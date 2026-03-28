@@ -71,8 +71,9 @@
 | `backend/agents/ontology_fetcher.py` | 重构 | 替换硬编码逻辑为 SPARQL 查询 |
 | `backend/llm/prompts.py` | 修改 | 结构化规则注入 + 强制引用指令 |
 | `cea-diagnosis.html` | 新增功能 | 激活面板、规则标签、对比开关 |
+| `backend/server.py` | 轻量修改 | 解析 `use_ontology` 参数，写入 context |
 
-**不动的文件：** `orchestrator.py`、`server.py`、`config.py`、其他 Agent 文件
+**不动的文件：** `orchestrator.py`、`config.py`、其他 Agent 文件
 
 ---
 
