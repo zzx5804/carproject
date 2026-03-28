@@ -289,6 +289,63 @@ OUTPUT_TEMPLATES: Dict[str, Dict[str, str]] = {
         "customer_service": """<div class="conc">【系统诊断】车辆1小时自动下电功能正常，可直接重新上电</div>
 <p style="margin-top:8px;font-style:italic;color:var(--txd)">"您好，停车1小时后自动下电是正常的节能功能，开门或踩刹车按启动键就能上电。"</p>""",
     },
+    "forced_off": {
+        "owner": """<div class="conc">⚠️ 车辆触发强制下电保护</div>
+<p style="margin-top:8px">车辆检测到异常状态（档位异常或长按启动键无响应），触发强制下电保护机制。</p>
+<div class="action-list">
+  <div class="ai"><div class="an">1</div>确认车辆已停在安全位置，档位处于P档</div>
+  <div class="ai"><div class="an">2</div>等待30秒后重新尝试上电</div>
+  <div class="ai"><div class="an">3</div>如反复出现请联系 <span class="hi">400-XXX-XXXX</span></div>
+</div>""",
+        "technician": """<div class="conc">【诊断结论】强制下电触发 — 档位异常/长按启动键超时 → LDCU_ForceOffReq=Active</div>
+<p style="margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--txd)">链路: GE_Fahrstufe异常检测 → LDCU_SafetyReq → 强制PowerMode=Off</p>
+<div class="action-list" style="margin-top:8px">
+  <div class="ai"><div class="an">P1</div>OBD读取GE_Fahrstufe当前值，确认档位传感器状态</div>
+  <div class="ai"><div class="an">P2</div>检查ZAT开关状态及LDCU_StartBtnSt信号</div>
+  <div class="ai"><div class="an">P3</div>读取LDCU_ForceOffReason历史记录</div>
+  <div class="ai"><div class="an">P4</div>验证档位传感器线束连接及信号完整性</div>
+</div>""",
+        "customer_service": """<div class="conc">【系统诊断】车辆触发强制下电保护机制</div>
+<p style="margin-top:8px;font-style:italic;color:var(--txd)">"您好，车辆因档位异常触发了安全保护机制自动下电。请确认车辆停在P档，等待30秒后重新尝试上电。"</p>""",
+    },
+    "remote_on": {
+        "owner": """<div class="conc">📡 远程上电/OTA升级过程中</div>
+<p style="margin-top:8px">车辆正在执行远程上电或OTA升级任务，此期间部分功能可能受限。</p>
+<div class="action-list">
+  <div class="ai"><div class="an">1</div>等待远程任务完成（通常5-15分钟）</div>
+  <div class="ai"><div class="an">2</div>任务完成后车辆会自动恢复常态</div>
+  <div class="ai"><div class="an">3</div>如长时间无响应请拨打 <span class="hi">400-XXX-XXXX</span></div>
+</div>""",
+        "technician": """<div class="conc">【诊断结论】远程上电/OTA模式激活 — TBOX RemoteOnReq=Active</div>
+<p style="margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--txd)">链路: TBOX_OTA_Req → LDCU_RemoteEnable → PowerMode=Remote On</p>
+<div class="action-list" style="margin-top:8px">
+  <div class="ai"><div class="an">P1</div>检查TBOX_OTAStatus及升级进度</div>
+  <div class="ai"><div class="an">P2</div>确认4G连接状态及Flag_4GReady</div>
+  <div class="ai"><div class="an">P3</div>监控OTA任务日志，确认无卡顿或失败</div>
+  <div class="ai"><div class="an">P4</div>如超时，检查TBOX固件版本及OTA模块状态</div>
+</div>""",
+        "customer_service": """<div class="conc">【系统诊断】车辆正在进行远程上电或OTA升级</div>
+<p style="margin-top:8px;font-style:italic;color:var(--txd)">"您好，车辆正在执行远程任务，请耐心等待5-15分钟。任务完成后您会收到通知。"</p>""",
+    },
+    "alcohol_lock": {
+        "owner": """<div class="conc">🚫 酒精锁激活，车辆无法进入Ready状态</div>
+<p style="margin-top:8px">车辆检测到酒精浓度超标或酒精锁系统激活，禁止进入Ready模式以保障安全。</p>
+<div class="action-list">
+  <div class="ai"><div class="an">1</div>请等待酒精浓度降低后重新吹气检测</div>
+  <div class="ai"><div class="an">2</div>确保吹气检测时用力均匀、时长充足</div>
+  <div class="ai"><div class="an">3</div>多次检测失败请联系 <span class="hi">400-XXX-XXXX</span></div>
+</div>""",
+        "technician": """<div class="conc">【诊断结论】酒精锁系统激活 — AlcoholLockSt=Active → Ready禁止</div>
+<p style="margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--txd)">链路: AlcoholSensor检测 → AlcoholLock_ECU → LDCU_ReadyEnable=Not Active</p>
+<div class="action-list" style="margin-top:8px">
+  <div class="ai"><div class="an">P1</div>OBD读取AlcoholLock_ECU：酒精浓度值及传感器状态</div>
+  <div class="ai"><div class="an">P2</div>检查吹气传感器灵敏度及校准状态</div>
+  <div class="ai"><div class="an">P3</div>验证AlcoholLockSt信号链路完整性</div>
+  <div class="ai"><div class="an">P4</div>如传感器异常，检查供电及CAN通信</div>
+</div>""",
+        "customer_service": """<div class="conc">【系统诊断】酒精锁系统激活，车辆无法启动</div>
+<p style="margin-top:8px;font-style:italic;color:var(--txd)">"您好，车辆酒精锁系统检测到异常，需要重新进行吹气检测。请确保吹气均匀、时长充足。"</p>""",
+    },
 }
 
 

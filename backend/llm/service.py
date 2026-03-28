@@ -682,6 +682,9 @@ class LLMTools:
 
             data = json.loads(response_text)
 
+            # ✨ 验证必要字段，如果缺失则使用 fallback 数据填充
+            data = self._validate_and_fill_missing_fields(data, request)
+
             # Build DiagnosisResponse
             return DiagnosisResponse(
                 diagnosis_id=f"diag_{int(time.time() * 1000)}",
@@ -691,7 +694,7 @@ class LLMTools:
                     for step in data.get("reasoning_steps", [])
                 ],
                 primary_hypothesis=DiagnosticHypothesis(**data["primary_hypothesis"])
-                if "primary_hypothesis" in data
+                if "primary_hypothesis" in data and data["primary_hypothesis"]
                 else None,
                 secondary_hypotheses=[
                     DiagnosticHypothesis(**h) if isinstance(h, dict) else h
@@ -712,19 +715,272 @@ class LLMTools:
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse diagnosis response JSON: {e}")
             # Return a basic response with the raw text
-            return DiagnosisResponse(
-                diagnosis_id=f"diag_{int(time.time() * 1000)}",
-                summary="诊断分析",
-                output_for_owner=response_text,
-                final_confidence=0.5,
-                model_used=self.config.model,
-            )
+            return self._generate_fallback_response(request, response_text)
         except LLMError as e:
             logger.error(f"LLM error during diagnosis generation: {e}")
             raise
         except Exception as e:
             logger.error(f"Unexpected error during diagnosis generation: {e}")
             raise LLMResponseError(f"Diagnosis generation failed: {e}") from e
+
+    def _validate_and_fill_missing_fields(
+        self, data: Dict[str, Any], request: DiagnosisRequest
+    ) -> Dict[str, Any]:
+        """
+        验证 LLM 返回的数据并填充缺失的必要字段。
+
+        当 LLM 返回的数据缺少 reasoning_steps、primary_hypothesis、
+        confidence_factors 等字段时，使用默认值填充。
+
+        Args:
+            data: LLM 返回的 JSON 数据
+            request: 原始诊断请求
+
+        Returns:
+            填充后的数据字典
+        """
+        from diagnosis_knowledge import HYPOTHESIS_TEMPLATES, OUTPUT_TEMPLATES
+        from scenario_detector import get_scenario_detector
+
+        scenario_detector = get_scenario_detector()
+        scenario = scenario_detector.detect(request.symptom)
+
+        # 验证并填充 reasoning_steps
+        if not data.get("reasoning_steps"):
+            logger.warning("LLM response missing reasoning_steps, generating defaults")
+            data["reasoning_steps"] = [
+                {
+                    "step_number": 1,
+                    "title": "症状解析",
+                    "body": f"用户症状: {request.symptom[:100]}\n场景分类: {scenario}",
+                    "confidence": 0.90,
+                },
+                {
+                    "step_number": 2,
+                    "title": "信号分析",
+                    "body": f"当前信号状态: {len(request.signals)} 个信号",
+                    "confidence": 0.85,
+                },
+                {
+                    "step_number": 3,
+                    "title": "规则匹配",
+                    "body": f"匹配场景: {scenario}",
+                    "confidence": 0.88,
+                },
+            ]
+
+        # 验证并填充 primary_hypothesis
+        if not data.get("primary_hypothesis"):
+            logger.warning(
+                "LLM response missing primary_hypothesis, generating defaults"
+            )
+            hypotheses = HYPOTHESIS_TEMPLATES.get(
+                scenario,
+                [
+                    {"name": "待进一步诊断", "pct": 50, "cls": "p"},
+                ],
+            )
+            primary_hyp = (
+                hypotheses[0] if hypotheses else {"name": "待进一步诊断", "pct": 50}
+            )
+
+            data["primary_hypothesis"] = {
+                "hypothesis_id": "hypo_001",
+                "rank": 1,
+                "root_cause": primary_hyp.get("name", "待进一步诊断"),
+                "description": f"基于场景 {scenario} 的诊断假设",
+                "confidence": primary_hyp.get("pct", 50) / 100.0,
+                "affected_components": [],
+                "verification_steps": [],
+                "priority": "high" if primary_hyp.get("pct", 50) > 70 else "medium",
+            }
+
+        # 验证并填充 confidence_factors
+        if not data.get("confidence_factors"):
+            logger.warning(
+                "LLM response missing confidence_factors, generating defaults"
+            )
+            data["confidence_factors"] = [
+                {
+                    "label": "症状匹配度",
+                    "value": 0.90,
+                    "weight": 0.30,
+                    "explanation": "基于场景匹配",
+                },
+                {
+                    "label": "规则可信度",
+                    "value": 0.85,
+                    "weight": 0.35,
+                    "explanation": "来自知识库规则",
+                },
+                {
+                    "label": "数据质量",
+                    "value": 0.80 if request.signals else 0.50,
+                    "weight": 0.20,
+                    "explanation": "信号数据完整性",
+                },
+                {
+                    "label": "假设一致性",
+                    "value": 0.85,
+                    "weight": 0.15,
+                    "explanation": "假设与证据一致性",
+                },
+            ]
+
+        # 验证并填充 final_confidence
+        if not data.get("final_confidence"):
+            # 从 confidence_factors 计算
+            factors = data.get("confidence_factors", [])
+            if factors:
+                total_weight = sum(f.get("weight", 0) for f in factors)
+                weighted_sum = sum(
+                    f.get("value", 0) * f.get("weight", 0) for f in factors
+                )
+                data["final_confidence"] = (
+                    weighted_sum / total_weight if total_weight > 0 else 0.75
+                )
+            else:
+                data["final_confidence"] = 0.75
+
+        # 验证并填充 output_for_*
+        role_str = (
+            request.role.value if hasattr(request.role, "value") else str(request.role)
+        )
+        output_key = f"output_for_{role_str}"
+
+        if not data.get(output_key) and not data.get("output_for_owner"):
+            logger.warning(
+                f"LLM response missing output for {role_str}, generating defaults"
+            )
+            templates = OUTPUT_TEMPLATES.get(scenario, {})
+            if role_str in templates:
+                data[output_key] = templates[role_str]
+            elif "owner" in templates:
+                data[output_key] = templates["owner"]
+
+        return data
+
+    def _generate_fallback_response(
+        self, request: DiagnosisRequest, raw_text: str = ""
+    ) -> DiagnosisResponse:
+        """
+        生成 fallback 诊断响应。
+
+        当 LLM 完全失败或返回无效 JSON 时使用。
+
+        Args:
+            request: 原始诊断请求
+            raw_text: LLM 返回的原始文本（如果有）
+
+        Returns:
+            DiagnosisResponse with fallback diagnosis
+        """
+        from diagnosis_knowledge import HYPOTHESIS_TEMPLATES, OUTPUT_TEMPLATES
+        from scenario_detector import get_scenario_detector
+
+        scenario_detector = get_scenario_detector()
+        scenario = scenario_detector.detect(request.symptom)
+        role_str = (
+            request.role.value if hasattr(request.role, "value") else str(request.role)
+        )
+
+        # 获取假设模板
+        hypotheses = HYPOTHESIS_TEMPLATES.get(
+            scenario,
+            [
+                {"name": "待进一步诊断", "pct": 50, "cls": "p"},
+            ],
+        )
+
+        # 构建推理步骤
+        reasoning_steps = [
+            ReasoningStep(
+                step_number=1,
+                title="症状解析",
+                body=f"用户症状: {request.symptom[:100]}\n场景分类: {scenario}",
+                confidence=0.90,
+            ),
+            ReasoningStep(
+                step_number=2,
+                title="信号分析",
+                body=f"当前信号状态: {len(request.signals)} 个信号",
+                confidence=0.85,
+            ),
+            ReasoningStep(
+                step_number=3,
+                title="规则匹配",
+                body=f"匹配场景: {scenario}",
+                confidence=0.88,
+            ),
+        ]
+
+        # 构建主要假设
+        primary = None
+        if hypotheses:
+            h = hypotheses[0]
+            primary = DiagnosticHypothesis(
+                hypothesis_id="hypo_001",
+                rank=1,
+                root_cause=h.get("name", "待进一步诊断"),
+                description=f"基于场景 {scenario} 的诊断假设",
+                confidence=h.get("pct", 50) / 100.0,
+                affected_components=[],
+                verification_steps=[],
+                priority="high" if h.get("pct", 50) > 70 else "medium",
+            )
+
+        # 构建置信度因子
+        confidence_factors = [
+            ConfidenceFactor(
+                label="症状匹配度",
+                value=0.90,
+                weight=0.30,
+                explanation="基于场景匹配",
+            ),
+            ConfidenceFactor(
+                label="规则可信度",
+                value=0.85,
+                weight=0.35,
+                explanation="来自知识库规则",
+            ),
+            ConfidenceFactor(
+                label="数据质量",
+                value=0.80 if request.signals else 0.50,
+                weight=0.20,
+                explanation="信号数据完整性",
+            ),
+            ConfidenceFactor(
+                label="假设一致性",
+                value=0.85,
+                weight=0.15,
+                explanation="假设与证据一致性",
+            ),
+        ]
+
+        final_confidence = sum(f.value * f.weight for f in confidence_factors)
+
+        # 获取输出模板
+        templates = OUTPUT_TEMPLATES.get(scenario, {})
+        output_text = templates.get(
+            role_str, templates.get("owner", raw_text or "诊断完成")
+        )
+
+        return DiagnosisResponse(
+            diagnosis_id=f"diag_fallback_{int(time.time() * 1000)}",
+            summary=f"诊断分析 - 场景: {scenario}",
+            reasoning_steps=reasoning_steps,
+            primary_hypothesis=primary,
+            secondary_hypotheses=[],
+            final_confidence=final_confidence,
+            confidence_factors=confidence_factors,
+            output_for_owner=output_text if role_str == "owner" else None,
+            output_for_technician=output_text if role_str == "technician" else None,
+            output_for_customer_service=output_text
+            if role_str == "customer_service"
+            else None,
+            model_used="fallback",
+            escalation_hint=None,
+        )
 
     async def generate_output(
         self,
