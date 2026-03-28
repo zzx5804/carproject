@@ -1,30 +1,33 @@
 # LLM Configuration for Vehicle Diagnosis CLI
 # 
-# 配置公司内部LLM网关
+# 支持两种模式:
+# 1. OpenRouter (推荐): 使用 openrouter.ai 的远程 LLM
+# 2. Custom (内部): 使用公司内部 LLM 网关
 
-# Provider: litellm (支持OpenAI兼容API)
-provider: litellm
+# Provider: openrouter 或 litellm
+# 推荐使用 openrouter，需要设置环境变量 LLM_OPENROUTER_API_KEY
+provider: "openrouter"
 
-# LLM Gateway endpoint
+# === OpenRouter 配置 (当 provider=openrouter 时) ===
+# 环境变量: LLM_OPENROUTER_API_KEY
+# 默认模型: openai/gpt-3.5-turbo
+openrouter_model: "openai/gpt-3.5-turbo"
+
+# === Custom LLM Gateway 配置 (当 provider=litellm 时) ===
 custom_endpoint: "https://llm-gateway.dev.cn-vwa.volkswagen-cea.com/v1/chat/completions"
-
-# API key (从环境变量读取，或在此处设置)
-# 建议使用环境变量: LLM_CUSTOM_API_KEY
 custom_api_key: ""
 
-# 可选模型列表 (来自 opencode.json 配置)
+# 可选模型列表
 available_models:
   - name: "GLM-5-FP8"
-    description: "GLM-5 FP8 模型 - 平衡性能与速度"
-  - name: "MiniMax"
-    description: "MiniMax 模型 - 快速响应"
-  - name: "MiniMax-M2.5"
-    description: "MiniMax M2.5 - 增强版"
-  - name: "MiniMax-M2.1"
-    description: "MiniMax M2.1 - 稳定版"
+    description: "GLM-5 FP8 模型 - 内部网关"
+  - name: "openai/gpt-3.5-turbo"
+    description: "GPT-3.5 Turbo - OpenRouter"
+  - name: "openai/gpt-4"
+    description: "GPT-4 - OpenRouter"
 
 # 默认模型
-model: "GLM-5-FP8"
+model: "openai/gpt-3.5-turbo"
 
 # 模型参数
 temperature: 0.7
