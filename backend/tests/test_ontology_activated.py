@@ -200,3 +200,57 @@ async def test_ontology_fetcher_sends_onto_activated_event(
 
     types = [m.get("type") for m in sent_messages if isinstance(m, dict)]
     assert "onto_activated" in types
+
+
+# ── Prompt injection tests ────────────────────────────────────────────────────
+
+def test_build_diagnosis_prompt_includes_rule_ids():
+    """Prompt must contain activated rule IDs in [T_x_x] format."""
+    from llm.prompts import get_prompt_builder
+    from models import ActivatedNode, ActivatedKnowledge
+
+    builder = get_prompt_builder()
+    knowledge = ActivatedKnowledge(
+        activated_rules=[
+            ActivatedNode(
+                node_id="T_1_2",
+                node_type="rule",
+                label_zh="Disable跳转至Enable",
+                confidence=0.92,
+                source_triple="rules_model.ttl#ruleT_1_2",
+            )
+        ],
+        signal_mappings={"sv-kv": ":ReadyEnableDisable"},
+        sparql_queries=[],
+    )
+    prompt = builder.build_diagnosis_prompt(
+        symptom="踩刹车无法上电",
+        role="owner",
+        signals={"sv-pm": "0:Off", "sv-kv": "INVALID"},
+        ontology_context="",
+        matched_rules=[],
+        activated_knowledge=knowledge,
+    )
+    assert "[T_1_2]" in prompt
+    assert "rules_model.ttl#ruleT_1_2" in prompt
+    assert "推理要求" in prompt
+
+
+def test_build_diagnosis_prompt_includes_signal_mappings():
+    from llm.prompts import get_prompt_builder
+    from models import ActivatedKnowledge
+
+    builder = get_prompt_builder()
+    knowledge = ActivatedKnowledge(
+        signal_mappings={"sv-kv": ":ReadyEnableDisable", "sv-pm": ":OffMode"},
+    )
+    prompt = builder.build_diagnosis_prompt(
+        symptom="无法上电",
+        role="owner",
+        signals={"sv-pm": "0:Off", "sv-kv": "INVALID"},
+        ontology_context="",
+        matched_rules=[],
+        activated_knowledge=knowledge,
+    )
+    assert ":ReadyEnableDisable" in prompt
+    assert ":OffMode" in prompt

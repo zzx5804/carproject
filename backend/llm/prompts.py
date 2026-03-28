@@ -216,18 +216,20 @@ class PromptBuilder:
         role: str,
         signals: Dict[str, str],
         ontology_context: str,
-        matched_rules: List[Dict[str, Any]]
+        matched_rules: List[Dict[str, Any]],
+        activated_knowledge: Optional[Any] = None,
     ) -> str:
         """
         Build complete diagnosis prompt.
-        
+
         Args:
             symptom: User's symptom description
             role: User role (owner/technician/customer_service)
             signals: Vehicle signal values
             ontology_context: Ontology knowledge context
             matched_rules: List of matched diagnostic rules
-            
+            activated_knowledge: ActivatedKnowledge from OntologyFetcher (optional)
+
         Returns:
             str: Complete prompt for LLM
         """
@@ -235,24 +237,60 @@ class PromptBuilder:
         signals_text = "\n".join([
             f"- {k}: {v}" for k, v in signals.items()
         ]) if signals else "无信号数据"
-        
+
         # Format rules
         rules_text = "\n".join([
             f"- {r.get('rule_id', 'R')}: {r.get('rule_text', '')} "
             f"(置信度: {r.get('match_confidence', 0.9):.0%})"
             for r in matched_rules
         ]) if matched_rules else "暂无匹配规则"
-        
+
+        # Build activated knowledge block
+        activated_block = ""
+        if activated_knowledge and activated_knowledge.activated_rules:
+            rule_lines = []
+            for node in activated_knowledge.activated_rules[:5]:
+                chain = f"[{node.node_id}] {node.label_zh}"
+                chain += f"\n  置信度: {int(node.confidence * 100)}%"
+                chain += f"\n  来源: {node.source_triple}"
+                rule_lines.append(chain)
+            activated_block += "\n### 激活的 Ontology 规则\n"
+            activated_block += "\n\n".join(rule_lines)
+
+        if activated_knowledge and activated_knowledge.signal_mappings:
+            mapping_lines = [
+                f'{k}="{signals.get(k, "?")}" → {v}'
+                for k, v in activated_knowledge.signal_mappings.items()
+            ]
+            activated_block += "\n\n### 信号 → 本体映射\n"
+            activated_block += "\n".join(mapping_lines)
+
         # Add role guidelines
         role_guidelines = ROLE_OUTPUT_GUIDELINES.get(role, "")
-        
-        return self.diagnosis_template.substitute(
+
+        base_prompt = self.diagnosis_template.substitute(
             symptom=symptom,
             role=role,
             signals=signals_text,
-            ontology_context=ontology_context,
+            ontology_context=ontology_context + activated_block,
             matched_rules=rules_text
         ) + f"\n\n## 角色输出指南\n{role_guidelines}"
+
+        if activated_knowledge and activated_knowledge.activated_rules:
+            base_prompt += """
+
+## 推理要求（必须遵守）
+
+在 reasoning_steps 的每个 body 字段中：
+1. 引用具体规则 ID，格式：[T_x_x]（例如 [T_1_2]）
+2. 引用本体个体名，格式：:ClassName（例如 :ReadyEnableDisable）
+3. 每个推理步骤必须说明依据了哪条 Ontology 规则
+
+示例：
+"根据规则 [T_1_2]，当信号 :ReadyEnableDisable 时，状态转移到 :ReadyEnableEnable 失败，确认为上电链路异常。"
+"""
+
+        return base_prompt
     
     def build_symptom_parsing_prompt(
         self,

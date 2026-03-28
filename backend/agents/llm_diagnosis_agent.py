@@ -273,7 +273,12 @@ class LLMDiagnosisAgent(BaseAgent):
         if hasattr(context.role, "value"):
             role = Role(context.role.value)
 
-        return DiagnosisRequest(symptom=context.symptom, role=role, signals=signals)
+        return DiagnosisRequest(
+            symptom=context.symptom,
+            role=role,
+            signals=signals,
+            activated_knowledge=context.activated_knowledge,
+        )
 
     def _update_context(
         self, context: DiagnosisContext, response: DiagnosisResponse

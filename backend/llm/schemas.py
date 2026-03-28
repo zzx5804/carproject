@@ -26,7 +26,7 @@ class SignalInfo(BaseModel):
 class DiagnosisRequest(BaseModel):
     """
     Request for LLM-based diagnosis.
-    
+
     This is the input format passed to the LLM for semantic analysis.
     """
     symptom: str = Field(description="User's symptom description in natural language")
@@ -42,6 +42,10 @@ class DiagnosisRequest(BaseModel):
     dtc_codes: Optional[List[str]] = Field(
         default=None,
         description="DTC (Diagnostic Trouble Code) codes if available"
+    )
+    activated_knowledge: Optional[Any] = Field(
+        default=None,
+        description="ActivatedKnowledge from OntologyFetcher for structured prompt injection"
     )
     
     class Config:

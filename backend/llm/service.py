@@ -602,6 +602,7 @@ class LLMTools:
         request: DiagnosisRequest,
         ontology_context: str,
         matched_rules: List[Dict[str, Any]],
+        activated_knowledge: Optional[Any] = None,
     ) -> DiagnosisResponse:
         """
         Generate complete diagnosis using LLM.
@@ -643,6 +644,42 @@ class LLMTools:
             else "无匹配规则"
         )
 
+        # Build activated knowledge block for prompt injection
+        activated_block = ""
+        if activated_knowledge and activated_knowledge.activated_rules:
+            rule_lines = []
+            for node in activated_knowledge.activated_rules[:5]:
+                chain = f"[{node.node_id}] {node.label_zh}"
+                chain += f"\n  置信度: {int(node.confidence * 100)}%"
+                chain += f"\n  来源: {node.source_triple}"
+                rule_lines.append(chain)
+            activated_block += "\n\n### 激活的 Ontology 规则\n"
+            activated_block += "\n\n".join(rule_lines)
+
+        if activated_knowledge and activated_knowledge.signal_mappings:
+            signals_dict = {s.key: s.value for s in request.signals}
+            mapping_lines = [
+                f'{k}="{signals_dict.get(k, "?")}" → {v}'
+                for k, v in activated_knowledge.signal_mappings.items()
+            ]
+            activated_block += "\n\n### 信号 → 本体映射\n"
+            activated_block += "\n".join(mapping_lines)
+
+        reasoning_requirement = ""
+        if activated_knowledge and activated_knowledge.activated_rules:
+            reasoning_requirement = """
+
+## 推理要求（必须遵守）
+
+在 reasoning_steps 的每个 body 字段中：
+1. 引用具体规则 ID，格式：[T_x_x]（例如 [T_1_2]）
+2. 引用本体个体名，格式：:ClassName（例如 :ReadyEnableDisable）
+3. 每个推理步骤必须说明依据了哪条 Ontology 规则
+
+示例：
+"根据规则 [T_1_2]，当信号 :ReadyEnableDisable 时，状态转移到 :ReadyEnableEnable 失败，确认为上电链路异常。"
+"""
+
         user_message = f"""## 诊断任务
 
 ### 用户症状
@@ -655,11 +692,11 @@ class LLMTools:
 {signals_text}
 
 ### Ontology上下文
-{ontology_context}
+{ontology_context}{activated_block}
 
 ### 匹配的诊断规则
 {rules_text}
-
+{reasoning_requirement}
 请提供完整的诊断结果，返回JSON格式。"""
 
         messages = [
@@ -1104,7 +1141,8 @@ class LLMService:
 
             # Generate diagnosis
             diagnosis = await self.tools.generate_diagnosis(
-                request, ontology_context, matched_rules
+                request, ontology_context, matched_rules,
+                activated_knowledge=request.activated_knowledge,
             )
 
             # Add processing time
