@@ -734,10 +734,29 @@ class DiagnosisService:
         return "not loaded"
 
     def get_llm_info(self) -> Dict[str, str]:
-        """Get LLM configuration info."""
+        """Get LLM configuration info based on provider."""
+        provider = self.llm_config.get("provider", "litellm")
+
+        if provider == "openrouter":
+            # OpenRouter configuration
+            endpoint = "https://openrouter.ai/api/v1"
+            model = self.llm_config.get(
+                "openrouter_model", self.llm_config.get("model", "openai/gpt-3.5-turbo")
+            )
+            # Add openrouter/ prefix for display if not present
+            if not model.startswith("openrouter/"):
+                model = f"openrouter/{model}"
+        else:
+            # Custom endpoint (internal LLM gateway)
+            endpoint = self.llm_config.get(
+                "custom_endpoint", self.llm_config.get("endpoint", "N/A")
+            )
+            model = self.llm_config.get("model", "N/A")
+
         return {
-            "endpoint": self.llm_config.get("endpoint", "N/A"),
-            "model": self.llm_config.get("model", "N/A"),
+            "endpoint": endpoint,
+            "model": model,
+            "provider": provider,
         }
 
     def set_model(self, model: str) -> bool:
