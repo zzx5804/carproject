@@ -243,6 +243,7 @@ async def start_diagnosis(message: dict, websocket: WebSocket):
     signals = message.get("signals", {})
     dtc_codes = message.get("dtc_codes", [])  # DTC codes support
     demo_mode = message.get("demo", False)  # Demo mode flag
+    use_ontology = message.get("use_ontology", True)  # Default: ontology enabled
 
     # Validate - need either symptom or DTC codes
     if not symptom and not dtc_codes:
@@ -269,6 +270,7 @@ async def start_diagnosis(message: dict, websocket: WebSocket):
     context = DiagnosisContext(
         symptom=symptom, role=role, signals=signals, dtc_codes=dtc_codes
     )
+    context.use_ontology = use_ontology
 
     # Log diagnosis start
     log_msg = f"Starting diagnosis"

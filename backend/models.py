@@ -429,3 +429,6 @@ class DiagnosisContext(BaseModel):
 
     # Activated ontology knowledge (populated by OntologyFetcher)
     activated_knowledge: Optional[ActivatedKnowledge] = None
+
+    # Pipeline control
+    use_ontology: bool = True  # When False, OntologyFetcher skips SPARQL queries
