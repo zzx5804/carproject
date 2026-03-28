@@ -158,3 +158,45 @@ def test_query_rule_chain_returns_string(real_parser):
     assert isinstance(chain, str)
     assert len(chain) > 0
     assert "T_1_2" in chain
+
+
+# ── OntologyFetcher integration tests ────────────────────────────────────────
+
+@pytest.mark.asyncio
+async def test_ontology_fetcher_populates_activated_knowledge(
+    real_parser, sample_context
+):
+    """After process(), context.activated_knowledge should be populated."""
+    from agents.ontology_fetcher import OntologyFetcherAgent
+    from unittest.mock import AsyncMock
+
+    sent_messages = []
+
+    agent = OntologyFetcherAgent()
+    agent.set_ontology_parser(real_parser)
+    agent._send = AsyncMock(side_effect=lambda msg: sent_messages.append(msg))
+
+    result = await agent.process(sample_context)
+
+    assert result.activated_knowledge is not None
+    assert isinstance(result.activated_knowledge.activated_rules, list)
+    assert isinstance(result.activated_knowledge.signal_mappings, dict)
+
+
+@pytest.mark.asyncio
+async def test_ontology_fetcher_sends_onto_activated_event(
+    real_parser, sample_context
+):
+    """OntologyFetcher must emit onto_activated WebSocket event."""
+    from agents.ontology_fetcher import OntologyFetcherAgent
+    from unittest.mock import AsyncMock
+
+    sent_messages = []
+    agent = OntologyFetcherAgent()
+    agent.set_ontology_parser(real_parser)
+    agent._send = AsyncMock(side_effect=lambda msg: sent_messages.append(msg))
+
+    await agent.process(sample_context)
+
+    types = [m.get("type") for m in sent_messages if isinstance(m, dict)]
+    assert "onto_activated" in types
