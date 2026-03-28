@@ -17,6 +17,15 @@ def test_activated_node_creation():
     assert node.confidence == 0.92
 
 
+@pytest.mark.parametrize("node_type", ["rule", "class", "individual"])
+def test_activated_node_valid_types(node_type):
+    node = ActivatedNode(
+        node_id="T_1_2", node_type=node_type, label_zh="测试",
+        confidence=0.5, source_triple="rules_model.ttl#ruleT_1_2"
+    )
+    assert node.node_type == node_type
+
+
 def test_activated_knowledge_creation():
     rule = ActivatedNode(
         node_id="T_1_2",
