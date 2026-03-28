@@ -995,3 +995,166 @@ class OntologyParser:
             }
             for name, tr in self.transition_rules.items()
         }
+
+    # =========================================================================
+    # SPARQL Query Methods (Ontology-as-Evidence)
+    # =========================================================================
+
+    def query_matching_rules(self, keywords: List[str]) -> List[Any]:
+        """
+        Query TransitionRule individuals whose labels or comments match keywords.
+
+        Returns ActivatedNode list sorted by confidence descending.
+        Confidence is computed as: matched_keywords / total_keywords, floored at 0.5
+        if the rule has any match at all.
+        """
+        from models import ActivatedNode
+
+        graph = self._require_graph()
+        ns = self.ns
+
+        # SPARQL: fetch all TransitionRule individuals with their metadata
+        sparql = """
+        SELECT ?rule ?ruleId ?labelZh ?commentZh ?fromState ?toState
+        WHERE {
+            ?rule rdf:type :TransitionRule .
+            OPTIONAL { ?rule :ruleId ?ruleId . }
+            OPTIONAL { ?rule rdfs:label ?labelZh FILTER(lang(?labelZh) = "zh") . }
+            OPTIONAL { ?rule rdfs:comment ?commentZh FILTER(lang(?commentZh) = "zh") . }
+            OPTIONAL { ?rule :fromState ?fromState . }
+            OPTIONAL { ?rule :toState ?toState . }
+        }
+        """
+        results = graph.query(
+            sparql,
+            initNs={"rdf": RDF, "rdfs": RDFS, "": ns},
+        )
+
+        activated: List[Any] = []
+        keywords_lower = [k.lower() for k in keywords]
+
+        for row in results:
+            rule_uri = str(row.rule) if row.rule else ""
+            rule_id = str(row.ruleId) if row.ruleId else rule_uri.split("#")[-1]
+            label_zh = str(row.labelZh) if row.labelZh else rule_id
+            comment_zh = str(row.commentZh) if row.commentZh else ""
+            from_state = str(row.fromState).split("#")[-1] if row.fromState else ""
+            to_state = str(row.toState).split("#")[-1] if row.toState else ""
+
+            # Score: count keyword hits across label + comment + state names
+            searchable = f"{label_zh} {comment_zh} {from_state} {to_state}".lower()
+            hits = sum(1 for kw in keywords_lower if kw in searchable)
+
+            if hits == 0:
+                continue
+
+            confidence = min(0.5 + (hits / max(len(keywords_lower), 1)) * 0.5, 1.0)
+
+            # Build source_triple reference
+            local_name = rule_uri.split("#")[-1] if "#" in rule_uri else rule_id
+            source = f"rules_model.ttl#{local_name}"
+
+            activated.append(
+                ActivatedNode(
+                    node_id=rule_id,
+                    node_type="rule",
+                    label_zh=label_zh,
+                    confidence=round(confidence, 2),
+                    source_triple=source,
+                )
+            )
+
+        # Sort by confidence descending, limit to top 5
+        activated.sort(key=lambda n: n.confidence, reverse=True)
+        return activated[:5]
+
+    def query_signal_individuals(self, signals: Dict[str, str]) -> Dict[str, str]:
+        """
+        Map frontend signal key-values to Ontology individual local names.
+
+        Mapping table:
+        - sv-pm with "Off"    → ":OffMode"
+        - sv-pm with "Remote" → ":RemoteOnMode"
+        - sv-pm with "Local"  → ":LocalOnMode"
+        - sv-pm with "Conv"   → ":ConvenienceMode"
+        - sv-kv "VALID"       → ":ReadyEnableEnable"
+        - sv-kv "INVALID"     → ":ReadyEnableDisable"
+        """
+        mappings: Dict[str, str] = {}
+
+        sv_pm = signals.get("sv-pm", "")
+        if "Off" in sv_pm:
+            mappings["sv-pm"] = ":OffMode"
+        elif "Remote" in sv_pm:
+            mappings["sv-pm"] = ":RemoteOnMode"
+        elif "Local" in sv_pm or "On" in sv_pm:
+            mappings["sv-pm"] = ":LocalOnMode"
+        elif "Conv" in sv_pm:
+            mappings["sv-pm"] = ":ConvenienceMode"
+
+        sv_kv = signals.get("sv-kv", "")
+        if "VALID" in sv_kv and "INVALID" not in sv_kv:
+            mappings["sv-kv"] = ":ReadyEnableEnable"
+        elif "INVALID" in sv_kv:
+            mappings["sv-kv"] = ":ReadyEnableDisable"
+
+        sv_ble = signals.get("sv-ble", "")
+        if sv_ble == "1":
+            mappings["sv-ble"] = ":BLEKeyDetected"
+        elif sv_ble == "0":
+            mappings["sv-ble"] = ":BLEKeyNotDetected"
+
+        return mappings
+
+    def query_rule_chain(self, rule_id: str) -> str:
+        """
+        Return a human-readable rule chain string for the given ruleId.
+
+        Format:
+            [T_1_2] Disable跳转至Enable
+              前提: :ReadyEnableDisable
+              结论: → :ReadyEnableEnable
+              来源: rules_model.ttl#ruleT_1_2
+        """
+        graph = self._require_graph()
+        ns = self.ns
+
+        sparql = """
+        SELECT ?rule ?labelZh ?commentZh ?fromState ?toState
+        WHERE {
+            ?rule rdf:type :TransitionRule .
+            ?rule :ruleId ?id .
+            FILTER(str(?id) = ?targetId)
+            OPTIONAL { ?rule rdfs:label ?labelZh FILTER(lang(?labelZh) = "zh") . }
+            OPTIONAL { ?rule rdfs:comment ?commentZh FILTER(lang(?commentZh) = "zh") . }
+            OPTIONAL { ?rule :fromState ?fromState . }
+            OPTIONAL { ?rule :toState ?toState . }
+        }
+        """
+        from rdflib import Literal as RDFLiteral
+        results = list(graph.query(
+            sparql,
+            initNs={"rdf": RDF, "rdfs": RDFS, "": ns},
+            initBindings={"targetId": RDFLiteral(rule_id)},
+        ))
+
+        if not results:
+            return f"[{rule_id}] 规则未找到"
+
+        row = results[0]
+        label_zh = str(row.labelZh) if row.labelZh else rule_id
+        comment_zh = str(row.commentZh) if row.commentZh else ""
+        from_state = str(row.fromState).split("#")[-1] if row.fromState else "?"
+        to_state = str(row.toState).split("#")[-1] if row.toState else "?"
+        rule_uri = str(row.rule) if row.rule else ""
+        local_name = rule_uri.split("#")[-1] if "#" in rule_uri else f"rule{rule_id}"
+
+        lines = [
+            f"[{rule_id}] {label_zh}",
+            f"  前提: :{from_state}",
+            f"  结论: → :{to_state}",
+        ]
+        if comment_zh:
+            lines.append(f"  说明: {comment_zh}")
+        lines.append(f"  来源: rules_model.ttl#{local_name}")
+        return "\n".join(lines)
