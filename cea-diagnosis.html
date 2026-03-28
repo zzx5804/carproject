@@ -220,6 +220,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
 .results-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
 @media(max-width:1000px){.main-grid{grid-template-columns:1fr}.results-2col{grid-template-columns:1fr}}
+@keyframes nodeActivate {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
 </style>
 </head>
 <body>
@@ -243,6 +247,23 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
     </div>
     <div class="panel"><div class="panel-head"><div class="ph-dot" style="background:var(--accent);box-shadow:0 0 5px var(--accent)"></div>诊断输入</div>
       <div class="role-sel"><button type="button" class="rbtn active" id="btn-owner" onclick="setRole('owner')"><span class="ri">🚗</span><span>车主</span></button><button type="button" class="rbtn" id="btn-tech" onclick="setRole('technician')"><span class="ri">🔧</span><span>技师</span></button><button type="button" class="rbtn" id="btn-cs" onclick="setRole('customer_service')"><span class="ri">📞</span><span>客服</span></button></div>
+      <div id="ontology-toggle" style="
+          display:flex;align-items:center;gap:8px;
+          padding:4px 8px;background:var(--bg);border-radius:6px;
+          border:1px solid var(--border);margin:8px 14px 0;
+      ">
+          <span style="font-size:10px;color:var(--tx3);font-family:var(--mono)">模式：</span>
+          <button onclick="setOntologyMode(true)"  id="btn-with-onto"
+              style="padding:3px 10px;border-radius:4px;border:none;cursor:pointer;
+                     font-size:9px;background:var(--accent);color:#000;font-weight:600">
+              Ontology + LLM
+          </button>
+          <button onclick="setOntologyMode(false)" id="btn-without-onto"
+              style="padding:3px 10px;border-radius:4px;border:none;cursor:pointer;
+                     font-size:9px;background:var(--surface2);color:var(--tx3)">
+              纯 LLM
+          </button>
+      </div>
       <div class="inp-area"><div class="inp-lbl">// 症状描述</div><textarea class="symt-in" id="symptomInput" placeholder="踩刹车按启动按钮，车辆无法上电..."></textarea>
         <div class="quick-btns"><button type="button" class="qbtn" onclick="loadScenario('ble_auth')">BLE认证失败</button><button type="button" class="qbtn" onclick="loadScenario('key_timeout')">钥匙搜索超时</button><button type="button" class="qbtn" onclick="loadScenario('forced_off')">强制下电无响应</button><button type="button" class="qbtn grn" onclick="loadScenario('bms_charging')">BMS充电热保护</button></div>
         <button type="button" class="go-btn" id="goBtn" onclick="startPipeline()">⚡ 启动 Ontology-Driven 诊断</button>
@@ -298,7 +319,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
     <!-- Reasoning + Results -->
     <div class="results-2col">
       <div class="panel"><div class="panel-head"><div class="ph-dot" style="background:var(--green);box-shadow:0 0 5px var(--green)"></div>因果推理链 <span class="prov-tag llm" style="margin-left:auto">LLM+Ontology</span></div>
-        <div style="padding:14px"><div class="chain" id="reasonChain"><div class="idle" id="chainIdle"><div class="idle-icon">🔗</div><div class="idle-txt">启动诊断查看推理链</div></div></div><div class="onto-detail" id="ontoDetail"></div></div>
+        <div style="padding:14px"><div id="onto-activated-panel" style="padding:8px 12px;min-height:40px;"></div><div class="chain" id="reasonChain"><div class="idle" id="chainIdle"><div class="idle-icon">🔗</div><div class="idle-txt">启动诊断查看推理链</div></div></div><div class="onto-detail" id="ontoDetail"></div></div>
       </div>
       <div class="panel"><div class="panel-head"><div class="ph-dot" style="background:var(--accent);box-shadow:0 0 5px var(--accent)"></div>诊断结果</div>
         <div style="padding:14px">
@@ -314,6 +335,93 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
 </div>
 <script>
 let role='owner',running=false,scenarioKey='ble_auth',ws=null,stepIndex=0;
+let _useOntology = true;
+
+function setOntologyMode(enabled) {
+    _useOntology = enabled;
+    document.getElementById("btn-with-onto").style.background =
+        enabled ? "var(--accent)" : "var(--surface2)";
+    document.getElementById("btn-with-onto").style.color =
+        enabled ? "#000" : "var(--tx3)";
+    document.getElementById("btn-without-onto").style.background =
+        enabled ? "var(--surface2)" : "var(--orange)";
+    document.getElementById("btn-without-onto").style.color =
+        enabled ? "var(--tx3)" : "#000";
+
+    if (!enabled) {
+        const panel = document.getElementById("onto-activated-panel");
+        if (panel) {
+            panel.innerHTML =
+                `<div style="color:var(--tx3);font-size:10px;font-family:var(--mono)">
+                    // 纯 LLM 模式 — Ontology 未激活
+                </div>`;
+        }
+    }
+}
+
+function renderOntologyActivated(data) {
+    const panel = document.getElementById("onto-activated-panel");
+    if (!panel) return;
+
+    const nodes = data.nodes || [];
+    const mappings = data.signal_mappings || {};
+
+    const rulesHtml = nodes.map(node => {
+        const confPct = Math.round(node.confidence * 100);
+        const confColor = confPct >= 80 ? "var(--green)" : "var(--yellow)";
+        return `<div class="onto-node" id="onto-node-${node.id}" style="
+            border:1px solid ${confColor};border-radius:6px;padding:6px 10px;
+            margin-bottom:5px;background:rgba(0,0,0,0.2);
+            animation:nodeActivate 0.5s ease-out;
+        ">
+            <div style="display:flex;justify-content:space-between">
+                <span style="color:${confColor};font-family:var(--mono);font-weight:600">${node.id}</span>
+                <span style="color:${confColor};font-size:9px">${confPct}%</span>
+            </div>
+            <div style="color:var(--tx2);font-size:10px;margin-top:2px">${node.label_zh}</div>
+            <div style="color:var(--tx3);font-size:8px">${node.source}</div>
+        </div>`;
+    }).join("");
+
+    const mappingsHtml = Object.entries(mappings).map(([k, v]) =>
+        `<div style="font-size:10px;font-family:var(--mono)">
+            <span style="color:var(--yellow)">${k}</span>
+            <span style="color:var(--tx3)"> → </span>
+            <span style="color:var(--accent)">${v}</span>
+        </div>`
+    ).join("");
+
+    panel.innerHTML = `
+        <div style="color:var(--accent);font-size:9px;letter-spacing:1px;margin-bottom:6px">
+            SPARQL 激活节点 · ${nodes.length} 条规则
+        </div>
+        ${rulesHtml}
+        ${mappingsHtml ? `<div style="margin-top:8px;border-top:1px solid var(--border);padding-top:6px">${mappingsHtml}</div>` : ""}
+    `;
+}
+
+function highlightRuleRefs(text) {
+    return text.replace(/\[([T][_\d]+)\]/g, (match, ruleId) =>
+        `<span class="rule-tag" onclick="highlightOntologyNode('${ruleId}')"
+            style="background:rgba(167,139,250,0.2);border:1px solid #a78bfa;
+                   border-radius:3px;padding:1px 5px;color:#a78bfa;
+                   font-family:var(--mono);font-size:9px;cursor:pointer"
+            title="点击高亮本体规则">${match} ↗</span>`
+    );
+}
+
+function highlightOntologyNode(ruleId) {
+    document.querySelectorAll(".onto-node.highlighted").forEach(el => {
+        el.classList.remove("highlighted");
+        el.style.boxShadow = "";
+    });
+    const node = document.getElementById(`onto-node-${ruleId}`);
+    if (node) {
+        node.classList.add("highlighted");
+        node.style.boxShadow = "0 0 12px rgba(167,139,250,0.6)";
+        node.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+}
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 const SCENARIOS = {
   ble_auth: {
@@ -385,7 +493,7 @@ function updateOutputMessage(msg){const ob=document.getElementById('outputBox');
 
 function updateOntologySummary(msg){if(msg.counts){animateNum('os-cls',0,msg.counts.classes||0,700);animateNum('os-prop',0,msg.counts.properties||0,900);animateNum('os-ind',0,msg.counts.rules||0,1100);document.getElementById('ontoBarFill').style.width='100%'}if(msg.summary){document.getElementById('ontoDetail').innerHTML=msg.summary;document.getElementById('ontoDetail').classList.add('vis')}}
 
-function handleBackendMessage(msg){switch(msg.type){case 'agent_status':setAgent(mapAgentId(msg.agent),msg.state||msg.status,msg.progress);break;case 'msg_bus':pushMsg(mapAgentId(msg.from),mapAgentId(msg.to),renderPairs(msg.pairs));break;case 'wire_animate':animateWire(mapAgentId(msg.from),mapAgentId(msg.to));break;case 'onto_summary':updateOntologySummary(msg);break;case 'reasoning_step':addChain({title:msg.step.title,body:msg.step.body,agent:'llm',details:[]},stepIndex++);break;case 'rule_matched':appendRule(msg.rule);break;case 'hypothesis':appendHypothesis(msg.hypothesis||msg.hypo);break;case 'conf_factors':updateConfidenceFactors(msg.factors);break;case 'conf_final':updateFinalConfidence(msg.confidence,msg.level);break;case 'output':updateOutputMessage(msg);break;case 'pipeline_done':document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;setAgent('master','done',100);break;case 'error':document.getElementById('sysStatus').textContent='● ERROR';document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;break;case 'backend_status':document.getElementById('sysStatus').textContent='● '+String(msg.status||'READY').toUpperCase();updateOntologySummary({counts:msg.ontology_stats,summary:msg.ontology_loaded?'知识库已挂载':''});break;case 'llm_thinking':break;default:console.log('Unhandled backend message',msg)}}
+function handleBackendMessage(msg){switch(msg.type){case 'agent_status':setAgent(mapAgentId(msg.agent),msg.state||msg.status,msg.progress);break;case 'msg_bus':pushMsg(mapAgentId(msg.from),mapAgentId(msg.to),renderPairs(msg.pairs));break;case 'wire_animate':animateWire(mapAgentId(msg.from),mapAgentId(msg.to));break;case 'onto_activated':renderOntologyActivated(msg);break;case 'onto_summary':updateOntologySummary(msg);break;case 'reasoning_step':addChain({title:msg.step.title,body:highlightRuleRefs(msg.step.body),agent:'llm',details:[]},stepIndex++);break;case 'rule_matched':appendRule(msg.rule);break;case 'hypothesis':appendHypothesis(msg.hypothesis||msg.hypo);break;case 'conf_factors':updateConfidenceFactors(msg.factors);break;case 'conf_final':updateFinalConfidence(msg.confidence,msg.level);break;case 'output':updateOutputMessage(msg);break;case 'pipeline_done':document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;setAgent('master','done',100);break;case 'error':document.getElementById('sysStatus').textContent='● ERROR';document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;break;case 'backend_status':document.getElementById('sysStatus').textContent='● '+String(msg.status||'READY').toUpperCase();updateOntologySummary({counts:msg.ontology_stats,summary:msg.ontology_loaded?'知识库已挂载':''});break;case 'llm_thinking':break;default:console.log('Unhandled backend message',msg)}}
 
 function connectWebSocket(){if(ws&&[WebSocket.OPEN,WebSocket.CONNECTING].includes(ws.readyState))return;ws=new WebSocket('ws://localhost:8765/ws');ws.onopen=()=>{document.getElementById('sysStatus').textContent='● ONLINE';ws.send(JSON.stringify({type:'client_ready',client_version:'cea-demo'}))};ws.onmessage=(event)=>{handleBackendMessage(JSON.parse(event.data))};ws.onclose=()=>{document.getElementById('sysStatus').textContent='● OFFLINE';ws=null;running=false;const btn=document.getElementById('goBtn');btn.disabled=false;btn.innerHTML='⚡ 启动 Ontology-Driven 诊断';};ws.onerror=()=>{document.getElementById('sysStatus').textContent='● ERROR';running=false;if(ws)try{ws.close();}catch(e){}ws=null;const btn=document.getElementById('goBtn');btn.disabled=false;btn.innerHTML='⚡ 启动 Ontology-Driven 诊断';}}
 
@@ -483,7 +591,7 @@ function highlightC(cats){
   });
 }
 
-async function startPipeline(){if(running)return;connectWebSocket();if(!ws)return;const btn=document.getElementById('goBtn');const defaultLabel='⚡ 启动 Ontology-Driven 诊断';btn.disabled=true;btn.innerHTML='<span class="tdots"><span></span><span></span><span></span></span> 诊断中...';const launch=()=>{running=true;stepIndex=0;resetAll();setAgent('master','running',10);let signalPayload=collectSignals();if(!Object.keys(signalPayload).length&&SCENARIOS[scenarioKey]){signalPayload=Object.fromEntries(Object.entries(SCENARIOS[scenarioKey].signals).map(([id,info])=>[id.replace('sv-',''),info.value]));}const payload={type:'start',symptom:document.getElementById('symptomInput').value,role:role,signals:signalPayload};ws.send(JSON.stringify(payload));};if(ws.readyState===WebSocket.OPEN){launch();return;}if(ws.readyState===WebSocket.CONNECTING){document.getElementById('sysStatus').textContent='● CONNECTING';const once=()=>{ws.removeEventListener('open',once);launch();};ws.addEventListener('open',once);return;}document.getElementById('sysStatus').textContent='● OFFLINE';btn.disabled=false;btn.innerHTML=defaultLabel;}
+async function startPipeline(){if(running)return;connectWebSocket();if(!ws)return;const btn=document.getElementById('goBtn');const defaultLabel='⚡ 启动 Ontology-Driven 诊断';btn.disabled=true;btn.innerHTML='<span class="tdots"><span></span><span></span><span></span></span> 诊断中...';const launch=()=>{running=true;stepIndex=0;resetAll();setAgent('master','running',10);let signalPayload=collectSignals();if(!Object.keys(signalPayload).length&&SCENARIOS[scenarioKey]){signalPayload=Object.fromEntries(Object.entries(SCENARIOS[scenarioKey].signals).map(([id,info])=>[id.replace('sv-',''),info.value]));}const payload={type:'start',symptom:document.getElementById('symptomInput').value,role:role,signals:signalPayload,use_ontology:_useOntology};ws.send(JSON.stringify(payload));};if(ws.readyState===WebSocket.OPEN){launch();return;}if(ws.readyState===WebSocket.CONNECTING){document.getElementById('sysStatus').textContent='● CONNECTING';const once=()=>{ws.removeEventListener('open',once);launch();};ws.addEventListener('open',once);return;}document.getElementById('sysStatus').textContent='● OFFLINE';btn.disabled=false;btn.innerHTML=defaultLabel;}
 
 window.addEventListener('load',()=>{loadScenario('ble_auth');connectWebSocket();setTimeout(drawWires,200);setTimeout(drawWires,500);document.fonts&&document.fonts.ready.then(()=>setTimeout(drawWires,200))});
 window.addEventListener('resize',()=>setTimeout(drawWires,50));
