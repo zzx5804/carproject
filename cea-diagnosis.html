@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEA Data Agent · Ontology-Driven LLM 智能诊断系统</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e1a;--bg2:#0f1525;--bg3:#141c30;--surface:#1a2340;--surface2:#1e2a4a;--border:#253050;--border2:#2a3a60;--accent:#00b4ff;--accent2:#0090d0;--green:#00e68a;--yellow:#ffc53d;--orange:#ff8c42;--red:#ff4d6a;--purple:#a78bfa;--purple2:#8b5cf6;--pink:#f472b6;--cyan:#22d3ee;--tx:#c8d6e5;--tx2:#7a8ba8;--tx3:#4a5a78;--txw:#e8f0fa;--mono:'JetBrains Mono',monospace;--sans:'Noto Sans SC',sans-serif;--radius:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:var(--sans);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,90,180,0.08),transparent 70%);pointer-events:none;z-index:0}
+.wrap{max-width:1480px;margin:0 auto;padding:20px 24px;position:relative;z-index:1}
+
+/* HEADER */
+header{display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.h-left{display:flex;align-items:center;gap:14px}
+.h-logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--accent2),var(--purple2));display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 20px rgba(0,180,255,0.2)}
+.h-sub{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:3px;text-transform:uppercase}
+.h-title{font-size:18px;font-weight:600;color:var(--txw);letter-spacing:-0.3px}
+.h-right{display:flex;align-items:center;gap:10px}
+.h-badge{font-family:var(--mono);font-size:9px;padding:4px 10px;border-radius:20px;letter-spacing:1px;border:1px solid var(--border2);color:var(--tx2)}
+.h-badge.active{border-color:var(--green);color:var(--green);box-shadow:0 0 8px rgba(0,230,138,0.15)}
+.h-badge.ont{border-color:var(--purple);color:var(--purple)}
+
+/* MAIN */
+.main-grid{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.panel-head{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--bg3);border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--tx2);letter-spacing:1px;text-transform:uppercase}
+.ph-dot{width:6px;height:6px;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ONTO LOAD */
+.onto-load{padding:12px 14px;border-bottom:1px solid var(--border)}
+.onto-title{font-family:var(--mono);font-size:9px;color:var(--yellow);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.onto-layers{display:flex;flex-direction:column;gap:5px}
+.onto-layer{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;display:flex;align-items:center;gap:8px;transition:all .4s}
+.onto-layer.loading{border-color:var(--yellow);box-shadow:0 0 8px rgba(255,197,61,0.1)}
+.onto-layer.loaded{border-color:var(--green);box-shadow:0 0 8px rgba(0,230,138,0.08)}
+.ol-icon{font-size:13px;width:20px;text-align:center}.ol-info{flex:1}
+.ol-name{font-family:var(--mono);font-size:10px;color:var(--txw);font-weight:500}
+.ol-desc{font-family:var(--mono);font-size:7.5px;color:var(--tx3);margin-top:1px}
+.ol-status{font-family:var(--mono);font-size:8px;padding:2px 5px;border-radius:3px}
+.ol-status.idle{color:var(--tx3);background:var(--bg)}.ol-status.loading{color:var(--yellow);background:rgba(255,197,61,0.1);border:1px solid rgba(255,197,61,0.2)}.ol-status.loaded{color:var(--green);background:rgba(0,230,138,0.08);border:1px solid rgba(0,230,138,0.2)}
+.onto-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:8px}
+.os-item{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:5px;text-align:center}
+.os-num{font-family:var(--mono);font-size:15px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.os-lbl{font-family:var(--mono);font-size:7px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.onto-bar{height:2px;background:var(--bg);border-radius:1px;margin-top:8px;overflow:hidden}
+.onto-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--yellow),var(--green));border-radius:1px;transition:width 1.5s ease}
+
+/* INPUT */
+.role-sel{display:flex;gap:0;background:var(--bg);border-radius:7px;padding:3px;margin:10px 14px 0}
+.rbtn{flex:1;padding:6px;border:none;background:transparent;color:var(--tx3);font-family:var(--sans);font-size:11px;cursor:pointer;border-radius:5px;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.rbtn .ri{font-size:14px}.rbtn.active{background:var(--surface2);color:var(--txw);box-shadow:0 0 0 1px var(--border2)}
+.inp-area{padding:10px 14px 14px}
+.inp-lbl{font-size:10px;color:var(--tx3);font-family:var(--mono);margin-bottom:4px;letter-spacing:1px}
+.symt-in{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--txw);font-family:var(--sans);font-size:12px;resize:none;height:56px;outline:none;transition:border .2s}
+.symt-in:focus{border-color:var(--accent)}
+.quick-btns{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}
+.qbtn{padding:3px 7px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;color:var(--tx2);font-size:10px;cursor:pointer;transition:all .2s;font-family:var(--sans)}
+.qbtn:hover{border-color:var(--accent);color:var(--accent)}.qbtn.grn{border-color:rgba(0,230,138,0.3);color:var(--green)}
+.go-btn{width:100%;padding:10px;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;border-radius:7px;color:#fff;font-weight:600;font-size:12px;cursor:pointer;font-family:var(--sans);transition:all .2s;margin-top:4px}
+.go-btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,180,255,0.25)}
+.go-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* SIGNAL */
+.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:8px 12px}
+.sig-item{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:4px 7px}
+.sig-key{font-family:var(--mono);font-size:7.5px;color:var(--tx3);margin-bottom:1px}
+.sig-val{font-family:var(--mono);font-size:10px;font-weight:500}
+.sig-val.ok{color:var(--green)}.sig-val.err{color:var(--red)}.sig-val.warn{color:var(--yellow)}.sig-val.dim{color:var(--tx3)}
+
+/* ═══ AGENT TOPOLOGY ═══ */
+.topo-inner{padding:28px 40px;position:relative;min-height:320px;overflow:visible}
+.topo-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:1}
+.agents-grid{display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:repeat(4,auto);gap:16px 24px;position:relative;z-index:2}
+.agent-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;width:190px;position:relative;transition:all .4s}
+.agent-card::after{content:'';position:absolute;inset:-1px;border-radius:11px;border:1.5px solid transparent;transition:all .4s;pointer-events:none}
+.agent-card.active::after{border-color:var(--accent);box-shadow:0 0 16px rgba(0,180,255,0.2)}
+.agent-card.done::after{border-color:var(--green);box-shadow:0 0 10px rgba(0,230,138,0.12)}
+.agent-card[data-id="master"]{grid-column:2;grid-row:1;justify-self:center}
+.agent-card[data-id="symptom"]{grid-column:1;grid-row:2;justify-self:center}
+.agent-card[data-id="ontology"]{grid-column:3;grid-row:2;justify-self:center}
+.agent-card[data-id="llm"]{grid-column:1;grid-row:3;justify-self:center}
+.agent-card[data-id="rule"]{grid-column:3;grid-row:3;justify-self:center}
+.agent-card[data-id="output"]{grid-column:2;grid-row:4;justify-self:center}
+.ac-top{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.ac-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ac-icon.i-master{background:rgba(0,180,255,0.1);border:1px solid rgba(0,180,255,0.25)}
+.ac-icon.i-sym{background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.25)}
+.ac-icon.i-ont{background:rgba(255,197,61,0.1);border:1px solid rgba(255,197,61,0.25)}
+.ac-icon.i-llm{background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25)}
+.ac-icon.i-rule{background:rgba(0,230,138,0.1);border:1px solid rgba(0,230,138,0.25)}
+.ac-icon.i-out{background:rgba(244,114,182,0.1);border:1px solid rgba(244,114,182,0.25)}
+.ac-name{font-size:12px;font-weight:600;color:var(--txw)}
+.ac-role{font-family:var(--mono);font-size:9px;margin-top:1px}
+.ac-role.r-master{color:var(--accent)}.ac-role.r-sym{color:var(--purple)}.ac-role.r-ont{color:var(--yellow)}.ac-role.r-llm{color:var(--purple2)}.ac-role.r-rule{color:var(--green)}.ac-role.r-out{color:var(--pink)}
+.ac-detail{font-family:var(--mono);font-size:8px;color:var(--tx3);margin-top:2px}
+.ac-status{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;display:inline-flex;align-items:center;gap:4px;margin-top:4px}
+.ac-status.s-idle{background:var(--bg);color:var(--tx3);border:1px solid var(--border)}
+.ac-status.s-run{background:rgba(0,180,255,0.08);color:var(--accent);border:1px solid rgba(0,180,255,0.25)}
+.ac-status.s-done{background:rgba(0,230,138,0.08);color:var(--green);border:1px solid rgba(0,230,138,0.2)}
+.ac-progress{height:2px;background:var(--bg);border-radius:1px;margin-top:6px;overflow:hidden;opacity:0;transition:opacity .3s}
+.ac-progress.show{opacity:1}
+.ac-progress-fill{height:100%;width:0%;border-radius:1px;transition:width .6s ease}
+
+/* WIRES */
+.wire{stroke:var(--border2);stroke-width:1.2;fill:none;transition:stroke .4s,stroke-width .4s}
+.wire.active{stroke:var(--accent);stroke-width:2;filter:drop-shadow(0 0 3px rgba(0,180,255,0.4))}
+.wire.done{stroke:var(--green);stroke-width:1.2;opacity:.5}
+.wire.ont-active{stroke:var(--yellow);stroke-width:2;filter:drop-shadow(0 0 3px rgba(255,197,61,0.4))}
+.wire.llm-active{stroke:var(--purple);stroke-width:2;filter:drop-shadow(0 0 3px rgba(167,139,250,0.4))}
+@keyframes packetTravel{0%{stroke-dashoffset:100}100%{stroke-dashoffset:0}}
+.wire-pulse{stroke:var(--accent);stroke-width:3;fill:none;opacity:0;stroke-dasharray:10 90;stroke-dashoffset:100}
+.wire-pulse.go{opacity:1;animation:packetTravel .7s linear forwards}
+.wire-pulse.ont{stroke:var(--yellow)}.wire-pulse.llm{stroke:var(--purple)}
+.wire-label{position:absolute;font-family:var(--mono);font-size:8px;padding:2px 6px;border-radius:3px;white-space:nowrap;opacity:0;transition:opacity .3s;pointer-events:none;z-index:3;background:var(--bg3);border:1px solid var(--border)}
+.wire-label.vis{opacity:1}
+.wire-label.c-acc{color:var(--accent);border-color:rgba(0,180,255,0.3)}.wire-label.c-ont{color:var(--yellow);border-color:rgba(255,197,61,0.3)}.wire-label.c-llm{color:var(--purple);border-color:rgba(167,139,250,0.3)}.wire-label.c-grn{color:var(--green);border-color:rgba(0,230,138,0.3)}.wire-label.c-pnk{color:var(--pink);border-color:rgba(244,114,182,0.3)}
+
+/* BOTTOM */
+.chain{display:flex;flex-direction:column;gap:0}
+.chain-step{display:flex;gap:10px;opacity:0;transform:translateX(-6px);transition:all .4s}
+.chain-step.vis{opacity:1;transform:translateX(0)}
+.cs-line{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0}
+.cs-dot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;transition:all .3s;font-family:var(--mono);color:var(--tx3)}
+.cs-dot.active{border-color:var(--accent);color:var(--accent);box-shadow:0 0 8px rgba(0,180,255,0.25)}
+.cs-dot.done{border-color:var(--green);color:var(--green)}
+.cs-conn{flex:1;width:1.5px;background:var(--border);margin:2px 0;min-height:10px;transition:background .3s}
+.cs-conn.done{background:rgba(0,230,138,0.3)}
+.cs-body{flex:1;padding-bottom:10px}
+.cs-title{font-family:var(--mono);font-size:10px;color:var(--tx2);margin-bottom:3px;font-weight:500}
+.cs-title.done{color:var(--green)}
+.cs-content{font-size:11px;line-height:1.5;color:var(--tx)}
+.cs-kv{display:flex;gap:5px;font-family:var(--mono);font-size:10px}
+.cs-k{color:var(--tx3)}.cs-v{color:var(--txw)}.cs-v.ok{color:var(--green)}.cs-v.err{color:var(--red)}.cs-v.warn{color:var(--yellow)}
+.prov-tag{display:inline-flex;align-items:center;gap:3px;font-family:var(--mono);font-size:7px;padding:1px 5px;border-radius:3px;margin-left:4px;vertical-align:middle}
+.prov-tag.llm{background:rgba(167,139,250,0.1);color:var(--purple);border:1px solid rgba(167,139,250,0.2)}
+.prov-tag.ont{background:rgba(255,197,61,0.1);color:var(--yellow);border:1px solid rgba(255,197,61,0.2)}
+.prov-tag.rule{background:rgba(0,230,138,0.1);color:var(--green);border:1px solid rgba(0,230,138,0.2)}
+.side-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px}
+.sb-title{font-family:var(--mono);font-size:9px;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.rule-item{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:6px 8px;margin-bottom:4px;display:flex;gap:7px;align-items:flex-start;opacity:0;transform:translateY(4px);transition:all .3s}
+.rule-item.vis{opacity:1;transform:translateY(0)}
+.rule-id{font-family:var(--mono);font-size:8px;padding:2px 5px;border-radius:3px;border:1px solid var(--accent);color:var(--accent);background:rgba(0,180,255,0.05);flex-shrink:0;white-space:nowrap}
+.rule-text{font-size:10px;color:var(--tx);line-height:1.4;flex:1}
+.rule-conf{font-family:var(--mono);font-size:10px;color:var(--green);flex-shrink:0}
+.rule-src{font-family:var(--mono);font-size:7px;color:var(--tx3);margin-top:2px;display:block}
+.hypo-item{margin-bottom:5px;opacity:0;transform:translateX(6px);transition:all .4s}
+.hypo-item.vis{opacity:1;transform:translateX(0)}
+.hypo-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.hypo-name{font-size:11px;color:var(--txw)}.hypo-pct{font-family:var(--mono);font-size:11px;color:var(--accent)}
+.hypo-bar{height:3px;background:var(--bg);border-radius:2px;overflow:hidden}
+.hypo-fill{height:100%;width:0%;border-radius:2px;transition:width 1s ease}
+.hypo-fill.p{background:linear-gradient(90deg,var(--accent2),var(--accent))}.hypo-fill.s{background:linear-gradient(90deg,var(--purple2),var(--purple))}.hypo-fill.t{background:linear-gradient(90deg,var(--tx3),var(--tx2))}
+.conf-display{text-align:center;padding:8px 0}
+.conf-num{font-family:var(--mono);font-size:44px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.conf-label{font-family:var(--mono);font-size:10px;color:var(--tx3);margin-top:3px}
+.conf-bar{height:4px;background:var(--bg);border-radius:2px;overflow:hidden;margin:8px 0}
+.conf-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent2),var(--accent),var(--green));border-radius:2px;transition:width 1.2s ease;box-shadow:0 0 8px rgba(0,180,255,0.3)}
+.conf-factors{display:flex;flex-direction:column;gap:4px}
+.cf-row{display:flex;align-items:center;gap:6px}
+.cf-lbl{font-family:var(--mono);font-size:9px;color:var(--tx3);width:110px;flex-shrink:0}
+.cf-bar{flex:1;height:2px;background:var(--bg);border-radius:1px;overflow:hidden}
+.cf-fill{height:100%;background:var(--accent);border-radius:1px;width:0%;transition:width 1.2s ease}
+.cf-val{font-family:var(--mono);font-size:9px;color:var(--txw);width:30px;text-align:right}
+.output-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:13px;line-height:1.8;color:var(--tx);min-height:50px;opacity:0;transition:opacity .5s}
+.output-box.vis{opacity:1}
+.output-box .conc{color:var(--txw);font-weight:600;font-size:14px}
+.action-list{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.ai{display:flex;align-items:flex-start;gap:6px;font-size:12px}
+.an{width:18px;height:18px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;color:var(--accent);flex-shrink:0;margin-top:1px}
+.esc-hint{margin:8px 0 0;padding:7px 10px;background:rgba(255,140,66,0.08);border:1px solid rgba(255,140,66,0.25);border-radius:5px;font-size:10px;color:var(--orange);display:none}
+.esc-hint.vis{display:block}
+.onto-detail{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px;font-family:var(--mono);font-size:10px;line-height:1.8;color:var(--tx);display:none;margin-top:8px}
+.onto-detail.vis{display:block}
+.idle{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;gap:6px;color:var(--tx3);text-align:center}
+.idle-icon{font-size:28px;opacity:.3}.idle-txt{font-size:11px;line-height:1.5}
+.tdots{display:inline-flex;gap:3px}
+.tdots span{width:4px;height:4px;border-radius:50%;background:var(--accent);animation:td 1.2s infinite}
+.tdots span:nth-child(2){animation-delay:.2s}.tdots span:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,100%{opacity:.2;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* ONTOLOGY SEMANTIC CORE C1-C10 */
+.onto-core{padding:10px 12px}
+.oc-title{font-family:var(--mono);font-size:8px;color:var(--yellow);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.oc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.oc-item{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:4px 7px;display:flex;align-items:center;gap:5px;transition:all .4s;font-family:var(--mono);font-size:8px}
+.oc-item.hit{border-color:var(--accent);background:rgba(0,180,255,0.05);box-shadow:0 0 6px rgba(0,180,255,0.1)}
+.oc-tag{font-size:7px;font-weight:700;color:var(--accent);min-width:18px}
+.oc-name{color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.oc-dot{width:4px;height:4px;border-radius:50%;margin-left:auto;flex-shrink:0;background:var(--border);transition:all .3s}
+.oc-dot.on{background:var(--green);box-shadow:0 0 4px var(--green)}
+
+/* MESSAGE BUS */
+.bus-body{overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.bus-msg{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:5px 8px;opacity:0;transform:translateX(6px);transition:all .3s;font-size:10px;line-height:1.4}
+.bus-msg.show{opacity:1;transform:translateX(0)}
+.bus-head{display:flex;align-items:center;gap:4px;margin-bottom:2px}
+.bus-from{font-family:var(--mono);font-size:8px;padding:1px 4px;border-radius:2px;font-weight:600}
+.bus-from.f-master{background:rgba(0,180,255,0.1);color:var(--accent)}
+.bus-from.f-sym{background:rgba(167,139,250,0.1);color:var(--purple)}
+.bus-from.f-ont{background:rgba(255,197,61,0.1);color:var(--yellow)}
+.bus-from.f-llm{background:rgba(139,92,246,0.1);color:var(--purple2)}
+.bus-from.f-rule{background:rgba(0,230,138,0.1);color:var(--green)}
+.bus-from.f-out{background:rgba(244,114,182,0.1);color:var(--pink)}
+.bus-arrow{font-size:8px;color:var(--tx3)}.bus-to{font-family:var(--mono);font-size:7px;color:var(--tx3)}
+.bus-content{font-family:var(--mono);font-size:9px;color:var(--tx)}
+.bus-kv{display:flex;gap:4px}.bus-k{color:var(--tx3)}.bus-v{color:var(--txw)}
+.bus-v.g{color:var(--green)}.bus-v.e{color:var(--red)}.bus-v.w{color:var(--yellow)}
+
+/* TOPO + BUS side-by-side */
+.topo-bus-row{display:flex;gap:14px;align-items:stretch}
+.bus-panel{width:280px;flex-shrink:0;display:flex;flex-direction:column}
+.bus-panel .bus-body{flex:1;overflow-y:auto}
+
+/* RESULTS 2-COL under topology */
+.results-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+@media(max-width:1000px){.main-grid{grid-template-columns:1fr}.results-2col{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="h-left"><div class="h-logo">🧠</div><div><div class="h-sub">Ontology-Driven LLM Architecture</div><div class="h-title">CEA Data Agent · 智能诊断系统</div></div></div>
+  <div class="h-right"><span class="h-badge ont">CEA Vehicle Ontology v1.0</span><span class="h-badge">EEA 3.5 · SSTS-CEA</span><span class="h-badge active" id="sysStatus">● READY</span></div>
+</header>
+<div class="main-grid">
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <div class="panel"><div class="panel-head"><div class="ph-dot" style="background:var(--yellow);box-shadow:0 0 5px var(--yellow)"></div>Ontology 本体加载</div>
+      <div class="onto-load"><div class="onto-title"><span>📦</span> Vehicle Ontology Layers</div>
+        <div class="onto-layers">
+          <div class="onto-layer" id="ol-l1"><div class="ol-icon">🚗</div><div class="ol-info"><div class="ol-name">L1 · Vehicle Layer</div><div class="ol-desc">PowerMode, KeySystem, GearBox</div></div><div class="ol-status idle" id="ols-l1">IDLE</div></div>
+          <div class="onto-layer" id="ol-l2"><div class="ol-icon">🔌</div><div class="ol-info"><div class="ol-name">L2 · Subsystem Layer</div><div class="ol-desc">BLE, NFC, 4G, LDCU, TBOX</div></div><div class="ol-status idle" id="ols-l2">IDLE</div></div>
+          <div class="onto-layer" id="ol-l3"><div class="ol-icon">🧩</div><div class="ol-info"><div class="ol-name">L3 · ECU Layer</div><div class="ol-desc">BMS, LDCU_EEPROM, TBOX_BLE</div></div><div class="ol-status idle" id="ols-l3">IDLE</div></div>
+        </div>
+        <div class="onto-stats"><div class="os-item"><div class="os-num" id="os-cls">0</div><div class="os-lbl">Classes</div></div><div class="os-item"><div class="os-num" id="os-prop">0</div><div class="os-lbl">Properties</div></div><div class="os-item"><div class="os-num" id="os-ind">0</div><div class="os-lbl">Instances</div></div></div>
+        <div class="onto-bar"><div class="onto-bar-fill" id="ontoBarFill"></div></div>
+      </div>
+    </div>
+    <div class="panel"><div class="panel-head"><div class="ph-dot" style="background:var(--accent);box-shadow:0 0 5px var(--accent)"></div>诊断输入</div>
+      <div class="role-sel"><button type="button" class="rbtn active" id="btn-owner" onclick="setRole('owner')"><span class="ri">🚗</span><span>车主</span></button><button type="button" class="rbtn" id="btn-tech" onclick="setRole('technician')"><span class="ri">🔧</span><span>技师</span></button><button type="button" class="rbtn" id="btn-cs" onclick="setRole('customer_service')"><span class="ri">📞</span><span>客服</span></button></div>
+      <div class="inp-area"><div class="inp-lbl">// 症状描述</div><textarea class="symt-in" id="symptomInput" placeholder="踩刹车按启动按钮，车辆无法上电..."></textarea>
+        <div class="quick-btns"><button type="button" class="qbtn" onclick="loadScenario('ble_auth')">BLE认证失败</button><button type="button" class="qbtn" onclick="loadScenario('key_timeout')">钥匙搜索超时</button><button type="button" class="qbtn" onclick="loadScenario('forced_off')">强制下电无响应</button><button type="button" class="qbtn grn" onclick="loadScenario('bms_charging')">BMS充电热保护</button></div>
+        <button type="button" class="go-btn" id="goBtn" onclick="startPipeline()">⚡ 启动 Ontology-Driven 诊断</button>
+      </div>
+    </div>
+    <div class="panel"><div class="panel-head"><div class="ph-dot" style="background:var(--cyan);box-shadow:0 0 5px var(--cyan)"></div>车辆信号</div>
+      <div class="sig-grid"><div class="sig-item"><div class="sig-key">LDCU_PowerMode</div><div class="sig-val err" id="sv-pm">0:Off</div></div><div class="sig-item"><div class="sig-key">KeyValidSt</div><div class="sig-val err" id="sv-kv">INVALID</div></div><div class="sig-item"><div class="sig-key">BrkPedalSt</div><div class="sig-val ok" id="sv-brk">PRESSED</div></div><div class="sig-item"><div class="sig-key">GE_Fahrstufe</div><div class="sig-val ok" id="sv-gear">P</div></div><div class="sig-item"><div class="sig-key">Flag_BLE</div><div class="sig-val warn" id="sv-ble">DETECTED_FAIL</div></div><div class="sig-item"><div class="sig-key">BLE_ErrorCode</div><div class="sig-val err" id="sv-bleerr">AUTH_ERR</div></div></div>
+    </div>
+    <!-- Ontology Semantic Core C1-C10 -->
+    <div class="panel">
+      <div class="panel-head"><div class="ph-dot" style="background:var(--yellow);box-shadow:0 0 5px var(--yellow)"></div>Ontology 语义核心 · C1-C10</div>
+      <div class="onto-core">
+        <div class="oc-title"><span>🧬</span> CEA Vehicle Ontology 十层语义结构</div>
+        <div class="oc-grid">
+          <div class="oc-item" id="oc-c1"><span class="oc-tag">C1</span><span class="oc-name">Objects 对象</span><span class="oc-dot" id="ocd-c1"></span></div>
+          <div class="oc-item" id="oc-c2"><span class="oc-tag">C2</span><span class="oc-name">Links 关联</span><span class="oc-dot" id="ocd-c2"></span></div>
+          <div class="oc-item" id="oc-c3"><span class="oc-tag">C3</span><span class="oc-name">Constraints 约束</span><span class="oc-dot" id="ocd-c3"></span></div>
+          <div class="oc-item" id="oc-c4"><span class="oc-tag">C4</span><span class="oc-name">Reasoning 推理</span><span class="oc-dot" id="ocd-c4"></span></div>
+          <div class="oc-item" id="oc-c5"><span class="oc-tag">C5</span><span class="oc-name">Rules 规则</span><span class="oc-dot" id="ocd-c5"></span></div>
+          <div class="oc-item" id="oc-c6"><span class="oc-tag">C6</span><span class="oc-name">Actions 动作</span><span class="oc-dot" id="ocd-c6"></span></div>
+          <div class="oc-item" id="oc-c7"><span class="oc-tag">C7</span><span class="oc-name">Events 事件</span><span class="oc-dot" id="ocd-c7"></span></div>
+          <div class="oc-item" id="oc-c8"><span class="oc-tag">C8</span><span class="oc-name">Contexts 上下文</span><span class="oc-dot" id="ocd-c8"></span></div>
+          <div class="oc-item" id="oc-c9"><span class="oc-tag">C9</span><span class="oc-name">Version 版本</span><span class="oc-dot" id="ocd-c9"></span></div>
+          <div class="oc-item" id="oc-c10"><span class="oc-tag">C10</span><span class="oc-name">Provenance 溯源</span><span class="oc-dot" id="ocd-c10"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:14px;">
+    <!-- Topology + Message Bus side by side -->
+    <div class="topo-bus-row">
+      <div class="panel" style="flex:1;min-width:0;">
+        <div class="panel-head"><div class="ph-dot" style="background:var(--purple);box-shadow:0 0 5px var(--purple)"></div>Agent 调用拓扑</div>
+        <div class="topo-inner" id="topoInner"><svg class="topo-svg" id="topoSvg"><title>Agent topology wires</title></svg>
+        <div class="agents-grid" id="agentsGrid">
+          <div class="agent-card" data-id="master" id="ac-master"><div class="ac-top"><div class="ac-icon i-master">🎯</div><div><div class="ac-name">Master Agent</div><div class="ac-role r-master">编排 Orchestrator</div></div></div><div class="ac-detail">调度所有 Sub-Agent</div><div class="ac-status s-idle" id="st-master">⏸ idle</div><div class="ac-progress" id="pg-master"><div class="ac-progress-fill" style="background:var(--accent)"></div></div></div>
+          <div class="agent-card" data-id="symptom" id="ac-symptom"><div class="ac-top"><div class="ac-icon i-sym">🔍</div><div><div class="ac-name">SymptomParser</div><div class="ac-role r-sym">症状解析 Agent</div></div></div><div class="ac-detail">NLU · C7 Events · C8 Contexts</div><div class="ac-status s-idle" id="st-symptom">⏸ idle</div><div class="ac-progress" id="pg-symptom"><div class="ac-progress-fill" style="background:var(--purple)"></div></div></div>
+          <div class="agent-card" data-id="ontology" id="ac-ontology"><div class="ac-top"><div class="ac-icon i-ont">📦</div><div><div class="ac-name">OntologyFetcher</div><div class="ac-role r-ont">本体查询 Agent</div></div></div><div class="ac-detail">C1 Objects · C2 Links · C3 Constraints</div><div class="ac-status s-idle" id="st-ontology">⏸ idle</div><div class="ac-progress" id="pg-ontology"><div class="ac-progress-fill" style="background:var(--yellow)"></div></div></div>
+          <div class="agent-card" data-id="llm" id="ac-llm"><div class="ac-top"><div class="ac-icon i-llm">🧠</div><div><div class="ac-name">LLM Reasoner</div><div class="ac-role r-llm">大模型推理 Agent</div></div></div><div class="ac-detail">因果推理 · 假设生成 · 置信度</div><div class="ac-status s-idle" id="st-llm">⏸ idle</div><div class="ac-progress" id="pg-llm"><div class="ac-progress-fill" style="background:var(--purple2)"></div></div></div>
+          <div class="agent-card" data-id="rule" id="ac-rule"><div class="ac-top"><div class="ac-icon i-rule">⚙️</div><div><div class="ac-name">RuleEngine</div><div class="ac-role r-rule">规则匹配 Agent</div></div></div><div class="ac-detail">C5 Rules · FRS/SSTS 规则库</div><div class="ac-status s-idle" id="st-rule">⏸ idle</div><div class="ac-progress" id="pg-rule"><div class="ac-progress-fill" style="background:var(--green)"></div></div></div>
+          <div class="agent-card" data-id="output" id="ac-output"><div class="ac-top"><div class="ac-icon i-out">💬</div><div><div class="ac-name">OutputAdapter</div><div class="ac-role r-out">输出适配 Agent</div></div></div><div class="ac-detail">角色适配 · 话术生成</div><div class="ac-status s-idle" id="st-output">⏸ idle</div><div class="ac-progress" id="pg-output"><div class="ac-progress-fill" style="background:var(--pink)"></div></div></div>
+        </div>
+        </div>
+      </div>
+      <!-- Message Bus next to topology -->
+      <div class="panel bus-panel">
+        <div class="panel-head"><div class="ph-dot" style="background:var(--green);box-shadow:0 0 5px var(--green)"></div>Agent 消息总线</div>
+        <div class="bus-body" id="msgBus">
+          <div class="idle" style="padding:20px"><div class="idle-icon" style="font-size:20px">📡</div><div class="idle-txt" style="font-size:10px">等待 Pipeline 启动<br>消息将实时推送到此处</div></div>
+        </div>
+      </div>
+    </div>
+    <!-- Reasoning + Results -->
+    <div class="results-2col">
+      <div class="panel"><div class="panel-head"><div class="ph-dot" style="background:var(--green);box-shadow:0 0 5px var(--green)"></div>因果推理链 <span class="prov-tag llm" style="margin-left:auto">LLM+Ontology</span></div>
+        <div style="padding:14px"><div class="chain" id="reasonChain"><div class="idle" id="chainIdle"><div class="idle-icon">🔗</div><div class="idle-txt">启动诊断查看推理链</div></div></div><div class="onto-detail" id="ontoDetail"></div></div>
+      </div>
+      <div class="panel"><div class="panel-head"><div class="ph-dot" style="background:var(--accent);box-shadow:0 0 5px var(--accent)"></div>诊断结果</div>
+        <div style="padding:14px">
+          <div class="side-box"><div class="sb-title">⚙️ 匹配规则 <span class="prov-tag rule">C5:Rules</span></div><div id="ruleList"><div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待规则匹配</div></div></div>
+          <div class="side-box"><div class="sb-title">💡 假设评估 <span class="prov-tag llm">LLM</span></div><div id="hypoList"><div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待假设生成</div></div></div>
+          <div class="side-box"><div class="sb-title">📊 置信度</div><div class="conf-display"><div class="conf-num" id="confNum">0%</div><div class="conf-label" id="confLabel">等待计算</div></div><div class="conf-bar"><div class="conf-bar-fill" id="confBarFill"></div></div><div class="conf-factors" id="confFactors"></div></div>
+          <div class="side-box"><div class="sb-title">💬 诊断输出 <span class="prov-tag ont">Role-Adaptive</span></div><div class="output-box" id="outputBox"><div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待诊断完成</div></div><div class="esc-hint" id="escalationHint"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+let role='owner',running=false,scenarioKey='ble_auth',ws=null,stepIndex=0;
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+const SCENARIOS = {
+  ble_auth: {
+    symptom: '踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"',
+    signals: {
+      'sv-pm': { cls: 'err', value: '0:Off (St1)' },
+      'sv-kv': { cls: 'err', value: 'INVALID' },
+      'sv-brk': { cls: 'ok', value: 'PRESSED' },
+      'sv-gear': { cls: 'ok', value: 'P (0x5)' },
+      'sv-ble': { cls: 'warn', value: 'DETECTED_FAIL' },
+      'sv-bleerr': { cls: 'err', value: 'AUTH_ERR(0x05)' }
+    }
+  },
+  key_timeout: {
+    symptom: '踩刹车按启动按钮，提示“钥匙搜索超时”，车辆保持Off',
+    signals: {
+      'sv-pm': { cls: 'err', value: '0:Off' },
+      'sv-kv': { cls: 'warn', value: 'SEARCHING' },
+      'sv-brk': { cls: 'ok', value: 'PRESSED' },
+      'sv-gear': { cls: 'ok', value: 'P' },
+      'sv-ble': { cls: 'warn', value: 'SEARCHING' },
+      'sv-bleerr': { cls: 'err', value: 'TIMEOUT' }
+    }
+  },
+  forced_off: {
+    symptom: '长按启动键车辆强制下电，松开后依旧无法上电',
+    signals: {
+      'sv-pm': { cls: 'err', value: '0:Off' },
+      'sv-kv': { cls: 'err', value: 'INVALID' },
+      'sv-brk': { cls: 'warn', value: 'NOT_PRESSED' },
+      'sv-gear': { cls: 'ok', value: 'P' },
+      'sv-ble': { cls: 'ok', value: 'AUTHORIZED' },
+      'sv-bleerr': { cls: 'ok', value: 'NONE' }
+    }
+  },
+  bms_charging: {
+    symptom: '充电过程中BMS触发热保护，充电功率下降并终止',
+    signals: {
+      'sv-pm': { cls: 'warn', value: '2:Charging' },
+      'sv-kv': { cls: 'ok', value: 'VALID' },
+      'sv-brk': { cls: 'ok', value: 'PRESSED' },
+      'sv-gear': { cls: 'ok', value: 'P' },
+      'sv-ble': { cls: 'ok', value: 'AUTHORIZED' },
+      'sv-bleerr': { cls: 'ok', value: 'NONE' }
+    }
+  }
+};
+
+function animateNum(id,s,e,d){const el=document.getElementById(id);if(!el)return;let t0=null;const step=ts=>{if(!t0)t0=ts;const p=Math.min((ts-t0)/d,1);el.textContent=Math.floor(p*(e-s)+s);if(p<1)requestAnimationFrame(step);else el.textContent=e};requestAnimationFrame(step)}
+function loadScenario(key){const sc=SCENARIOS[key];if(!sc)return;scenarioKey=key;document.getElementById('symptomInput').value=sc.symptom;Object.entries(sc.signals).forEach(([id,info])=>{const el=document.getElementById(id);if(el){el.className='sig-val '+(info.cls||'ok');el.textContent=info.value||'';}});}
+
+function collectSignals(){const result={};document.querySelectorAll('[id^="sv-"]').forEach(el=>{const key=el.id.replace('sv-','');result[key]=el.textContent.trim();});return result;}
+
+function setRole(r){role=r;document.querySelectorAll('.rbtn').forEach(b=>{b.classList.remove('active')});document.getElementById({owner:'btn-owner',technician:'btn-tech',customer_service:'btn-cs'}[r]).classList.add('active')}
+
+function mapAgentId(id){return ({orch:'master',orchestrator:'master',sym:'symptom',symptom_parser:'symptom',ont:'ontology',ontology_fetcher:'ontology',rule:'rule',conf:'rule',confidence_calc:'rule',out:'output',output_adapter:'output',llm:'llm',llm_diagnosis_agent:'llm',ALL:'master'})[id]||id}
+
+function renderPairs(pairs){return(pairs||[]).map(({k,v,cls})=>`<div class="bus-kv"><span class="bus-k">${k}:</span><span class="bus-v ${cls||''}">${v}</span></div>`).join('')}
+
+function appendRule(rule){const rl=document.getElementById('ruleList');if(!rl)return;const empty=rl.querySelector('div[style*="等待规则匹配"]');if(empty)rl.innerHTML='';const el=document.createElement('div');el.className='rule-item';el.innerHTML=`<span class="rule-id">${rule.id}</span><span class="rule-text">${rule.text}<span class="rule-src">${rule.src||''}</span></span><span class="rule-conf">${rule.conf||''}</span>`;rl.appendChild(el);setTimeout(()=>el.classList.add('vis'),50)}
+
+function appendHypothesis(hypothesis){const hl=document.getElementById('hypoList');if(!hl)return;const empty=hl.querySelector('div[style*="等待假设生成"]');if(empty)hl.innerHTML='';const pct=hypothesis.pct??Math.round((hypothesis.conf||0)*100);const cls=hypothesis.cls||'p';const name=hypothesis.name||hypothesis.desc||'未命名假设';const el=document.createElement('div');el.className='hypo-item';el.innerHTML=`<div class="hypo-row"><span class="hypo-name">${name}</span><span class="hypo-pct">${pct}%</span></div><div class="hypo-bar"><div class="hypo-fill ${cls}"></div></div>`;hl.appendChild(el);setTimeout(()=>{el.classList.add('vis');el.querySelector('.hypo-fill').style.width=pct+'%'},50)}
+
+function updateConfidenceFactors(factors){const cf=document.getElementById('confFactors');if(!cf)return;cf.innerHTML='';(factors||[]).forEach(f=>{const label=f.label||f.key||'';const val=f.val??f.value??0;const display=f.display||`${Math.round(val*100)}%`;const row=document.createElement('div');row.className='cf-row';row.innerHTML=`<span class="cf-lbl">${label}</span><div class="cf-bar"><div class="cf-fill" style="width:${val*100}%"></div></div><span class="cf-val">${display}</span>`;cf.appendChild(row)})}
+
+function updateFinalConfidence(confidence,level){const pct=confidence>1?confidence:Math.round(confidence*100);document.getElementById('confNum').textContent=pct+'%';document.getElementById('confBarFill').style.width=pct+'%';document.getElementById('confLabel').textContent=level==='high'?'🔴 高置信度':level==='medium'?'🟡 中置信度':'⚪ 低置信度'}
+
+function updateOutputMessage(msg){const ob=document.getElementById('outputBox');const payload=msg.output||{};const text=payload.text||msg.html||'';ob.innerHTML=text||'<div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">无输出</div>';ob.classList.add('vis');const esc=document.getElementById('escalationHint');const hint=msg.escalation||payload.hint||(typeof payload.escalation==='string'?payload.escalation:null);if(hint){esc.textContent='⚠️ '+hint;esc.style.display='block';esc.classList.add('vis');}else{esc.classList.remove('vis');esc.style.display='none';esc.textContent=''}}
+
+function updateOntologySummary(msg){if(msg.counts){animateNum('os-cls',0,msg.counts.classes||0,700);animateNum('os-prop',0,msg.counts.properties||0,900);animateNum('os-ind',0,msg.counts.rules||0,1100);document.getElementById('ontoBarFill').style.width='100%'}if(msg.summary){document.getElementById('ontoDetail').innerHTML=msg.summary;document.getElementById('ontoDetail').classList.add('vis')}}
+
+function handleBackendMessage(msg){switch(msg.type){case 'agent_status':setAgent(mapAgentId(msg.agent),msg.state||msg.status,msg.progress);break;case 'msg_bus':pushMsg(mapAgentId(msg.from),mapAgentId(msg.to),renderPairs(msg.pairs));break;case 'wire_animate':animateWire(mapAgentId(msg.from),mapAgentId(msg.to));break;case 'onto_summary':updateOntologySummary(msg);break;case 'reasoning_step':addChain({title:msg.step.title,body:msg.step.body,agent:'llm',details:[]},stepIndex++);break;case 'rule_matched':appendRule(msg.rule);break;case 'hypothesis':appendHypothesis(msg.hypothesis||msg.hypo);break;case 'conf_factors':updateConfidenceFactors(msg.factors);break;case 'conf_final':updateFinalConfidence(msg.confidence,msg.level);break;case 'output':updateOutputMessage(msg);break;case 'pipeline_done':document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;setAgent('master','done',100);break;case 'error':document.getElementById('sysStatus').textContent='● ERROR';document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;break;case 'backend_status':document.getElementById('sysStatus').textContent='● '+String(msg.status||'READY').toUpperCase();updateOntologySummary({counts:msg.ontology_stats,summary:msg.ontology_loaded?'知识库已挂载':''});break;case 'llm_thinking':break;default:console.log('Unhandled backend message',msg)}}
+
+function connectWebSocket(){if(ws&&[WebSocket.OPEN,WebSocket.CONNECTING].includes(ws.readyState))return;ws=new WebSocket('ws://localhost:8765/ws');ws.onopen=()=>{document.getElementById('sysStatus').textContent='● ONLINE';ws.send(JSON.stringify({type:'client_ready',client_version:'cea-demo'}))};ws.onmessage=(event)=>{handleBackendMessage(JSON.parse(event.data))};ws.onclose=()=>{document.getElementById('sysStatus').textContent='● OFFLINE';ws=null;running=false;const btn=document.getElementById('goBtn');btn.disabled=false;btn.innerHTML='⚡ 启动 Ontology-Driven 诊断';};ws.onerror=()=>{document.getElementById('sysStatus').textContent='● ERROR';running=false;if(ws)try{ws.close();}catch(e){}ws=null;const btn=document.getElementById('goBtn');btn.disabled=false;btn.innerHTML='⚡ 启动 Ontology-Driven 诊断';}}
+
+const CONNECTIONS=[['master','symptom'],['master','ontology'],['symptom','llm'],['ontology','llm'],['llm','rule'],['llm','ontology'],['rule','output'],['llm','output']];
+function drawWires(){
+  const svg=document.getElementById('topoSvg');
+  svg.innerHTML='';
+  const c=document.getElementById('topoInner');
+  const cr=c.getBoundingClientRect();
+  svg.setAttribute('viewBox',`0 0 ${cr.width} ${cr.height}`);
+
+  function getBox(id){
+    const el=document.getElementById('ac-'+id);
+    const r=el.getBoundingClientRect();
+    return {
+      cx:r.left-cr.left+r.width/2,
+      cy:r.top-cr.top+r.height/2,
+      t:r.top-cr.top,
+      b:r.top-cr.top+r.height,
+      l:r.left-cr.left,
+      r:r.left-cr.left+r.width
+    };
+  }
+
+  // Find best edge point between two boxes
+  function edgePoint(from,to){
+    const dx=to.cx-from.cx, dy=to.cy-from.cy;
+    // Determine which edge to exit from
+    if(Math.abs(dx)>Math.abs(dy)){
+      // Horizontal dominant
+      if(dx>0) return {x:from.r, y:from.cy};
+      else return {x:from.l, y:from.cy};
+    } else {
+      // Vertical dominant
+      if(dy>0) return {x:from.cx, y:from.b};
+      else return {x:from.cx, y:from.t};
+    }
+  }
+
+  for(const[a,b]of CONNECTIONS){
+    try{
+      const ba=getBox(a), bb=getBox(b);
+      const pa=edgePoint(ba,bb);
+      const pb=edgePoint(bb,ba);
+      const mx=(pa.x+pb.x)/2, my=(pa.y+pb.y)/2;
+      const d=`M ${pa.x} ${pa.y} Q ${mx} ${pa.y} ${mx} ${my} Q ${mx} ${pb.y} ${pb.x} ${pb.y}`;
+
+      const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+      path.setAttribute('d',d);path.setAttribute('class','wire');path.id=`wire-${a}-${b}`;
+      svg.appendChild(path);
+
+      const pulse=document.createElementNS('http://www.w3.org/2000/svg','path');
+      pulse.setAttribute('d',d);pulse.setAttribute('class','wire-pulse');pulse.id=`pulse-${a}-${b}`;
+      svg.appendChild(pulse);
+    }catch(e){}
+  }
+}
+
+async function animateWire(f,t,s){const w=document.getElementById(`wire-${f}-${t}`);const p=document.getElementById(`pulse-${f}-${t}`);const cls=s||'active';if(w)w.setAttribute('class',`wire ${cls}`);if(p){p.setAttribute('class',`wire-pulse ${s==='ont-active'?'ont':s==='llm-active'?'llm':''}`);p.classList.add('go');await delay(700);p.classList.remove('go')}if(w)w.setAttribute('class','wire done')}
+
+function showLabel(f,t,text,cc){const c=document.getElementById('topoInner');const cr=c.getBoundingClientRect();const a=document.getElementById('ac-'+f).getBoundingClientRect();const b=document.getElementById('ac-'+t).getBoundingClientRect();const mx=(a.left+a.width/2+b.left+b.width/2)/2-cr.left;const my=(a.top+a.height/2+b.top+b.height/2)/2-cr.top;const l=document.createElement('div');l.className=`wire-label ${cc}`;l.textContent=text;l.style.left=mx+'px';l.style.top=my+'px';l.style.transform='translate(-50%,-50%)';c.appendChild(l);setTimeout(()=>l.classList.add('vis'),50);setTimeout(()=>{l.classList.remove('vis');setTimeout(()=>l.remove(),300)},2200)}
+
+function setAgent(id,state,pg){const c=document.getElementById('ac-'+id);const s=document.getElementById('st-'+id);const p=document.getElementById('pg-'+id);c.classList.remove('active','done');if(state==='running'){c.classList.add('active');s.className='ac-status s-run';s.innerHTML='<span class="tdots"><span></span><span></span><span></span></span> running'}else if(state==='done'){c.classList.add('done');s.className='ac-status s-done';s.innerHTML='✓ done'}else{s.className='ac-status s-idle';s.innerHTML='⏸ idle'}if(pg!==undefined){p.classList.add('show');p.querySelector('.ac-progress-fill').style.width=pg+'%'}}
+
+async function loadOntology(sc){const ls=['l1','l2','l3'];ls.forEach(l=>{document.getElementById('ol-'+l).classList.remove('loading','loaded');const s=document.getElementById('ols-'+l);s.className='ol-status idle';s.textContent='IDLE'});document.getElementById('ontoBarFill').style.width='0%';await delay(200);for(let i=0;i<3;i++){const l=ls[i],el=document.getElementById('ol-'+l),st=document.getElementById('ols-'+l);el.classList.add('loading');st.className='ol-status loading';st.textContent='LOADING...';document.getElementById('ontoBarFill').style.width=((i+.5)/3*100)+'%';await delay(400+Math.random()*200);el.classList.remove('loading');el.classList.add('loaded');st.className='ol-status loaded';st.textContent='✓ LOADED';document.getElementById('ontoBarFill').style.width=((i+1)/3*100)+'%'}animateNum('os-cls',0,sc.ontoCounts.cls,700);animateNum('os-prop',0,sc.ontoCounts.prop,900);animateNum('os-ind',0,sc.ontoCounts.ind,1100);await delay(300)}
+
+function addChain(step,i){const ch=document.getElementById('reasonChain');const idle=document.getElementById('chainIdle');if(idle)idle.style.display='none';const tag=step.agent==='llm'?'<span class="prov-tag llm">LLM</span>':step.agent==='ont'?'<span class="prov-tag ont">Ontology</span>':step.agent==='sym'?'<span class="prov-tag llm">NLU</span>':'<span class="prov-tag rule">Output</span>';let dh='';if(step.details&&step.details.length)dh='<div style="margin-top:3px">'+step.details.map(([k,v,c])=>`<div class="cs-kv"><span class="cs-k">${k}:</span><span class="cs-v ${c||''}">${v}</span></div>`).join('')+'</div>';const el=document.createElement('div');el.className='chain-step';el.innerHTML=`<div class="cs-line"><div class="cs-dot">${i+1}</div><div class="cs-conn"></div></div><div class="cs-body"><div class="cs-title">[S${i+1}] ${step.title} ${tag}</div><div class="cs-content">${step.body}${dh}</div></div>`;ch.appendChild(el);setTimeout(()=>{el.classList.add('vis');el.querySelector('.cs-dot').classList.add('active')},50);setTimeout(()=>{el.querySelector('.cs-dot').classList.remove('active');el.querySelector('.cs-dot').classList.add('done');el.querySelector('.cs-conn').classList.add('done');el.querySelector('.cs-title').classList.add('done')},800)}
+
+function resetAll(){['master','symptom','ontology','llm','rule','output'].forEach(id=>{document.getElementById('ac-'+id).classList.remove('active','done');document.getElementById('st-'+id).className='ac-status s-idle';document.getElementById('st-'+id).innerHTML='⏸ idle';document.getElementById('pg-'+id).classList.remove('show')});document.getElementById('reasonChain').innerHTML='<div class="idle" id="chainIdle"><div class="idle-icon">🔗</div><div class="idle-txt">启动诊断查看推理链</div></div>';document.getElementById('ruleList').innerHTML='<div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待规则匹配</div>';document.getElementById('hypoList').innerHTML='<div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待假设生成</div>';document.getElementById('confNum').textContent='0%';document.getElementById('confLabel').textContent='等待计算';document.getElementById('confBarFill').style.width='0%';document.getElementById('confFactors').innerHTML='';document.getElementById('outputBox').innerHTML='<div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待诊断完成</div>';document.getElementById('outputBox').classList.remove('vis');document.getElementById('escalationHint').classList.remove('vis');document.getElementById('escalationHint').style.display='none';document.getElementById('ontoDetail').classList.remove('vis');document.getElementById('ontoDetail').innerHTML='';document.querySelectorAll('.wire-label').forEach(l=>{l.remove()});
+// Reset message bus
+document.getElementById('msgBus').innerHTML='<div class="idle" style="padding:16px"><div class="idle-icon" style="font-size:20px">📡</div><div class="idle-txt" style="font-size:10px">等待 Pipeline 启动</div></div>';
+// Reset C1-C10
+for(let i=1;i<=10;i++){const item=document.getElementById('oc-c'+i);const dot=document.getElementById('ocd-c'+i);if(item)item.classList.remove('hit');if(dot)dot.classList.remove('on')}
+drawWires()}
+
+// ═══ MESSAGE BUS ═══
+const AGENT_NAMES={master:'Master',symptom:'Symptom',ontology:'Ontology',llm:'LLM',rule:'RuleEngine',output:'Output'};
+const AGENT_CLS={master:'f-master',symptom:'f-sym',ontology:'f-ont',llm:'f-llm',rule:'f-rule',output:'f-out'};
+function pushMsg(from,to,content){
+  const bus=document.getElementById('msgBus');
+  const idle=bus.querySelector('.idle');if(idle)idle.remove();
+  const el=document.createElement('div');el.className='bus-msg';
+  el.innerHTML=`<div class="bus-head"><span class="bus-from ${AGENT_CLS[from]||''}">${AGENT_NAMES[from]||from}</span><span class="bus-arrow">→</span><span class="bus-to">${AGENT_NAMES[to]||to}</span></div><div class="bus-content">${content}</div>`;
+  bus.appendChild(el);bus.scrollTop=bus.scrollHeight;
+  setTimeout(()=>el.classList.add('show'),30);
+}
+
+// ═══ C1-C10 HIGHLIGHT ═══
+function highlightC(cats){
+  cats.forEach(c=>{
+    const item=document.getElementById('oc-c'+c);
+    const dot=document.getElementById('ocd-c'+c);
+    if(item)item.classList.add('hit');
+    if(dot)dot.classList.add('on');
+  });
+}
+
+async function startPipeline(){if(running)return;connectWebSocket();if(!ws)return;const btn=document.getElementById('goBtn');const defaultLabel='⚡ 启动 Ontology-Driven 诊断';btn.disabled=true;btn.innerHTML='<span class="tdots"><span></span><span></span><span></span></span> 诊断中...';const launch=()=>{running=true;stepIndex=0;resetAll();setAgent('master','running',10);let signalPayload=collectSignals();if(!Object.keys(signalPayload).length&&SCENARIOS[scenarioKey]){signalPayload=Object.fromEntries(Object.entries(SCENARIOS[scenarioKey].signals).map(([id,info])=>[id.replace('sv-',''),info.value]));}const payload={type:'start',symptom:document.getElementById('symptomInput').value,role:role,signals:signalPayload};ws.send(JSON.stringify(payload));};if(ws.readyState===WebSocket.OPEN){launch();return;}if(ws.readyState===WebSocket.CONNECTING){document.getElementById('sysStatus').textContent='● CONNECTING';const once=()=>{ws.removeEventListener('open',once);launch();};ws.addEventListener('open',once);return;}document.getElementById('sysStatus').textContent='● OFFLINE';btn.disabled=false;btn.innerHTML=defaultLabel;}
+
+window.addEventListener('load',()=>{loadScenario('ble_auth');connectWebSocket();setTimeout(drawWires,200);setTimeout(drawWires,500);document.fonts&&document.fonts.ready.then(()=>setTimeout(drawWires,200))});
+window.addEventListener('resize',()=>setTimeout(drawWires,50));
+</script>
+</body>
+</html>

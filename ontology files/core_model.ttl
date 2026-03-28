@@ -1,0 +1,2502 @@
+@prefix : <http://example.org/vehicle-power-management#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# =============================================================================
+# CORE MODEL - Objects & Links (Data Agent Components 1-2)
+# =============================================================================
+#
+# This file contains the core domain classes, properties, and individuals
+# for the vehicle power management ontology.
+# Part of Data Agent 10-Component framework (Components 1-2: Objects & Links)
+#
+# =============================================================================
+
+<http://example.org/vehicle-power-management/core> rdf:type owl:Ontology ;
+    rdfs:label "Vehicle Power Management Core Model"@en ;
+    rdfs:label "车辆电源管理核心模型"@zh ;
+    rdfs:comment "Core domain classes, properties, and individuals for vehicle power management"@en ;
+    rdfs:comment "车辆电源管理的核心领域类、属性和实例"@zh ;
+    owl:versionInfo "V1.0" .
+
+# =============================================================================
+# CLASSES - Core Domain Concepts
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Vehicle and Components
+# -----------------------------------------------------------------------------
+
+:Vehicle rdf:type owl:Class ;
+    rdfs:label "Vehicle"@en ;
+    rdfs:label "车辆"@zh ;
+    rdfs:comment "The complete vehicle entity"@en ;
+    rdfs:comment "完整的车辆实体"@zh .
+
+:PhysicalComponent rdf:type owl:Class ;
+    rdfs:label "Physical Component"@en ;
+    rdfs:label "物理部件"@zh ;
+    rdfs:comment "Physical hardware component in the vehicle"@en ;
+    rdfs:comment "车辆中的物理硬件部件"@zh .
+
+:ECU rdf:type owl:Class ;
+    rdfs:subClassOf :PhysicalComponent ;
+    rdfs:label "Electronic Control Unit"@en ;
+    rdfs:label "电子控制单元"@zh .
+
+:LDCU rdf:type owl:Class ;
+    rdfs:subClassOf :ECU ;
+    rdfs:label "Left Domain Control Unit"@en ;
+    rdfs:label "左域控制器"@zh ;
+    rdfs:comment "Left domain control unit responsible for power mode management"@en ;
+    rdfs:comment "负责电源模式管理的左域控制器"@zh .
+
+:RDCU rdf:type owl:Class ;
+    rdfs:subClassOf :ECU ;
+    rdfs:label "Right Domain Control Unit"@en ;
+    rdfs:label "右域控制器"@zh ;
+    rdfs:comment "Right domain control unit"@en ;
+    rdfs:comment "右域控制器"@zh .
+
+:CDCU rdf:type owl:Class ;
+    rdfs:subClassOf :ECU ;
+    rdfs:label "Central Domain Control Unit"@en ;
+    rdfs:label "中央域控制器"@zh ;
+    rdfs:comment "Central domain control unit for infotainment and vehicle coordination"@en ;
+    rdfs:comment "用于信息娱乐和车辆协调的中央域控制器"@zh .
+
+:TBOX rdf:type owl:Class ;
+    rdfs:subClassOf :ECU ;
+    rdfs:label "Telematics Box"@en ;
+    rdfs:label "远程通信单元"@zh ;
+    rdfs:comment "Telematics control unit for remote connectivity"@en ;
+    rdfs:comment "用于远程连接的远程通信控制单元"@zh .
+
+:XPU rdf:type owl:Class ;
+    rdfs:subClassOf :ECU ;
+    rdfs:label "Autonomous Driving Unit"@en ;
+    rdfs:label "自动驾驶单元"@zh ;
+    rdfs:comment "Autonomous driving processing unit"@en ;
+    rdfs:comment "自动驾驶处理单元"@zh .
+
+:IPB rdf:type owl:Class ;
+    rdfs:subClassOf :ECU ;
+    rdfs:label "Intelligent Power Brake"@en ;
+    rdfs:label "智能制动系统"@zh .
+
+:SRS rdf:type owl:Class ;
+    rdfs:subClassOf :ECU ;
+    rdfs:label "Safety Restraint System"@en ;
+    rdfs:label "安全约束系统"@zh .
+
+:IPUR rdf:type owl:Class ;
+    rdfs:subClassOf :ECU ;
+    rdfs:label "Rear Electric Drive Unit"@en ;
+    rdfs:label "后电驱单元"@zh .
+
+:BLE rdf:type owl:Class ;
+    rdfs:subClassOf :ECU ;
+    rdfs:label "Bluetooth Module"@en ;
+    rdfs:label "蓝牙模块"@zh .
+
+:AlcoholInterlock rdf:type owl:Class ;
+    rdfs:subClassOf :PhysicalComponent ;
+    rdfs:label "Alcohol Interlock"@en ;
+    rdfs:label "酒精锁"@zh ;
+    rdfs:comment "Alcohol interlock device for driver sobriety testing"@en ;
+    rdfs:comment "用于驾驶员清醒度测试的酒精锁装置"@zh .
+
+# -----------------------------------------------------------------------------
+# Logical Components
+# -----------------------------------------------------------------------------
+
+:LogicalComponent rdf:type owl:Class ;
+    rdfs:label "Logical Component"@en ;
+    rdfs:label "逻辑部件"@zh ;
+    rdfs:comment "Logical software component within ECU"@en ;
+    rdfs:comment "ECU内的逻辑软件部件"@zh .
+
+:LcPowerModeManagement rdf:type owl:Class ;
+    rdfs:subClassOf :LogicalComponent ;
+    rdfs:label "Logical Component - Power Mode Management"@en ;
+    rdfs:label "逻辑部件 - 电源模式管理"@zh ;
+    rdfs:comment "Responsible for implementing PowerMode state machine and all vehicle power on/off logic"@en ;
+    rdfs:comment "负责实现电源模式状态机及所有车辆上下电功能逻辑"@zh .
+
+:LcKeySearchAndValidation rdf:type owl:Class ;
+    rdfs:subClassOf :LogicalComponent ;
+    rdfs:label "Logical Component - Key Search and Validation"@en ;
+    rdfs:label "逻辑部件 - 钥匙搜索和有效性判断"@zh ;
+    rdfs:comment "Responsible for key search trigger logic and key validity judgment based on digital key, RKE key, and access subsystem positioning results"@en ;
+    rdfs:comment "负责实现钥匙搜索触发逻辑，以及根据数字钥匙、遥控钥匙、进出入子系统给出的不同类型的钥匙的定位结果综合判断钥匙有效性"@zh .
+
+:LcVehicleStartManagement rdf:type owl:Class ;
+    rdfs:subClassOf :LogicalComponent ;
+    rdfs:label "Logical Component - Vehicle Start Management"@en ;
+    rdfs:label "逻辑部件 - 车辆启动管理"@zh .
+
+:LcAlcoholInterlockManagement rdf:type owl:Class ;
+    rdfs:subClassOf :LogicalComponent ;
+    rdfs:label "Logical Component - Alcohol Interlock Management"@en ;
+    rdfs:label "逻辑部件 - 酒精锁管理"@zh ;
+    rdfs:comment "Responsible for managing alcohol interlock and outputting alcohol interlock start permission status"@en ;
+    rdfs:comment "负责实现对酒精锁的管理，输出酒精锁启动允许状态"@zh .
+
+# -----------------------------------------------------------------------------
+# Power Mode State Machine
+# -----------------------------------------------------------------------------
+
+:PowerMode rdf:type owl:Class ;
+    rdfs:label "Power Mode"@en ;
+    rdfs:label "电源模式"@zh ;
+    rdfs:comment "Vehicle power mode state"@en ;
+    rdfs:comment "车辆电源模式状态"@zh .
+
+:OffMode rdf:type owl:Class ;
+    rdfs:subClassOf :PowerMode ;
+    rdfs:label "Off Mode"@en ;
+    rdfs:label "关闭模式"@zh ;
+    rdfs:comment "Vehicle power off state (0x0)"@en ;
+    rdfs:comment "车辆电源关闭状态 (0x0)"@zh .
+
+:LocalOnMode rdf:type owl:Class ;
+    rdfs:subClassOf :PowerMode ;
+    rdfs:label "Local On Mode"@en ;
+    rdfs:label "本地开启模式"@zh ;
+    rdfs:comment "Vehicle locally powered on state (0x1)"@en ;
+    rdfs:comment "车辆本地上电状态 (0x1)"@zh .
+
+:RemoteOnMode rdf:type owl:Class ;
+    rdfs:subClassOf :PowerMode ;
+    rdfs:label "Remote On Mode"@en ;
+    rdfs:label "远程开启模式"@zh ;
+    rdfs:comment "Vehicle remotely powered on state (0x2)"@en ;
+    rdfs:comment "车辆远程上电状态 (0x2)"@zh .
+
+:ReservedPowerMode rdf:type owl:Class ;
+    rdfs:subClassOf :PowerMode ;
+    rdfs:label "Reserved Power Mode"@en ;
+    rdfs:label "保留电源模式"@zh ;
+    rdfs:comment "Reserved power mode value (0x3)"@en ;
+    rdfs:comment "保留电源模式值 (0x3)"@zh .
+
+:ConvenienceMode rdf:type owl:Class ;
+    rdfs:subClassOf :PowerMode ;
+    rdfs:label "Convenience Mode"@en ;
+    rdfs:label "舒适模式"@zh ;
+    rdfs:comment "Intermediate power state between Off and Local ON mode"@en ;
+    rdfs:comment "介于关闭模式和本地开启模式之间的中间电源状态"@zh ;
+    rdfs:comment "KL15 off / KLS on (KL15断开，KLS接通)"@en ;
+    owl:disjointWith :OffMode, :LocalOnMode, :RemoteOnMode .
+
+# -----------------------------------------------------------------------------
+# Ready Enable State Machine
+# -----------------------------------------------------------------------------
+
+:ReadyEnable rdf:type owl:Class ;
+    rdfs:label "Ready Enable State"@en ;
+    rdfs:label "Ready使能状态"@zh ;
+    rdfs:comment "Ready enable state for vehicle start authorization"@en ;
+    rdfs:comment "车辆启动授权的Ready使能状态"@zh .
+
+:DisableState rdf:type owl:Class ;
+    rdfs:subClassOf :ReadyEnable ;
+    rdfs:label "Disable State"@en ;
+    rdfs:label "禁止状态"@zh ;
+    rdfs:comment "Ready enable disabled (0x0)"@en ;
+    rdfs:comment "Ready使能禁止 (0x0)"@zh .
+
+:EnableState rdf:type owl:Class ;
+    rdfs:subClassOf :ReadyEnable ;
+    rdfs:label "Enable State"@en ;
+    rdfs:label "使能状态"@zh ;
+    rdfs:comment "Ready enable enabled (0x1)"@en ;
+    rdfs:comment "Ready使能允许 (0x1)"@zh .
+
+:ArmedState rdf:type owl:Class ;
+    rdfs:subClassOf :ReadyEnable ;
+    rdfs:label "Armed State"@en ;
+    rdfs:label "预激活状态"@zh ;
+    rdfs:comment "Ready enable armed state"@en ;
+    rdfs:comment "Ready使能预激活状态"@zh .
+
+# -----------------------------------------------------------------------------
+# Key Types and Validation
+# -----------------------------------------------------------------------------
+
+:Key rdf:type owl:Class ;
+    rdfs:label "Key"@en ;
+    rdfs:label "钥匙"@zh ;
+    rdfs:comment "Vehicle key entity"@en ;
+    rdfs:comment "车辆钥匙实体"@zh .
+
+:ValidKey rdf:type owl:Class ;
+    rdfs:subClassOf :Key ;
+    rdfs:label "Valid Key"@en ;
+    rdfs:label "有效钥匙"@zh ;
+    rdfs:comment "Valid key that can authorize vehicle operations"@en ;
+    rdfs:comment "可以授权车辆操作的有效钥匙"@zh .
+
+:BLEKey rdf:type owl:Class ;
+    rdfs:subClassOf :Key ;
+    rdfs:label "BLE Key"@en ;
+    rdfs:label "蓝牙钥匙"@zh ;
+    rdfs:comment "Bluetooth Low Energy based digital key"@en ;
+    rdfs:comment "基于蓝牙低功耗的数字钥匙"@zh .
+
+:RKEKey rdf:type owl:Class ;
+    rdfs:subClassOf :Key ;
+    rdfs:label "RKE Key"@en ;
+    rdfs:label "遥控钥匙"@zh ;
+    rdfs:comment "Remote Keyless Entry key"@en ;
+    rdfs:comment "遥控无钥匙进入钥匙"@zh .
+
+:NFCKey rdf:type owl:Class ;
+    rdfs:subClassOf :Key ;
+    rdfs:label "NFC Key"@en ;
+    rdfs:label "NFC钥匙"@zh ;
+    rdfs:comment "Near Field Communication based key"@en ;
+    rdfs:comment "基于近场通信的钥匙"@zh .
+
+:UWBKey rdf:type owl:Class ;
+    rdfs:subClassOf :Key ;
+    rdfs:label "UWB Key"@en ;
+    rdfs:label "UWB钥匙"@zh ;
+    rdfs:comment "Ultra-Wideband based key"@en ;
+    rdfs:comment "基于超宽带的钥匙"@zh .
+
+:DigitalKey rdf:type owl:Class ;
+    rdfs:subClassOf :Key ;
+    rdfs:label "Digital Key"@en ;
+    rdfs:label "数字钥匙"@zh ;
+    rdfs:comment "Generic digital key type"@en ;
+    rdfs:comment "通用数字钥匙类型"@zh .
+
+:PhysicalKey rdf:type owl:Class ;
+    rdfs:subClassOf :Key ;
+    rdfs:label "Physical Key"@en ;
+    rdfs:label "物理钥匙"@zh ;
+    rdfs:comment "Traditional physical key"@en ;
+    rdfs:comment "传统物理钥匙"@zh .
+
+:KeyLocation rdf:type owl:Class ;
+    rdfs:label "Key Location"@en ;
+    rdfs:label "钥匙位置"@zh ;
+    rdfs:comment "Key position relative to vehicle"@en ;
+    rdfs:comment "钥匙相对于车辆的位置"@zh .
+
+:KeyNotSearched rdf:type owl:Class ;
+    rdfs:subClassOf :KeyLocation ;
+    rdfs:label "Key Not Searched"@en ;
+    rdfs:label "未搜索钥匙"@zh .
+
+:KeyInCar rdf:type owl:Class ;
+    rdfs:subClassOf :KeyLocation ;
+    rdfs:label "Key In Car"@en ;
+    rdfs:label "钥匙在车内"@zh .
+
+:KeyNearFLDoor rdf:type owl:Class ;
+    rdfs:subClassOf :KeyLocation ;
+    rdfs:label "Key Near Front Left Door"@en ;
+    rdfs:label "钥匙在前左门附近"@zh .
+
+:KeyInTrunk rdf:type owl:Class ;
+    rdfs:subClassOf :KeyLocation ;
+    rdfs:label "Key In Trunk"@en ;
+    rdfs:label "钥匙在后备箱"@zh .
+
+:KeyNearTrunk rdf:type owl:Class ;
+    rdfs:subClassOf :KeyLocation ;
+    rdfs:label "Key Near Trunk"@en ;
+    rdfs:label "钥匙在后备箱附近"@zh .
+
+:KeyNotFound rdf:type owl:Class ;
+    rdfs:subClassOf :KeyLocation ;
+    rdfs:label "Key Not Found"@en ;
+    rdfs:label "未找到钥匙"@zh .
+
+:KeyNearFRDoor rdf:type owl:Class ;
+    rdfs:subClassOf :KeyLocation ;
+    rdfs:label "Key Near Front Right Door"@en ;
+    rdfs:label "钥匙在前右门附近"@zh .
+
+:KeySearchResult rdf:type owl:Class ;
+    rdfs:label "Key Search Result"@en ;
+    rdfs:label "钥匙搜索结果"@zh ;
+    rdfs:comment "Result of key search operation"@en ;
+    rdfs:comment "钥匙搜索操作的结果"@zh .
+
+:KeySearchNotFound rdf:type owl:Class ;
+    rdfs:subClassOf :KeySearchResult ;
+    rdfs:label "Key Search Not Found"@en ;
+    rdfs:label "未找到钥匙"@zh .
+
+:KeySearchInCar rdf:type owl:Class ;
+    rdfs:subClassOf :KeySearchResult ;
+    rdfs:label "Key Search In Car"@en ;
+    rdfs:label "钥匙在车内"@zh .
+
+:KeySearchNotInCar rdf:type owl:Class ;
+    rdfs:subClassOf :KeySearchResult ;
+    rdfs:label "Key Search Not In Car"@en ;
+    rdfs:label "钥匙不在车内"@zh .
+
+:KeySearchingState rdf:type owl:Class ;
+    rdfs:label "Key Searching State"@en ;
+    rdfs:label "搜钥匙状态"@zh ;
+    rdfs:comment "Current state of key searching process"@en ;
+    rdfs:comment "钥匙搜索过程的当前状态"@zh .
+
+:NotSearching rdf:type owl:Class ;
+    rdfs:subClassOf :KeySearchingState ;
+    rdfs:label "Not Searching"@en ;
+    rdfs:label "未搜索"@zh .
+
+:InitialSearch rdf:type owl:Class ;
+    rdfs:subClassOf :KeySearchingState ;
+    rdfs:label "Initial Search"@en ;
+    rdfs:label "初始搜索"@zh .
+
+:TimeoutResearch rdf:type owl:Class ;
+    rdfs:subClassOf :KeySearchingState ;
+    rdfs:label "Timeout Research"@en ;
+    rdfs:label "超时重新搜索"@zh .
+
+:KeyValidityStatus rdf:type owl:Class ;
+    rdfs:label "Key Validity Status"@en ;
+    rdfs:label "钥匙有效性状态"@zh ;
+    rdfs:comment "Validity status of a key"@en ;
+    rdfs:comment "钥匙的有效性状态"@zh .
+
+:KeyInvalid rdf:type owl:Class ;
+    rdfs:subClassOf :KeyValidityStatus ;
+    rdfs:label "Key Invalid"@en ;
+    rdfs:label "钥匙无效"@zh .
+
+:KeyValid rdf:type owl:Class ;
+    rdfs:subClassOf :KeyValidityStatus ;
+    rdfs:label "Key Valid"@en ;
+    rdfs:label "钥匙有效"@zh .
+
+# -----------------------------------------------------------------------------
+# Door and Lock States
+# -----------------------------------------------------------------------------
+
+:Door rdf:type owl:Class ;
+    rdfs:label "Door"@en ;
+    rdfs:label "车门"@zh .
+
+:DoorState rdf:type owl:Class ;
+    rdfs:label "Door State"@en ;
+    rdfs:label "车门状态"@zh ;
+    rdfs:comment "Door open/close state"@en ;
+    rdfs:comment "车门开关状态"@zh .
+
+:DoorClosed rdf:type owl:Class ;
+    rdfs:subClassOf :DoorState ;
+    rdfs:label "Door Closed"@en ;
+    rdfs:label "车门关闭"@zh .
+
+:DoorOpen rdf:type owl:Class ;
+    rdfs:subClassOf :DoorState ;
+    rdfs:label "Door Open"@en ;
+    rdfs:label "车门打开"@zh .
+
+:DoorLockState rdf:type owl:Class ;
+    rdfs:label "Door Lock State"@en ;
+    rdfs:label "门锁状态"@zh ;
+    rdfs:comment "Door lock/unlock state"@en ;
+    rdfs:comment "车门锁止/解锁状态"@zh .
+
+:DoorLocked rdf:type owl:Class ;
+    rdfs:subClassOf :DoorLockState ;
+    rdfs:label "Door Locked"@en ;
+    rdfs:label "车门锁止"@zh .
+
+:DoorUnlocked rdf:type owl:Class ;
+    rdfs:subClassOf :DoorLockState ;
+    rdfs:label "Door Unlocked"@en ;
+    rdfs:label "车门解锁"@zh .
+
+:DoorLockEvent rdf:type owl:Class ;
+    rdfs:label "Door Lock Event"@en ;
+    rdfs:label "门锁事件"@zh ;
+    rdfs:comment "Door lock/unlock event"@en ;
+    rdfs:comment "车门锁止/解锁事件"@zh .
+
+:NoLockEvent rdf:type owl:Class ;
+    rdfs:subClassOf :DoorLockEvent ;
+    rdfs:label "No Lock Event"@en ;
+    rdfs:label "无锁事件"@zh .
+
+:LockEvent rdf:type owl:Class ;
+    rdfs:subClassOf :DoorLockEvent ;
+    rdfs:label "Lock Event"@en ;
+    rdfs:label "锁止事件"@zh .
+
+:UnlockEvent rdf:type owl:Class ;
+    rdfs:subClassOf :DoorLockEvent ;
+    rdfs:label "Unlock Event"@en ;
+    rdfs:label "解锁事件"@zh .
+
+:UnlockSource rdf:type owl:Class ;
+    rdfs:label "Unlock Source"@en ;
+    rdfs:label "解锁源"@zh ;
+    rdfs:comment "Source of unlock command"@en ;
+    rdfs:comment "解锁命令来源"@zh .
+
+:LockSourceType rdf:type owl:Class ;
+    rdfs:label "Lock Source Type"@en ;
+    rdfs:label "闭锁源类型"@zh ;
+    rdfs:comment "Type of lock command source"@en ;
+    rdfs:comment "闭锁命令来源类型"@zh .
+
+:TailGatePositionState rdf:type owl:Class ;
+    rdfs:label "Tail Gate Position State"@en ;
+    rdfs:label "尾门位置状态"@zh .
+
+:TailGateUnknown rdf:type owl:Class ;
+    rdfs:subClassOf :TailGatePositionState ;
+    rdfs:label "Tail Gate Unknown"@en ;
+    rdfs:label "尾门未知"@zh .
+
+:TailGateFullClosed rdf:type owl:Class ;
+    rdfs:subClassOf :TailGatePositionState ;
+    rdfs:label "Tail Gate Full Closed"@en ;
+    rdfs:label "尾门完全关闭"@zh .
+
+:TailGateHalfClosed rdf:type owl:Class ;
+    rdfs:subClassOf :TailGatePositionState ;
+    rdfs:label "Tail Gate Half Closed"@en ;
+    rdfs:label "尾门半关"@zh .
+
+:TailGateOpened rdf:type owl:Class ;
+    rdfs:subClassOf :TailGatePositionState ;
+    rdfs:label "Tail Gate Opened"@en ;
+    rdfs:label "尾门打开"@zh .
+
+:TailGateFullOpened rdf:type owl:Class ;
+    rdfs:subClassOf :TailGatePositionState ;
+    rdfs:label "Tail Gate Full Opened"@en ;
+    rdfs:label "尾门完全打开"@zh .
+
+# -----------------------------------------------------------------------------
+# Vehicle Mode
+# -----------------------------------------------------------------------------
+
+:VehicleMode rdf:type owl:Class ;
+    rdfs:label "Vehicle Mode"@en ;
+    rdfs:label "车辆模式"@zh ;
+    rdfs:comment "Operating mode of the vehicle"@en ;
+    rdfs:comment "车辆的运行模式"@zh .
+
+:NormalMode rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleMode ;
+    rdfs:label "Normal Mode"@en ;
+    rdfs:label "正常模式"@zh .
+
+:MaintenanceMode rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleMode ;
+    rdfs:label "Maintenance Mode"@en ;
+    rdfs:label "维护模式"@zh .
+
+:ExhibitionMode rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleMode ;
+    rdfs:label "Exhibition Mode"@en ;
+    rdfs:label "展示模式"@zh .
+
+:TransportationMode rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleMode ;
+    rdfs:label "Transportation Mode"@en ;
+    rdfs:label "运输模式"@zh .
+
+:FactoryMode rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleMode ;
+    rdfs:label "Factory Mode"@en ;
+    rdfs:label "工厂模式"@zh .
+
+:ProductionMode rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleMode ;
+    rdfs:label "Production Mode"@en ;
+    rdfs:label "生产模式"@zh .
+
+:TrialDriveMode rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleMode ;
+    rdfs:label "Trial Drive Mode"@en ;
+    rdfs:label "试驾模式"@zh .
+
+:InvalidVehicleMode rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleMode ;
+    rdfs:label "Invalid Vehicle Mode"@en ;
+    rdfs:label "无效车辆模式"@zh .
+
+# -----------------------------------------------------------------------------
+# Diagnostic States
+# -----------------------------------------------------------------------------
+
+:DiagnosticState rdf:type owl:Class ;
+    rdfs:label "Diagnostic State"@en ;
+    rdfs:label "诊断状态"@zh ;
+    rdfs:comment "Current diagnostic state of the gateway"@en ;
+    rdfs:comment "网关当前的诊断状态"@zh .
+
+:NoDiagnostics rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticState ;
+    rdfs:label "No Diagnostics"@en ;
+    rdfs:label "无诊断"@zh .
+
+:OBDCan rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticState ;
+    rdfs:label "OBD-CAN"@en ;
+    rdfs:label "OBD-CAN诊断"@zh .
+
+:OBDEthernet rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticState ;
+    rdfs:label "OBD-Ethernet"@en ;
+    rdfs:label "OBD-Ethernet诊断"@zh .
+
+:T1Diag rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticState ;
+    rdfs:label "T1 Diagnostics"@en ;
+    rdfs:label "T1诊断"@zh .
+
+:SilentOTA rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticState ;
+    rdfs:label "Silent OTA"@en ;
+    rdfs:label "静默OTA"@zh .
+
+:NormalOTA rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticState ;
+    rdfs:label "Normal OTA"@en ;
+    rdfs:label "普通OTA"@zh .
+
+:RemoteDiag rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticState ;
+    rdfs:label "Remote Diagnostics"@en ;
+    rdfs:label "远程诊断"@zh .
+
+# -----------------------------------------------------------------------------
+# OTA Power On Valid State Machine
+# -----------------------------------------------------------------------------
+
+:OTAPowerOnValidState rdf:type owl:Class ;
+    rdfs:label "OTA Power On Valid State"@en ;
+    rdfs:label "OTA上电有效状态"@zh ;
+    rdfs:comment "State of OTA power on validation - determines if remote power on is allowed"@en ;
+    rdfs:comment "OTA上电有效性状态 - 决定是否允许远程上电"@zh ;
+    rdfs:comment "Timer: tOTAPowerOnValid = 1 minute (configurable)"@en ;
+    rdfs:comment "Maximum duration: 3 hours"@en ;
+    rdfs:comment "Timer restarts on each DiagnosticSt update (Normal OTA / Silent OTA / Remote Diag)"@en .
+
+:OTAPowerOnValidInvalid rdf:type owl:Class ;
+    rdfs:subClassOf :OTAPowerOnValidState ;
+    rdfs:label "OTA Power On Valid Invalid"@en ;
+    rdfs:label "OTA上电无效"@zh ;
+    rdfs:comment "Initial state, timer not started, or timer expired, or 3h max exceeded"@en ;
+    rdfs:comment "初始状态，计时器未启动，或计时器已过期，或已超过3小时最大时长"@zh .
+
+:OTAPowerOnValidValid rdf:type owl:Class ;
+    rdfs:subClassOf :OTAPowerOnValidState ;
+    rdfs:label "OTA Power On Valid Valid"@en ;
+    rdfs:label "OTA上电有效"@zh ;
+    rdfs:comment "OTA power on is valid, tOTAPowerOnValid timer running (default 1min)"@en ;
+    rdfs:comment "OTA上电有效，tOTAPowerOnValid计时器运行中（默认1分钟）"@zh .
+
+# -----------------------------------------------------------------------------
+# Power On/Off Sources
+# -----------------------------------------------------------------------------
+
+:PowerOnSource rdf:type owl:Class ;
+    rdfs:label "Power On Source"@en ;
+    rdfs:label "上电源"@zh ;
+    rdfs:comment "Source of power on command"@en ;
+    rdfs:comment "上电命令来源"@zh .
+
+:PowerOnInvalid rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnSource ;
+    rdfs:label "Power On Invalid"@en ;
+    rdfs:label "无效上电源"@zh .
+
+:PowerOnDoorOpen rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnSource ;
+    rdfs:label "Power On Door Open"@en ;
+    rdfs:label "车门打开上电"@zh .
+
+:PowerOnBrakePress rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnSource ;
+    rdfs:label "Power On Brake Press"@en ;
+    rdfs:label "制动踏板上电"@zh .
+
+:PowerOnOTARemoteDiag rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnSource ;
+    rdfs:label "Power On OTA/Remote Diag"@en ;
+    rdfs:label "OTA/远程诊断上电"@zh .
+
+:PowerOnXPURequest rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnSource ;
+    rdfs:label "Power On XPU Request"@en ;
+    rdfs:label "XPU请求上电"@zh .
+
+:PowerOffSource rdf:type owl:Class ;
+    rdfs:label "Power Off Source"@en ;
+    rdfs:label "下电源"@zh ;
+    rdfs:comment "Source of power off command"@en ;
+    rdfs:comment "下电命令来源"@zh .
+
+:PowerOffInvalid rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffSource ;
+    rdfs:label "Power Off Invalid"@en ;
+    rdfs:label "无效下电源"@zh .
+
+:PowerOffDoorLock rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffSource ;
+    rdfs:label "Power Off Door Lock"@en ;
+    rdfs:label "门锁下电"@zh .
+
+:PowerOffForcePowerOff rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffSource ;
+    rdfs:label "Power Off Force Power Off"@en ;
+    rdfs:label "强制下电"@zh .
+
+:PowerOffOTARemoteDiag rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffSource ;
+    rdfs:label "Power Off OTA/Remote Diag"@en ;
+    rdfs:label "OTA/远程诊断下电"@zh .
+
+:PowerOffXPURequest rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffSource ;
+    rdfs:label "Power Off XPU Request"@en ;
+    rdfs:label "XPU请求下电"@zh .
+
+:PowerOffAutoPowerOff rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffSource ;
+    rdfs:label "Power Off Auto Power Off"@en ;
+    rdfs:label "自动下电"@zh .
+
+# -----------------------------------------------------------------------------
+# Auto Power Off Function
+# -----------------------------------------------------------------------------
+
+:AutoPowerOffFunctionState rdf:type owl:Class ;
+    rdfs:label "Auto Power Off Function State"@en ;
+    rdfs:label "自动下电功能状态"@zh ;
+    rdfs:comment "State of automatic power off function"@en ;
+    rdfs:comment "自动下电功能的状态"@zh .
+
+:AutoPowerOffNotActive rdf:type owl:Class ;
+    rdfs:subClassOf :AutoPowerOffFunctionState ;
+    rdfs:label "Auto Power Off Not Active"@en ;
+    rdfs:label "自动下电未激活"@zh .
+
+:OneHourCountDownStarted rdf:type owl:Class ;
+    rdfs:subClassOf :AutoPowerOffFunctionState ;
+    rdfs:label "One Hour Count Down Started"@en ;
+    rdfs:label "一小时倒计时已开始"@zh .
+
+:TenMinCountDownStarted rdf:type owl:Class ;
+    rdfs:subClassOf :AutoPowerOffFunctionState ;
+    rdfs:label "Ten Min Count Down Started"@en ;
+    rdfs:label "十分钟倒计时已开始"@zh .
+
+:AutoPowerOff30MinCountDownStarted rdf:type owl:Class ;
+    rdfs:subClassOf :AutoPowerOffFunctionState ;
+    rdfs:label "Auto Power Off 30 Min Count Down Started"@en ;
+    rdfs:label "30分钟自动下电倒计时已开始"@zh ;
+    rdfs:comment "30 minute countdown for Local ON / Remote ON state"@en ;
+    rdfs:comment "本地开启/远程开启状态下的30分钟倒计时"@zh .
+
+:AutoPowerOff10MinCountDownStarted rdf:type owl:Class ;
+    rdfs:subClassOf :AutoPowerOffFunctionState ;
+    rdfs:label "Auto Power Off 10 Min Count Down Started"@en ;
+    rdfs:label "10分钟自动下电倒计时已开始"@zh ;
+    rdfs:comment "10 minute countdown for Convenience state"@en ;
+    rdfs:comment "舒适模式下的10分钟倒计时"@zh .
+
+:CountDownCanceled rdf:type owl:Class ;
+    rdfs:subClassOf :AutoPowerOffFunctionState ;
+    rdfs:label "Count Down Canceled"@en ;
+    rdfs:label "倒计时已取消"@zh .
+
+:CountDownCompleted rdf:type owl:Class ;
+    rdfs:subClassOf :AutoPowerOffFunctionState ;
+    rdfs:label "Count Down Completed"@en ;
+    rdfs:label "倒计时已完成"@zh .
+
+# -----------------------------------------------------------------------------
+# Emergency Power Off
+# -----------------------------------------------------------------------------
+
+:EmergencyPowerOffSwitchState rdf:type owl:Class ;
+    rdfs:label "Emergency Power Off Switch State"@en ;
+    rdfs:label "强制下电开关状态"@zh ;
+    rdfs:comment "State of emergency power off switch"@en ;
+    rdfs:comment "强制下电开关的状态"@zh .
+
+:SwitchNotPressed rdf:type owl:Class ;
+    rdfs:subClassOf :EmergencyPowerOffSwitchState ;
+    rdfs:label "Switch Not Pressed"@en ;
+    rdfs:label "开关未按下"@zh .
+
+:SwitchPressed rdf:type owl:Class ;
+    rdfs:subClassOf :EmergencyPowerOffSwitchState ;
+    rdfs:label "Switch Pressed"@en ;
+    rdfs:label "开关已按下"@zh .
+
+:SwitchInvalid rdf:type owl:Class ;
+    rdfs:subClassOf :EmergencyPowerOffSwitchState ;
+    rdfs:label "Switch Invalid"@en ;
+    rdfs:label "开关无效"@zh .
+
+:SwitchNotUsed rdf:type owl:Class ;
+    rdfs:subClassOf :EmergencyPowerOffSwitchState ;
+    rdfs:label "Switch Not Used"@en ;
+    rdfs:label "开关未使用"@zh .
+
+:SecondOffResult rdf:type owl:Class ;
+    rdfs:label "Second Off Result"@en ;
+    rdfs:label "强制下电二次确认结果"@zh ;
+    rdfs:comment "Result of second confirmation for forced power off"@en ;
+    rdfs:comment "强制下电二次确认的结果"@zh .
+
+:SecondOffNoCommand rdf:type owl:Class ;
+    rdfs:subClassOf :SecondOffResult ;
+    rdfs:label "Second Off No Command"@en ;
+    rdfs:label "无命令"@zh .
+
+:SecondOffOK rdf:type owl:Class ;
+    rdfs:subClassOf :SecondOffResult ;
+    rdfs:label "Second Off OK"@en ;
+    rdfs:label "确认"@zh .
+
+:SecondOffCancel rdf:type owl:Class ;
+    rdfs:subClassOf :SecondOffResult ;
+    rdfs:label "Second Off Cancel"@en ;
+    rdfs:label "取消"@zh .
+
+# -----------------------------------------------------------------------------
+# Power Control Error
+# -----------------------------------------------------------------------------
+
+:PowerControlError rdf:type owl:Class ;
+    rdfs:label "Power Control Error"@en ;
+    rdfs:label "电源控制异常"@zh ;
+    rdfs:comment "Power control error type"@en ;
+    rdfs:comment "电源控制异常类型"@zh .
+
+:NoError rdf:type owl:Class ;
+    rdfs:subClassOf :PowerControlError ;
+    rdfs:label "No Error"@en ;
+    rdfs:label "无异常"@zh .
+
+:PowerOnError rdf:type owl:Class ;
+    rdfs:subClassOf :PowerControlError ;
+    rdfs:label "Power On Error"@en ;
+    rdfs:label "上电异常"@zh .
+
+:PowerOffError rdf:type owl:Class ;
+    rdfs:subClassOf :PowerControlError ;
+    rdfs:label "Power Off Error"@en ;
+    rdfs:label "下电异常"@zh .
+
+# -----------------------------------------------------------------------------
+# Signals
+# -----------------------------------------------------------------------------
+
+:Signal rdf:type owl:Class ;
+    rdfs:label "Signal"@en ;
+    rdfs:label "信号"@zh ;
+    rdfs:comment "Communication signal between ECUs"@en ;
+    rdfs:comment "ECU之间的通信信号"@zh .
+
+:CANSignal rdf:type owl:Class ;
+    rdfs:subClassOf :Signal ;
+    rdfs:label "CAN Signal"@en ;
+    rdfs:label "CAN信号"@zh ;
+    rdfs:comment "CAN bus communication signal"@en ;
+    rdfs:comment "CAN总线通信信号"@zh .
+
+:LINSignal rdf:type owl:Class ;
+    rdfs:subClassOf :Signal ;
+    rdfs:label "LIN Signal"@en ;
+    rdfs:label "LIN信号"@zh ;
+    rdfs:comment "LIN bus communication signal"@en ;
+    rdfs:comment "LIN总线通信信号"@zh .
+
+:HardwireSignal rdf:type owl:Class ;
+    rdfs:subClassOf :Signal ;
+    rdfs:label "Hardwire Signal"@en ;
+    rdfs:label "硬线信号"@zh ;
+    rdfs:comment "Physical hardwire signal"@en ;
+    rdfs:comment "物理硬线信号"@zh .
+
+:SomeIPSignal rdf:type owl:Class ;
+    rdfs:subClassOf :Signal ;
+    rdfs:label "SOME/IP Signal"@en ;
+    rdfs:label "SOME/IP信号"@zh ;
+    rdfs:comment "SOME/IP protocol signal"@en ;
+    rdfs:comment "SOME/IP协议信号"@zh .
+
+:MessageTransportType rdf:type owl:Class ;
+    rdfs:label "Message Transport Type"@en ;
+    rdfs:label "报文类型"@zh ;
+    rdfs:comment "Type of message transport"@en ;
+    rdfs:comment "报文传输类型"@zh .
+
+:FixedPeriodic rdf:type owl:Class ;
+    rdfs:subClassOf :MessageTransportType ;
+    rdfs:label "Fixed Periodic"@en ;
+    rdfs:label "固定周期"@zh .
+
+# -----------------------------------------------------------------------------
+# CAN Signal Classes
+# -----------------------------------------------------------------------------
+
+:GE_Fahrstufe rdf:type owl:Class ;
+    rdfs:subClassOf :GearPosition ;
+    rdfs:label "Gear Position Extended"@en ;
+    rdfs:label "档位位置(扩展)"@zh ;
+    rdfs:comment "Extended gear position signal for power mode control. Values: 0x5=Position_P, 0x7=Position_N"@en ;
+    rdfs:comment "用于电源模式控制的扩展档位信号。值：0x5=P档, 0x7=N档"@zh .
+
+:Position_P rdf:type owl:Class ;
+    rdfs:subClassOf :GE_Fahrstufe ;
+    rdfs:label "Position P"@en ;
+    rdfs:label "P档位"@zh ;
+    rdfs:comment "Gear position P (signal value 0x5)"@en ;
+    rdfs:comment "P档位（信号值0x5）"@zh .
+
+:Position_N rdf:type owl:Class ;
+    rdfs:subClassOf :GE_Fahrstufe ;
+    rdfs:label "Position N"@en ;
+    rdfs:label "N档位"@zh ;
+    rdfs:comment "Gear position N (signal value 0x7)"@en ;
+    rdfs:comment "N档位（信号值0x7）"@zh .
+
+:MO_Motor_laeuft rdf:type owl:Class ;
+    rdfs:subClassOf :CANSignal ;
+    rdfs:label "Motor Running State"@en ;
+    rdfs:label "电机运行状态"@zh ;
+    rdfs:comment "Motor running state signal from IPUR"@en ;
+    rdfs:comment "来自IPUR的电机运行状态信号"@zh .
+
+:Motor_laeuft_nicht rdf:type owl:Class ;
+    rdfs:subClassOf :MO_Motor_laeuft ;
+    rdfs:label "Motor Not Running"@en ;
+    rdfs:label "电机未运行"@zh .
+
+:Motor_laeuft_autark_und_stabil rdf:type owl:Class ;
+    rdfs:subClassOf :MO_Motor_laeuft ;
+    rdfs:label "Motor Running Autark and Stable"@en ;
+    rdfs:label "电机自主稳定运行"@zh .
+
+:LVEM_LowBattPowerOff_Req rdf:type owl:Class ;
+    rdfs:subClassOf :CANSignal ;
+    rdfs:label "Low Battery Power Off Request"@en ;
+    rdfs:label "低电量下电请求"@zh ;
+    rdfs:comment "Request signal for low battery power off"@en ;
+    rdfs:comment "低电量下电请求信号"@zh .
+
+:LowBattPowerOff_Active rdf:type owl:Class ;
+    rdfs:subClassOf :LVEM_LowBattPowerOff_Req ;
+    rdfs:label "Low Battery Power Off Active"@en ;
+    rdfs:label "低电量下电激活"@zh .
+
+:LowBattPowerOff_NotActive rdf:type owl:Class ;
+    rdfs:subClassOf :LVEM_LowBattPowerOff_Req ;
+    rdfs:label "Low Battery Power Off Not Active"@en ;
+    rdfs:label "低电量下电未激活"@zh .
+
+:CDCU_CancelPowerOffSW rdf:type owl:Class ;
+    rdfs:subClassOf :CANSignal ;
+    rdfs:label "Cancel Auto Power Off Switch"@en ;
+    rdfs:label "取消自动下电开关"@zh ;
+    rdfs:comment "Switch signal to cancel automatic power off"@en ;
+    rdfs:comment "取消自动下电的开关信号"@zh .
+
+:CancelPowerOff_Active rdf:type owl:Class ;
+    rdfs:subClassOf :CDCU_CancelPowerOffSW ;
+    rdfs:label "Cancel Power Off Active"@en ;
+    rdfs:label "取消下电激活"@zh .
+
+:CancelPowerOff_NotActive rdf:type owl:Class ;
+    rdfs:subClassOf :CDCU_CancelPowerOffSW ;
+    rdfs:label "Cancel Power Off Not Active"@en ;
+    rdfs:label "取消下电未激活"@zh .
+
+:LDCU_AutoPowerOffFuncSt rdf:type owl:Class ;
+    rdfs:subClassOf :CANSignal ;
+    rdfs:label "Auto Power Off Function State"@en ;
+    rdfs:label "自动下电功能状态"@zh ;
+    rdfs:comment "State of the auto power off function"@en ;
+    rdfs:comment "自动下电功能状态"@zh .
+
+:AutoPowerOff_NotActive rdf:type owl:Class ;
+    rdfs:subClassOf :LDCU_AutoPowerOffFuncSt ;
+    rdfs:label "Auto Power Off Not Active"@en ;
+    rdfs:label "自动下电未激活"@zh .
+
+:AutoPowerOff_30minCountDown rdf:type owl:Class ;
+    rdfs:subClassOf :LDCU_AutoPowerOffFuncSt ;
+    rdfs:label "30min Count Down Started"@en ;
+    rdfs:label "30分钟倒计时已开始"@zh .
+
+:AutoPowerOff_10minCountDown rdf:type owl:Class ;
+    rdfs:subClassOf :LDCU_AutoPowerOffFuncSt ;
+    rdfs:label "10min Count Down Started"@en ;
+    rdfs:label "10分钟倒计时已开始"@zh .
+
+:AutoPowerOff_CountDownCanceled rdf:type owl:Class ;
+    rdfs:subClassOf :LDCU_AutoPowerOffFuncSt ;
+    rdfs:label "Count Down Canceled"@en ;
+    rdfs:label "倒计时已取消"@zh .
+
+:AutoPowerOff_CountDownCompleted rdf:type owl:Class ;
+    rdfs:subClassOf :LDCU_AutoPowerOffFuncSt ;
+    rdfs:label "Count Down Completed"@en ;
+    rdfs:label "倒计时已完成"@zh .
+
+# -----------------------------------------------------------------------------
+# Gear and Brake
+# -----------------------------------------------------------------------------
+
+:GearPosition rdf:type owl:Class ;
+    rdfs:label "Gear Position"@en ;
+    rdfs:label "档位"@zh ;
+    rdfs:comment "Transmission gear position"@en ;
+    rdfs:comment "变速箱档位"@zh .
+
+:GearInvalid rdf:type owl:Class ;
+    rdfs:subClassOf :GearPosition ;
+    rdfs:label "Gear Invalid"@en ;
+    rdfs:label "无效档位"@zh .
+
+:GearD rdf:type owl:Class ;
+    rdfs:subClassOf :GearPosition ;
+    rdfs:label "D Gear"@en ;
+    rdfs:label "D档"@zh .
+
+:GearN rdf:type owl:Class ;
+    rdfs:subClassOf :GearPosition ;
+    rdfs:label "N Gear"@en ;
+    rdfs:label "N档"@zh .
+
+:GearR rdf:type owl:Class ;
+    rdfs:subClassOf :GearPosition ;
+    rdfs:label "R Gear"@en ;
+    rdfs:label "R档"@zh .
+
+:GearP rdf:type owl:Class ;
+    rdfs:subClassOf :GearPosition ;
+    rdfs:label "P Gear"@en ;
+    rdfs:label "P档"@zh .
+
+:ShiftLeverPosition rdf:type owl:Class ;
+    rdfs:label "Shift Lever Position"@en ;
+    rdfs:label "真实档位状态"@zh ;
+    rdfs:comment "Actual shift lever position"@en ;
+    rdfs:comment "换挡杆实际位置"@zh .
+
+:BrakePedalState rdf:type owl:Class ;
+    rdfs:label "Brake Pedal State"@en ;
+    rdfs:label "制动踏板状态"@zh ;
+    rdfs:comment "Brake pedal pressed state"@en ;
+    rdfs:comment "制动踏板按压状态"@zh .
+
+:BrakeNotPressed rdf:type owl:Class ;
+    rdfs:subClassOf :BrakePedalState ;
+    rdfs:label "Brake Not Pressed"@en ;
+    rdfs:label "制动未踩下"@zh .
+
+:BrakePressed rdf:type owl:Class ;
+    rdfs:subClassOf :BrakePedalState ;
+    rdfs:label "Brake Pressed"@en ;
+    rdfs:label "制动已踩下"@zh .
+
+:ValidityStatus rdf:type owl:Class ;
+    rdfs:label "Validity Status"@en ;
+    rdfs:label "有效性状态"@zh .
+
+:NotValid rdf:type owl:Class ;
+    rdfs:subClassOf :ValidityStatus ;
+    rdfs:label "Not Valid"@en ;
+    rdfs:label "无效"@zh .
+
+:Valid rdf:type owl:Class ;
+    rdfs:subClassOf :ValidityStatus ;
+    rdfs:label "Valid"@en ;
+    rdfs:label "有效"@zh .
+
+:NotInitialized rdf:type owl:Class ;
+    rdfs:subClassOf :ValidityStatus ;
+    rdfs:label "Not Initialized"@en ;
+    rdfs:label "未初始化"@zh .
+
+# -----------------------------------------------------------------------------
+# Electric Drive Mode (IPUR)
+# -----------------------------------------------------------------------------
+
+:ElectricDriveMode rdf:type owl:Class ;
+    rdfs:label "Electric Drive Mode"@en ;
+    rdfs:label "电驱模式"@zh ;
+    rdfs:comment "Electric drive unit operating mode"@en ;
+    rdfs:comment "电驱单元运行模式"@zh .
+
+:EDModeInit rdf:type owl:Class ;
+    rdfs:subClassOf :ElectricDriveMode ;
+    rdfs:label "ED Mode Init"@en ;
+    rdfs:label "初始化"@zh .
+
+:EDModeStandby rdf:type owl:Class ;
+    rdfs:subClassOf :ElectricDriveMode ;
+    rdfs:label "ED Mode Standby"@en ;
+    rdfs:label "待机"@zh .
+
+:EDModeReady rdf:type owl:Class ;
+    rdfs:subClassOf :ElectricDriveMode ;
+    rdfs:label "ED Mode Ready"@en ;
+    rdfs:label "就绪"@zh .
+
+:EDModeBoostCtrl rdf:type owl:Class ;
+    rdfs:subClassOf :ElectricDriveMode ;
+    rdfs:label "ED Mode Boost Control"@en ;
+    rdfs:label "增压控制"@zh .
+
+:EDModeReadyHeat rdf:type owl:Class ;
+    rdfs:subClassOf :ElectricDriveMode ;
+    rdfs:label "ED Mode Ready and Heat"@en ;
+    rdfs:label "就绪加热"@zh .
+
+:EDModeTrqCtrlHeat rdf:type owl:Class ;
+    rdfs:subClassOf :ElectricDriveMode ;
+    rdfs:label "ED Mode Torque Control and Heat"@en ;
+    rdfs:label "扭矩控制加热"@zh .
+
+:EDModeTrqCtrl rdf:type owl:Class ;
+    rdfs:subClassOf :ElectricDriveMode ;
+    rdfs:label "ED Mode Torque Control"@en ;
+    rdfs:label "扭矩控制"@zh .
+
+:EDModeSpeedCtrl rdf:type owl:Class ;
+    rdfs:subClassOf :ElectricDriveMode ;
+    rdfs:label "ED Mode Speed Control"@en ;
+    rdfs:label "速度控制"@zh .
+
+:EDModeDepolarizeCtrl rdf:type owl:Class ;
+    rdfs:subClassOf :ElectricDriveMode ;
+    rdfs:label "ED Mode Depolarize Control"@en ;
+    rdfs:label "去极化控制"@zh .
+
+:EDModeASC rdf:type owl:Class ;
+    rdfs:subClassOf :ElectricDriveMode ;
+    rdfs:label "ED Mode ASC"@en ;
+    rdfs:label "ASC模式"@zh .
+
+:EDModeFailure rdf:type owl:Class ;
+    rdfs:subClassOf :ElectricDriveMode ;
+    rdfs:label "ED Mode Failure"@en ;
+    rdfs:label "故障"@zh .
+
+:EDModeEmDischarge rdf:type owl:Class ;
+    rdfs:subClassOf :ElectricDriveMode ;
+    rdfs:label "ED Mode Emergency Discharge"@en ;
+    rdfs:label "紧急放电"@zh .
+
+# -----------------------------------------------------------------------------
+# EV System Ready State
+# -----------------------------------------------------------------------------
+
+:EVSystemReadyState rdf:type owl:Class ;
+    rdfs:label "EV System Ready State"@en ;
+    rdfs:label "高压系统Ready状态"@zh ;
+    rdfs:comment "High voltage system ready state"@en ;
+    rdfs:comment "高压系统就绪状态"@zh .
+
+:EVNotReady rdf:type owl:Class ;
+    rdfs:subClassOf :EVSystemReadyState ;
+    rdfs:label "EV Not Ready"@en ;
+    rdfs:label "未就绪"@zh .
+
+:HighVoltageOn rdf:type owl:Class ;
+    rdfs:subClassOf :EVSystemReadyState ;
+    rdfs:label "High Voltage On"@en ;
+    rdfs:label "高压开启"@zh .
+
+:EVReady rdf:type owl:Class ;
+    rdfs:subClassOf :EVSystemReadyState ;
+    rdfs:label "EV Ready"@en ;
+    rdfs:label "EV就绪"@zh .
+
+# -----------------------------------------------------------------------------
+# Alarm State
+# -----------------------------------------------------------------------------
+
+:AlarmState rdf:type owl:Class ;
+    rdfs:label "Alarm State"@en ;
+    rdfs:label "设防状态"@zh ;
+    rdfs:comment "Vehicle alarm/arm state"@en ;
+    rdfs:comment "车辆报警/设防状态"@zh .
+
+:AlarmArmed rdf:type owl:Class ;
+    rdfs:subClassOf :AlarmState ;
+    rdfs:label "Armed"@en ;
+    rdfs:label "已设防"@zh .
+
+:AlarmPrearmed rdf:type owl:Class ;
+    rdfs:subClassOf :AlarmState ;
+    rdfs:label "Prearmed"@en ;
+    rdfs:label "预设防"@zh .
+
+:AlarmDisarmed rdf:type owl:Class ;
+    rdfs:subClassOf :AlarmState ;
+    rdfs:label "Disarmed"@en ;
+    rdfs:label "未设防"@zh .
+
+:AlarmActive rdf:type owl:Class ;
+    rdfs:subClassOf :AlarmState ;
+    rdfs:label "Alarm Active"@en ;
+    rdfs:label "报警激活"@zh .
+
+# -----------------------------------------------------------------------------
+# Authentication State
+# -----------------------------------------------------------------------------
+
+:AuthenticationState rdf:type owl:Class ;
+    rdfs:label "Authentication State"@en ;
+    rdfs:label "认证状态"@zh ;
+    rdfs:comment "Authentication result state between units"@en ;
+    rdfs:comment "单元之间的认证结果状态"@zh .
+
+:AuthDefault rdf:type owl:Class ;
+    rdfs:subClassOf :AuthenticationState ;
+    rdfs:label "Auth Default"@en ;
+    rdfs:label "默认"@zh .
+
+:AuthFail rdf:type owl:Class ;
+    rdfs:subClassOf :AuthenticationState ;
+    rdfs:label "Auth Fail"@en ;
+    rdfs:label "认证失败"@zh .
+
+:AuthPass rdf:type owl:Class ;
+    rdfs:subClassOf :AuthenticationState ;
+    rdfs:label "Auth Pass"@en ;
+    rdfs:label "认证通过"@zh .
+
+:AuthOvertime rdf:type owl:Class ;
+    rdfs:subClassOf :AuthenticationState ;
+    rdfs:label "Auth Overtime"@en ;
+    rdfs:label "认证超时"@zh .
+
+# -----------------------------------------------------------------------------
+# XPU Mode
+# -----------------------------------------------------------------------------
+
+:XPUMode rdf:type owl:Class ;
+    rdfs:label "XPU Mode"@en ;
+    rdfs:label "自动驾驶模式"@zh ;
+    rdfs:comment "Autonomous driving mode"@en ;
+    rdfs:comment "自动驾驶模式"@zh .
+
+:XPUInvalid rdf:type owl:Class ;
+    rdfs:subClassOf :XPUMode ;
+    rdfs:label "XPU Invalid"@en ;
+    rdfs:label "无效"@zh .
+
+:XPUAutoDriveEnterSuccess rdf:type owl:Class ;
+    rdfs:subClassOf :XPUMode ;
+    rdfs:label "Auto Drive Mode Enter Success"@en ;
+    rdfs:label "自动驾驶模式进入成功"@zh .
+
+:XPUAutoDriveEnterFail rdf:type owl:Class ;
+    rdfs:subClassOf :XPUMode ;
+    rdfs:label "Auto Drive Mode Enter Fail"@en ;
+    rdfs:label "自动驾驶模式进入失败"@zh .
+
+:XPUPowerRequest rdf:type owl:Class ;
+    rdfs:label "XPU Power Request"@en ;
+    rdfs:label "XPU上电请求"@zh ;
+    rdfs:comment "XPU power on/off request"@en ;
+    rdfs:comment "XPU上电/下电请求"@zh .
+
+:XPUNoRequest rdf:type owl:Class ;
+    rdfs:subClassOf :XPUPowerRequest ;
+    rdfs:label "No Request"@en ;
+    rdfs:label "无请求"@zh .
+
+:XPUPowerOnRequest rdf:type owl:Class ;
+    rdfs:subClassOf :XPUPowerRequest ;
+    rdfs:label "Power On Request"@en ;
+    rdfs:label "上电请求"@zh .
+
+:XPUPowerOffRequest rdf:type owl:Class ;
+    rdfs:subClassOf :XPUPowerRequest ;
+    rdfs:label "Power Off Request"@en ;
+    rdfs:label "下电请求"@zh .
+
+# -----------------------------------------------------------------------------
+# Alcohol Interlock
+# -----------------------------------------------------------------------------
+
+:AlcoholInterlockStatus rdf:type owl:Class ;
+    rdfs:label "Alcohol Interlock Status"@en ;
+    rdfs:label "酒精锁状态"@zh ;
+    rdfs:comment "Status of alcohol interlock device"@en ;
+    rdfs:comment "酒精锁设备状态"@zh .
+
+:AlcActivated rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockStatus ;
+    rdfs:label "Activated"@en ;
+    rdfs:label "激活"@zh .
+
+:AlcProtocolValidation rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockStatus ;
+    rdfs:label "Protocol Validation"@en ;
+    rdfs:label "协议验证"@zh .
+
+:AlcServiceInformation rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockStatus ;
+    rdfs:label "Service Information"@en ;
+    rdfs:label "服务信息"@zh .
+
+:AlcWarmUp rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockStatus ;
+    rdfs:label "Warm Up"@en ;
+    rdfs:label "预热"@zh .
+
+:AlcTestRequest rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockStatus ;
+    rdfs:label "Test Request"@en ;
+    rdfs:label "测试请求"@zh .
+
+:AlcAnalyzing rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockStatus ;
+    rdfs:label "Analyzing"@en ;
+    rdfs:label "分析中"@zh .
+
+:AlcResult rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockStatus ;
+    rdfs:label "Result"@en ;
+    rdfs:label "结果"@zh .
+
+:AlcWaitIgnition rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockStatus ;
+    rdfs:label "Wait Ignition"@en ;
+    rdfs:label "等待点火"@zh .
+
+:AlcIdle rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockStatus ;
+    rdfs:label "Idle"@en ;
+    rdfs:label "空闲"@zh .
+
+:AlcLockout rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockStatus ;
+    rdfs:label "Lockout"@en ;
+    rdfs:label "锁定"@zh .
+
+:AlcService rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockStatus ;
+    rdfs:label "Service"@en ;
+    rdfs:label "服务"@zh .
+
+:AlcError rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockStatus ;
+    rdfs:label "Error"@en ;
+    rdfs:label "错误"@zh .
+
+:AlcoholInterlockBlockingState rdf:type owl:Class ;
+    rdfs:label "Alcohol Interlock Blocking State"@en ;
+    rdfs:label "酒精锁检测状态"@zh ;
+    rdfs:comment "Blocking state of alcohol interlock"@en ;
+    rdfs:comment "酒精锁阻止状态"@zh .
+
+:NotBlocking rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockBlockingState ;
+    rdfs:label "Not Blocking"@en ;
+    rdfs:label "未阻止"@zh .
+
+:Blocking rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockBlockingState ;
+    rdfs:label "Blocking"@en ;
+    rdfs:label "阻止"@zh .
+
+:VehicleStatusForAlc rdf:type owl:Class ;
+    rdfs:label "Vehicle Status for Alcohol Interlock"@en ;
+    rdfs:label "车端状态"@zh .
+
+:AlcProtocolValStatus rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleStatusForAlc ;
+    rdfs:label "Protocol Validation (0xA9)"@en ;
+    rdfs:label "协议验证 (0xA9)"@zh .
+
+:AlcSetStatus rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleStatusForAlc ;
+    rdfs:label "Set (0xCC)"@en ;
+    rdfs:label "设置 (0xCC)"@zh .
+
+:AlcUnsetStatus rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleStatusForAlc ;
+    rdfs:label "Unset (0x99)"@en ;
+    rdfs:label "未设置 (0x99)"@zh .
+
+:AlcShutdownStatus rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleStatusForAlc ;
+    rdfs:label "Shutdown (0xC3)"@en ;
+    rdfs:label "关机 (0xC3)"@zh .
+
+# -----------------------------------------------------------------------------
+# NFC Status
+# -----------------------------------------------------------------------------
+
+:NFCDetectionState rdf:type owl:Class ;
+    rdfs:label "NFC Detection State"@en ;
+    rdfs:label "NFC检测状态"@zh ;
+    rdfs:comment "NFC raw detection state"@en ;
+    rdfs:comment "NFC原始检测状态"@zh .
+
+:NFCUnknown rdf:type owl:Class ;
+    rdfs:subClassOf :NFCDetectionState ;
+    rdfs:label "NFC Unknown"@en ;
+    rdfs:label "未知"@zh .
+
+:NFCInvalid rdf:type owl:Class ;
+    rdfs:subClassOf :NFCDetectionState ;
+    rdfs:label "NFC Invalid"@en ;
+    rdfs:label "无效"@zh .
+
+:NFCValid rdf:type owl:Class ;
+    rdfs:subClassOf :NFCDetectionState ;
+    rdfs:label "NFC Valid"@en ;
+    rdfs:label "有效"@zh .
+
+:NFCPowerStartAuthority rdf:type owl:Class ;
+    rdfs:label "NFC Power Start Authority"@en ;
+    rdfs:label "NFC上电权限"@zh ;
+    rdfs:comment "NFC power start authorization"@en ;
+    rdfs:comment "NFC上电启动授权"@zh .
+
+:NFCAuthorityEnable rdf:type owl:Class ;
+    rdfs:subClassOf :NFCPowerStartAuthority ;
+    rdfs:label "NFC Authority Enable"@en ;
+    rdfs:label "允许"@zh .
+
+:NFCAuthorityDisable rdf:type owl:Class ;
+    rdfs:subClassOf :NFCPowerStartAuthority ;
+    rdfs:label "NFC Authority Disable"@en ;
+    rdfs:label "禁止"@zh .
+
+# -----------------------------------------------------------------------------
+# Flag States
+# -----------------------------------------------------------------------------
+
+:FlagState rdf:type owl:Class ;
+    rdfs:label "Flag State"@en ;
+    rdfs:label "标志位状态"@zh ;
+    rdfs:comment "Flag state for key validation"@en ;
+    rdfs:comment "钥匙验证标志位状态"@zh .
+
+:FlagZero rdf:type owl:Class ;
+    rdfs:subClassOf :FlagState ;
+    rdfs:label "Flag Zero"@en ;
+    rdfs:label "标志位零"@zh .
+
+:FlagOne rdf:type owl:Class ;
+    rdfs:subClassOf :FlagState ;
+    rdfs:label "Flag One"@en ;
+    rdfs:label "标志位一"@zh .
+
+:FlagTwo rdf:type owl:Class ;
+    rdfs:subClassOf :FlagState ;
+    rdfs:label "Flag Two"@en ;
+    rdfs:label "标志位二"@zh .
+
+# -----------------------------------------------------------------------------
+# Key Invalid Alert
+# -----------------------------------------------------------------------------
+
+:KeyInvalidAlertRequest rdf:type owl:Class ;
+    rdfs:label "Key Invalid Alert Request"@en ;
+    rdfs:label "车内无有效钥匙提示请求"@zh ;
+    rdfs:comment "Request for alert when no valid key in vehicle"@en ;
+    rdfs:comment "车内无有效钥匙时的提示请求"@zh .
+
+:NoAlertRequest rdf:type owl:Class ;
+    rdfs:subClassOf :KeyInvalidAlertRequest ;
+    rdfs:label "No Alert Request"@en ;
+    rdfs:label "无请求"@zh .
+
+:BLEWatchTimeoutAlert rdf:type owl:Class ;
+    rdfs:subClassOf :KeyInvalidAlertRequest ;
+    rdfs:label "BLE Watch Timeout Alert"@en ;
+    rdfs:label "蓝牙手表超时提示"@zh .
+
+:KeyNotFoundAlert rdf:type owl:Class ;
+    rdfs:subClassOf :KeyInvalidAlertRequest ;
+    rdfs:label "Key Not Found Alert"@en ;
+    rdfs:label "未找到钥匙提示"@zh .
+
+:CancelAlert rdf:type owl:Class ;
+    rdfs:subClassOf :KeyInvalidAlertRequest ;
+    rdfs:label "Cancel Alert"@en ;
+    rdfs:label "取消提示"@zh .
+
+:Ready4GAlert rdf:type owl:Class ;
+    rdfs:subClassOf :KeyInvalidAlertRequest ;
+    rdfs:label "4G Ready Alert"@en ;
+    rdfs:label "4G Ready提示"@zh .
+
+:NFCNotFoundAlert rdf:type owl:Class ;
+    rdfs:subClassOf :KeyInvalidAlertRequest ;
+    rdfs:label "NFC Not Found Alert"@en ;
+    rdfs:label "NFC未找到提示"@zh .
+
+# -----------------------------------------------------------------------------
+# Seat Belt and Occupancy
+# -----------------------------------------------------------------------------
+
+:SeatBeltState rdf:type owl:Class ;
+    rdfs:label "Seat Belt State"@en ;
+    rdfs:label "安全带状态"@zh ;
+    rdfs:comment "Seat belt buckle state"@en ;
+    rdfs:comment "安全带扣状态"@zh .
+
+:SeatBeltUnbuckled rdf:type owl:Class ;
+    rdfs:subClassOf :SeatBeltState ;
+    rdfs:label "Unbuckled"@en ;
+    rdfs:label "未系"@zh .
+
+:SeatBeltBuckled rdf:type owl:Class ;
+    rdfs:subClassOf :SeatBeltState ;
+    rdfs:label "Buckled"@en ;
+    rdfs:label "已系"@zh .
+
+:SeatOccupancyState rdf:type owl:Class ;
+    rdfs:label "Seat Occupancy State"@en ;
+    rdfs:label "座椅占位状态"@zh ;
+    rdfs:comment "Seat occupancy detection state"@en ;
+    rdfs:comment "座椅占位检测状态"@zh .
+
+:NotOccupied rdf:type owl:Class ;
+    rdfs:subClassOf :SeatOccupancyState ;
+    rdfs:label "Not Occupied"@en ;
+    rdfs:label "未占用"@zh .
+
+:Occupied rdf:type owl:Class ;
+    rdfs:subClassOf :SeatOccupancyState ;
+    rdfs:label "Occupied"@en ;
+    rdfs:label "已占用"@zh .
+
+# -----------------------------------------------------------------------------
+# Bonnet (Hood) State
+# -----------------------------------------------------------------------------
+
+:BonnetState rdf:type owl:Class ;
+    rdfs:label "Bonnet State"@en ;
+    rdfs:label "前舱盖状态"@zh ;
+    rdfs:comment "Vehicle bonnet/hood state"@en ;
+    rdfs:comment "车辆前舱盖状态"@zh .
+
+:BonnetClosed rdf:type owl:Class ;
+    rdfs:subClassOf :BonnetState ;
+    rdfs:label "Bonnet Closed"@en ;
+    rdfs:label "关闭"@zh .
+
+:BonnetOpen rdf:type owl:Class ;
+    rdfs:subClassOf :BonnetState ;
+    rdfs:label "Bonnet Open"@en ;
+    rdfs:label "打开"@zh .
+
+:BonnetCollide rdf:type owl:Class ;
+    rdfs:subClassOf :BonnetState ;
+    rdfs:label "Bonnet Collide"@en ;
+    rdfs:label "碰撞"@zh .
+
+:BonnetOpenCircuit rdf:type owl:Class ;
+    rdfs:subClassOf :BonnetState ;
+    rdfs:label "Bonnet Open Circuit"@en ;
+    rdfs:label "开路"@zh .
+
+# -----------------------------------------------------------------------------
+# Platform Configuration
+# -----------------------------------------------------------------------------
+
+:Platform rdf:type owl:Class ;
+    rdfs:label "Platform"@en ;
+    rdfs:label "平台"@zh ;
+    rdfs:comment "Vehicle platform type"@en ;
+    rdfs:comment "车辆平台类型"@zh .
+
+:MEB31 rdf:type owl:Class ;
+    rdfs:subClassOf :Platform ;
+    rdfs:label "MEB31 Platform"@en ;
+    rdfs:label "MEB31平台"@zh .
+
+:CMP21D rdf:type owl:Class ;
+    rdfs:subClassOf :Platform ;
+    rdfs:label "CMP21D Platform"@en ;
+    rdfs:label "CMP21D平台"@zh .
+
+:ConfigurationWord rdf:type owl:Class ;
+    rdfs:label "Configuration Word"@en ;
+    rdfs:label "配置字"@zh ;
+    rdfs:comment "Configuration bytes for platform-specific features"@en ;
+    rdfs:comment "平台特定功能的配置字节"@zh .
+
+# -----------------------------------------------------------------------------
+# Auto Power Off Mode Configuration
+# -----------------------------------------------------------------------------
+
+:AutoPowerOffMode rdf:type owl:Class ;
+    rdfs:label "Auto Power Off Mode"@en ;
+    rdfs:label "自动下电模式"@zh ;
+    rdfs:comment "Auto power off mode configuration - Transport vs Normal"@en ;
+    rdfs:comment "自动下电模式配置 - 运输模式与常规模式"@zh .
+
+:TransportMode rdf:type owl:Class ;
+    rdfs:subClassOf :AutoPowerOffMode ;
+    rdfs:label "Transport Mode"@en ;
+    rdfs:label "运输模式"@zh ;
+    rdfs:comment "Transport mode - enables driver leave timeout auto power off"@en ;
+    rdfs:comment "运输模式 - 启用驾驶员离开超时自动下电"@zh .
+
+:NonTransportMode rdf:type owl:Class ;
+    rdfs:subClassOf :AutoPowerOffMode ;
+    rdfs:label "Non-Transport Mode"@en ;
+    rdfs:label "常规模式"@zh ;
+    rdfs:comment "Normal mode - standard auto power off timing"@en ;
+    rdfs:comment "常规模式 - 标准自动下电计时"@zh .
+
+# -----------------------------------------------------------------------------
+# Requirements
+# -----------------------------------------------------------------------------
+
+:Requirement rdf:type owl:Class ;
+    rdfs:label "Requirement"@en ;
+    rdfs:label "需求"@zh ;
+    rdfs:comment "System requirement"@en ;
+    rdfs:comment "系统需求"@zh .
+
+:SystemRequirement rdf:type owl:Class ;
+    rdfs:subClassOf :Requirement ;
+    rdfs:label "System Requirement"@en ;
+    rdfs:label "系统需求"@zh .
+
+:FunctionalRequirement rdf:type owl:Class ;
+    rdfs:subClassOf :Requirement ;
+    rdfs:label "Functional Requirement"@en ;
+    rdfs:label "功能需求"@zh .
+
+# -----------------------------------------------------------------------------
+# Condition and Action (for rules)
+# -----------------------------------------------------------------------------
+
+:Condition rdf:type owl:Class ;
+    rdfs:label "Condition"@en ;
+    rdfs:label "条件"@zh ;
+    rdfs:comment "A condition that can be evaluated"@en ;
+    rdfs:comment "可评估的条件"@zh .
+
+:Action rdf:type owl:Class ;
+    rdfs:label "Action"@en ;
+    rdfs:label "动作"@zh ;
+    rdfs:comment "An action that can be executed"@en ;
+    rdfs:comment "可执行的动作"@zh .
+
+:Function rdf:type owl:Class ;
+    rdfs:label "Function"@en ;
+    rdfs:label "功能"@zh ;
+    rdfs:comment "A system function"@en ;
+    rdfs:comment "系统功能"@zh .
+
+# =============================================================================
+# OBJECT PROPERTIES
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Structural Relationships
+# -----------------------------------------------------------------------------
+
+:hasComponent rdf:type owl:ObjectProperty ;
+    rdfs:label "has component"@en ;
+    rdfs:label "包含部件"@zh ;
+    rdfs:comment "Relationship between an entity and its component"@en ;
+    rdfs:comment "实体与其部件之间的关系"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range :PhysicalComponent .
+
+:containsPart rdf:type owl:ObjectProperty ;
+    rdfs:label "contains part"@en ;
+    rdfs:label "包含零件"@zh ;
+    rdfs:domain :PhysicalComponent ;
+    rdfs:range :PhysicalComponent .
+
+:hasModule rdf:type owl:ObjectProperty ;
+    rdfs:label "has module"@en ;
+    rdfs:label "包含模块"@zh ;
+    rdfs:domain :ECU ;
+    rdfs:range :LogicalComponent .
+
+:allocatedTo rdf:type owl:ObjectProperty ;
+    rdfs:label "allocated to"@en ;
+    rdfs:label "分配到"@zh ;
+    rdfs:comment "Logical component allocation to physical component"@en ;
+    rdfs:comment "逻辑部件分配到物理部件"@zh ;
+    rdfs:domain :LogicalComponent ;
+    rdfs:range :PhysicalComponent .
+
+# -----------------------------------------------------------------------------
+# State Relationships
+# -----------------------------------------------------------------------------
+
+:hasPowerMode rdf:type owl:ObjectProperty ;
+    rdfs:label "has power mode"@en ;
+    rdfs:label "具有电源模式"@zh ;
+    rdfs:comment "Current power mode of the vehicle or component"@en ;
+    rdfs:comment "车辆或部件的当前电源模式"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range :PowerMode .
+
+:hasStatus rdf:type owl:ObjectProperty ;
+    rdfs:label "has status"@en ;
+    rdfs:label "具有状态"@zh ;
+    rdfs:comment "Current status of an entity"@en ;
+    rdfs:comment "实体的当前状态"@zh .
+
+:hasKey rdf:type owl:ObjectProperty ;
+    rdfs:label "has key"@en ;
+    rdfs:label "具有钥匙"@zh ;
+    rdfs:comment "Vehicle has associated key"@en ;
+    rdfs:comment "车辆具有关联的钥匙"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range :Key .
+
+:hasKeyValidity rdf:type owl:ObjectProperty ;
+    rdfs:label "has key validity"@en ;
+    rdfs:label "具有钥匙有效性"@zh ;
+    rdfs:domain :Key ;
+    rdfs:range :KeyValidityStatus .
+
+:hasKeyLocation rdf:type owl:ObjectProperty ;
+    rdfs:label "has key location"@en ;
+    rdfs:label "具有钥匙位置"@zh ;
+    rdfs:domain :Key ;
+    rdfs:range :KeyLocation .
+
+:hasDoorState rdf:type owl:ObjectProperty ;
+    rdfs:label "has door state"@en ;
+    rdfs:label "具有车门状态"@zh ;
+    rdfs:domain :Door ;
+    rdfs:range :DoorState .
+
+:hasDoorLockState rdf:type owl:ObjectProperty ;
+    rdfs:label "has door lock state"@en ;
+    rdfs:label "具有门锁状态"@zh ;
+    rdfs:domain :Door ;
+    rdfs:range :DoorLockState .
+
+:hasVehicleMode rdf:type owl:ObjectProperty ;
+    rdfs:label "has vehicle mode"@en ;
+    rdfs:label "具有车辆模式"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range :VehicleMode .
+
+:hasDiagnosticState rdf:type owl:ObjectProperty ;
+    rdfs:label "has diagnostic state"@en ;
+    rdfs:label "具有诊断状态"@zh ;
+    rdfs:domain :ECU ;
+    rdfs:range :DiagnosticState .
+
+:hasReadyEnableState rdf:type owl:ObjectProperty ;
+    rdfs:label "has ready enable state"@en ;
+    rdfs:label "具有Ready使能状态"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range :ReadyEnable .
+
+:hasPowerOnSource rdf:type owl:ObjectProperty ;
+    rdfs:label "has power on source"@en ;
+    rdfs:label "具有上电源"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range :PowerOnSource .
+
+:hasPowerOffSource rdf:type owl:ObjectProperty ;
+    rdfs:label "has power off source"@en ;
+    rdfs:label "具有下电源"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range :PowerOffSource .
+
+:hasGearPosition rdf:type owl:ObjectProperty ;
+    rdfs:label "has gear position"@en ;
+    rdfs:label "具有档位"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range :GearPosition .
+
+:hasBrakePedalState rdf:type owl:ObjectProperty ;
+    rdfs:label "has brake pedal state"@en ;
+    rdfs:label "具有制动踏板状态"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range :BrakePedalState .
+
+:hasEVSystemState rdf:type owl:ObjectProperty ;
+    rdfs:label "has EV system state"@en ;
+    rdfs:label "具有高压系统状态"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range :EVSystemReadyState .
+
+:hasAlarmState rdf:type owl:ObjectProperty ;
+    rdfs:label "has alarm state"@en ;
+    rdfs:label "具有设防状态"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range :AlarmState .
+
+:hasAuthenticationState rdf:type owl:ObjectProperty ;
+    rdfs:label "has authentication state"@en ;
+    rdfs:label "具有认证状态"@zh ;
+    rdfs:domain :ECU ;
+    rdfs:range :AuthenticationState .
+
+:hasElectricDriveMode rdf:type owl:ObjectProperty ;
+    rdfs:label "has electric drive mode"@en ;
+    rdfs:label "具有电驱模式"@zh ;
+    rdfs:domain :IPUR ;
+    rdfs:range :ElectricDriveMode .
+
+:hasAlcoholInterlockStatus rdf:type owl:ObjectProperty ;
+    rdfs:label "has alcohol interlock status"@en ;
+    rdfs:label "具有酒精锁状态"@zh ;
+    rdfs:domain :AlcoholInterlock ;
+    rdfs:range :AlcoholInterlockStatus .
+
+:hasBlockingState rdf:type owl:ObjectProperty ;
+    rdfs:label "has blocking state"@en ;
+    rdfs:label "具有阻止状态"@zh ;
+    rdfs:domain :AlcoholInterlock ;
+    rdfs:range :AlcoholInterlockBlockingState .
+
+# -----------------------------------------------------------------------------
+# Transition Relationships
+# -----------------------------------------------------------------------------
+
+:transitionsTo rdf:type owl:ObjectProperty ;
+    rdfs:label "transitions to"@en ;
+    rdfs:label "跳转到"@zh ;
+    rdfs:comment "State transition target"@en ;
+    rdfs:comment "状态跳转目标"@zh ;
+    rdfs:domain :PowerMode ;
+    rdfs:range :PowerMode .
+
+:transitionsFrom rdf:type owl:ObjectProperty ;
+    rdfs:label "transitions from"@en ;
+    rdfs:label "从...跳转"@zh ;
+    rdfs:comment "State transition source"@en ;
+    rdfs:comment "状态跳转源"@zh ;
+    rdfs:domain :PowerMode ;
+    rdfs:range :PowerMode .
+
+:transitionsToReadyEnable rdf:type owl:ObjectProperty ;
+    rdfs:label "transitions to ready enable state"@en ;
+    rdfs:label "跳转到Ready使能状态"@zh ;
+    rdfs:domain :ReadyEnable ;
+    rdfs:range :ReadyEnable .
+
+# -----------------------------------------------------------------------------
+# Signal Communication
+# -----------------------------------------------------------------------------
+
+:sendsSignal rdf:type owl:ObjectProperty ;
+    rdfs:label "sends signal"@en ;
+    rdfs:label "发送信号"@zh ;
+    rdfs:domain :ECU ;
+    rdfs:range :Signal .
+
+:receivesSignal rdf:type owl:ObjectProperty ;
+    rdfs:label "receives signal"@en ;
+    rdfs:label "接收信号"@zh ;
+    rdfs:domain :ECU ;
+    rdfs:range :Signal .
+
+:hasSignalType rdf:type owl:ObjectProperty ;
+    rdfs:label "has signal type"@en ;
+    rdfs:label "具有信号类型"@zh ;
+    rdfs:domain :Signal ;
+    rdfs:range :MessageTransportType .
+
+:hasSignalValue rdf:type owl:ObjectProperty ;
+    rdfs:label "has signal value"@en ;
+    rdfs:label "具有信号值"@zh ;
+    rdfs:domain :Signal ;
+    rdfs:range :Signal .
+
+# -----------------------------------------------------------------------------
+# Causal Relationships
+# -----------------------------------------------------------------------------
+
+:triggers rdf:type owl:ObjectProperty ;
+    rdfs:label "triggers"@en ;
+    rdfs:label "触发"@zh ;
+    rdfs:comment "One event triggers another"@en ;
+    rdfs:comment "一个事件触发另一个事件"@zh .
+
+:causesFault rdf:type owl:ObjectProperty ;
+    rdfs:label "causes fault"@en ;
+    rdfs:label "导致故障"@zh ;
+    rdfs:comment "Entity causes a fault condition"@en ;
+    rdfs:comment "实体导致故障状态"@zh .
+
+:propagatesTo rdf:type owl:ObjectProperty ;
+    rdfs:label "propagates to"@en ;
+    rdfs:label "传播到"@zh ;
+    rdfs:comment "Fault or state propagates to another entity"@en ;
+    rdfs:comment "故障或状态传播到另一个实体"@zh .
+
+# -----------------------------------------------------------------------------
+# Key-Related Relationships
+# -----------------------------------------------------------------------------
+
+:authorizesPowerOn rdf:type owl:ObjectProperty ;
+    rdfs:label "authorizes power on"@en ;
+    rdfs:label "授权上电"@zh ;
+    rdfs:domain :Key ;
+    rdfs:range :Vehicle .
+
+:searchesKey rdf:type owl:ObjectProperty ;
+    rdfs:label "searches key"@en ;
+    rdfs:label "搜索钥匙"@zh ;
+    rdfs:domain :LcKeySearchAndValidation ;
+    rdfs:range :Key .
+
+:validatesKey rdf:type owl:ObjectProperty ;
+    rdfs:label "validates key"@en ;
+    rdfs:label "验证钥匙"@zh ;
+    rdfs:domain :LcKeySearchAndValidation ;
+    rdfs:range :Key .
+
+# -----------------------------------------------------------------------------
+# Configuration Relationships
+# -----------------------------------------------------------------------------
+
+:hasConfiguration rdf:type owl:ObjectProperty ;
+    rdfs:label "has configuration"@en ;
+    rdfs:label "具有配置"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range :ConfigurationWord .
+
+:configuredFor rdf:type owl:ObjectProperty ;
+    rdfs:label "configured for"@en ;
+    rdfs:label "配置为"@zh ;
+    rdfs:domain :ConfigurationWord ;
+    rdfs:range :Platform .
+
+# -----------------------------------------------------------------------------
+# Requirement Relationships
+# -----------------------------------------------------------------------------
+
+:hasRequirement rdf:type owl:ObjectProperty ;
+    rdfs:label "has requirement"@en ;
+    rdfs:label "具有需求"@zh ;
+    rdfs:domain :LogicalComponent ;
+    rdfs:range :Requirement .
+
+:satisfiesRequirement rdf:type owl:ObjectProperty ;
+    rdfs:label "satisfies requirement"@en ;
+    rdfs:label "满足需求"@zh ;
+    rdfs:domain :LogicalComponent ;
+    rdfs:range :Requirement .
+
+# =============================================================================
+# DATA PROPERTIES
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Signal Data Properties
+# -----------------------------------------------------------------------------
+
+:signalName rdf:type owl:DatatypeProperty ;
+    rdfs:label "signal name"@en ;
+    rdfs:label "信号名称"@zh ;
+    rdfs:comment "Name identifier of the signal"@en ;
+    rdfs:comment "信号的名称标识符"@zh ;
+    rdfs:domain :Signal ;
+    rdfs:range xsd:string .
+
+:signalValueHex rdf:type owl:DatatypeProperty ;
+    rdfs:label "signal value (hex)"@en ;
+    rdfs:label "信号值(十六进制)"@zh ;
+    rdfs:comment "Signal value in hexadecimal format"@en ;
+    rdfs:comment "十六进制格式的信号值"@zh ;
+    rdfs:domain :Signal ;
+    rdfs:range xsd:string .
+
+:signalValueDecimal rdf:type owl:DatatypeProperty ;
+    rdfs:label "signal value (decimal)"@en ;
+    rdfs:label "信号值(十进制)"@zh ;
+    rdfs:comment "Signal value in decimal format"@en ;
+    rdfs:comment "十进制格式的信号值"@zh ;
+    rdfs:domain :Signal ;
+    rdfs:range xsd:integer .
+
+:signalDescription rdf:type owl:DatatypeProperty ;
+    rdfs:label "signal description"@en ;
+    rdfs:label "信号描述"@zh ;
+    rdfs:domain :Signal ;
+    rdfs:range xsd:string .
+
+# -----------------------------------------------------------------------------
+# Vehicle Data Properties
+# -----------------------------------------------------------------------------
+
+:vehicleSpeed rdf:type owl:DatatypeProperty ;
+    rdfs:label "vehicle speed"@en ;
+    rdfs:label "车速"@zh ;
+    rdfs:comment "Vehicle speed in km/h"@en ;
+    rdfs:comment "车速，单位：公里/小时"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:float .
+
+:totalOdometer rdf:type owl:DatatypeProperty ;
+    rdfs:label "total odometer"@en ;
+    rdfs:label "总里程"@zh ;
+    rdfs:comment "Total distance traveled"@en ;
+    rdfs:comment "总行驶里程"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:voltage rdf:type owl:DatatypeProperty ;
+    rdfs:label "voltage"@en ;
+    rdfs:label "电压"@zh ;
+    rdfs:comment "Voltage in volts"@en ;
+    rdfs:comment "电压，单位：伏特"@zh ;
+    rdfs:range xsd:float .
+
+:temperature rdf:type owl:DatatypeProperty ;
+    rdfs:label "temperature"@en ;
+    rdfs:label "温度"@zh ;
+    rdfs:comment "Temperature in Celsius"@en ;
+    rdfs:comment "温度，单位：摄氏度"@zh ;
+    rdfs:range xsd:float .
+
+:current rdf:type owl:DatatypeProperty ;
+    rdfs:label "current"@en ;
+    rdfs:label "电流"@zh ;
+    rdfs:comment "Current in amperes"@en ;
+    rdfs:comment "电流，单位：安培"@zh ;
+    rdfs:range xsd:float .
+
+# -----------------------------------------------------------------------------
+# Time Properties
+# -----------------------------------------------------------------------------
+
+:timeWindow rdf:type owl:DatatypeProperty ;
+    rdfs:label "time window"@en ;
+    rdfs:label "时间窗口"@zh ;
+    rdfs:comment "Time window for operation in milliseconds"@en ;
+    rdfs:comment "操作时间窗口，单位：毫秒"@zh ;
+    rdfs:range xsd:integer .
+
+:delay rdf:type owl:DatatypeProperty ;
+    rdfs:label "delay"@en ;
+    rdfs:label "延迟"@zh ;
+    rdfs:comment "Delay time in milliseconds"@en ;
+    rdfs:comment "延迟时间，单位：毫秒"@zh ;
+    rdfs:range xsd:integer .
+
+:duration rdf:type owl:DatatypeProperty ;
+    rdfs:label "duration"@en ;
+    rdfs:label "持续时间"@zh ;
+    rdfs:comment "Duration in milliseconds"@en ;
+    rdfs:comment "持续时间，单位：毫秒"@zh ;
+    rdfs:range xsd:integer .
+
+:timeToPowerOffMinutes rdf:type owl:DatatypeProperty ;
+    rdfs:label "time to power off (minutes)"@en ;
+    rdfs:label "自动下电倒计时分钟"@zh ;
+    rdfs:comment "Minutes until auto power off (0-59)"@en ;
+    rdfs:comment "自动下电倒计时分钟 (0-59)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:timeToPowerOffSeconds rdf:type owl:DatatypeProperty ;
+    rdfs:label "time to power off (seconds)"@en ;
+    rdfs:label "自动下电倒计时秒"@zh ;
+    rdfs:comment "Seconds until auto power off (0-59)"@en ;
+    rdfs:comment "自动下电倒计时秒 (0-59)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:nfcValidTime rdf:type owl:DatatypeProperty ;
+    rdfs:label "NFC valid time"@en ;
+    rdfs:label "NFC刷卡有效时间"@zh ;
+    rdfs:comment "Valid time after NFC card swipe in seconds"@en ;
+    rdfs:comment "NFC刷卡后有效时间，单位：秒"@zh ;
+    rdfs:range xsd:integer .
+
+# -----------------------------------------------------------------------------
+# Timer and Configuration Properties
+# -----------------------------------------------------------------------------
+
+:tKeySearch rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer ;
+    rdfs:label "Key Search Timer"@en ;
+    rdfs:label "钥匙搜索计时器"@zh ;
+    rdfs:comment "Timeout for key validity search. Default: 3 seconds. Unit: seconds"@en ;
+    rdfs:comment "钥匙有效性搜索超时时间 默认: 3秒 单位: 秒"@zh .
+
+:tLowBattPwrOff rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer ;
+    rdfs:label "Low Battery Power Off Timer"@en ;
+    rdfs:label "低电量下电计时器"@zh ;
+    rdfs:comment "Timeout for low battery power off. Default: 30 seconds (configurable). Unit: seconds"@en ;
+    rdfs:comment "低电量下电超时时间 默认: 30秒(可标定) 单位: 秒"@zh .
+
+:tOTAPowerOnValid rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer ;
+    rdfs:label "OTA Power On Valid Timer"@en ;
+    rdfs:label "OTA上电有效计时器"@zh ;
+    rdfs:comment "Timer for OTA power on validity. Default: 1 minute (configurable). Unit: minutes"@en ;
+    rdfs:comment "OTA上电有效计时器 默认: 1分钟(可标定) 单位: 分钟"@zh .
+
+:tOTAPowerOnValidMax rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer ;
+    rdfs:label "OTA Power On Valid Max Duration"@en ;
+    rdfs:label "OTA上电有效最大时长"@zh ;
+    rdfs:comment "Maximum duration for OTA power on validity. Fixed: 3 hours. Unit: hours"@en ;
+    rdfs:comment "OTA上电有效最大时长 固定: 3小时 单位: 小时"@zh .
+
+:forcePowerOffHoldTime rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer ;
+    rdfs:label "Forced Power Off Hold Time"@en ;
+    rdfs:label "强制下电按压时间"@zh ;
+    rdfs:comment "Hold time required for forced power off. Default: 3 seconds. Unit: seconds"@en ;
+    rdfs:comment "强制下电所需按压时间 默认: 3秒 单位: 秒"@zh .
+
+:forcePowerOffPressCount rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer ;
+    rdfs:label "Forced Power Off Press Count"@en ;
+    rdfs:label "强制下电按压次数"@zh ;
+    rdfs:comment "Number of presses within time window to trigger forced power off. Default: 3 times. Unit: count"@en ;
+    rdfs:comment "时间窗口内按压次数触发强制下电 默认: 3次 单位: 次数"@zh .
+
+:forcePowerOffPressTimeWindow rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer ;
+    rdfs:label "Forced Power Off Press Time Window"@en ;
+    rdfs:label "强制下电按压时间窗口"@zh ;
+    rdfs:comment "Time window for press count. Default: 2 seconds. Unit: seconds"@en ;
+    rdfs:comment "按压次数计时时间窗口 默认: 2秒 单位: 秒"@zh .
+
+# -----------------------------------------------------------------------------
+# Requirement Properties
+# -----------------------------------------------------------------------------
+
+:requirementId rdf:type owl:DatatypeProperty ;
+    rdfs:label "requirement ID"@en ;
+    rdfs:label "需求编号"@zh ;
+    rdfs:comment "Unique identifier for requirement"@en ;
+    rdfs:comment "需求的唯一标识符"@zh ;
+    rdfs:domain :Requirement ;
+    rdfs:range xsd:string .
+
+:priority rdf:type owl:DatatypeProperty ;
+    rdfs:label "priority"@en ;
+    rdfs:label "优先级"@zh ;
+    rdfs:domain :Requirement ;
+    rdfs:range xsd:integer .
+
+# -----------------------------------------------------------------------------
+# Configuration Properties
+# -----------------------------------------------------------------------------
+
+:configByte rdf:type owl:DatatypeProperty ;
+    rdfs:label "config byte"@en ;
+    rdfs:label "配置字节"@zh ;
+    rdfs:comment "Configuration byte value"@en ;
+    rdfs:comment "配置字节值"@zh ;
+    rdfs:domain :ConfigurationWord ;
+    rdfs:range xsd:hexBinary .
+
+:platformType rdf:type owl:DatatypeProperty ;
+    rdfs:label "platform type"@en ;
+    rdfs:label "平台类型"@zh ;
+    rdfs:domain :Platform ;
+    rdfs:range xsd:string .
+
+:dID rdf:type owl:DatatypeProperty ;
+    rdfs:label "DID"@en ;
+    rdfs:label "数据标识符"@zh ;
+    rdfs:comment "Data Identifier for diagnostic services"@en ;
+    rdfs:comment "诊断服务的数据标识符"@zh ;
+    rdfs:range xsd:string .
+
+:rID rdf:type owl:DatatypeProperty ;
+    rdfs:label "RID"@en ;
+    rdfs:label "例程标识符"@zh ;
+    rdfs:comment "Routine Identifier for diagnostic services"@en ;
+    rdfs:comment "诊断服务的例程标识符"@zh ;
+    rdfs:range xsd:string .
+
+# -----------------------------------------------------------------------------
+# Document Properties
+# -----------------------------------------------------------------------------
+
+:documentVersion rdf:type owl:DatatypeProperty ;
+    rdfs:label "document version"@en ;
+    rdfs:label "文档版本"@zh ;
+    rdfs:range xsd:string .
+
+:documentDate rdf:type owl:DatatypeProperty ;
+    rdfs:label "document date"@en ;
+    rdfs:label "文档日期"@zh ;
+    rdfs:range xsd:date .
+
+:author rdf:type owl:DatatypeProperty ;
+    rdfs:label "author"@en ;
+    rdfs:label "作者"@zh ;
+    rdfs:range xsd:string .
+
+# =============================================================================
+# INDIVIDUALS
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Power Mode Individuals
+# -----------------------------------------------------------------------------
+
+:powerModeOff rdf:type :OffMode ;
+    rdfs:label "Power Mode Off"@en ;
+    rdfs:label "电源模式关闭"@zh ;
+    :signalValueHex "0x0" .
+
+:powerModeLocalOn rdf:type :LocalOnMode ;
+    rdfs:label "Power Mode Local On"@en ;
+    rdfs:label "电源模式本地开启"@zh ;
+    :signalValueHex "0x1" .
+
+:powerModeRemoteOn rdf:type :RemoteOnMode ;
+    rdfs:label "Power Mode Remote On"@en ;
+    rdfs:label "电源模式远程开启"@zh ;
+    :signalValueHex "0x2" .
+
+# -----------------------------------------------------------------------------
+# Key Search State Individuals
+# -----------------------------------------------------------------------------
+
+:keySearchNotSearching rdf:type :NotSearching ;
+    rdfs:label "Key Search Not Searching"@en ;
+    rdfs:label "未搜索钥匙"@zh ;
+    :signalValueHex "0x0" .
+
+:keySearchInitial rdf:type :InitialSearch ;
+    rdfs:label "Key Search Initial"@en ;
+    rdfs:label "初始搜索"@zh ;
+    :signalValueHex "0x1" .
+
+:keySearchTimeout rdf:type :TimeoutResearch ;
+    rdfs:label "Key Search Timeout"@en ;
+    rdfs:label "超时重新搜索"@zh ;
+    :signalValueHex "0x2" .
+
+# -----------------------------------------------------------------------------
+# Flag State Individuals
+# -----------------------------------------------------------------------------
+
+:flagZero rdf:type :FlagZero ;
+    rdfs:label "Flag Zero"@en ;
+    rdfs:label "标志位零"@zh ;
+    :signalValueHex "0x0" .
+
+:flagOne rdf:type :FlagOne ;
+    rdfs:label "Flag One"@en ;
+    rdfs:label "标志位一"@zh ;
+    :signalValueHex "0x1" .
+
+:flagTwo rdf:type :FlagTwo ;
+    rdfs:label "Flag Two"@en ;
+    rdfs:label "标志位二"@zh ;
+    :signalValueHex "0x2" .
+
+# -----------------------------------------------------------------------------
+# Validity Individuals
+# -----------------------------------------------------------------------------
+
+:validityInvalid rdf:type :KeyInvalid ;
+    rdfs:label "Invalid"@en ;
+    rdfs:label "无效"@zh ;
+    :signalValueHex "0x0" .
+
+:validityValid rdf:type :KeyValid ;
+    rdfs:label "Valid"@en ;
+    rdfs:label "有效"@zh ;
+    :signalValueHex "0x1" .
+
+# -----------------------------------------------------------------------------
+# Door State Individuals
+# -----------------------------------------------------------------------------
+
+:doorClosed rdf:type :DoorClosed ;
+    rdfs:label "Door Closed"@en ;
+    rdfs:label "车门关闭"@zh ;
+    :signalValueHex "0x0" .
+
+:doorOpen rdf:type :DoorOpen ;
+    rdfs:label "Door Open"@en ;
+    rdfs:label "车门打开"@zh ;
+    :signalValueHex "0x1" .
+
+# -----------------------------------------------------------------------------
+# Lock State Individuals
+# -----------------------------------------------------------------------------
+
+:doorLocked rdf:type :DoorLocked ;
+    rdfs:label "Door Locked"@en ;
+    rdfs:label "车门锁止"@zh ;
+    :signalValueHex "0x1" .
+
+:doorUnlocked rdf:type :DoorUnlocked ;
+    rdfs:label "Door Unlocked"@en ;
+    rdfs:label "车门解锁"@zh ;
+    :signalValueHex "0x0" .
+
+# -----------------------------------------------------------------------------
+# Ready Enable Individuals
+# -----------------------------------------------------------------------------
+
+:readyEnableDisable rdf:type :DisableState ;
+    rdfs:label "Ready Enable Disable"@en ;
+    rdfs:label "Ready使能禁止"@zh ;
+    :signalValueHex "0x0" .
+
+:readyEnableEnable rdf:type :EnableState ;
+    rdfs:label "Ready Enable Enable"@en ;
+    rdfs:label "Ready使能允许"@zh ;
+    :signalValueHex "0x1" .
+
+# -----------------------------------------------------------------------------
+# Platform Individuals
+# -----------------------------------------------------------------------------
+
+:platformMEB31 rdf:type :MEB31 ;
+    rdfs:label "MEB31 Platform"@en ;
+    rdfs:label "MEB31平台"@zh ;
+    :platformType "MEB31" .
+
+:platformCMP21D rdf:type :CMP21D ;
+    rdfs:label "CMP21D Platform"@en ;
+    rdfs:label "CMP21D平台"@zh ;
+    :platformType "CMP21D" .
+
+# -----------------------------------------------------------------------------
+# Emergency Power Off Switch Individuals
+# -----------------------------------------------------------------------------
+
+:emergPwrOffNotPressed rdf:type :SwitchNotPressed ;
+    rdfs:label "Emergency Power Off Not Pressed"@en ;
+    rdfs:label "强制下电开关未按下"@zh ;
+    :signalValueHex "0x0" .
+
+:emergPwrOffPressed rdf:type :SwitchPressed ;
+    rdfs:label "Emergency Power Off Pressed"@en ;
+    rdfs:label "强制下电开关已按下"@zh ;
+    :signalValueHex "0x1" .
+
+:emergPwrOffInvalid rdf:type :SwitchInvalid ;
+    rdfs:label "Emergency Power Off Invalid"@en ;
+    rdfs:label "强制下电开关无效"@zh ;
+    :signalValueHex "0x2" .
+
+# -----------------------------------------------------------------------------
+# Alcohol Interlock Blocking Individuals
+# -----------------------------------------------------------------------------
+
+:alcInterlockNotBlocking rdf:type :NotBlocking ;
+    rdfs:label "Alcohol Interlock Not Blocking"@en ;
+    rdfs:label "酒精锁未阻止"@zh ;
+    :signalValueHex "0x0" .
+
+:alcInterlockBlocking rdf:type :Blocking ;
+    rdfs:label "Alcohol Interlock Blocking"@en ;
+    rdfs:label "酒精锁阻止"@zh ;
+    :signalValueHex "0x1" .
+
+# =============================================================================
+# COMPLEX OWL CONSTRUCTS
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Valid Key Union (OR) - Any of these key types is considered valid
+# -----------------------------------------------------------------------------
+
+:ValidKeyUnion rdf:type owl:Class ;
+    rdfs:label "Valid Key Union"@en ;
+    rdfs:label "有效钥匙联合"@zh ;
+    rdfs:comment "Union of all valid key types"@en ;
+    rdfs:comment "所有有效钥匙类型的联合"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:unionOf (:BLEKey :RKEKey :NFCKey :UWBKey :DigitalKey :PhysicalKey)
+    ] .
+
+# -----------------------------------------------------------------------------
+# Vehicle with Valid Key Restriction
+# -----------------------------------------------------------------------------
+
+:VehicleWithValidKey rdf:type owl:Class ;
+    rdfs:label "Vehicle With Valid Key"@en ;
+    rdfs:label "具有有效钥匙的车辆"@zh ;
+    rdfs:comment "Vehicle that has at least one valid key"@en ;
+    rdfs:comment "至少具有一把有效钥匙的车辆"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :hasKey ;
+        owl:someValuesFrom :ValidKey
+    ] .
+
+# -----------------------------------------------------------------------------
+# Power Mode State Machine Transitions
+# -----------------------------------------------------------------------------
+
+# OffMode can transition to ConvenienceMode, LocalOnMode or RemoteOnMode
+:OffModeTransitions rdf:type owl:Class ;
+    rdfs:subClassOf [
+        rdf:type owl:Restriction ;
+        owl:onProperty :transitionsTo ;
+        owl:allValuesFrom [
+            rdf:type owl:Class ;
+            owl:unionOf (:ConvenienceMode :LocalOnMode :RemoteOnMode)
+        ]
+    ] .
+
+# LocalOnMode can transition to OffMode, ConvenienceMode or RemoteOnMode
+:LocalOnModeTransitions rdf:type owl:Class ;
+    rdfs:subClassOf [
+        rdf:type owl:Restriction ;
+        owl:onProperty :transitionsTo ;
+        owl:allValuesFrom [
+            rdf:type owl:Class ;
+            owl:unionOf (:OffMode :ConvenienceMode :RemoteOnMode)
+        ]
+    ] .
+
+# RemoteOnMode can transition to OffMode, ConvenienceMode or LocalOnMode
+:RemoteOnModeTransitions rdf:type owl:Class ;
+    rdfs:subClassOf [
+        rdf:type owl:Restriction ;
+        owl:onProperty :transitionsTo ;
+        owl:allValuesFrom [
+            rdf:type owl:Class ;
+            owl:unionOf (:OffMode :ConvenienceMode :LocalOnMode)
+        ]
+    ] .
+
+# -----------------------------------------------------------------------------
+# Ready Enable State Machine Transitions
+# -----------------------------------------------------------------------------
+
+# Disable can transition to Enable
+:DisableStateTransitions rdf:type owl:Class ;
+    rdfs:subClassOf [
+        rdf:type owl:Restriction ;
+        owl:onProperty :transitionsToReadyEnable ;
+        owl:allValuesFrom :EnableState
+    ] .
+
+# Enable can transition to Disable or Armed
+:EnableStateTransitions rdf:type owl:Class ;
+    rdfs:subClassOf [
+        rdf:type owl:Restriction ;
+        owl:onProperty :transitionsToReadyEnable ;
+        owl:allValuesFrom [
+            rdf:type owl:Class ;
+            owl:unionOf (:DisableState :ArmedState)
+        ]
+    ] .
+
+# -----------------------------------------------------------------------------
+# Critical Vehicle State (Intersection)
+# A vehicle is in critical state if it has high voltage on and is in motion
+# -----------------------------------------------------------------------------
+
+:CriticalVehicleState rdf:type owl:Class ;
+    rdfs:label "Critical Vehicle State"@en ;
+    rdfs:label "关键车辆状态"@zh ;
+    rdfs:comment "Vehicle in critical operating state"@en ;
+    rdfs:comment "处于关键运行状态的车辆"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :Vehicle
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasEVSystemState ;
+              owl:hasValue :HighVoltageOn
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Vehicle Requiring Key Validation
+# -----------------------------------------------------------------------------
+
+:VehicleRequiringKeyValidation rdf:type owl:Class ;
+    rdfs:label "Vehicle Requiring Key Validation"@en ;
+    rdfs:label "需要钥匙验证的车辆"@zh ;
+    rdfs:comment "Vehicle in power mode requiring key validation"@en ;
+    rdfs:comment "处于需要钥匙验证的电源模式的车辆"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :Vehicle
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasPowerMode ;
+              owl:someValuesFrom [
+                  rdf:type owl:Class ;
+                  owl:unionOf (:LocalOnMode :RemoteOnMode)
+              ]
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Auto Power Off Active State
+# -----------------------------------------------------------------------------
+
+:AutoPowerOffActive rdf:type owl:Class ;
+    rdfs:label "Auto Power Off Active"@en ;
+    rdfs:label "自动下电激活"@zh ;
+    rdfs:comment "Vehicle with auto power off countdown active"@en ;
+    rdfs:comment "自动下电倒计时激活的车辆"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :hasStatus ;
+        owl:someValuesFrom [
+            rdf:type owl:Class ;
+            owl:unionOf (:OneHourCountDownStarted :TenMinCountDownStarted)
+        ]
+    ] .
+
+# -----------------------------------------------------------------------------
+# Blocking Required for Vehicle Start
+# -----------------------------------------------------------------------------
+
+:BlockingRequiredForStart rdf:type owl:Class ;
+    rdfs:label "Blocking Required For Start"@en ;
+    rdfs:label "启动需要阻止"@zh ;
+    rdfs:comment "Vehicle start is blocked due to alcohol interlock"@en ;
+    rdfs:comment "由于酒精锁阻止车辆启动"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :Vehicle
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasStatus ;
+              owl:someValuesFrom :Blocking
+            ]
+        )
+    ] .
+
+# =============================================================================
+# END OF CORE MODEL
+# =============================================================================

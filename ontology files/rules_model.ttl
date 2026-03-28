@@ -1,0 +1,242 @@
+@prefix : <http://example.org/vehicle-power-management#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# =============================================================================
+# RULES MODEL - Transition Rules and Business Logic
+# =============================================================================
+
+<http://example.org/vehicle-power-management/rules> rdf:type owl:Ontology ;
+    rdfs:label "Vehicle Power Management Rules Model"@en ;
+    rdfs:label "车辆电源管理规则模型"@zh ;
+    rdfs:comment "Transition rules component for Data Agent Design"@en ;
+    rdfs:comment "数据代理设计的跳转规则组件"@zh ;
+    owl:versionInfo "1.0" ;
+    owl:imports <http://example.org/vehicle-power-management/core> .
+#
+# This file contains transition rules for the vehicle power management ontology.
+# Part of Data Agent 10-Component framework (Component 6: Rules)
+#
+# =============================================================================
+
+# =============================================================================
+# TRANSITION RULE CLASS
+# =============================================================================
+
+:TransitionRule rdf:type owl:Class ;
+    rdfs:label "Transition Rule"@en ;
+    rdfs:label "跳转规则"@zh ;
+    rdfs:comment "State transition rule definition"@en ;
+    rdfs:comment "状态跳转规则定义"@zh .
+
+# -----------------------------------------------------------------------------
+# Rule Properties
+# -----------------------------------------------------------------------------
+
+:ruleId rdf:type owl:DatatypeProperty ;
+    rdfs:label "Rule ID"@en ;
+    rdfs:label "规则编号"@zh ;
+    rdfs:comment "Unique identifier for transition rule"@en ;
+    rdfs:comment "跳转规则的唯一标识符"@zh ;
+    rdfs:domain :TransitionRule ;
+    rdfs:range xsd:string .
+
+:ruleName rdf:type owl:DatatypeProperty ;
+    rdfs:label "Rule Name"@en ;
+    rdfs:label "规则名称"@zh ;
+    rdfs:domain :TransitionRule ;
+    rdfs:range xsd:string .
+
+:ruleDescription rdf:type owl:DatatypeProperty ;
+    rdfs:label "Rule Description"@en ;
+    rdfs:label "规则描述"@zh ;
+    rdfs:domain :TransitionRule ;
+    rdfs:range xsd:string .
+
+:fromState rdf:type owl:ObjectProperty ;
+    rdfs:label "From State"@en ;
+    rdfs:label "源状态"@zh ;
+    rdfs:comment "Source state of transition"@en ;
+    rdfs:comment "跳转的源状态"@zh ;
+    rdfs:domain :TransitionRule ;
+    rdfs:range :PowerMode .
+
+:toState rdf:type owl:ObjectProperty ;
+    rdfs:label "To State"@en ;
+    rdfs:label "目标状态"@zh ;
+    rdfs:comment "Target state of transition"@en ;
+    rdfs:comment "跳转的目标状态"@zh ;
+    rdfs:domain :TransitionRule ;
+    rdfs:range :PowerMode .
+
+:triggerCondition rdf:type owl:ObjectProperty ;
+    rdfs:label "Trigger Condition"@en ;
+    rdfs:label "触发条件"@zh ;
+    rdfs:comment "Condition that triggers the transition"@en ;
+    rdfs:comment "触发跳转的条件"@zh ;
+    rdfs:domain :TransitionRule ;
+    rdfs:range :Condition .
+
+:action rdf:type owl:ObjectProperty ;
+    rdfs:label "Action"@en ;
+    rdfs:label "动作"@zh ;
+    rdfs:comment "Action to execute during transition"@en ;
+    rdfs:comment "跳转时执行的动作"@zh ;
+    rdfs:domain :TransitionRule ;
+    rdfs:range :Action .
+
+# =============================================================================
+# POWER MANAGEMENT FUNCTIONS (Related to Rules)
+# =============================================================================
+
+:PowerStorageInitialization rdf:type owl:Class ;
+    rdfs:subClassOf :Function ;
+    rdfs:label "Power Storage and Initialization"@en ;
+    rdfs:label "电源状态存储与初始化"@zh ;
+    rdfs:comment "Power mode storage in EEPROM and initialization logic"@en ;
+    rdfs:comment "电源模式EEPROM存储及初始化逻辑"@zh .
+
+:PowerErrorMonitoring rdf:type owl:Class ;
+    rdfs:subClassOf :Function ;
+    rdfs:label "Power Error Monitoring"@en ;
+    rdfs:label "电源异常监控"@zh ;
+    rdfs:comment "Monitoring for power on/off errors between LDCU and RDCU"@en ;
+    rdfs:comment "LDCU与RDCU之间电源上电/下电异常监控"@zh .
+
+:PowerOnErrorCondition rdf:type owl:Class ;
+    rdfs:subClassOf :PowerErrorMonitoring ;
+    rdfs:label "Power On Error Condition"@en ;
+    rdfs:label "上电异常条件"@zh ;
+    rdfs:comment "LDCU_PowerMode=ON for 1s AND RDCU_PowerSt=OFF"@en ;
+    rdfs:comment "LDCU_PowerMode=ON持续1秒且RDCU_PowerSt=OFF"@zh .
+
+:PowerOffErrorCondition rdf:type owl:Class ;
+    rdfs:subClassOf :PowerErrorMonitoring ;
+    rdfs:label "Power Off Error Condition"@en ;
+    rdfs:label "下电异常条件"@zh ;
+    rdfs:comment "LDCU_PowerMode=OFF for 1s AND RDCU_PowerSt=ON"@en ;
+    rdfs:comment "LDCU_PowerMode=OFF持续1秒且RDCU_PowerSt=ON"@zh .
+
+:TransportModeAutoPowerOff rdf:type owl:Class ;
+    rdfs:subClassOf :Function ;
+    rdfs:label "Transport Mode Auto Power Off"@en ;
+    rdfs:label "运输模式自动下电"@zh ;
+    rdfs:comment "Auto power off when driver leaves in transport mode (10min timeout)"@en ;
+    rdfs:comment "运输模式下驾驶员离车自动下电(10分钟超时)"@zh .
+
+:ForcedPowerOff rdf:type owl:Class ;
+    rdfs:subClassOf :Function ;
+    rdfs:label "Forced Power Off"@en ;
+    rdfs:label "强制下电"@zh ;
+    rdfs:comment "Forced power off via long button press or rapid presses"@en ;
+    rdfs:comment "通过长按按钮或快速多次按压触发强制下电"@zh .
+
+# =============================================================================
+# TRANSITION RULE INDIVIDUALS
+# =============================================================================
+
+# T_1_1: Off跳转至LocalOn
+:ruleT_1_1 rdf:type :TransitionRule ;
+    rdfs:label "T_1_1: Off to LocalOn"@en ;
+    rdfs:label "T_1_1: Off跳转至LocalOn"@zh ;
+    :ruleId "T_1_1" ;
+    rdfs:comment "Transition from Off mode to Local On mode"@en ;
+    rdfs:comment "从Off模式跳转到Local On模式"@zh ;
+    :fromState :OffMode ;
+    :toState :LocalOnMode .
+
+# T_1_2: Disable跳转至Enable (ReadyEnable state machine)
+:ruleT_1_2 rdf:type :TransitionRule ;
+    rdfs:label "T_1_2: Disable to Enable"@en ;
+    rdfs:label "T_1_2: Disable跳转至Enable"@zh ;
+    :ruleId "T_1_2" ;
+    rdfs:comment "Transition from Disable to Enable"@en ;
+    rdfs:comment "从Disable跳转到Enable"@zh ;
+    :fromState :ReadyEnableDisable ;
+    :toState :ReadyEnableEnable .
+
+# T_1_3: Off跳转至RemoteOn
+:ruleT_1_3 rdf:type :TransitionRule ;
+    rdfs:label "T_1_3: Off to RemoteOn"@en ;
+    rdfs:label "T_1_3: Off跳转至RemoteOn"@zh ;
+    :ruleId "T_1_3" ;
+    rdfs:comment "Transition from Off mode to Remote On mode"@en ;
+    rdfs:comment "从Off模式跳转到Remote On模式"@zh ;
+    :fromState :OffMode ;
+    :toState :RemoteOnMode .
+
+# T_2_1: Convenience跳转至Off
+:ruleT_2_1 rdf:type :TransitionRule ;
+    rdfs:label "T_2_1: Convenience to Off"@en ;
+    rdfs:label "T_2_1: Convenience跳转至Off"@zh ;
+    :ruleId "T_2_1" ;
+    rdfs:comment "Transition from Convenience mode to Off mode"@en ;
+    rdfs:comment "从Convenience模式跳转到Off模式"@zh ;
+    :fromState :ConvenienceMode ;
+    :toState :OffMode .
+
+# T_2_3: Convenience跳转至LocalOn
+:ruleT_2_3 rdf:type :TransitionRule ;
+    rdfs:label "T_2_3: Convenience to LocalOn"@en ;
+    rdfs:label "T_2_3: Convenience跳转至LocalOn"@zh ;
+    :ruleId "T_2_3" ;
+    rdfs:comment "Transition from Convenience mode to Local On mode"@en ;
+    rdfs:comment "从Convenience模式跳转到Local On模式"@zh ;
+    :fromState :ConvenienceMode ;
+    :toState :LocalOnMode .
+
+# T_3_1: Remote On跳转至Off
+:ruleT_3_1 rdf:type :TransitionRule ;
+    rdfs:label "T_3_1: RemoteOn to Off"@en ;
+    rdfs:label "T_3_1: RemoteOn跳转至Off"@zh ;
+    :ruleId "T_3_1" ;
+    rdfs:comment "Transition from Remote On mode to Off mode"@en ;
+    rdfs:comment "从Remote On模式跳转到Off模式"@zh ;
+    :fromState :RemoteOnMode ;
+    :toState :OffMode .
+
+# T_3_2: LocalOn跳转至Convenience
+:ruleT_3_2 rdf:type :TransitionRule ;
+    rdfs:label "T_3_2: LocalOn to Convenience"@en ;
+    rdfs:label "T_3_2: LocalOn跳转至Convenience"@zh ;
+    :ruleId "T_3_2" ;
+    rdfs:comment "Transition from Local On mode to Convenience mode"@en ;
+    rdfs:comment "从Local On模式跳转到Convenience模式"@zh ;
+    :fromState :LocalOnMode ;
+    :toState :ConvenienceMode .
+
+# T_3_4: LocalOn跳转至RemoteOn
+:ruleT_3_4 rdf:type :TransitionRule ;
+    rdfs:label "T_3_4: LocalOn to RemoteOn"@en ;
+    rdfs:label "T_3_4: LocalOn跳转至RemoteOn"@zh ;
+    :ruleId "T_3_4" ;
+    rdfs:comment "Transition from Local On mode to Remote On mode"@en ;
+    rdfs:comment "从Local On模式跳转到Remote On模式"@zh ;
+    :fromState :LocalOnMode ;
+    :toState :RemoteOnMode .
+
+# T_4_1: RemoteOn跳转至Off
+:ruleT_4_1 rdf:type :TransitionRule ;
+    rdfs:label "T_4_1: RemoteOn to Off"@en ;
+    rdfs:label "T_4_1: RemoteOn跳转至Off"@zh ;
+    :ruleId "T_4_1" ;
+    rdfs:comment "Transition from Remote On mode to Off mode"@en ;
+    rdfs:comment "从Remote On模式跳转到Off模式"@zh ;
+    :fromState :RemoteOnMode ;
+    :toState :OffMode .
+
+# T_4_3: RemoteOn跳转至LocalOn
+:ruleT_4_3 rdf:type :TransitionRule ;
+    rdfs:label "T_4_3: RemoteOn to LocalOn"@en ;
+    rdfs:label "T_4_3: RemoteOn跳转至LocalOn"@zh ;
+    :ruleId "T_4_3" ;
+    rdfs:comment "Transition from Remote On mode to Local On mode"@en ;
+    rdfs:comment "从Remote On模式跳转到Local On模式"@zh ;
+    :fromState :RemoteOnMode ;
+    :toState :LocalOnMode .
+
+# =============================================================================
+# END OF RULES MODEL
+# =============================================================================

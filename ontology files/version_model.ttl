@@ -1,0 +1,390 @@
+@prefix : <http://example.org/vehicle-power-management#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+# =============================================================================
+# ONTOLOGY METADATA
+# =============================================================================
+
+<http://example.org/vehicle-power-management/version> rdf:type owl:Ontology ;
+    rdfs:label "Vehicle Power Management Ontology - Version Model"@en ;
+    rdfs:label "车辆电源管理本体 - 版本模型"@zh ;
+    rdfs:comment "Version management component for tracking ontology changes and evolution"@en ;
+    rdfs:comment "用于追踪本体变更和演化的版本管理组件"@zh ;
+    owl:versionInfo "7.0.0" ;
+    dc:created "2024-01-01"^^xsd:date ;
+    dc:modified "2024-12-15"^^xsd:date ;
+    owl:imports <http://example.org/vehicle-power-management/core> .
+
+# =============================================================================
+# CLASSES
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Version Class
+# -----------------------------------------------------------------------------
+
+:Version rdf:type owl:Class ;
+    rdfs:label "Version"@en ;
+    rdfs:label "版本"@zh ;
+    rdfs:comment "Represents a specific version of the ontology with change tracking information"@en ;
+    rdfs:comment "表示本体的特定版本，包含变更追踪信息"@zh .
+
+:OntologyVersion rdf:type owl:Class ;
+    rdfs:subClassOf :Version ;
+    rdfs:label "Ontology Version"@en ;
+    rdfs:label "本体版本"@zh ;
+    rdfs:comment "A version of the vehicle power management ontology"@en ;
+    rdfs:comment "车辆电源管理本体的一个版本"@zh .
+
+# -----------------------------------------------------------------------------
+# Change Record Class
+# -----------------------------------------------------------------------------
+
+:ChangeRecord rdf:type owl:Class ;
+    rdfs:label "Change Record"@en ;
+    rdfs:label "变更记录"@zh ;
+    rdfs:comment "Documents a specific change made in a version"@en ;
+    rdfs:comment "记录版本中的特定变更"@zh .
+
+# =============================================================================
+# OBJECT PROPERTIES
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Version Linking Properties
+# -----------------------------------------------------------------------------
+
+:hasVersion rdf:type owl:ObjectProperty ;
+    rdfs:domain owl:Ontology ;
+    rdfs:range :Version ;
+    rdfs:label "has version"@en ;
+    rdfs:label "拥有版本"@zh ;
+    rdfs:comment "Links an ontology to its versions"@en ;
+    rdfs:comment "将本体链接到其版本"@zh .
+
+:currentVersion rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasVersion ;
+    rdfs:domain owl:Ontology ;
+    rdfs:range :Version ;
+    rdfs:label "current version"@en ;
+    rdfs:label "当前版本"@zh ;
+    rdfs:comment "Indicates the current/latest version of the ontology"@en ;
+    rdfs:comment "表示本体的当前/最新版本"@zh .
+
+:previousVersion rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasVersion ;
+    rdfs:domain :Version ;
+    rdfs:range :Version ;
+    rdfs:label "previous version"@en ;
+    rdfs:label "上一版本"@zh ;
+    rdfs:comment "Links to the immediately preceding version"@en ;
+    rdfs:comment "链接到紧邻的前一个版本"@zh .
+
+:nextVersion rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasVersion ;
+    rdfs:domain :Version ;
+    rdfs:range :Version ;
+    owl:inverseOf :previousVersion ;
+    rdfs:label "next version"@en ;
+    rdfs:label "下一版本"@zh ;
+    rdfs:comment "Links to the immediately following version"@en ;
+    rdfs:comment "链接到紧邻的后一个版本"@zh .
+
+# -----------------------------------------------------------------------------
+# Change Tracking Properties
+# -----------------------------------------------------------------------------
+
+:hasChangeRecord rdf:type owl:ObjectProperty ;
+    rdfs:domain :Version ;
+    rdfs:range :ChangeRecord ;
+    rdfs:label "has change record"@en ;
+    rdfs:label "拥有变更记录"@zh ;
+    rdfs:comment "Links a version to its change records"@en ;
+    rdfs:comment "将版本链接到其变更记录"@zh .
+
+:deprecatedIn rdf:type owl:ObjectProperty ;
+    rdfs:domain owl:Class ;
+    rdfs:range :Version ;
+    rdfs:label "deprecated in"@en ;
+    rdfs:label "废弃于"@zh ;
+    rdfs:comment "Indicates the version in which a class/property was deprecated"@en ;
+    rdfs:comment "表示类/属性被废弃的版本"@zh .
+
+:introducedIn rdf:type owl:ObjectProperty ;
+    rdfs:domain owl:Class ;
+    rdfs:range :Version ;
+    rdfs:label "introduced in"@en ;
+    rdfs:label "引入于"@zh ;
+    rdfs:comment "Indicates the version in which a class/property was introduced"@en ;
+    rdfs:comment "表示类/属性被引入的版本"@zh .
+
+# =============================================================================
+# DATA PROPERTIES
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Version Identification Properties
+# -----------------------------------------------------------------------------
+
+:versionNumber rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Version ;
+    rdfs:range xsd:string ;
+    rdfs:label "version number"@en ;
+    rdfs:label "版本号"@zh ;
+    rdfs:comment "Semantic version number in format vX.Y.Z where X=major, Y=minor, Z=patch"@en ;
+    rdfs:comment "语义版本号，格式为 vX.Y.Z，其中 X=主版本，Y=次版本，Z=补丁版本"@zh .
+
+:majorVersion rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Version ;
+    rdfs:range xsd:integer ;
+    rdfs:label "major version"@en ;
+    rdfs:label "主版本号"@zh ;
+    rdfs:comment "Major version number - changes indicate breaking changes"@en ;
+    rdfs:comment "主版本号 - 变更表示不兼容的修改"@zh .
+
+:minorVersion rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Version ;
+    rdfs:range xsd:integer ;
+    rdfs:label "minor version"@en ;
+    rdfs:label "次版本号"@zh ;
+    rdfs:comment "Minor version number - changes indicate new features"@en ;
+    rdfs:comment "次版本号 - 变更表示新增功能"@zh .
+
+:patchVersion rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Version ;
+    rdfs:range xsd:integer ;
+    rdfs:label "patch version"@en ;
+    rdfs:label "补丁版本号"@zh ;
+    rdfs:comment "Patch version number - changes indicate bug fixes"@en ;
+    rdfs:comment "补丁版本号 - 变更表示错误修复"@zh .
+
+# -----------------------------------------------------------------------------
+# Version Metadata Properties
+# -----------------------------------------------------------------------------
+
+:releaseDate rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Version ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "release date"@en ;
+    rdfs:label "发布日期"@zh ;
+    rdfs:comment "Date and time when this version was released"@en ;
+    rdfs:comment "此版本发布的日期和时间"@zh .
+
+:changeLog rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Version ;
+    rdfs:range xsd:string ;
+    rdfs:label "change log"@en ;
+    rdfs:label "变更日志"@zh ;
+    rdfs:comment "Summary of changes in this version"@en ;
+    rdfs:comment "此版本的变更摘要"@zh .
+
+# -----------------------------------------------------------------------------
+# Backward Compatibility Properties
+# -----------------------------------------------------------------------------
+
+:isBackwardCompatible rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Version ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "is backward compatible"@en ;
+    rdfs:label "向后兼容"@zh ;
+    rdfs:comment "Indicates if this version is backward compatible with previous versions"@en ;
+    rdfs:comment "表示此版本是否与先前版本向后兼容"@zh .
+
+:deprecatedFeatures rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Version ;
+    rdfs:range xsd:string ;
+    rdfs:label "deprecated features"@en ;
+    rdfs:label "废弃功能"@zh ;
+    rdfs:comment "List of features deprecated in this version"@en ;
+    rdfs:comment "此版本中废弃的功能列表"@zh .
+
+:newFeatures rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Version ;
+    rdfs:range xsd:string ;
+    rdfs:label "new features"@en ;
+    rdfs:label "新功能"@zh ;
+    rdfs:comment "List of new features introduced in this version"@en ;
+    rdfs:comment "此版本中引入的新功能列表"@zh .
+
+:breakingChanges rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Version ;
+    rdfs:range xsd:string ;
+    rdfs:label "breaking changes"@en ;
+    rdfs:label "破坏性变更"@zh ;
+    rdfs:comment "List of breaking changes in this version"@en ;
+    rdfs:comment "此版本中的破坏性变更列表"@zh .
+
+# -----------------------------------------------------------------------------
+# Change Record Properties
+# -----------------------------------------------------------------------------
+
+:changeType rdf:type owl:DatatypeProperty ;
+    rdfs:domain :ChangeRecord ;
+    rdfs:range xsd:string ;
+    rdfs:label "change type"@en ;
+    rdfs:label "变更类型"@zh ;
+    rdfs:comment "Type of change: addition, modification, deprecation, removal"@en ;
+    rdfs:comment "变更类型：新增、修改、废弃、移除"@zh .
+
+:changeDescription rdf:type owl:DatatypeProperty ;
+    rdfs:domain :ChangeRecord ;
+    rdfs:range xsd:string ;
+    rdfs:label "change description"@en ;
+    rdfs:label "变更描述"@zh ;
+    rdfs:comment "Detailed description of the change"@en ;
+    rdfs:comment "变更的详细描述"@zh .
+
+:affectedElement rdf:type owl:DatatypeProperty ;
+    rdfs:domain :ChangeRecord ;
+    rdfs:range xsd:string ;
+    rdfs:label "affected element"@en ;
+    rdfs:label "受影响元素"@zh ;
+    rdfs:comment "IRI or name of the affected ontology element"@en ;
+    rdfs:comment "受影响的本体元素的IRI或名称"@zh .
+
+# =============================================================================
+# INDIVIDUALS - VERSION INSTANCES
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Version v1.0.0 - Initial Release
+# -----------------------------------------------------------------------------
+
+:version_v1_0_0 rdf:type :OntologyVersion ;
+    rdfs:label "Version 1.0.0"@en ;
+    rdfs:label "版本 1.0.0"@zh ;
+    :versionNumber "v1.0.0" ;
+    :majorVersion 1 ;
+    :minorVersion 0 ;
+    :patchVersion 0 ;
+    :releaseDate "2024-01-15T00:00:00"^^xsd:dateTime ;
+    :changeLog "Initial release of Vehicle Power Management Ontology"@en ;
+    :changeLog "车辆电源管理本体初始版本"@zh ;
+    :isBackwardCompatible true ;
+    :newFeatures "Core power management classes (Vehicle, ECU, Battery)"@en ;
+    :newFeatures "Basic power mode definitions (Off, LocalOn, RemoteOn)"@en ;
+    :newFeatures "核心电源管理类（车辆、ECU、电池）"@zh ;
+    :newFeatures "基本电源模式定义（关闭、本地开启、远程开启）"@zh .
+
+# -----------------------------------------------------------------------------
+# Version v7.0.0 - Current Version (ConvenienceMode Addition)
+# -----------------------------------------------------------------------------
+
+:version_v7_0_0 rdf:type :OntologyVersion ;
+    rdfs:label "Version 7.0.0"@en ;
+    rdfs:label "版本 7.0.0"@zh ;
+    :versionNumber "v7.0.0" ;
+    :majorVersion 7 ;
+    :minorVersion 0 ;
+    :patchVersion 0 ;
+    :releaseDate "2024-12-15T00:00:00"^^xsd:dateTime ;
+    :changeLog "Major update with ConvenienceMode addition and enhanced fault propagation"@en ;
+    :changeLog "重大更新，新增便捷模式及增强故障传播机制"@zh ;
+    :isBackwardCompatible true ;
+    :previousVersion :version_v6_0_0 ;
+    :newFeatures "ConvenienceMode class for extended power management"@en ;
+    :newFeatures "Enhanced fault propagation chains"@en ;
+    :newFeatures "Diagnostic rule improvements"@en ;
+    :newFeatures "便捷模式类，用于扩展电源管理"@zh ;
+    :newFeatures "增强的故障传播链"@zh ;
+    :newFeatures "诊断规则改进"@zh ;
+    :deprecatedFeatures "Legacy PowerState enumeration (replaced by PowerMode hierarchy)"@en ;
+    :deprecatedFeatures "旧版 PowerState 枚举（已由 PowerMode 层次结构替代）"@zh .
+
+# -----------------------------------------------------------------------------
+# Intermediate Version v6.0.0 (for version chain)
+# -----------------------------------------------------------------------------
+
+:version_v6_0_0 rdf:type :OntologyVersion ;
+    rdfs:label "Version 6.0.0"@en ;
+    rdfs:label "版本 6.0.0"@zh ;
+    :versionNumber "v6.0.0" ;
+    :majorVersion 6 ;
+    :minorVersion 0 ;
+    :patchVersion 0 ;
+    :releaseDate "2024-10-01T00:00:00"^^xsd:dateTime ;
+    :changeLog "Refactored power mode state machine"@en ;
+    :changeLog "重构电源模式状态机"@zh ;
+    :isBackwardCompatible true ;
+    :previousVersion :version_v5_0_0 ;
+    :nextVersion :version_v7_0_0 .
+
+# -----------------------------------------------------------------------------
+# Intermediate Version v5.0.0 (for version chain)
+# -----------------------------------------------------------------------------
+
+:version_v5_0_0 rdf:type :OntologyVersion ;
+    rdfs:label "Version 5.0.0"@en ;
+    rdfs:label "版本 5.0.0"@zh ;
+    :versionNumber "v5.0.0" ;
+    :majorVersion 5 ;
+    :minorVersion 0 ;
+    :patchVersion 0 ;
+    :releaseDate "2024-07-15T00:00:00"^^xsd:dateTime ;
+    :changeLog "Added comprehensive diagnostic rules"@en ;
+    :changeLog "新增全面诊断规则"@zh ;
+    :isBackwardCompatible true ;
+    :previousVersion :version_v1_0_0 ;
+    :nextVersion :version_v6_0_0 .
+
+# =============================================================================
+# ONTOLOGY VERSION LINKING
+# =============================================================================
+
+<http://example.org/vehicle-power-management> 
+    :hasVersion :version_v1_0_0 ;
+    :hasVersion :version_v5_0_0 ;
+    :hasVersion :version_v6_0_0 ;
+    :hasVersion :version_v7_0_0 ;
+    :currentVersion :version_v7_0_0 .
+
+# =============================================================================
+# CHANGE RECORD EXAMPLES
+# =============================================================================
+
+:change_v7_convenienceMode rdf:type :ChangeRecord ;
+    rdfs:label "ConvenienceMode Addition"@en ;
+    rdfs:label "便捷模式新增"@zh ;
+    :changeType "addition" ;
+    :changeDescription "Added ConvenienceMode as subclass of PowerMode for managing convenience features during power transitions"@en ;
+    :changeDescription "新增 ConvenienceMode 作为 PowerMode 的子类，用于管理电源转换期间的便捷功能"@zh ;
+    :affectedElement ":ConvenienceMode" .
+
+:change_v7_faultPropagation rdf:type :ChangeRecord ;
+    rdfs:label "Fault Propagation Enhancement"@en ;
+    rdfs:label "故障传播增强"@zh ;
+    :changeType "modification" ;
+    :changeDescription "Enhanced fault propagation chain to support multi-level fault cascading"@en ;
+    :changeDescription "增强故障传播链以支持多级故障级联"@zh ;
+    :affectedElement ":propagatesTo" .
+
+:version_v7_0_0 :hasChangeRecord :change_v7_convenienceMode ;
+    :hasChangeRecord :change_v7_faultPropagation .
+
+# =============================================================================
+# VERSION COMPATIBILITY AXIOMS
+# =============================================================================
+
+# A version is the current version if it has no next version
+:CurrentVersionAxiom rdf:type owl:Class ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :Version
+            [ rdf:type owl:Class ;
+              owl:complementOf [
+                rdf:type owl:Restriction ;
+                owl:onProperty :nextVersion ;
+                owl:someValuesFrom :Version
+              ]
+            ]
+        )
+    ] ;
+    rdfs:label "Current Version"@en ;
+    rdfs:label "当前版本"@zh ;
+    rdfs:comment "A version that has no successor, indicating it is the latest"@en ;
+    rdfs:comment "没有后继版本的版本，表示为最新版本"@zh .

@@ -1,0 +1,1161 @@
+@prefix : <http://example.org/vehicle-power-management#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+# =============================================================================
+# ONTOLOGY METADATA
+# =============================================================================
+
+<http://example.org/vehicle-power-management/context> rdf:type owl:Ontology ;
+    rdfs:label "Vehicle Power Management Context Model"@en ;
+    rdfs:label "车辆电源管理上下文模型"@zh ;
+    rdfs:comment "Context model for Data Agent Design - defines situational awareness and context-dependent behavior"@en ;
+    rdfs:comment "数据代理设计的上下文模型 - 定义情境感知和上下文依赖行为"@zh ;
+    owl:versionInfo "1.0" ;
+    owl:imports <http://example.org/vehicle-power-management/core> .
+
+# =============================================================================
+# CLASSES - Core Context Framework
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Context Base Class
+# -----------------------------------------------------------------------------
+
+:Context rdf:type owl:Class ;
+    rdfs:label "Context"@en ;
+    rdfs:label "上下文"@zh ;
+    rdfs:comment "Base class for all situational contexts in the vehicle power management system"@en ;
+    rdfs:comment "车辆电源管理系统中所有情境上下文的基类"@zh ;
+    skos:definition "A context represents a specific operational situation that influences system behavior"@en ;
+    skos:definition "上下文表示影响系统行为的特定操作情境"@zh .
+
+# -----------------------------------------------------------------------------
+# Context State Classes
+# -----------------------------------------------------------------------------
+
+:ContextState rdf:type owl:Class ;
+    rdfs:label "Context State"@en ;
+    rdfs:label "上下文状态"@zh ;
+    rdfs:comment "State of a context (active, inactive, suspended)"@en ;
+    rdfs:comment "上下文的状态（激活、未激活、暂停）"@zh .
+
+:ContextActive rdf:type owl:Class ;
+    rdfs:subClassOf :ContextState ;
+    rdfs:label "Context Active"@en ;
+    rdfs:label "上下文激活"@zh ;
+    rdfs:comment "Context is currently active"@en ;
+    rdfs:comment "上下文当前处于激活状态"@zh .
+
+:ContextInactive rdf:type owl:Class ;
+    rdfs:subClassOf :ContextState ;
+    rdfs:label "Context Inactive"@en ;
+    rdfs:label "上下文未激活"@zh ;
+    rdfs:comment "Context is not active"@en ;
+    rdfs:comment "上下文当前未激活"@zh .
+
+:ContextSuspended rdf:type owl:Class ;
+    rdfs:subClassOf :ContextState ;
+    rdfs:label "Context Suspended"@en ;
+    rdfs:label "上下文暂停"@zh ;
+    rdfs:comment "Context is temporarily suspended"@en ;
+    rdfs:comment "上下文临时暂停"@zh .
+
+# =============================================================================
+# CLASSES - Context Subclasses
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Operational Context
+# -----------------------------------------------------------------------------
+
+:OperationalContext rdf:type owl:Class ;
+    rdfs:subClassOf :Context ;
+    rdfs:label "Operational Context"@en ;
+    rdfs:label "运行上下文"@zh ;
+    rdfs:comment "Context related to vehicle operational modes"@en ;
+    rdfs:comment "与车辆运行模式相关的上下文"@zh .
+
+:NormalOperationContext rdf:type owl:Class ;
+    rdfs:subClassOf :OperationalContext ;
+    rdfs:label "Normal Operation Context"@en ;
+    rdfs:label "正常运行上下文"@zh ;
+    rdfs:comment "Context for normal vehicle operation"@en ;
+    rdfs:comment "正常车辆运行上下文"@zh .
+
+:MaintenanceContext rdf:type owl:Class ;
+    rdfs:subClassOf :OperationalContext ;
+    rdfs:label "Maintenance Context"@en ;
+    rdfs:label "维护上下文"@zh ;
+    rdfs:comment "Context for vehicle maintenance mode"@en ;
+    rdfs:comment "车辆维护模式上下文"@zh .
+
+:ExhibitionContext rdf:type owl:Class ;
+    rdfs:subClassOf :OperationalContext ;
+    rdfs:label "Exhibition Context"@en ;
+    rdfs:label "展示上下文"@zh ;
+    rdfs:comment "Context for exhibition/showroom mode"@en ;
+    rdfs:comment "展示厅/展厅模式上下文"@zh .
+
+:TransportationContext rdf:type owl:Class ;
+    rdfs:subClassOf :OperationalContext ;
+    rdfs:label "Transportation Context"@en ;
+    rdfs:label "运输上下文"@zh ;
+    rdfs:comment "Context for vehicle transportation mode"@en ;
+    rdfs:comment "车辆运输模式上下文"@zh .
+
+:FactoryContext rdf:type owl:Class ;
+    rdfs:subClassOf :OperationalContext ;
+    rdfs:label "Factory Context"@en ;
+    rdfs:label "工厂上下文"@zh ;
+    rdfs:comment "Context for factory production mode"@en ;
+    rdfs:comment "工厂生产模式上下文"@zh .
+
+:TrialDriveContext rdf:type owl:Class ;
+    rdfs:subClassOf :OperationalContext ;
+    rdfs:label "Trial Drive Context"@en ;
+    rdfs:label "试驾上下文"@zh ;
+    rdfs:comment "Context for trial drive mode"@en ;
+    rdfs:comment "试驾模式上下文"@zh .
+
+# -----------------------------------------------------------------------------
+# Diagnostic Context
+# -----------------------------------------------------------------------------
+
+:DiagnosticContext rdf:type owl:Class ;
+    rdfs:subClassOf :Context ;
+    rdfs:label "Diagnostic Context"@en ;
+    rdfs:label "诊断上下文"@zh ;
+    rdfs:comment "Context related to diagnostic operations"@en ;
+    rdfs:comment "与诊断操作相关的上下文"@zh .
+
+:OBDDiagnosticContext rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticContext ;
+    rdfs:label "OBD Diagnostic Context"@en ;
+    rdfs:label "OBD诊断上下文"@zh ;
+    rdfs:comment "Context for on-board diagnostics via CAN or Ethernet"@en ;
+    rdfs:comment "通过CAN或以太网的在线诊断上下文"@zh .
+
+:RemoteDiagnosticContext rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticContext ;
+    rdfs:label "Remote Diagnostic Context"@en ;
+    rdfs:label "远程诊断上下文"@zh ;
+    rdfs:comment "Context for remote diagnostics via telematics"@en ;
+    rdfs:comment "通过远程通信的远程诊断上下文"@zh .
+
+:SilentOTAContext rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticContext ;
+    rdfs:label "Silent OTA Context"@en ;
+    rdfs:label "静默OTA上下文"@zh ;
+    rdfs:comment "Context for silent over-the-air updates"@en ;
+    rdfs:comment "静默空中更新上下文"@zh .
+
+:NormalOTAContext rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticContext ;
+    rdfs:label "Normal OTA Context"@en ;
+    rdfs:label "普通OTA上下文"@zh ;
+    rdfs:comment "Context for normal over-the-air updates"@en ;
+    rdfs:comment "普通空中更新上下文"@zh .
+
+# -----------------------------------------------------------------------------
+# Power Context
+# -----------------------------------------------------------------------------
+
+:PowerContext rdf:type owl:Class ;
+    rdfs:subClassOf :Context ;
+    rdfs:label "Power Context"@en ;
+    rdfs:label "电源上下文"@zh ;
+    rdfs:comment "Context related to power management situations"@en ;
+    rdfs:comment "与电源管理情境相关的上下文"@zh .
+
+:LowPowerContext rdf:type owl:Class ;
+    rdfs:subClassOf :PowerContext ;
+    rdfs:label "Low Power Context"@en ;
+    rdfs:label "低电量上下文"@zh ;
+    rdfs:comment "Context triggered by low battery condition - triggers power saving actions"@en ;
+    rdfs:comment "由低电量状态触发的上下文 - 触发省电动作"@zh .
+
+:PowerSaveContext rdf:type owl:Class ;
+    rdfs:subClassOf :PowerContext ;
+    rdfs:label "Power Save Context"@en ;
+    rdfs:label "省电上下文"@zh ;
+    rdfs:comment "Context for power saving mode"@en ;
+    rdfs:comment "省电模式上下文"@zh .
+
+:EmergencyPowerContext rdf:type owl:Class ;
+    rdfs:subClassOf :PowerContext ;
+    rdfs:label "Emergency Power Context"@en ;
+    rdfs:label "紧急电源上下文"@zh ;
+    rdfs:comment "Context for emergency power situations"@en ;
+    rdfs:comment "紧急电源情境上下文"@zh .
+
+# -----------------------------------------------------------------------------
+# Security Context
+# -----------------------------------------------------------------------------
+
+:SecurityContext rdf:type owl:Class ;
+    rdfs:subClassOf :Context ;
+    rdfs:label "Security Context"@en ;
+    rdfs:label "安全上下文"@zh ;
+    rdfs:comment "Context related to security situations"@en ;
+    rdfs:comment "与安全情境相关的上下文"@zh .
+
+:TheftAlertContext rdf:type owl:Class ;
+    rdfs:subClassOf :SecurityContext ;
+    rdfs:label "Theft Alert Context"@en ;
+    rdfs:label "防盗报警上下文"@zh ;
+    rdfs:comment "Context triggered by theft detection"@en ;
+    rdfs:comment "由防盗检测触发的上下文"@zh .
+
+:ValetModeContext rdf:type owl:Class ;
+    rdfs:subClassOf :SecurityContext ;
+    rdfs:label "Valet Mode Context"@en ;
+    rdfs:label "代客泊车上下文"@zh ;
+    rdfs:comment "Context for valet parking mode with restricted access"@en ;
+    rdfs:comment "代客泊车模式上下文，具有受限访问权限"@zh .
+
+:RemoteAccessContext rdf:type owl:Class ;
+    rdfs:subClassOf :SecurityContext ;
+    rdfs:label "Remote Access Context"@en ;
+    rdfs:label "远程访问上下文"@zh ;
+    rdfs:comment "Context for remote access operations"@en ;
+    rdfs:comment "远程访问操作上下文"@zh .
+
+# =============================================================================
+# CLASSES - Context Transition
+# =============================================================================
+
+:ContextTransition rdf:type owl:Class ;
+    rdfs:label "Context Transition"@en ;
+    rdfs:label "上下文切换"@zh ;
+    rdfs:comment "Defines valid transitions between contexts"@en ;
+    rdfs:comment "定义上下文之间的有效切换"@zh .
+
+:TransitionCondition rdf:type owl:Class ;
+    rdfs:label "Transition Condition"@en ;
+    rdfs:label "切换条件"@zh ;
+    rdfs:comment "Condition that must be satisfied for context transition"@en ;
+    rdfs:comment "上下文切换必须满足的条件"@zh .
+
+:TransitionAction rdf:type owl:Class ;
+    rdfs:label "Transition Action"@en ;
+    rdfs:label "切换动作"@zh ;
+    rdfs:comment "Action executed during context transition"@en ;
+    rdfs:comment "上下文切换时执行的动作"@zh .
+
+# =============================================================================
+# CLASSES - Context Operation Mapping
+# =============================================================================
+
+:ValidOperation rdf:type owl:Class ;
+    rdfs:label "Valid Operation"@en ;
+    rdfs:label "有效操作"@zh ;
+    rdfs:comment "Operation that is valid within a specific context"@en ;
+    rdfs:comment "在特定上下文中有效的操作"@zh .
+
+:ForbiddenOperation rdf:type owl:Class ;
+    rdfs:label "Forbidden Operation"@en ;
+    rdfs:label "禁止操作"@zh ;
+    rdfs:comment "Operation that is forbidden within a specific context"@en ;
+    rdfs:comment "在特定上下文中禁止的操作"@zh .
+
+# =============================================================================
+# OBJECT PROPERTIES - Context Properties
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Core Context Properties
+# -----------------------------------------------------------------------------
+
+:hasContextId rdf:type owl:DatatypeProperty ;
+    rdfs:label "has context ID"@en ;
+    rdfs:label "具有上下文ID"@zh ;
+    rdfs:comment "Unique identifier for the context"@en ;
+    rdfs:comment "上下文的唯一标识符"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range xsd:string .
+
+:hasContextName rdf:type owl:DatatypeProperty ;
+    rdfs:label "has context name"@en ;
+    rdfs:label "具有上下文名称"@zh ;
+    rdfs:comment "Human-readable name of the context"@en ;
+    rdfs:comment "上下文的可读名称"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range xsd:string .
+
+:hasActiveState rdf:type owl:ObjectProperty ;
+    rdfs:label "has active state"@en ;
+    rdfs:label "具有激活状态"@zh ;
+    rdfs:comment "Current active state of the context"@en ;
+    rdfs:comment "上下文的当前激活状态"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range :ContextState .
+
+:hasDuration rdf:type owl:DatatypeProperty ;
+    rdfs:label "has duration"@en ;
+    rdfs:label "具有持续时间"@zh ;
+    rdfs:comment "Duration of the context in milliseconds"@en ;
+    rdfs:comment "上下文持续时间，单位：毫秒"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range xsd:integer .
+
+:hasPriority rdf:type owl:DatatypeProperty ;
+    rdfs:label "has priority"@en ;
+    rdfs:label "具有优先级"@zh ;
+    rdfs:comment "Priority of the context (higher number = higher priority)"@en ;
+    rdfs:comment "上下文的优先级（数字越大优先级越高）"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range xsd:integer .
+
+:isActive rdf:type owl:DatatypeProperty ;
+    rdfs:label "is active"@en ;
+    rdfs:label "是否激活"@zh ;
+    rdfs:comment "Boolean flag indicating if context is currently active"@en ;
+    rdfs:comment "表示上下文当前是否激活的布尔标志"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range xsd:boolean .
+
+:activatedBy rdf:type owl:ObjectProperty ;
+    rdfs:label "activated by"@en ;
+    rdfs:label "由...激活"@zh ;
+    rdfs:comment "Event or condition that activates this context"@en ;
+    rdfs:comment "激活此上下文的事件或条件"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range :TransitionCondition .
+
+:deactivatedBy rdf:type owl:ObjectProperty ;
+    rdfs:label "deactivated by"@en ;
+    rdfs:label "由...停用"@zh ;
+    rdfs:comment "Event or condition that deactivates this context"@en ;
+    rdfs:comment "停用此上下文的事件或条件"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range :TransitionCondition .
+
+# -----------------------------------------------------------------------------
+# Context Transition Properties
+# -----------------------------------------------------------------------------
+
+:fromContext rdf:type owl:ObjectProperty ;
+    rdfs:label "from context"@en ;
+    rdfs:label "从上下文"@zh ;
+    rdfs:comment "Source context for transition"@en ;
+    rdfs:comment "切换的源上下文"@zh ;
+    rdfs:domain :ContextTransition ;
+    rdfs:range :Context .
+
+:toContext rdf:type owl:ObjectProperty ;
+    rdfs:label "to context"@en ;
+    rdfs:label "到上下文"@zh ;
+    rdfs:comment "Target context for transition"@en ;
+    rdfs:comment "切换的目标上下文"@zh ;
+    rdfs:domain :ContextTransition ;
+    rdfs:range :Context .
+
+:transitionCondition rdf:type owl:ObjectProperty ;
+    rdfs:label "transition condition"@en ;
+    rdfs:label "切换条件"@zh ;
+    rdfs:comment "Condition that must be met for transition"@en ;
+    rdfs:comment "切换必须满足的条件"@zh ;
+    rdfs:domain :ContextTransition ;
+    rdfs:range :TransitionCondition .
+
+:transitionAction rdf:type owl:ObjectProperty ;
+    rdfs:label "transition action"@en ;
+    rdfs:label "切换动作"@zh ;
+    rdfs:comment "Action to execute during transition"@en ;
+    rdfs:comment "切换时执行的动作"@zh ;
+    rdfs:domain :ContextTransition ;
+    rdfs:range :TransitionAction .
+
+:hasContextTransition rdf:type owl:ObjectProperty ;
+    rdfs:label "has context transition"@en ;
+    rdfs:label "具有上下文切换"@zh ;
+    rdfs:comment "Valid transition from this context"@en ;
+    rdfs:comment "从此上下文的有效切换"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range :ContextTransition .
+
+# -----------------------------------------------------------------------------
+# Context-VehicleMode Linking
+# -----------------------------------------------------------------------------
+
+:associatedWithVehicleMode rdf:type owl:ObjectProperty ;
+    rdfs:label "associated with vehicle mode"@en ;
+    rdfs:label "关联车辆模式"@zh ;
+    rdfs:comment "Links context to corresponding vehicle mode"@en ;
+    rdfs:comment "将上下文链接到对应的车辆模式"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range :VehicleMode .
+
+:associatedWithDiagnosticState rdf:type owl:ObjectProperty ;
+    rdfs:label "associated with diagnostic state"@en ;
+    rdfs:label "关联诊断状态"@zh ;
+    rdfs:comment "Links context to corresponding diagnostic state"@en ;
+    rdfs:comment "将上下文链接到对应的诊断状态"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range :DiagnosticState .
+
+:associatedWithPowerMode rdf:type owl:ObjectProperty ;
+    rdfs:label "associated with power mode"@en ;
+    rdfs:label "关联电源模式"@zh ;
+    rdfs:comment "Links context to corresponding power mode"@en ;
+    rdfs:comment "将上下文链接到对应的电源模式"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range :PowerMode .
+
+# -----------------------------------------------------------------------------
+# Context Operation Properties
+# -----------------------------------------------------------------------------
+
+:allowsOperation rdf:type owl:ObjectProperty ;
+    rdfs:label "allows operation"@en ;
+    rdfs:label "允许操作"@zh ;
+    rdfs:comment "Operation allowed in this context"@en ;
+    rdfs:comment "在此上下文中允许的操作"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range :ValidOperation .
+
+:forbidsOperation rdf:type owl:ObjectProperty ;
+    rdfs:label "forbids operation"@en ;
+    rdfs:label "禁止操作"@zh ;
+    rdfs:comment "Operation forbidden in this context"@en ;
+    rdfs:comment "在此上下文中禁止的操作"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range :ForbiddenOperation .
+
+:hasValidOperation rdf:type owl:ObjectProperty ;
+    rdfs:label "has valid operation"@en ;
+    rdfs:label "具有有效操作"@zh ;
+    rdfs:comment "Links to operations valid in this context"@en ;
+    rdfs:comment "链接到在此上下文中有效的操作"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range :ValidOperation .
+
+:inContext rdf:type owl:ObjectProperty ;
+    rdfs:label "in context"@en ;
+    rdfs:label "在上下文中"@zh ;
+    rdfs:comment "Operation is valid in this context"@en ;
+    rdfs:comment "操作在此上下文中有效"@zh ;
+    rdfs:domain :ValidOperation ;
+    rdfs:range :Context .
+
+# -----------------------------------------------------------------------------
+# Context Hierarchy Properties
+# -----------------------------------------------------------------------------
+
+:hasParentContext rdf:type owl:ObjectProperty ;
+    rdfs:label "has parent context"@en ;
+    rdfs:label "具有父上下文"@zh ;
+    rdfs:comment "Parent context in hierarchy"@en ;
+    rdfs:comment "层次结构中的父上下文"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range :Context .
+
+:hasChildContext rdf:type owl:ObjectProperty ;
+    rdfs:label "has child context"@en ;
+    rdfs:label "具有子上下文"@zh ;
+    rdfs:comment "Child context in hierarchy"@en ;
+    rdfs:comment "层次结构中的子上下文"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range :Context ;
+    owl:inverseOf :hasParentContext .
+
+:overridesContext rdf:type owl:ObjectProperty ;
+    rdfs:label "overrides context"@en ;
+    rdfs:label "覆盖上下文"@zh ;
+    rdfs:comment "This context overrides another context"@en ;
+    rdfs:comment "此上下文覆盖另一个上下文"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range :Context .
+
+# =============================================================================
+# DATA PROPERTIES - Additional Context Properties
+# =============================================================================
+
+:contextDescription rdf:type owl:DatatypeProperty ;
+    rdfs:label "context description"@en ;
+    rdfs:label "上下文描述"@zh ;
+    rdfs:comment "Detailed description of the context"@en ;
+    rdfs:comment "上下文的详细描述"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range xsd:string .
+
+:transitionId rdf:type owl:DatatypeProperty ;
+    rdfs:label "transition ID"@en ;
+    rdfs:label "切换ID"@zh ;
+    rdfs:comment "Unique identifier for the transition"@en ;
+    rdfs:comment "切换的唯一标识符"@zh ;
+    rdfs:domain :ContextTransition ;
+    rdfs:range xsd:string .
+
+:transitionPriority rdf:type owl:DatatypeProperty ;
+    rdfs:label "transition priority"@en ;
+    rdfs:label "切换优先级"@zh ;
+    rdfs:comment "Priority of the transition"@en ;
+    rdfs:comment "切换的优先级"@zh ;
+    rdfs:domain :ContextTransition ;
+    rdfs:range xsd:integer .
+
+:activationTimestamp rdf:type owl:DatatypeProperty ;
+    rdfs:label "activation timestamp"@en ;
+    rdfs:label "激活时间戳"@zh ;
+    rdfs:comment "Timestamp when context was activated"@en ;
+    rdfs:comment "上下文激活的时间戳"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range xsd:dateTime .
+
+:deactivationTimestamp rdf:type owl:DatatypeProperty ;
+    rdfs:label "deactivation timestamp"@en ;
+    rdfs:label "停用时间戳"@zh ;
+    rdfs:comment "Timestamp when context was deactivated"@en ;
+    rdfs:comment "上下文停用的时间戳"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range xsd:dateTime .
+
+:maximumDuration rdf:type owl:DatatypeProperty ;
+    rdfs:label "maximum duration"@en ;
+    rdfs:label "最大持续时间"@zh ;
+    rdfs:comment "Maximum allowed duration for the context in milliseconds"@en ;
+    rdfs:comment "上下文允许的最大持续时间，单位：毫秒"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range xsd:integer .
+
+:isExclusive rdf:type owl:DatatypeProperty ;
+    rdfs:label "is exclusive"@en ;
+    rdfs:label "是否互斥"@zh ;
+    rdfs:comment "Indicates if this context is exclusive (no other contexts active)"@en ;
+    rdfs:comment "表示此上下文是否互斥（无其他上下文激活）"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range xsd:boolean .
+
+# =============================================================================
+# INDIVIDUALS - Context States
+# =============================================================================
+
+:contextState_Active rdf:type :ContextActive ;
+    rdfs:label "Active"@en ;
+    rdfs:label "激活"@zh ;
+    rdfs:comment "Context is active"@en ;
+    rdfs:comment "上下文处于激活状态"@zh .
+
+:contextState_Inactive rdf:type :ContextInactive ;
+    rdfs:label "Inactive"@en ;
+    rdfs:label "未激活"@zh ;
+    rdfs:comment "Context is inactive"@en ;
+    rdfs:comment "上下文处于未激活状态"@zh .
+
+:contextState_Suspended rdf:type :ContextSuspended ;
+    rdfs:label "Suspended"@en ;
+    rdfs:label "暂停"@zh ;
+    rdfs:comment "Context is suspended"@en ;
+    rdfs:comment "上下文处于暂停状态"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Operational Contexts
+# =============================================================================
+
+:context_NormalOperation rdf:type :NormalOperationContext ;
+    rdfs:label "Normal Operation Context"@en ;
+    rdfs:label "正常运行上下文"@zh ;
+    :hasContextId "CTX-OP-001" ;
+    :hasContextName "NormalOperation" ;
+    :hasPriority 10 ;
+    :isActive false ;
+    :isExclusive false ;
+    :associatedWithVehicleMode :NormalMode ;
+    :contextDescription "Normal vehicle operation context for everyday driving"@en ;
+    :contextDescription "日常驾驶的正常车辆运行上下文"@zh .
+
+:context_MaintenanceMode rdf:type :MaintenanceContext ;
+    rdfs:label "Maintenance Mode Context"@en ;
+    rdfs:label "维护模式上下文"@zh ;
+    :hasContextId "CTX-OP-002" ;
+    :hasContextName "MaintenanceMode" ;
+    :hasPriority 30 ;
+    :isActive false ;
+    :isExclusive true ;
+    :associatedWithVehicleMode :MaintenanceMode ;
+    :contextDescription "Maintenance mode context for service operations"@en ;
+    :contextDescription "服务操作的维护模式上下文"@zh .
+
+:context_ExhibitionMode rdf:type :ExhibitionContext ;
+    rdfs:label "Exhibition Mode Context"@en ;
+    rdfs:label "展示模式上下文"@zh ;
+    :hasContextId "CTX-OP-003" ;
+    :hasContextName "ExhibitionMode" ;
+    :hasPriority 25 ;
+    :isActive false ;
+    :isExclusive true ;
+    :associatedWithVehicleMode :ExhibitionMode ;
+    :contextDescription "Exhibition/showroom mode for vehicle display"@en ;
+    :contextDescription "车辆展示的展厅模式"@zh .
+
+:context_TransportationMode rdf:type :TransportationContext ;
+    rdfs:label "Transportation Mode Context"@en ;
+    rdfs:label "运输模式上下文"@zh ;
+    :hasContextId "CTX-OP-004" ;
+    :hasContextName "TransportationMode" ;
+    :hasPriority 20 ;
+    :isActive false ;
+    :isExclusive false ;
+    :associatedWithVehicleMode :TransportationMode ;
+    :contextDescription "Transportation mode for vehicle delivery"@en ;
+    :contextDescription "车辆交付的运输模式"@zh .
+
+:context_FactoryMode rdf:type :FactoryContext ;
+    rdfs:label "Factory Mode Context"@en ;
+    rdfs:label "工厂模式上下文"@zh ;
+    :hasContextId "CTX-OP-005" ;
+    :hasContextName "FactoryMode" ;
+    :hasPriority 40 ;
+    :isActive false ;
+    :isExclusive true ;
+    :associatedWithVehicleMode :FactoryMode ;
+    :contextDescription "Factory mode for production and end-of-line testing"@en ;
+    :contextDescription "生产和下线测试的工厂模式"@zh .
+
+:context_TrialDriveMode rdf:type :TrialDriveContext ;
+    rdfs:label "Trial Drive Mode Context"@en ;
+    rdfs:label "试驾模式上下文"@zh ;
+    :hasContextId "CTX-OP-006" ;
+    :hasContextName "TrialDriveMode" ;
+    :hasPriority 15 ;
+    :isActive false ;
+    :isExclusive false ;
+    :associatedWithVehicleMode :TrialDriveMode ;
+    :contextDescription "Trial drive mode for customer test drives"@en ;
+    :contextDescription "客户试驾的试驾模式"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Diagnostic Contexts
+# =============================================================================
+
+:context_OBDDiagnostic rdf:type :OBDDiagnosticContext ;
+    rdfs:label "OBD Diagnostic Context"@en ;
+    rdfs:label "OBD诊断上下文"@zh ;
+    :hasContextId "CTX-DIAG-001" ;
+    :hasContextName "OBDDiagnostic" ;
+    :hasPriority 50 ;
+    :isActive false ;
+    :isExclusive true ;
+    :associatedWithDiagnosticState :OBDCan ;
+    :contextDescription "On-board diagnostics via CAN interface"@en ;
+    :contextDescription "通过CAN接口的在线诊断"@zh .
+
+:context_OBDEthernetDiagnostic rdf:type :OBDDiagnosticContext ;
+    rdfs:label "OBD Ethernet Diagnostic Context"@en ;
+    rdfs:label "OBD以太网诊断上下文"@zh ;
+    :hasContextId "CTX-DIAG-002" ;
+    :hasContextName "OBDEthernetDiagnostic" ;
+    :hasPriority 50 ;
+    :isActive false ;
+    :isExclusive true ;
+    :associatedWithDiagnosticState :OBDEthernet ;
+    :contextDescription "On-board diagnostics via Ethernet interface"@en ;
+    :contextDescription "通过以太网接口的在线诊断"@zh .
+
+:context_RemoteDiagnostic rdf:type :RemoteDiagnosticContext ;
+    rdfs:label "Remote Diagnostic Context"@en ;
+    rdfs:label "远程诊断上下文"@zh ;
+    :hasContextId "CTX-DIAG-003" ;
+    :hasContextName "RemoteDiagnostic" ;
+    :hasPriority 55 ;
+    :isActive false ;
+    :isExclusive true ;
+    :associatedWithDiagnosticState :RemoteDiag ;
+    :contextDescription "Remote diagnostics via telematics"@en ;
+    :contextDescription "通过远程通信的远程诊断"@zh .
+
+:context_SilentOTA rdf:type :SilentOTAContext ;
+    rdfs:label "Silent OTA Context"@en ;
+    rdfs:label "静默OTA上下文"@zh ;
+    :hasContextId "CTX-DIAG-004" ;
+    :hasContextName "SilentOTA" ;
+    :hasPriority 60 ;
+    :isActive false ;
+    :isExclusive true ;
+    :associatedWithDiagnosticState :SilentOTA ;
+    :contextDescription "Silent over-the-air update context"@en ;
+    :contextDescription "静默空中更新上下文"@zh .
+
+:context_NormalOTA rdf:type :NormalOTAContext ;
+    rdfs:label "Normal OTA Context"@en ;
+    rdfs:label "普通OTA上下文"@zh ;
+    :hasContextId "CTX-DIAG-005" ;
+    :hasContextName "NormalOTA" ;
+    :hasPriority 60 ;
+    :isActive false ;
+    :isExclusive true ;
+    :associatedWithDiagnosticState :NormalOTA ;
+    :contextDescription "Normal over-the-air update context with user notification"@en ;
+    :contextDescription "带用户通知的普通空中更新上下文"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Power Contexts
+# =============================================================================
+
+:context_LowBattery rdf:type :LowPowerContext ;
+    rdfs:label "Low Battery Context"@en ;
+    rdfs:label "低电量上下文"@zh ;
+    :hasContextId "CTX-PWR-001" ;
+    :hasContextName "LowBattery" ;
+    :hasPriority 70 ;
+    :isActive false ;
+    :isExclusive false ;
+    :maximumDuration 1800000 ;  # 30 minutes in ms
+    :contextDescription "Low battery condition - triggers power saving actions"@en ;
+    :contextDescription "低电量状态 - 触发省电动作"@zh .
+
+:context_PowerSave rdf:type :PowerSaveContext ;
+    rdfs:label "Power Save Context"@en ;
+    rdfs:label "省电上下文"@zh ;
+    :hasContextId "CTX-PWR-002" ;
+    :hasContextName "PowerSave" ;
+    :hasPriority 65 ;
+    :isActive false ;
+    :isExclusive false ;
+    :contextDescription "Power saving mode for extended battery life"@en ;
+    :contextDescription "延长电池寿命的省电模式"@zh .
+
+:context_EmergencyPower rdf:type :EmergencyPowerContext ;
+    rdfs:label "Emergency Power Context"@en ;
+    rdfs:label "紧急电源上下文"@zh ;
+    :hasContextId "CTX-PWR-003" ;
+    :hasContextName "EmergencyPower" ;
+    :hasPriority 100 ;
+    :isActive false ;
+    :isExclusive true ;
+    :contextDescription "Emergency power situation - highest priority"@en ;
+    :contextDescription "紧急电源状态 - 最高优先级"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Security Contexts
+# =============================================================================
+
+:context_TheftAlert rdf:type :TheftAlertContext ;
+    rdfs:label "Theft Alert Context"@en ;
+    rdfs:label "防盗报警上下文"@zh ;
+    :hasContextId "CTX-SEC-001" ;
+    :hasContextName "TheftAlert" ;
+    :hasPriority 90 ;
+    :isActive false ;
+    :isExclusive true ;
+    :contextDescription "Theft detection alert context"@en ;
+    :contextDescription "防盗检测报警上下文"@zh .
+
+:context_ValetMode rdf:type :ValetModeContext ;
+    rdfs:label "Valet Mode Context"@en ;
+    rdfs:label "代客泊车上下文"@zh ;
+    :hasContextId "CTX-SEC-002" ;
+    :hasContextName "ValetMode" ;
+    :hasPriority 35 ;
+    :isActive false ;
+    :isExclusive false ;
+    :contextDescription "Valet parking mode with restricted access"@en ;
+    :contextDescription "受限访问的代客泊车模式"@zh .
+
+:context_RemoteAccess rdf:type :RemoteAccessContext ;
+    rdfs:label "Remote Access Context"@en ;
+    rdfs:label "远程访问上下文"@zh ;
+    :hasContextId "CTX-SEC-003" ;
+    :hasContextName "RemoteAccess" ;
+    :hasPriority 45 ;
+    :isActive false ;
+    :isExclusive false ;
+    :contextDescription "Remote access operations context"@en ;
+    :contextDescription "远程访问操作上下文"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Context Transitions
+# =============================================================================
+
+# Transition: Normal -> Maintenance
+:transition_NormalToMaintenance rdf:type :ContextTransition ;
+    rdfs:label "Normal to Maintenance Transition"@en ;
+    rdfs:label "正常到维护切换"@zh ;
+    :transitionId "TRANS-001" ;
+    :fromContext :context_NormalOperation ;
+    :toContext :context_MaintenanceMode ;
+    :transitionPriority 30 ;
+    rdfs:comment "Transition from normal operation to maintenance mode"@en ;
+    rdfs:comment "从正常运行到维护模式的切换"@zh .
+
+# Transition: Normal -> OTA
+:transition_NormalToOTA rdf:type :ContextTransition ;
+    rdfs:label "Normal to OTA Transition"@en ;
+    rdfs:label "正常到OTA切换"@zh ;
+    :transitionId "TRANS-002" ;
+    :fromContext :context_NormalOperation ;
+    :toContext :context_NormalOTA ;
+    :transitionPriority 60 ;
+    rdfs:comment "Transition from normal operation to OTA update"@en ;
+    rdfs:comment "从正常运行到OTA更新的切换"@zh .
+
+# Transition: Normal -> Low Battery
+:transition_NormalToLowBattery rdf:type :ContextTransition ;
+    rdfs:label "Normal to Low Battery Transition"@en ;
+    rdfs:label "正常到低电量切换"@zh ;
+    :transitionId "TRANS-003" ;
+    :fromContext :context_NormalOperation ;
+    :toContext :context_LowBattery ;
+    :transitionPriority 70 ;
+    rdfs:comment "Transition triggered by low battery detection"@en ;
+    rdfs:comment "由低电量检测触发的切换"@zh .
+
+# Transition: OTA -> Normal
+:transition_OTAToNormal rdf:type :ContextTransition ;
+    rdfs:label "OTA to Normal Transition"@en ;
+    rdfs:label "OTA到正常切换"@zh ;
+    :transitionId "TRANS-004" ;
+    :fromContext :context_NormalOTA ;
+    :toContext :context_NormalOperation ;
+    :transitionPriority 10 ;
+    rdfs:comment "Transition from OTA update back to normal operation"@en ;
+    rdfs:comment "从OTA更新返回正常运行的切换"@zh .
+
+# Transition: Maintenance -> Normal
+:transition_MaintenanceToNormal rdf:type :ContextTransition ;
+    rdfs:label "Maintenance to Normal Transition"@en ;
+    rdfs:label "维护到正常切换"@zh ;
+    :transitionId "TRANS-005" ;
+    :fromContext :context_MaintenanceMode ;
+    :toContext :context_NormalOperation ;
+    :transitionPriority 10 ;
+    rdfs:comment "Transition from maintenance mode back to normal operation"@en ;
+    rdfs:comment "从维护模式返回正常运行的切换"@zh .
+
+# Transition: Low Battery -> Power Save
+:transition_LowBatteryToPowerSave rdf:type :ContextTransition ;
+    rdfs:label "Low Battery to Power Save Transition"@en ;
+    rdfs:label "低电量到省电切换"@zh ;
+    :transitionId "TRANS-006" ;
+    :fromContext :context_LowBattery ;
+    :toContext :context_PowerSave ;
+    :transitionPriority 65 ;
+    rdfs:comment "Transition to power save mode from low battery context"@en ;
+    rdfs:comment "从低电量上下文切换到省电模式"@zh .
+
+# Transition: Normal -> Exhibition
+:transition_NormalToExhibition rdf:type :ContextTransition ;
+    rdfs:label "Normal to Exhibition Transition"@en ;
+    rdfs:label "正常到展示切换"@zh ;
+    :transitionId "TRANS-007" ;
+    :fromContext :context_NormalOperation ;
+    :toContext :context_ExhibitionMode ;
+    :transitionPriority 25 ;
+    rdfs:comment "Transition from normal operation to exhibition mode"@en ;
+    rdfs:comment "从正常运行到展示模式的切换"@zh .
+
+# Transition: Exhibition -> Normal
+:transition_ExhibitionToNormal rdf:type :ContextTransition ;
+    rdfs:label "Exhibition to Normal Transition"@en ;
+    rdfs:label "展示到正常切换"@zh ;
+    :transitionId "TRANS-008" ;
+    :fromContext :context_ExhibitionMode ;
+    :toContext :context_NormalOperation ;
+    :transitionPriority 10 ;
+    rdfs:comment "Transition from exhibition mode back to normal operation"@en ;
+    rdfs:comment "从展示模式返回正常运行的切换"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Valid Operations
+# =============================================================================
+
+:op_PowerOn rdf:type :ValidOperation ;
+    rdfs:label "Power On Operation"@en ;
+    rdfs:label "上电操作"@zh ;
+    rdfs:comment "Operation to power on the vehicle"@en ;
+    rdfs:comment "为车辆上电的操作"@zh .
+
+:op_PowerOff rdf:type :ValidOperation ;
+    rdfs:label "Power Off Operation"@en ;
+    rdfs:label "下电操作"@zh ;
+    rdfs:comment "Operation to power off the vehicle"@en ;
+    rdfs:comment "为车辆下电的操作"@zh .
+
+:op_RemoteStart rdf:type :ValidOperation ;
+    rdfs:label "Remote Start Operation"@en ;
+    rdfs:label "远程启动操作"@zh ;
+    rdfs:comment "Operation to remotely start the vehicle"@en ;
+    rdfs:comment "远程启动车辆的操作"@zh .
+
+:op_DoorLock rdf:type :ValidOperation ;
+    rdfs:label "Door Lock Operation"@en ;
+    rdfs:label "门锁操作"@zh ;
+    rdfs:comment "Operation to lock/unlock doors"@en ;
+    rdfs:comment "锁止/解锁车门的操作"@zh .
+
+:op_OTAUpdate rdf:type :ValidOperation ;
+    rdfs:label "OTA Update Operation"@en ;
+    rdfs:label "OTA更新操作"@zh ;
+    rdfs:comment "Operation to perform OTA update"@en ;
+    rdfs:comment "执行OTA更新的操作"@zh .
+
+:op_DiagnosticRead rdf:type :ValidOperation ;
+    rdfs:label "Diagnostic Read Operation"@en ;
+    rdfs:label "诊断读取操作"@zh ;
+    rdfs:comment "Operation to read diagnostic data"@en ;
+    rdfs:comment "读取诊断数据的操作"@zh .
+
+:op_ClimateControl rdf:type :ValidOperation ;
+    rdfs:label "Climate Control Operation"@en ;
+    rdfs:label "空调控制操作"@zh ;
+    rdfs:comment "Operation to control climate system"@en ;
+    rdfs:comment "控制空调系统的操作"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Forbidden Operations
+# =============================================================================
+
+:op_FactoryReset rdf:type :ForbiddenOperation ;
+    rdfs:label "Factory Reset Operation"@en ;
+    rdfs:label "恢复出厂设置操作"@zh ;
+    rdfs:comment "Operation to reset vehicle to factory settings - forbidden in normal operation"@en ;
+    rdfs:comment "将车辆恢复出厂设置的操作 - 正常运行中禁止"@zh .
+
+:op_FirmwareFlash rdf:type :ForbiddenOperation ;
+    rdfs:label "Firmware Flash Operation"@en ;
+    rdfs:label "固件刷写操作"@zh ;
+    rdfs:comment "Operation to flash firmware - forbidden in normal operation"@en ;
+    rdfs:comment "刷写固件的操作 - 正常运行中禁止"@zh .
+
+:op_ImmobilizerBypass rdf:type :ForbiddenOperation ;
+    rdfs:label "Immobilizer Bypass Operation"@en ;
+    rdfs:label "防盗系统旁路操作"@zh ;
+    rdfs:comment "Operation to bypass immobilizer - always forbidden"@en ;
+    rdfs:comment "旁路防盗系统的操作 - 始终禁止"@zh .
+
+# =============================================================================
+# CONTEXT-OPERATION MAPPINGS
+# =============================================================================
+
+# Normal Operation Context - Allowed Operations
+:context_NormalOperation :allowsOperation :op_PowerOn ;
+    :allowsOperation :op_PowerOff ;
+    :allowsOperation :op_RemoteStart ;
+    :allowsOperation :op_DoorLock ;
+    :allowsOperation :op_ClimateControl .
+
+# Maintenance Context - Allowed Operations
+:context_MaintenanceMode :allowsOperation :op_DiagnosticRead ;
+    :allowsOperation :op_FirmwareFlash ;
+    :forbidsOperation :op_RemoteStart .
+
+# OTA Context - Allowed Operations
+:context_NormalOTA :allowsOperation :op_OTAUpdate ;
+    :allowsOperation :op_DiagnosticRead ;
+    :forbidsOperation :op_PowerOff .
+
+# Exhibition Context - Allowed Operations
+:context_ExhibitionMode :allowsOperation :op_ClimateControl ;
+    :forbidsOperation :op_PowerOn ;
+    :forbidsOperation :op_PowerOff .
+
+# Transportation Context - Allowed Operations
+:context_TransportationMode :allowsOperation :op_PowerOn ;
+    :forbidsOperation :op_RemoteStart ;
+    :forbidsOperation :op_ClimateControl .
+
+# Factory Context - Allowed Operations
+:context_FactoryMode :allowsOperation :op_FactoryReset ;
+    :allowsOperation :op_FirmwareFlash ;
+    :allowsOperation :op_DiagnosticRead .
+
+# Low Battery Context - Allowed Operations
+:context_LowBattery :allowsOperation :op_PowerOff ;
+    :forbidsOperation :op_ClimateControl ;
+    :forbidsOperation :op_RemoteStart .
+
+# Valet Mode Context - Allowed Operations
+:context_ValetMode :allowsOperation :op_PowerOn ;
+    :allowsOperation :op_DowerOff ;
+    :forbidsOperation :op_RemoteStart ;
+    :forbidsOperation :op_DiagnosticRead .
+
+# =============================================================================
+# CONTEXT TRANSITION LINKS
+# =============================================================================
+
+:context_NormalOperation :hasContextTransition :transition_NormalToMaintenance ;
+    :hasContextTransition :transition_NormalToOTA ;
+    :hasContextTransition :transition_NormalToLowBattery ;
+    :hasContextTransition :transition_NormalToExhibition .
+
+:context_MaintenanceMode :hasContextTransition :transition_MaintenanceToNormal .
+
+:context_NormalOTA :hasContextTransition :transition_OTAToNormal .
+
+:context_LowBattery :hasContextTransition :transition_LowBatteryToPowerSave .
+
+:context_ExhibitionMode :hasContextTransition :transition_ExhibitionToNormal .
+
+# =============================================================================
+# COMPLEX OWL CONSTRUCTS
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Active Context Definition
+# -----------------------------------------------------------------------------
+
+:ActiveContext rdf:type owl:Class ;
+    rdfs:label "Active Context"@en ;
+    rdfs:label "激活上下文"@zh ;
+    rdfs:comment "A context that is currently active"@en ;
+    rdfs:comment "当前处于激活状态的上下文"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :Context
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :isActive ;
+              owl:hasValue true
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Exclusive Context Definition
+# -----------------------------------------------------------------------------
+
+:ExclusiveActiveContext rdf:type owl:Class ;
+    rdfs:label "Exclusive Active Context"@en ;
+    rdfs:label "互斥激活上下文"@zh ;
+    rdfs:comment "A context that is exclusive and active"@en ;
+    rdfs:comment "处于激活状态的互斥上下文"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :Context
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :isExclusive ;
+              owl:hasValue true
+            ]
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :isActive ;
+              owl:hasValue true
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# High Priority Context Definition
+# -----------------------------------------------------------------------------
+
+:HighPriorityContext rdf:type owl:Class ;
+    rdfs:label "High Priority Context"@en ;
+    rdfs:label "高优先级上下文"@zh ;
+    rdfs:comment "A context with priority >= 50"@en ;
+    rdfs:comment "优先级大于等于50的上下文"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :Context
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasPriority ;
+              owl:someValuesFrom [
+                  rdf:type rdfs:Datatype ;
+                  owl:onDatatype xsd:integer ;
+                  owl:withRestrictions ([ xsd:minInclusive 50 ])
+              ]
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Diagnostic Context Union
+# -----------------------------------------------------------------------------
+
+:AnyDiagnosticContext rdf:type owl:Class ;
+    rdfs:label "Any Diagnostic Context"@en ;
+    rdfs:label "任意诊断上下文"@zh ;
+    rdfs:comment "Union of all diagnostic context types"@en ;
+    rdfs:comment "所有诊断上下文类型的联合"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:unionOf (:OBDDiagnosticContext :RemoteDiagnosticContext :SilentOTAContext :NormalOTAContext)
+    ] .
+
+# -----------------------------------------------------------------------------
+# Power Context Union
+# -----------------------------------------------------------------------------
+
+:AnyPowerContext rdf:type owl:Class ;
+    rdfs:label "Any Power Context"@en ;
+    rdfs:label "任意电源上下文"@zh ;
+    rdfs:comment "Union of all power context types"@en ;
+    rdfs:comment "所有电源上下文类型的联合"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:unionOf (:LowPowerContext :PowerSaveContext :EmergencyPowerContext)
+    ] .
+
+# -----------------------------------------------------------------------------
+# Security Context Union
+# -----------------------------------------------------------------------------
+
+:AnySecurityContext rdf:type owl:Class ;
+    rdfs:label "Any Security Context"@en ;
+    rdfs:label "任意安全上下文"@zh ;
+    rdfs:comment "Union of all security context types"@en ;
+    rdfs:comment "所有安全上下文类型的联合"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:unionOf (:TheftAlertContext :ValetModeContext :RemoteAccessContext)
+    ] .
+
+# =============================================================================
+# CONSTRAINTS
+# =============================================================================
+
+# Priority must be non-negative
+:hasPriority rdfs:range [
+    rdf:type rdfs:Datatype ;
+    owl:onDatatype xsd:integer ;
+    owl:withRestrictions ([ xsd:minInclusive 0 ])
+] .
+
+# Duration must be non-negative
+:hasDuration rdfs:range [
+    rdf:type rdfs:Datatype ;
+    owl:onDatatype xsd:integer ;
+    owl:withRestrictions ([ xsd:minInclusive 0 ])
+] .
+
+# Maximum duration must be non-negative
+:maximumDuration rdfs:range [
+    rdf:type rdfs:Datatype ;
+    owl:onDatatype xsd:integer ;
+    owl:withRestrictions ([ xsd:minInclusive 0 ])
+] .
+
+# =============================================================================
+# ANNOTATION PROPERTIES
+# =============================================================================
+
+:contextVersion rdf:type owl:AnnotationProperty ;
+    rdfs:label "context version"@en ;
+    rdfs:label "上下文版本"@zh ;
+    rdfs:comment "Version of the context definition"@en ;
+    rdfs:comment "上下文定义的版本"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range xsd:string .
+
+:contextOwner rdf:type owl:AnnotationProperty ;
+    rdfs:label "context owner"@en ;
+    rdfs:label "上下文所有者"@zh ;
+    rdfs:comment "Owner or responsible party for the context"@en ;
+    rdfs:comment "上下文的所有者或负责方"@zh ;
+    rdfs:domain :Context ;
+    rdfs:range xsd:string .
+
+# =============================================================================
+# ONTOLOGY ANNOTATIONS
+# =============================================================================
+
+<http://example.org/vehicle-power-management/context> 
+    :contextVersion "1.0" ;
+    rdfs:seeAlso <http://example.org/vehicle-power-management> ;
+    rdfs:seeAlso <http://example.org/vehicle-power-management/action> .

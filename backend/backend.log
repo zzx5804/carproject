@@ -1,0 +1,333 @@
+2026-03-28 00:53:31.297 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-28 00:53:31.299 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-28 00:53:40.876 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-28 00:53:40.879 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-28 00:53:41.007 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_load_single_file_backward0\test_onto.ttl
+2026-03-28 00:53:41.046 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_load_single_file_backward0\test_onto.ttl
+2026-03-28 00:53:41.047 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 00:53:41.048 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 00:53:41.048 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 00:53:41.055 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_load_folder_with_ttl_file0
+2026-03-28 00:53:41.060 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part1.ttl (3 triples)
+2026-03-28 00:53:41.064 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part2.ttl (3 triples)
+2026-03-28 00:53:41.068 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part3.ttl (3 triples)
+2026-03-28 00:53:41.068 | INFO     | ontology.parser:load:155 - Loaded 3 ontology files with 3 total triples
+2026-03-28 00:53:41.069 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 00:53:41.069 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 00:53:41.069 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 00:53:41.074 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_load_empty_folder0
+2026-03-28 00:53:41.075 | WARNING  | ontology.parser:load:138 - No TTL files found in folder: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_load_empty_folder0
+2026-03-28 00:53:41.076 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: /nonexistent/path/to/ontology.ttl
+2026-03-28 00:53:41.077 | ERROR    | ontology.parser:load:165 - Ontology source not found: /nonexistent/path/to/ontology.ttl
+2026-03-28 00:53:41.082 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_load_folder_logs_each_fil0
+2026-03-28 00:53:41.090 | INFO     | ontology.parser:load:151 - Loaded ontology file: module_a.ttl (3 triples)
+2026-03-28 00:53:41.095 | INFO     | ontology.parser:load:151 - Loaded ontology file: module_b.ttl (3 triples)
+2026-03-28 00:53:41.095 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 3 total triples
+2026-03-28 00:53:41.096 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 00:53:41.096 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 00:53:41.097 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 00:53:41.103 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_swrl_rules_from_multiple_0
+2026-03-28 00:53:41.127 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_part1.ttl (3 triples)
+2026-03-28 00:53:41.168 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_part2.ttl (3 triples)
+2026-03-28 00:53:41.169 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 6 total triples
+2026-03-28 00:53:41.169 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (2 classes)
+2026-03-28 00:53:41.171 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 2 SWRL rules from file comments
+2026-03-28 00:53:41.171 | INFO     | ontology.parser:load:179 - Parsed 2 classes, 0 object properties, 0 datatype properties, 0 individuals, 2 SWRL rules, 0 transition rules
+2026-03-28 00:53:41.183 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_loaded_files_is_list0\test.ttl
+2026-03-28 00:53:41.190 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_loaded_files_is_list0\test.ttl
+2026-03-28 00:53:41.190 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 00:53:41.191 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 00:53:41.192 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 00:53:41.199 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_loaded_files_contains_abs0\test.ttl
+2026-03-28 00:53:41.202 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_loaded_files_contains_abs0\test.ttl
+2026-03-28 00:53:41.202 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 00:53:41.203 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 00:53:41.203 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 00:53:41.212 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_load_folder_with_subfolde0
+2026-03-28 00:53:41.216 | INFO     | ontology.parser:load:151 - Loaded ontology file: root.ttl (3 triples)
+2026-03-28 00:53:41.216 | INFO     | ontology.parser:load:155 - Loaded 1 ontology files with 3 total triples
+2026-03-28 00:53:41.216 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 00:53:41.216 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 00:53:41.216 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 00:53:41.220 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_load_mixed_content_folder0
+2026-03-28 00:53:41.222 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology.ttl (3 triples)
+2026-03-28 00:53:41.223 | INFO     | ontology.parser:load:155 - Loaded 1 ontology files with 3 total triples
+2026-03-28 00:53:41.223 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 00:53:41.223 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 00:53:41.223 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 00:53:41.226 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_detect_namespace_from_cla0\action.ttl
+2026-03-28 00:53:41.244 | INFO     | ontology.parser:load:162 - Loaded ontology with 11 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_detect_namespace_from_cla0\action.ttl
+2026-03-28 00:53:41.244 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (3 classes)
+2026-03-28 00:53:41.244 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 00:53:41.245 | INFO     | ontology.parser:load:179 - Parsed 3 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 00:53:41.247 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_multi_file_namespace_dete0
+2026-03-28 00:53:41.265 | INFO     | ontology.parser:load:151 - Loaded ontology file: action.ttl (5 triples)
+2026-03-28 00:53:41.283 | INFO     | ontology.parser:load:151 - Loaded ontology file: context.ttl (5 triples)
+2026-03-28 00:53:41.283 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 10 total triples
+2026-03-28 00:53:41.283 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (4 classes)
+2026-03-28 00:53:41.283 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 00:53:41.283 | INFO     | ontology.parser:load:179 - Parsed 4 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 00:53:41.285 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_fallback_when_no_classes0\empty.ttl
+2026-03-28 00:53:41.305 | INFO     | ontology.parser:load:162 - Loaded ontology with 2 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-1\test_fallback_when_no_classes0\empty.ttl
+2026-03-28 00:53:41.305 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from owl:Ontology: http://example.org/test-ontology/core#
+2026-03-28 00:53:41.305 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 00:53:41.305 | INFO     | ontology.parser:load:179 - Parsed 0 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 00:53:50.246 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-28 00:53:50.247 | INFO     | __main__:start_server:343 - ============================================================
+2026-03-28 00:53:50.247 | INFO     | __main__:start_server:344 - Vehicle Power Diagnosis System v1.0.0
+2026-03-28 00:53:50.247 | INFO     | __main__:start_server:345 - ============================================================
+2026-03-28 00:53:50.247 | INFO     | __main__:start_server:349 - Loading ontology from folder: D:\workspace\2\ontology files
+2026-03-28 00:53:50.247 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\workspace\2\ontology files
+2026-03-28 00:53:50.298 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-28 00:53:50.327 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-28 00:53:50.387 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-28 00:53:50.423 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-28 00:53:50.437 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-28 00:53:50.443 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (173 triples)
+2026-03-28 00:53:50.465 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-28 00:53:50.500 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-28 00:53:50.546 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-28 00:53:50.556 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-28 00:53:50.556 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9491 total triples
+2026-03-28 00:53:50.557 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-28 00:53:50.594 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 00:53:50.594 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-28 00:53:50.594 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 141 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-28 00:53:50.594 | INFO     | __main__:start_server:353 - Ontology loaded successfully!
+2026-03-28 00:53:50.594 | INFO     | __main__:start_server:354 -   Loaded files: 10
+2026-03-28 00:53:50.594 | INFO     | __main__:start_server:355 -   Total classes: 502
+2026-03-28 00:53:50.594 | INFO     | __main__:start_server:356 -   Object Properties: 147
+2026-03-28 00:53:50.594 | INFO     | __main__:start_server:357 -   Datatype Properties: 141
+2026-03-28 00:53:50.594 | INFO     | __main__:start_server:358 -   Individuals: 197
+2026-03-28 00:53:50.595 | INFO     | __main__:__init__:80 - LLM Diagnosis Agent enabled
+2026-03-28 00:53:50.595 | INFO     | __main__:__init__:91 - DiagnosisPipeline initialized (LLM智能诊断模式) with agents:
+2026-03-28 00:53:50.595 | INFO     | __main__:__init__:93 -   - orch
+2026-03-28 00:53:50.595 | INFO     | __main__:__init__:93 -   - dtc
+2026-03-28 00:53:50.595 | INFO     | __main__:__init__:93 -   - sym
+2026-03-28 00:53:50.595 | INFO     | __main__:__init__:93 -   - ont
+2026-03-28 00:53:50.595 | INFO     | __main__:__init__:93 -   - rule
+2026-03-28 00:53:50.595 | INFO     | __main__:__init__:93 -   - sig
+2026-03-28 00:53:50.595 | INFO     | __main__:__init__:93 -   - conf
+2026-03-28 00:53:50.595 | INFO     | __main__:__init__:93 -   - out
+2026-03-28 00:53:50.595 | INFO     | __main__:__init__:93 -   - llm
+2026-03-28 00:53:50.595 | INFO     | server:initialize_app:100 - Application initialized
+2026-03-28 00:53:50.766 | INFO     | __main__:start_server:371 - Starting server on ws://localhost:8765
+2026-03-28 00:53:50.766 | INFO     | __main__:start_server:372 - Open the frontend at: http://localhost:8000
+2026-03-28 00:53:50.766 | INFO     | __main__:start_server:373 - WebSocket endpoint: ws://localhost:8765/ws
+2026-03-28 00:53:50.766 | INFO     | __main__:start_server:374 - ============================================================
+2026-03-28 18:47:27.434 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-28 18:47:27.436 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-28 18:47:27.565 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_load_single_file_backward0\test_onto.ttl
+2026-03-28 18:47:27.589 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_load_single_file_backward0\test_onto.ttl
+2026-03-28 18:47:27.589 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:47:27.589 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:47:27.589 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:47:27.593 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_load_folder_with_ttl_file0
+2026-03-28 18:47:27.596 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part1.ttl (3 triples)
+2026-03-28 18:47:27.597 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part2.ttl (3 triples)
+2026-03-28 18:47:27.599 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part3.ttl (3 triples)
+2026-03-28 18:47:27.599 | INFO     | ontology.parser:load:155 - Loaded 3 ontology files with 3 total triples
+2026-03-28 18:47:27.600 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:47:27.600 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:47:27.600 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:47:27.602 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_load_empty_folder0
+2026-03-28 18:47:27.603 | WARNING  | ontology.parser:load:138 - No TTL files found in folder: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_load_empty_folder0
+2026-03-28 18:47:27.603 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: /nonexistent/path/to/ontology.ttl
+2026-03-28 18:47:27.604 | ERROR    | ontology.parser:load:165 - Ontology source not found: /nonexistent/path/to/ontology.ttl
+2026-03-28 18:47:27.606 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_load_folder_logs_each_fil0
+2026-03-28 18:47:27.609 | INFO     | ontology.parser:load:151 - Loaded ontology file: module_a.ttl (3 triples)
+2026-03-28 18:47:27.610 | INFO     | ontology.parser:load:151 - Loaded ontology file: module_b.ttl (3 triples)
+2026-03-28 18:47:27.610 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 3 total triples
+2026-03-28 18:47:27.611 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:47:27.611 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:47:27.611 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:47:27.614 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_swrl_rules_from_multiple_0
+2026-03-28 18:47:27.637 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_part1.ttl (3 triples)
+2026-03-28 18:47:27.655 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_part2.ttl (3 triples)
+2026-03-28 18:47:27.655 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 6 total triples
+2026-03-28 18:47:27.655 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (2 classes)
+2026-03-28 18:47:27.656 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 2 SWRL rules from file comments
+2026-03-28 18:47:27.656 | INFO     | ontology.parser:load:179 - Parsed 2 classes, 0 object properties, 0 datatype properties, 0 individuals, 2 SWRL rules, 0 transition rules
+2026-03-28 18:47:27.658 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_loaded_files_is_list0\test.ttl
+2026-03-28 18:47:27.661 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_loaded_files_is_list0\test.ttl
+2026-03-28 18:47:27.661 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:47:27.661 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:47:27.661 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:47:27.664 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_loaded_files_contains_abs0\test.ttl
+2026-03-28 18:47:27.666 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_loaded_files_contains_abs0\test.ttl
+2026-03-28 18:47:27.666 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:47:27.666 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:47:27.666 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:47:27.669 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_load_folder_with_subfolde0
+2026-03-28 18:47:27.672 | INFO     | ontology.parser:load:151 - Loaded ontology file: root.ttl (3 triples)
+2026-03-28 18:47:27.672 | INFO     | ontology.parser:load:155 - Loaded 1 ontology files with 3 total triples
+2026-03-28 18:47:27.672 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:47:27.672 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:47:27.672 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:47:27.678 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_load_mixed_content_folder0
+2026-03-28 18:47:27.680 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology.ttl (3 triples)
+2026-03-28 18:47:27.680 | INFO     | ontology.parser:load:155 - Loaded 1 ontology files with 3 total triples
+2026-03-28 18:47:27.680 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:47:27.680 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:47:27.681 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:47:27.683 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_detect_namespace_from_cla0\action.ttl
+2026-03-28 18:47:27.702 | INFO     | ontology.parser:load:162 - Loaded ontology with 11 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_detect_namespace_from_cla0\action.ttl
+2026-03-28 18:47:27.702 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (3 classes)
+2026-03-28 18:47:27.702 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:47:27.702 | INFO     | ontology.parser:load:179 - Parsed 3 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:47:27.705 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_multi_file_namespace_dete0
+2026-03-28 18:47:27.726 | INFO     | ontology.parser:load:151 - Loaded ontology file: action.ttl (5 triples)
+2026-03-28 18:47:27.746 | INFO     | ontology.parser:load:151 - Loaded ontology file: context.ttl (5 triples)
+2026-03-28 18:47:27.746 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 10 total triples
+2026-03-28 18:47:27.746 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (4 classes)
+2026-03-28 18:47:27.746 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:47:27.746 | INFO     | ontology.parser:load:179 - Parsed 4 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:47:27.749 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_fallback_when_no_classes0\empty.ttl
+2026-03-28 18:47:27.768 | INFO     | ontology.parser:load:162 - Loaded ontology with 2 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-2\test_fallback_when_no_classes0\empty.ttl
+2026-03-28 18:47:27.768 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from owl:Ontology: http://example.org/test-ontology/core#
+2026-03-28 18:47:27.768 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:47:27.768 | INFO     | ontology.parser:load:179 - Parsed 0 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:48:28.602 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-28 18:48:28.605 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-28 18:48:28.659 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_load_single_file_backward0\test_onto.ttl
+2026-03-28 18:48:28.665 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_load_single_file_backward0\test_onto.ttl
+2026-03-28 18:48:28.665 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:48:28.666 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:48:28.666 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:48:28.669 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_load_folder_with_ttl_file0
+2026-03-28 18:48:28.671 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part1.ttl (3 triples)
+2026-03-28 18:48:28.673 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part2.ttl (3 triples)
+2026-03-28 18:48:28.675 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part3.ttl (3 triples)
+2026-03-28 18:48:28.675 | INFO     | ontology.parser:load:155 - Loaded 3 ontology files with 3 total triples
+2026-03-28 18:48:28.675 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:48:28.675 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:48:28.675 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:48:28.678 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_load_empty_folder0
+2026-03-28 18:48:28.678 | WARNING  | ontology.parser:load:138 - No TTL files found in folder: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_load_empty_folder0
+2026-03-28 18:48:28.679 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: /nonexistent/path/to/ontology.ttl
+2026-03-28 18:48:28.679 | ERROR    | ontology.parser:load:165 - Ontology source not found: /nonexistent/path/to/ontology.ttl
+2026-03-28 18:48:28.682 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_load_folder_logs_each_fil0
+2026-03-28 18:48:28.684 | INFO     | ontology.parser:load:151 - Loaded ontology file: module_a.ttl (3 triples)
+2026-03-28 18:48:28.686 | INFO     | ontology.parser:load:151 - Loaded ontology file: module_b.ttl (3 triples)
+2026-03-28 18:48:28.686 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 3 total triples
+2026-03-28 18:48:28.686 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:48:28.686 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:48:28.686 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:48:28.689 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_swrl_rules_from_multiple_0
+2026-03-28 18:48:28.692 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_part1.ttl (3 triples)
+2026-03-28 18:48:28.694 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_part2.ttl (3 triples)
+2026-03-28 18:48:28.694 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 6 total triples
+2026-03-28 18:48:28.694 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (2 classes)
+2026-03-28 18:48:28.694 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 2 SWRL rules from file comments
+2026-03-28 18:48:28.695 | INFO     | ontology.parser:load:179 - Parsed 2 classes, 0 object properties, 0 datatype properties, 0 individuals, 2 SWRL rules, 0 transition rules
+2026-03-28 18:48:28.697 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_loaded_files_is_list0\test.ttl
+2026-03-28 18:48:28.699 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_loaded_files_is_list0\test.ttl
+2026-03-28 18:48:28.699 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:48:28.699 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:48:28.699 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:48:28.702 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_loaded_files_contains_abs0\test.ttl
+2026-03-28 18:48:28.704 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_loaded_files_contains_abs0\test.ttl
+2026-03-28 18:48:28.704 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:48:28.704 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:48:28.704 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:48:28.707 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_load_folder_with_subfolde0
+2026-03-28 18:48:28.709 | INFO     | ontology.parser:load:151 - Loaded ontology file: root.ttl (3 triples)
+2026-03-28 18:48:28.710 | INFO     | ontology.parser:load:155 - Loaded 1 ontology files with 3 total triples
+2026-03-28 18:48:28.710 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:48:28.710 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:48:28.710 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:48:28.714 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_load_mixed_content_folder0
+2026-03-28 18:48:28.718 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology.ttl (3 triples)
+2026-03-28 18:48:28.718 | INFO     | ontology.parser:load:155 - Loaded 1 ontology files with 3 total triples
+2026-03-28 18:48:28.718 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:48:28.718 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:48:28.718 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:48:28.721 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_detect_namespace_from_cla0\action.ttl
+2026-03-28 18:48:28.723 | INFO     | ontology.parser:load:162 - Loaded ontology with 11 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_detect_namespace_from_cla0\action.ttl
+2026-03-28 18:48:28.723 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (3 classes)
+2026-03-28 18:48:28.724 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:48:28.724 | INFO     | ontology.parser:load:179 - Parsed 3 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:48:28.727 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_multi_file_namespace_dete0
+2026-03-28 18:48:28.730 | INFO     | ontology.parser:load:151 - Loaded ontology file: action.ttl (5 triples)
+2026-03-28 18:48:28.732 | INFO     | ontology.parser:load:151 - Loaded ontology file: context.ttl (5 triples)
+2026-03-28 18:48:28.732 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 10 total triples
+2026-03-28 18:48:28.732 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (4 classes)
+2026-03-28 18:48:28.732 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:48:28.732 | INFO     | ontology.parser:load:179 - Parsed 4 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:48:28.735 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_fallback_when_no_classes0\empty.ttl
+2026-03-28 18:48:28.737 | INFO     | ontology.parser:load:162 - Loaded ontology with 2 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-3\test_fallback_when_no_classes0\empty.ttl
+2026-03-28 18:48:28.737 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from owl:Ontology: http://example.org/test-ontology/core#
+2026-03-28 18:48:28.737 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:48:28.737 | INFO     | ontology.parser:load:179 - Parsed 0 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:49:44.414 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-28 18:49:44.417 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-28 18:49:44.472 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_load_single_file_backward0\test_onto.ttl
+2026-03-28 18:49:44.478 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_load_single_file_backward0\test_onto.ttl
+2026-03-28 18:49:44.478 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:49:44.478 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:49:44.478 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:49:44.482 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_load_folder_with_ttl_file0
+2026-03-28 18:49:44.485 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part1.ttl (3 triples)
+2026-03-28 18:49:44.486 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part2.ttl (3 triples)
+2026-03-28 18:49:44.488 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part3.ttl (3 triples)
+2026-03-28 18:49:44.488 | INFO     | ontology.parser:load:155 - Loaded 3 ontology files with 3 total triples
+2026-03-28 18:49:44.488 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:49:44.488 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:49:44.488 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:49:44.491 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_load_empty_folder0
+2026-03-28 18:49:44.491 | WARNING  | ontology.parser:load:138 - No TTL files found in folder: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_load_empty_folder0
+2026-03-28 18:49:44.492 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: /nonexistent/path/to/ontology.ttl
+2026-03-28 18:49:44.492 | ERROR    | ontology.parser:load:165 - Ontology source not found: /nonexistent/path/to/ontology.ttl
+2026-03-28 18:49:44.494 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_load_folder_logs_each_fil0
+2026-03-28 18:49:44.497 | INFO     | ontology.parser:load:151 - Loaded ontology file: module_a.ttl (3 triples)
+2026-03-28 18:49:44.499 | INFO     | ontology.parser:load:151 - Loaded ontology file: module_b.ttl (3 triples)
+2026-03-28 18:49:44.499 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 3 total triples
+2026-03-28 18:49:44.499 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:49:44.499 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:49:44.499 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:49:44.502 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_swrl_rules_from_multiple_0
+2026-03-28 18:49:44.505 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_part1.ttl (3 triples)
+2026-03-28 18:49:44.506 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_part2.ttl (3 triples)
+2026-03-28 18:49:44.506 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 6 total triples
+2026-03-28 18:49:44.506 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (2 classes)
+2026-03-28 18:49:44.507 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 2 SWRL rules from file comments
+2026-03-28 18:49:44.507 | INFO     | ontology.parser:load:179 - Parsed 2 classes, 0 object properties, 0 datatype properties, 0 individuals, 2 SWRL rules, 0 transition rules
+2026-03-28 18:49:44.509 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_loaded_files_is_list0\test.ttl
+2026-03-28 18:49:44.511 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_loaded_files_is_list0\test.ttl
+2026-03-28 18:49:44.511 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:49:44.512 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:49:44.512 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:49:44.514 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_loaded_files_contains_abs0\test.ttl
+2026-03-28 18:49:44.516 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_loaded_files_contains_abs0\test.ttl
+2026-03-28 18:49:44.516 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:49:44.516 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:49:44.516 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:49:44.519 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_load_folder_with_subfolde0
+2026-03-28 18:49:44.521 | INFO     | ontology.parser:load:151 - Loaded ontology file: root.ttl (3 triples)
+2026-03-28 18:49:44.522 | INFO     | ontology.parser:load:155 - Loaded 1 ontology files with 3 total triples
+2026-03-28 18:49:44.522 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:49:44.522 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:49:44.522 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:49:44.525 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_load_mixed_content_folder0
+2026-03-28 18:49:44.527 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology.ttl (3 triples)
+2026-03-28 18:49:44.527 | INFO     | ontology.parser:load:155 - Loaded 1 ontology files with 3 total triples
+2026-03-28 18:49:44.527 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-28 18:49:44.528 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:49:44.528 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:49:44.530 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_detect_namespace_from_cla0\action.ttl
+2026-03-28 18:49:44.532 | INFO     | ontology.parser:load:162 - Loaded ontology with 11 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_detect_namespace_from_cla0\action.ttl
+2026-03-28 18:49:44.533 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (3 classes)
+2026-03-28 18:49:44.533 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:49:44.533 | INFO     | ontology.parser:load:179 - Parsed 3 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:49:44.536 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_multi_file_namespace_dete0
+2026-03-28 18:49:44.538 | INFO     | ontology.parser:load:151 - Loaded ontology file: action.ttl (5 triples)
+2026-03-28 18:49:44.539 | INFO     | ontology.parser:load:151 - Loaded ontology file: context.ttl (5 triples)
+2026-03-28 18:49:44.539 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 10 total triples
+2026-03-28 18:49:44.540 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (4 classes)
+2026-03-28 18:49:44.540 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:49:44.540 | INFO     | ontology.parser:load:179 - Parsed 4 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-28 18:49:44.542 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_fallback_when_no_classes0\empty.ttl
+2026-03-28 18:49:44.545 | INFO     | ontology.parser:load:162 - Loaded ontology with 2 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-4\test_fallback_when_no_classes0\empty.ttl
+2026-03-28 18:49:44.545 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from owl:Ontology: http://example.org/test-ontology/core#
+2026-03-28 18:49:44.545 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-28 18:49:44.545 | INFO     | ontology.parser:load:179 - Parsed 0 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules

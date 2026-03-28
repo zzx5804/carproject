@@ -1,0 +1,1438 @@
+@prefix : <http://example.org/vehicle-power-management#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix event: <http://example.org/vehicle-power-management/event#> .
+
+# =============================================================================
+# ONTOLOGY METADATA
+# =============================================================================
+
+<http://example.org/vehicle-power-management/event> rdf:type owl:Ontology ;
+    rdfs:label "Vehicle Power Management Event Model"@en ;
+    rdfs:label "车辆电源管理事件模型"@zh ;
+    rdfs:comment "Event component for Data Agent Design - defines events, timestamps, causation chains, and sequencing semantics"@en ;
+    rdfs:comment "数据代理设计的事件组件 - 定义事件、时间戳、因果链和时序语义"@zh ;
+    owl:versionInfo "1.0" ;
+    owl:imports <http://example.org/vehicle-power-management/core> ;
+    owl:imports <http://example.org/vehicle-power-management/action> .
+
+# =============================================================================
+# CLASSES - Core Event Framework
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Event Base Class
+# -----------------------------------------------------------------------------
+
+:Event rdf:type owl:Class ;
+    rdfs:label "Event"@en ;
+    rdfs:label "事件"@zh ;
+    rdfs:comment "Base class for all events in the power management system. An event represents an occurrence of interest that happens at a specific point in time."@en ;
+    rdfs:comment "电源管理系统中所有事件的基类。事件表示在特定时间点发生的感兴趣的事情。"@zh ;
+    skos:definition "An event is a temporal occurrence that may trigger actions, change states, or be caused by other events"@en ;
+    skos:definition "事件是一种时间性发生，可能触发动作、改变状态或由其他事件引起"@zh .
+
+# -----------------------------------------------------------------------------
+# Event Metadata Classes
+# -----------------------------------------------------------------------------
+
+:EventMetadata rdf:type owl:Class ;
+    rdfs:label "Event Metadata"@en ;
+    rdfs:label "事件元数据"@zh ;
+    rdfs:comment "Metadata associated with an event for tracking and analysis"@en ;
+    rdfs:comment "与事件关联的元数据，用于跟踪和分析"@zh .
+
+:EventSource rdf:type owl:Class ;
+    rdfs:label "Event Source"@en ;
+    rdfs:label "事件源"@zh ;
+    rdfs:comment "The source or origin of an event"@en ;
+    rdfs:comment "事件的来源或起源"@zh .
+
+:InternalSource rdf:type owl:Class ;
+    rdfs:subClassOf :EventSource ;
+    rdfs:label "Internal Source"@en ;
+    rdfs:label "内部源"@zh ;
+    rdfs:comment "Event originated from internal system component"@en ;
+    rdfs:comment "事件源自内部系统组件"@zh .
+
+:ExternalSource rdf:type owl:Class ;
+    rdfs:subClassOf :EventSource ;
+    rdfs:label "External Source"@en ;
+    rdfs:label "外部源"@zh ;
+    rdfs:comment "Event originated from external input or user action"@en ;
+    rdfs:comment "事件源自外部输入或用户动作"@zh .
+
+:NetworkSource rdf:type owl:Class ;
+    rdfs:subClassOf :EventSource ;
+    rdfs:label "Network Source"@en ;
+    rdfs:label "网络源"@zh ;
+    rdfs:comment "Event originated from network communication (OTA, remote diag)"@en ;
+    rdfs:comment "事件源自网络通信（OTA、远程诊断）"@zh .
+
+:EventPayload rdf:type owl:Class ;
+    rdfs:label "Event Payload"@en ;
+    rdfs:label "事件载荷"@zh ;
+    rdfs:comment "Data payload associated with an event"@en ;
+    rdfs:comment "与事件关联的数据载荷"@zh .
+
+# =============================================================================
+# CLASSES - Event Subclasses
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# State Change Events
+# -----------------------------------------------------------------------------
+
+:StateChangeEvent rdf:type owl:Class ;
+    rdfs:subClassOf :Event ;
+    rdfs:label "State Change Event"@en ;
+    rdfs:label "状态变更事件"@zh ;
+    rdfs:comment "Event that represents a change in system state"@en ;
+    rdfs:comment "表示系统状态变更的事件"@zh .
+
+# Power Mode Change Events
+:PowerModeChangeEvent rdf:type owl:Class ;
+    rdfs:subClassOf :StateChangeEvent ;
+    rdfs:label "Power Mode Change Event"@en ;
+    rdfs:label "电源模式变更事件"@zh ;
+    rdfs:comment "Event representing a change in power mode"@en ;
+    rdfs:comment "表示电源模式变更的事件"@zh .
+
+:PowerOnEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerModeChangeEvent ;
+    rdfs:label "Power On Event"@en ;
+    rdfs:label "上电事件"@zh ;
+    rdfs:comment "Event representing vehicle power on"@en ;
+    rdfs:comment "表示车辆上电的事件"@zh .
+
+:DoorOpenPowerOnEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnEvent ;
+    rdfs:label "Door Open Power On Event"@en ;
+    rdfs:label "车门打开上电事件"@zh ;
+    rdfs:comment "Power on triggered by door open"@en ;
+    rdfs:comment "由车门打开触发的上电事件"@zh .
+
+:BrakePressPowerOnEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnEvent ;
+    rdfs:label "Brake Press Power On Event"@en ;
+    rdfs:label "制动踏板上电事件"@zh ;
+    rdfs:comment "Power on triggered by brake pedal press"@en ;
+    rdfs:comment "由制动踏板踩下触发的上电事件"@zh .
+
+:OTAPowerOnEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnEvent ;
+    rdfs:label "OTA Power On Event"@en ;
+    rdfs:label "OTA上电事件"@zh ;
+    rdfs:comment "Power on triggered by OTA update request"@en ;
+    rdfs:comment "由OTA更新请求触发的上电事件"@zh .
+
+:RemoteDiagPowerOnEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnEvent ;
+    rdfs:label "Remote Diagnostic Power On Event"@en ;
+    rdfs:label "远程诊断上电事件"@zh ;
+    rdfs:comment "Power on triggered by remote diagnostic request"@en ;
+    rdfs:comment "由远程诊断请求触发的上电事件"@zh .
+
+:XPURequestPowerOnEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnEvent ;
+    rdfs:label "XPU Request Power On Event"@en ;
+    rdfs:label "XPU请求上电事件"@zh ;
+    rdfs:comment "Power on triggered by XPU (autonomous driving) request"@en ;
+    rdfs:comment "由XPU（自动驾驶）请求触发的上电事件"@zh .
+
+:PowerOffEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerModeChangeEvent ;
+    rdfs:label "Power Off Event"@en ;
+    rdfs:label "下电事件"@zh ;
+    rdfs:comment "Event representing vehicle power off"@en ;
+    rdfs:comment "表示车辆下电的事件"@zh .
+
+:DoorLockPowerOffEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffEvent ;
+    rdfs:label "Door Lock Power Off Event"@en ;
+    rdfs:label "门锁下电事件"@zh ;
+    rdfs:comment "Power off triggered by door lock event"@en ;
+    rdfs:comment "由门锁事件触发的下电事件"@zh .
+
+:TimeoutPowerOffEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffEvent ;
+    rdfs:label "Timeout Power Off Event"@en ;
+    rdfs:label "超时下电事件"@zh ;
+    rdfs:comment "Power off triggered by auto power off timeout"@en ;
+    rdfs:comment "由自动下电超时触发的下电事件"@zh .
+
+:ForcedPowerOffEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffEvent ;
+    rdfs:label "Forced Power Off Event"@en ;
+    rdfs:label "强制下电事件"@zh ;
+    rdfs:comment "Power off triggered by forced power off switch"@en ;
+    rdfs:comment "由强制下电开关触发的下电事件"@zh .
+
+:LowBatteryPowerOffEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffEvent ;
+    rdfs:label "Low Battery Power Off Event"@en ;
+    rdfs:label "低电量下电事件"@zh ;
+    rdfs:comment "Power off triggered by low battery condition"@en ;
+    rdfs:comment "由低电量状态触发的下电事件"@zh .
+
+:OTAPowerOffEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffEvent ;
+    rdfs:label "OTA Power Off Event"@en ;
+    rdfs:label "OTA下电事件"@zh ;
+    rdfs:comment "Power off triggered by OTA completion or request"@en ;
+    rdfs:comment "由OTA完成或请求触发的下电事件"@zh .
+
+# Convenience Mode Events
+:ConvenienceModeEnterEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerModeChangeEvent ;
+    rdfs:label "Convenience Mode Enter Event"@en ;
+    rdfs:label "舒适模式进入事件"@zh ;
+    rdfs:comment "Event representing entering convenience mode"@en ;
+    rdfs:comment "表示进入舒适模式的事件"@zh .
+
+:ConvenienceModeExitEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerModeChangeEvent ;
+    rdfs:label "Convenience Mode Exit Event"@en ;
+    rdfs:label "舒适模式退出事件"@zh ;
+    rdfs:comment "Event representing exiting convenience mode"@en ;
+    rdfs:comment "表示退出舒适模式的事件"@zh .
+
+# Ready Enable Change Events
+:ReadyEnableChangeEvent rdf:type owl:Class ;
+    rdfs:subClassOf :StateChangeEvent ;
+    rdfs:label "Ready Enable Change Event"@en ;
+    rdfs:label "Ready使能变更事件"@zh ;
+    rdfs:comment "Event representing a change in ready enable state"@en ;
+    rdfs:comment "表示Ready使能状态变更的事件"@zh .
+
+:ReadyEnableActivatedEvent rdf:type owl:Class ;
+    rdfs:subClassOf :ReadyEnableChangeEvent ;
+    rdfs:label "Ready Enable Activated Event"@en ;
+    rdfs:label "Ready使能激活事件"@zh ;
+    rdfs:comment "Event representing ready enable activation"@en ;
+    rdfs:comment "表示Ready使能激活的事件"@zh .
+
+:ReadyEnableDeactivatedEvent rdf:type owl:Class ;
+    rdfs:subClassOf :ReadyEnableChangeEvent ;
+    rdfs:label "Ready Enable Deactivated Event"@en ;
+    rdfs:label "Ready使能去激活事件"@zh ;
+    rdfs:comment "Event representing ready enable deactivation"@en ;
+    rdfs:comment "表示Ready使能去激活的事件"@zh .
+
+# Vehicle Mode Change Events
+:VehicleModeChangeEvent rdf:type owl:Class ;
+    rdfs:subClassOf :StateChangeEvent ;
+    rdfs:label "Vehicle Mode Change Event"@en ;
+    rdfs:label "车辆模式变更事件"@zh ;
+    rdfs:comment "Event representing a change in vehicle mode"@en ;
+    rdfs:comment "表示车辆模式变更的事件"@zh .
+
+:TransportModeEnterEvent rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleModeChangeEvent ;
+    rdfs:label "Transport Mode Enter Event"@en ;
+    rdfs:label "运输模式进入事件"@zh ;
+    rdfs:comment "Event representing entering transport mode"@en ;
+    rdfs:comment "表示进入运输模式的事件"@zh .
+
+:TransportModeExitEvent rdf:type owl:Class ;
+    rdfs:subClassOf :VehicleModeChangeEvent ;
+    rdfs:label "Transport Mode Exit Event"@en ;
+    rdfs:label "运输模式退出事件"@zh ;
+    rdfs:comment "Event representing exiting transport mode"@en ;
+    rdfs:comment "表示退出运输模式的事件"@zh .
+
+# Key Validity Change Events
+:KeyValidityChangeEvent rdf:type owl:Class ;
+    rdfs:subClassOf :StateChangeEvent ;
+    rdfs:label "Key Validity Change Event"@en ;
+    rdfs:label "钥匙有效性变更事件"@zh ;
+    rdfs:comment "Event representing a change in key validity status"@en ;
+    rdfs:comment "表示钥匙有效性状态变更的事件"@zh .
+
+:KeyValidationSuccessEvent rdf:type owl:Class ;
+    rdfs:subClassOf :KeyValidityChangeEvent ;
+    rdfs:label "Key Validation Success Event"@en ;
+    rdfs:label "钥匙验证成功事件"@zh ;
+    rdfs:comment "Event representing successful key validation"@en ;
+    rdfs:comment "表示钥匙验证成功的事件"@zh .
+
+:KeyValidationFailureEvent rdf:type owl:Class ;
+    rdfs:subClassOf :KeyValidityChangeEvent ;
+    rdfs:label "Key Validation Failure Event"@en ;
+    rdfs:label "钥匙验证失败事件"@zh ;
+    rdfs:comment "Event representing key validation failure"@en ;
+    rdfs:comment "表示钥匙验证失败的事件"@zh .
+
+:KeyNotFoundEvent rdf:type owl:Class ;
+    rdfs:subClassOf :KeyValidityChangeEvent ;
+    rdfs:label "Key Not Found Event"@en ;
+    rdfs:label "未找到钥匙事件"@zh ;
+    rdfs:comment "Event representing key not found during search"@en ;
+    rdfs:comment "表示搜索过程中未找到钥匙的事件"@zh .
+
+# Door State Change Events
+:DoorStateChangeEvent rdf:type owl:Class ;
+    rdfs:subClassOf :StateChangeEvent ;
+    rdfs:label "Door State Change Event"@en ;
+    rdfs:label "车门状态变更事件"@zh ;
+    rdfs:comment "Event representing a change in door state"@en ;
+    rdfs:comment "表示车门状态变更的事件"@zh .
+
+:DoorOpenEvent rdf:type owl:Class ;
+    rdfs:subClassOf :DoorStateChangeEvent ;
+    rdfs:label "Door Open Event"@en ;
+    rdfs:label "车门打开事件"@zh ;
+    rdfs:comment "Event representing a door being opened"@en ;
+    rdfs:comment "表示车门被打开的事件"@zh .
+
+:DoorCloseEvent rdf:type owl:Class ;
+    rdfs:subClassOf :DoorStateChangeEvent ;
+    rdfs:label "Door Close Event"@en ;
+    rdfs:label "车门关闭事件"@zh ;
+    rdfs:comment "Event representing a door being closed"@en ;
+    rdfs:comment "表示车门被关闭的事件"@zh .
+
+# Door Lock State Change Events
+:DoorLockStateChangeEvent rdf:type owl:Class ;
+    rdfs:subClassOf :StateChangeEvent ;
+    rdfs:label "Door Lock State Change Event"@en ;
+    rdfs:label "门锁状态变更事件"@zh ;
+    rdfs:comment "Event representing a change in door lock state"@en ;
+    rdfs:comment "表示门锁状态变更的事件"@zh .
+
+:DoorLockEvent rdf:type owl:Class ;
+    rdfs:subClassOf :DoorLockStateChangeEvent ;
+    rdfs:label "Door Lock Event"@en ;
+    rdfs:label "门锁锁止事件"@zh ;
+    rdfs:comment "Event representing doors being locked"@en ;
+    rdfs:comment "表示车门被锁止的事件"@zh .
+
+:DoorUnlockEvent rdf:type owl:Class ;
+    rdfs:subClassOf :DoorLockStateChangeEvent ;
+    rdfs:label "Door Unlock Event"@en ;
+    rdfs:label "门锁解锁事件"@zh ;
+    rdfs:comment "Event representing doors being unlocked"@en ;
+    rdfs:comment "表示车门被解锁的事件"@zh .
+
+# -----------------------------------------------------------------------------
+# Diagnostic Events
+# -----------------------------------------------------------------------------
+
+:DiagnosticEvent rdf:type owl:Class ;
+    rdfs:subClassOf :Event ;
+    rdfs:label "Diagnostic Event"@en ;
+    rdfs:label "诊断事件"@zh ;
+    rdfs:comment "Event related to diagnostic operations"@en ;
+    rdfs:comment "与诊断操作相关的事件"@zh .
+
+:FaultDetectedEvent rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticEvent ;
+    rdfs:label "Fault Detected Event"@en ;
+    rdfs:label "故障检测事件"@zh ;
+    rdfs:comment "Event representing a fault being detected"@en ;
+    rdfs:comment "表示检测到故障的事件"@zh .
+
+:PowerControlErrorEvent rdf:type owl:Class ;
+    rdfs:subClassOf :FaultDetectedEvent ;
+    rdfs:label "Power Control Error Event"@en ;
+    rdfs:label "电源控制异常事件"@zh ;
+    rdfs:comment "Event representing power control error between LDCU and RDCU"@en ;
+    rdfs:comment "表示LDCU与RDCU之间电源控制异常的事件"@zh .
+
+:PowerOnErrorEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerControlErrorEvent ;
+    rdfs:label "Power On Error Event"@en ;
+    rdfs:label "上电异常事件"@zh ;
+    rdfs:comment "Event representing power on error"@en ;
+    rdfs:comment "表示上电异常的事件"@zh .
+
+:PowerOffErrorEvent rdf:type owl:Class ;
+    rdfs:subClassOf :PowerControlErrorEvent ;
+    rdfs:label "Power Off Error Event"@en ;
+    rdfs:label "下电异常事件"@zh ;
+    rdfs:comment "Event representing power off error"@en ;
+    rdfs:comment "表示下电异常的事件"@zh .
+
+:DiagnosticRequestEvent rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticEvent ;
+    rdfs:label "Diagnostic Request Event"@en ;
+    rdfs:label "诊断请求事件"@zh ;
+    rdfs:comment "Event representing a diagnostic request received"@en ;
+    rdfs:comment "表示收到诊断请求的事件"@zh .
+
+:OBDDiagnosticEvent rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticRequestEvent ;
+    rdfs:label "OBD Diagnostic Event"@en ;
+    rdfs:label "OBD诊断事件"@zh ;
+    rdfs:comment "Event representing OBD diagnostic session"@en ;
+    rdfs:comment "表示OBD诊断会话的事件"@zh .
+
+:RemoteDiagEvent rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticRequestEvent ;
+    rdfs:label "Remote Diagnostic Event"@en ;
+    rdfs:label "远程诊断事件"@zh ;
+    rdfs:comment "Event representing remote diagnostic session"@en ;
+    rdfs:comment "表示远程诊断会话的事件"@zh .
+
+:OTAUpdateEvent rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticEvent ;
+    rdfs:label "OTA Update Event"@en ;
+    rdfs:label "OTA更新事件"@zh ;
+    rdfs:comment "Event representing OTA update activity"@en ;
+    rdfs:comment "表示OTA更新活动的事件"@zh .
+
+:OTAUpdateStartedEvent rdf:type owl:Class ;
+    rdfs:subClassOf :OTAUpdateEvent ;
+    rdfs:label "OTA Update Started Event"@en ;
+    rdfs:label "OTA更新开始事件"@zh ;
+    rdfs:comment "Event representing OTA update started"@en ;
+    rdfs:comment "表示OTA更新开始的事件"@zh .
+
+:OTAUpdateCompletedEvent rdf:type owl:Class ;
+    rdfs:subClassOf :OTAUpdateEvent ;
+    rdfs:label "OTA Update Completed Event"@en ;
+    rdfs:label "OTA更新完成事件"@zh ;
+    rdfs:comment "Event representing OTA update completed"@en ;
+    rdfs:comment "表示OTA更新完成的事件"@zh .
+
+:OTAUpdateFailedEvent rdf:type owl:Class ;
+    rdfs:subClassOf :OTAUpdateEvent ;
+    rdfs:label "OTA Update Failed Event"@en ;
+    rdfs:label "OTA更新失败事件"@zh ;
+    rdfs:comment "Event representing OTA update failure"@en ;
+    rdfs:comment "表示OTA更新失败的事件"@zh .
+
+:AlcoholInterlockEvent rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticEvent ;
+    rdfs:label "Alcohol Interlock Event"@en ;
+    rdfs:label "酒精锁事件"@zh ;
+    rdfs:comment "Event related to alcohol interlock system"@en ;
+    rdfs:comment "与酒精锁系统相关的事件"@zh .
+
+:AlcoholInterlockTestEvent rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockEvent ;
+    rdfs:label "Alcohol Interlock Test Event"@en ;
+    rdfs:label "酒精锁测试事件"@zh ;
+    rdfs:comment "Event representing alcohol interlock test"@en ;
+    rdfs:comment "表示酒精锁测试的事件"@zh .
+
+:AlcoholInterlockBlockingEvent rdf:type owl:Class ;
+    rdfs:subClassOf :AlcoholInterlockEvent ;
+    rdfs:label "Alcohol Interlock Blocking Event"@en ;
+    rdfs:label "酒精锁阻止事件"@zh ;
+    rdfs:comment "Event representing alcohol interlock blocking vehicle start"@en ;
+    rdfs:comment "表示酒精锁阻止车辆启动的事件"@zh .
+
+# -----------------------------------------------------------------------------
+# Timer Events
+# -----------------------------------------------------------------------------
+
+:TimerEvent rdf:type owl:Class ;
+    rdfs:subClassOf :Event ;
+    rdfs:label "Timer Event"@en ;
+    rdfs:label "计时器事件"@zh ;
+    rdfs:comment "Event related to timer operations"@en ;
+    rdfs:comment "与计时器操作相关的事件"@zh .
+
+:TimerStartedEvent rdf:type owl:Class ;
+    rdfs:subClassOf :TimerEvent ;
+    rdfs:label "Timer Started Event"@en ;
+    rdfs:label "计时器启动事件"@zh ;
+    rdfs:comment "Event representing a timer being started"@en ;
+    rdfs:comment "表示计时器启动的事件"@zh .
+
+:TimerStoppedEvent rdf:type owl:Class ;
+    rdfs:subClassOf :TimerEvent ;
+    rdfs:label "Timer Stopped Event"@en ;
+    rdfs:label "计时器停止事件"@zh ;
+    rdfs:comment "Event representing a timer being stopped"@en ;
+    rdfs:comment "表示计时器停止的事件"@zh .
+
+:TimerExpiredEvent rdf:type owl:Class ;
+    rdfs:subClassOf :TimerEvent ;
+    rdfs:label "Timer Expired Event"@en ;
+    rdfs:label "计时器到期事件"@zh ;
+    rdfs:comment "Event representing a timer expiring"@en ;
+    rdfs:comment "表示计时器到期的事件"@zh .
+
+:AutoPowerOffTimerEvent rdf:type owl:Class ;
+    rdfs:subClassOf :TimerExpiredEvent ;
+    rdfs:label "Auto Power Off Timer Event"@en ;
+    rdfs:label "自动下电计时器事件"@zh ;
+    rdfs:comment "Event representing auto power off timer expiration"@en ;
+    rdfs:comment "表示自动下电计时器到期的事件"@zh .
+
+:AutoPowerOff30MinTimerEvent rdf:type owl:Class ;
+    rdfs:subClassOf :AutoPowerOffTimerEvent ;
+    rdfs:label "Auto Power Off 30 Min Timer Event"@en ;
+    rdfs:label "30分钟自动下电计时器事件"@zh ;
+    rdfs:comment "Event representing 30 minute auto power off timer expiration"@en ;
+    rdfs:comment "表示30分钟自动下电计时器到期的事件"@zh .
+
+:AutoPowerOff10MinTimerEvent rdf:type owl:Class ;
+    rdfs:subClassOf :AutoPowerOffTimerEvent ;
+    rdfs:label "Auto Power Off 10 Min Timer Event"@en ;
+    rdfs:label "10分钟自动下电计时器事件"@zh ;
+    rdfs:comment "Event representing 10 minute auto power off timer expiration"@en ;
+    rdfs:comment "表示10分钟自动下电计时器到期的事件"@zh .
+
+:KeySearchTimerEvent rdf:type owl:Class ;
+    rdfs:subClassOf :TimerExpiredEvent ;
+    rdfs:label "Key Search Timer Event"@en ;
+    rdfs:label "钥匙搜索计时器事件"@zh ;
+    rdfs:comment "Event representing key search timer expiration"@en ;
+    rdfs:comment "表示钥匙搜索计时器到期的事件"@zh .
+
+:OTAPowerOnValidTimerEvent rdf:type owl:Class ;
+    rdfs:subClassOf :TimerExpiredEvent ;
+    rdfs:label "OTA Power On Valid Timer Event"@en ;
+    rdfs:label "OTA上电有效计时器事件"@zh ;
+    rdfs:comment "Event representing OTA power on valid timer expiration"@en ;
+    rdfs:comment "表示OTA上电有效计时器到期的事件"@zh .
+
+:LowBatteryTimerEvent rdf:type owl:Class ;
+    rdfs:subClassOf :TimerExpiredEvent ;
+    rdfs:label "Low Battery Timer Event"@en ;
+    rdfs:label "低电量计时器事件"@zh ;
+    rdfs:comment "Event representing low battery power off timer expiration"@en ;
+    rdfs:comment "表示低电量下电计时器到期的事件"@zh .
+
+# -----------------------------------------------------------------------------
+# User Interaction Events
+# -----------------------------------------------------------------------------
+
+:UserInteractionEvent rdf:type owl:Class ;
+    rdfs:subClassOf :Event ;
+    rdfs:label "User Interaction Event"@en ;
+    rdfs:label "用户交互事件"@zh ;
+    rdfs:comment "Event triggered by user interaction"@en ;
+    rdfs:comment "由用户交互触发的事件"@zh .
+
+:ButtonPressEvent rdf:type owl:Class ;
+    rdfs:subClassOf :UserInteractionEvent ;
+    rdfs:label "Button Press Event"@en ;
+    rdfs:label "按钮按压事件"@zh ;
+    rdfs:comment "Event representing a button being pressed"@en ;
+    rdfs:comment "表示按钮被按压的事件"@zh .
+
+:StartButtonPressEvent rdf:type owl:Class ;
+    rdfs:subClassOf :ButtonPressEvent ;
+    rdfs:label "Start Button Press Event"@en ;
+    rdfs:label "启动按钮按压事件"@zh ;
+    rdfs:comment "Event representing start button press"@en ;
+    rdfs:comment "表示启动按钮按压的事件"@zh .
+
+:EmergencyButtonPressEvent rdf:type owl:Class ;
+    rdfs:subClassOf :ButtonPressEvent ;
+    rdfs:label "Emergency Button Press Event"@en ;
+    rdfs:label "紧急按钮按压事件"@zh ;
+    rdfs:comment "Event representing emergency/power off button press"@en ;
+    rdfs:comment "表示紧急/下电按钮按压的事件"@zh .
+
+:KeyEvent rdf:type owl:Class ;
+    rdfs:subClassOf :UserInteractionEvent ;
+    rdfs:label "Key Event"@en ;
+    rdfs:label "钥匙事件"@zh ;
+    rdfs:comment "Event related to key operations"@en ;
+    rdfs:comment "与钥匙操作相关的事件"@zh .
+
+:KeyUnlockEvent rdf:type owl:Class ;
+    rdfs:subClassOf :KeyEvent ;
+    rdfs:label "Key Unlock Event"@en ;
+    rdfs:label "钥匙解锁事件"@zh ;
+    rdfs:comment "Event representing key unlock command"@en ;
+    rdfs:comment "表示钥匙解锁命令的事件"@zh .
+
+:KeyLockEvent rdf:type owl:Class ;
+    rdfs:subClassOf :KeyEvent ;
+    rdfs:label "Key Lock Event"@en ;
+    rdfs:label "钥匙锁止事件"@zh ;
+    rdfs:comment "Event representing key lock command"@en ;
+    rdfs:comment "表示钥匙锁止命令的事件"@zh .
+
+:KeyDetectionEvent rdf:type owl:Class ;
+    rdfs:subClassOf :KeyEvent ;
+    rdfs:label "Key Detection Event"@en ;
+    rdfs:label "钥匙检测事件"@zh ;
+    rdfs:comment "Event representing key being detected"@en ;
+    rdfs:comment "表示检测到钥匙的事件"@zh .
+
+:NFCKeyDetectionEvent rdf:type owl:Class ;
+    rdfs:subClassOf :KeyDetectionEvent ;
+    rdfs:label "NFC Key Detection Event"@en ;
+    rdfs:label "NFC钥匙检测事件"@zh ;
+    rdfs:comment "Event representing NFC key being detected"@en ;
+    rdfs:comment "表示检测到NFC钥匙的事件"@zh .
+
+:BLEKeyDetectionEvent rdf:type owl:Class ;
+    rdfs:subClassOf :KeyDetectionEvent ;
+    rdfs:label "BLE Key Detection Event"@en ;
+    rdfs:label "蓝牙钥匙检测事件"@zh ;
+    rdfs:comment "Event representing BLE key being detected"@en ;
+    rdfs:comment "表示检测到蓝牙钥匙的事件"@zh .
+
+# =============================================================================
+# CLASSES - Event Sequence
+# =============================================================================
+
+:EventSequence rdf:type owl:Class ;
+    rdfs:label "Event Sequence"@en ;
+    rdfs:label "事件序列"@zh ;
+    rdfs:comment "An ordered sequence of events representing a causal chain or temporal order"@en ;
+    rdfs:comment "表示因果链或时序的有序事件序列"@zh ;
+    skos:definition "A sequence that maintains temporal ordering of events with causation links"@en ;
+    skos:definition "维护事件时序和因果链接的序列"@zh .
+
+:EventChain rdf:type owl:Class ;
+    rdfs:subClassOf :EventSequence ;
+    rdfs:label "Event Chain"@en ;
+    rdfs:label "事件链"@zh ;
+    rdfs:comment "A chain of events where each event causes the next"@en ;
+    rdfs:comment "每个事件导致下一个事件的事件链"@zh .
+
+:CausationChain rdf:type owl:Class ;
+    rdfs:subClassOf :EventChain ;
+    rdfs:label "Causation Chain"@en ;
+    rdfs:label "因果链"@zh ;
+    rdfs:comment "A chain of events linked by causation relationships"@en ;
+    rdfs:comment "通过因果关系链接的事件链"@zh .
+
+:EventGroup rdf:type owl:Class ;
+    rdfs:label "Event Group"@en ;
+    rdfs:label "事件组"@zh ;
+    rdfs:comment "A group of related events that occur together or are logically grouped"@en ;
+    rdfs:comment "一起发生或逻辑上分组的相关事件组"@zh .
+
+# =============================================================================
+# OBJECT PROPERTIES - Event Properties
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Core Event Properties
+# -----------------------------------------------------------------------------
+
+:hasTimestamp rdf:type owl:DatatypeProperty ;
+    rdfs:label "has timestamp"@en ;
+    rdfs:label "具有时间戳"@zh ;
+    rdfs:comment "The timestamp when the event occurred"@en ;
+    rdfs:comment "事件发生的时间戳"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range xsd:dateTime .
+
+:hasEventId rdf:type owl:DatatypeProperty ;
+    rdfs:label "has event ID"@en ;
+    rdfs:label "具有事件编号"@zh ;
+    rdfs:comment "Unique identifier for the event"@en ;
+    rdfs:comment "事件的唯一标识符"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range xsd:string .
+
+:hasEventType rdf:type owl:DatatypeProperty ;
+    rdfs:label "has event type"@en ;
+    rdfs:label "具有事件类型"@zh ;
+    rdfs:comment "Type classification of the event"@en ;
+    rdfs:comment "事件的类型分类"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range xsd:string .
+
+:hasEventName rdf:type owl:DatatypeProperty ;
+    rdfs:label "has event name"@en ;
+    rdfs:label "具有事件名称"@zh ;
+    rdfs:comment "Human-readable name of the event"@en ;
+    rdfs:comment "事件的可读名称"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range xsd:string .
+
+:hasEventDescription rdf:type owl:DatatypeProperty ;
+    rdfs:label "has event description"@en ;
+    rdfs:label "具有事件描述"@zh ;
+    rdfs:comment "Description of the event"@en ;
+    rdfs:comment "事件的描述"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range xsd:string .
+
+:hasEventPriority rdf:type owl:DatatypeProperty ;
+    rdfs:label "has event priority"@en ;
+    rdfs:label "具有事件优先级"@zh ;
+    rdfs:comment "Priority level of the event for processing"@en ;
+    rdfs:comment "事件处理的优先级"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range xsd:integer .
+
+:hasEventSeverity rdf:type owl:DatatypeProperty ;
+    rdfs:label "has event severity"@en ;
+    rdfs:label "具有事件严重性"@zh ;
+    rdfs:comment "Severity level of the event (1=info, 2=warning, 3=error, 4=critical)"@en ;
+    rdfs:comment "事件的严重性级别（1=信息，2=警告，3=错误，4=严重）"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range xsd:integer .
+
+# -----------------------------------------------------------------------------
+# Causation Properties
+# -----------------------------------------------------------------------------
+
+:causedBy rdf:type owl:ObjectProperty ;
+    rdfs:label "caused by"@en ;
+    rdfs:label "由...引起"@zh ;
+    rdfs:comment "Indicates that this event was caused by another event or action"@en ;
+    rdfs:comment "表示此事件由另一个事件或动作引起"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range :Event ;
+    owl:inverseOf :causes .
+
+:causes rdf:type owl:ObjectProperty ;
+    rdfs:label "causes"@en ;
+    rdfs:label "导致"@zh ;
+    rdfs:comment "Indicates that this event causes another event"@en ;
+    rdfs:comment "表示此事件导致另一个事件"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range :Event ;
+    owl:inverseOf :causedBy .
+
+:causedByAction rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :causedBy ;
+    rdfs:label "caused by action"@en ;
+    rdfs:label "由动作引起"@zh ;
+    rdfs:comment "Indicates that this event was caused by an action"@en ;
+    rdfs:comment "表示此事件由动作引起"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range :Action .
+
+:triggersAction rdf:type owl:ObjectProperty ;
+    rdfs:label "triggers action"@en ;
+    rdfs:label "触发动作"@zh ;
+    rdfs:comment "Indicates that this event triggers an action"@en ;
+    rdfs:comment "表示此事件触发一个动作"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range :Action .
+
+:causedBySignal rdf:type owl:ObjectProperty ;
+    rdfs:label "caused by signal"@en ;
+    rdfs:label "由信号引起"@zh ;
+    rdfs:comment "Indicates that this event was caused by a signal change"@en ;
+    rdfs:comment "表示此事件由信号变化引起"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range :Signal .
+
+# -----------------------------------------------------------------------------
+# Context Properties
+# -----------------------------------------------------------------------------
+
+:occursIn rdf:type owl:ObjectProperty ;
+    rdfs:label "occurs in"@en ;
+    rdfs:label "发生于"@zh ;
+    rdfs:comment "The context or location where the event occurs"@en ;
+    rdfs:comment "事件发生的上下文或位置"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range :Vehicle .
+
+:hasSource rdf:type owl:ObjectProperty ;
+    rdfs:label "has source"@en ;
+    rdfs:label "具有来源"@zh ;
+    rdfs:comment "The source of the event"@en ;
+    rdfs:comment "事件的来源"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range :EventSource .
+
+:hasPayload rdf:type owl:ObjectProperty ;
+    rdfs:label "has payload"@en ;
+    rdfs:label "具有载荷"@zh ;
+    rdfs:comment "Data payload associated with the event"@en ;
+    rdfs:comment "与事件关联的数据载荷"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range :EventPayload .
+
+:hasPreviousState rdf:type owl:ObjectProperty ;
+    rdfs:label "has previous state"@en ;
+    rdfs:label "具有前一状态"@zh ;
+    rdfs:comment "The state before the event occurred (for state change events)"@en ;
+    rdfs:comment "事件发生前的状态（用于状态变更事件）"@zh ;
+    rdfs:domain :StateChangeEvent ;
+    rdfs:range :PowerMode .
+
+:hasNewState rdf:type owl:ObjectProperty ;
+    rdfs:label "has new state"@en ;
+    rdfs:label "具有新状态"@zh ;
+    rdfs:comment "The state after the event occurred (for state change events)"@en ;
+    rdfs:comment "事件发生后的状态（用于状态变更事件）"@zh ;
+    rdfs:domain :StateChangeEvent ;
+    rdfs:range :PowerMode .
+
+:hasPreviousPowerMode rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasPreviousState ;
+    rdfs:label "has previous power mode"@en ;
+    rdfs:label "具有前一电源模式"@zh ;
+    rdfs:comment "The power mode before the event"@en ;
+    rdfs:comment "事件前的电源模式"@zh ;
+    rdfs:domain :PowerModeChangeEvent ;
+    rdfs:range :PowerMode .
+
+:hasNewPowerMode rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasNewState ;
+    rdfs:label "has new power mode"@en ;
+    rdfs:label "具有新电源模式"@zh ;
+    rdfs:comment "The power mode after the event"@en ;
+    rdfs:comment "事件后的电源模式"@zh ;
+    rdfs:domain :PowerModeChangeEvent ;
+    rdfs:range :PowerMode .
+
+:hasPreviousReadyEnable rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasPreviousState ;
+    rdfs:label "has previous ready enable state"@en ;
+    rdfs:label "具有前一Ready使能状态"@zh ;
+    rdfs:domain :ReadyEnableChangeEvent ;
+    rdfs:range :ReadyEnable .
+
+:hasNewReadyEnable rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasNewState ;
+    rdfs:label "has new ready enable state"@en ;
+    rdfs:label "具有新Ready使能状态"@zh ;
+    rdfs:domain :ReadyEnableChangeEvent ;
+    rdfs:range :ReadyEnable .
+
+:hasPreviousKeyValidity rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasPreviousState ;
+    rdfs:label "has previous key validity"@en ;
+    rdfs:label "具有前一钥匙有效性"@zh ;
+    rdfs:domain :KeyValidityChangeEvent ;
+    rdfs:range :KeyValidityStatus .
+
+:hasNewKeyValidity rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasNewState ;
+    rdfs:label "has new key validity"@en ;
+    rdfs:label "具有新钥匙有效性"@zh ;
+    rdfs:domain :KeyValidityChangeEvent ;
+    rdfs:range :KeyValidityStatus .
+
+:hasPreviousDoorState rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasPreviousState ;
+    rdfs:label "has previous door state"@en ;
+    rdfs:label "具有前一车门状态"@zh ;
+    rdfs:domain :DoorStateChangeEvent ;
+    rdfs:range :DoorState .
+
+:hasNewDoorState rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasNewState ;
+    rdfs:label "has new door state"@en ;
+    rdfs:label "具有新车门状态"@zh ;
+    rdfs:domain :DoorStateChangeEvent ;
+    rdfs:range :DoorState .
+
+:hasPreviousDoorLockState rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasPreviousState ;
+    rdfs:label "has previous door lock state"@en ;
+    rdfs:label "具有前一门锁状态"@zh ;
+    rdfs:domain :DoorLockStateChangeEvent ;
+    rdfs:range :DoorLockState .
+
+:hasNewDoorLockState rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasNewState ;
+    rdfs:label "has new door lock state"@en ;
+    rdfs:label "具有新门锁状态"@zh ;
+    rdfs:domain :DoorLockStateChangeEvent ;
+    rdfs:range :DoorLockState .
+
+# -----------------------------------------------------------------------------
+# Event Sequence Properties
+# -----------------------------------------------------------------------------
+
+:hasPreviousEvent rdf:type owl:ObjectProperty ;
+    rdfs:label "has previous event"@en ;
+    rdfs:label "具有前一事件"@zh ;
+    rdfs:comment "Links to the previous event in a sequence"@en ;
+    rdfs:comment "链接到序列中的前一个事件"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range :Event ;
+    owl:inverseOf :hasNextEvent .
+
+:hasNextEvent rdf:type owl:ObjectProperty ;
+    rdfs:label "has next event"@en ;
+    rdfs:label "具有下一事件"@zh ;
+    rdfs:comment "Links to the next event in a sequence"@en ;
+    rdfs:comment "链接到序列中的下一个事件"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range :Event ;
+    owl:inverseOf :hasPreviousEvent .
+
+:sequencePosition rdf:type owl:DatatypeProperty ;
+    rdfs:label "sequence position"@en ;
+    rdfs:label "序列位置"@zh ;
+    rdfs:comment "Position of the event in a sequence (1-based)"@en ;
+    rdfs:comment "事件在序列中的位置（从1开始）"@zh ;
+    rdfs:domain :Event ;
+    rdfs:range xsd:integer .
+
+:hasFirstEvent rdf:type owl:ObjectProperty ;
+    rdfs:label "has first event"@en ;
+    rdfs:label "具有首个事件"@zh ;
+    rdfs:comment "Links to the first event in a sequence"@en ;
+    rdfs:comment "链接到序列中的第一个事件"@zh ;
+    rdfs:domain :EventSequence ;
+    rdfs:range :Event .
+
+:hasLastEvent rdf:type owl:ObjectProperty ;
+    rdfs:label "has last event"@en ;
+    rdfs:label "具有最后事件"@zh ;
+    rdfs:comment "Links to the last event in a sequence"@en ;
+    rdfs:comment "链接到序列中的最后一个事件"@zh ;
+    rdfs:domain :EventSequence ;
+    rdfs:range :Event .
+
+:containsEvent rdf:type owl:ObjectProperty ;
+    rdfs:label "contains event"@en ;
+    rdfs:label "包含事件"@zh ;
+    rdfs:comment "Indicates that a sequence contains an event"@en ;
+    rdfs:comment "表示序列包含一个事件"@zh ;
+    rdfs:domain :EventSequence ;
+    rdfs:range :Event .
+
+:sequenceLength rdf:type owl:DatatypeProperty ;
+    rdfs:label "sequence length"@en ;
+    rdfs:label "序列长度"@zh ;
+    rdfs:comment "Number of events in the sequence"@en ;
+    rdfs:comment "序列中的事件数量"@zh ;
+    rdfs:domain :EventSequence ;
+    rdfs:range xsd:integer .
+
+:sequenceStartTime rdf:type owl:DatatypeProperty ;
+    rdfs:label "sequence start time"@en ;
+    rdfs:label "序列开始时间"@zh ;
+    rdfs:comment "Timestamp when the sequence started"@en ;
+    rdfs:comment "序列开始的时间戳"@zh ;
+    rdfs:domain :EventSequence ;
+    rdfs:range xsd:dateTime .
+
+:sequenceEndTime rdf:type owl:DatatypeProperty ;
+    rdfs:label "sequence end time"@en ;
+    rdfs:label "序列结束时间"@zh ;
+    rdfs:comment "Timestamp when the sequence ended"@en ;
+    rdfs:comment "序列结束的时间戳"@zh ;
+    rdfs:domain :EventSequence ;
+    rdfs:range xsd:dateTime .
+
+# -----------------------------------------------------------------------------
+# Event-Action Linking Properties
+# -----------------------------------------------------------------------------
+
+:triggersEvent rdf:type owl:ObjectProperty ;
+    rdfs:label "triggers event"@en ;
+    rdfs:label "触发事件"@zh ;
+    rdfs:comment "An action triggers an event"@en ;
+    rdfs:comment "动作触发一个事件"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range :Event ;
+    owl:inverseOf :causedByAction .
+
+# -----------------------------------------------------------------------------
+# Fault-Related Properties
+# -----------------------------------------------------------------------------
+
+:hasFaultCode rdf:type owl:DatatypeProperty ;
+    rdfs:label "has fault code"@en ;
+    rdfs:label "具有故障码"@zh ;
+    rdfs:comment "Diagnostic trouble code associated with the event"@en ;
+    rdfs:comment "与事件关联的诊断故障码"@zh ;
+    rdfs:domain :FaultDetectedEvent ;
+    rdfs:range xsd:string .
+
+:hasFaultDescription rdf:type owl:DatatypeProperty ;
+    rdfs:label "has fault description"@en ;
+    rdfs:label "具有故障描述"@zh ;
+    rdfs:comment "Description of the fault"@en ;
+    rdfs:comment "故障的描述"@zh ;
+    rdfs:domain :FaultDetectedEvent ;
+    rdfs:range xsd:string .
+
+:hasFaultSource rdf:type owl:ObjectProperty ;
+    rdfs:label "has fault source"@en ;
+    rdfs:label "具有故障源"@zh ;
+    rdfs:comment "The source ECU or component that reported the fault"@en ;
+    rdfs:comment "报告故障的源ECU或组件"@zh ;
+    rdfs:domain :FaultDetectedEvent ;
+    rdfs:range :ECU .
+
+# =============================================================================
+# DATA PROPERTIES - Event Payload
+# =============================================================================
+
+:payloadKey rdf:type owl:DatatypeProperty ;
+    rdfs:label "payload key"@en ;
+    rdfs:label "载荷键"@zh ;
+    rdfs:comment "Key for a payload data item"@en ;
+    rdfs:comment "载荷数据项的键"@zh ;
+    rdfs:domain :EventPayload ;
+    rdfs:range xsd:string .
+
+:payloadValue rdf:type owl:DatatypeProperty ;
+    rdfs:label "payload value"@en ;
+    rdfs:label "载荷值"@zh ;
+    rdfs:comment "Value for a payload data item"@en ;
+    rdfs:comment "载荷数据项的值"@zh ;
+    rdfs:domain :EventPayload ;
+    rdfs:range xsd:string .
+
+:payloadType rdf:type owl:DatatypeProperty ;
+    rdfs:label "payload type"@en ;
+    rdfs:label "载荷类型"@zh ;
+    rdfs:comment "Type of the payload data"@en ;
+    rdfs:comment "载荷数据的类型"@zh ;
+    rdfs:domain :EventPayload ;
+    rdfs:range xsd:string .
+
+# =============================================================================
+# INDIVIDUALS - Event Sources
+# =============================================================================
+
+:sourceLDCU rdf:type :InternalSource ;
+    rdfs:label "LDCU Source"@en ;
+    rdfs:label "LDCU源"@zh ;
+    rdfs:comment "Event originated from Left Domain Control Unit"@en ;
+    rdfs:comment "事件源自左域控制器"@zh .
+
+:sourceRDCU rdf:type :InternalSource ;
+    rdfs:label "RDCU Source"@en ;
+    rdfs:label "RDCU源"@zh ;
+    rdfs:comment "Event originated from Right Domain Control Unit"@en ;
+    rdfs:comment "事件源自右域控制器"@zh .
+
+:sourceCDCU rdf:type :InternalSource ;
+    rdfs:label "CDCU Source"@en ;
+    rdfs:label "CDCU源"@zh ;
+    rdfs:comment "Event originated from Central Domain Control Unit"@en ;
+    rdfs:comment "事件源自中央域控制器"@zh .
+
+:sourceTBOX rdf:type :NetworkSource ;
+    rdfs:label "TBOX Source"@en ;
+    rdfs:label "TBOX源"@zh ;
+    rdfs:comment "Event originated from Telematics Box"@en ;
+    rdfs:comment "事件源自远程通信单元"@zh .
+
+:sourceXPU rdf:type :InternalSource ;
+    rdfs:label "XPU Source"@en ;
+    rdfs:label "XPU源"@zh ;
+    rdfs:comment "Event originated from Autonomous Driving Unit"@en ;
+    rdfs:comment "事件源自自动驾驶单元"@zh .
+
+:sourceUser rdf:type :ExternalSource ;
+    rdfs:label "User Source"@en ;
+    rdfs:label "用户源"@zh ;
+    rdfs:comment "Event originated from user interaction"@en ;
+    rdfs:comment "事件源自用户交互"@zh .
+
+:sourceRemoteDiag rdf:type :NetworkSource ;
+    rdfs:label "Remote Diagnostic Source"@en ;
+    rdfs:label "远程诊断源"@zh ;
+    rdfs:comment "Event originated from remote diagnostic server"@en ;
+    rdfs:comment "事件源自远程诊断服务器"@zh .
+
+:sourceOTA rdf:type :NetworkSource ;
+    rdfs:label "OTA Source"@en ;
+    rdfs:label "OTA源"@zh ;
+    rdfs:comment "Event originated from OTA update system"@en ;
+    rdfs:comment "事件源自OTA更新系统"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Example Events
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Power On Event Example
+# -----------------------------------------------------------------------------
+
+:event_PowerOn_DoorOpen_20240315 rdf:type :DoorOpenPowerOnEvent ;
+    rdfs:label "Power On by Door Open - 2024-03-15"@en ;
+    rdfs:label "车门打开上电 - 2024-03-15"@zh ;
+    :hasEventId "EVT-PO-20240315-001" ;
+    :hasEventName "DoorOpenPowerOn" ;
+    :hasEventType "PowerOn" ;
+    :hasTimestamp "2024-03-15T08:30:45.123Z"^^xsd:dateTime ;
+    :hasSource :sourceUser ;
+    :hasEventPriority 10 ;
+    :hasEventSeverity 1 ;
+    :hasPreviousPowerMode :OffMode ;
+    :hasNewPowerMode :LocalOnMode ;
+    :triggersAction :action_DoorOpenPowerOn ;
+    rdfs:comment "Vehicle powered on by driver door open with valid BLE key"@en ;
+    rdfs:comment "驾驶员车门打开时使用有效蓝牙钥匙上电"@zh .
+
+# -----------------------------------------------------------------------------
+# Power Off Event Example
+# -----------------------------------------------------------------------------
+
+:event_PowerOff_DoorLock_20240315 rdf:type :DoorLockPowerOffEvent ;
+    rdfs:label "Power Off by Door Lock - 2024-03-15"@en ;
+    rdfs:label "门锁下电 - 2024-03-15"@zh ;
+    :hasEventId "EVT-PF-20240315-001" ;
+    :hasEventName "DoorLockPowerOff" ;
+    :hasEventType "PowerOff" ;
+    :hasTimestamp "2024-03-15T18:45:30.456Z"^^xsd:dateTime ;
+    :hasSource :sourceUser ;
+    :hasEventPriority 10 ;
+    :hasEventSeverity 1 ;
+    :hasPreviousPowerMode :LocalOnMode ;
+    :hasNewPowerMode :OffMode ;
+    :triggersAction :action_DoorLockPowerOff ;
+    :causedBy :event_DoorLock_20240315 ;
+    rdfs:comment "Vehicle powered off after door lock event with all doors closed"@en ;
+    rdfs:comment "门锁事件后所有车门关闭后下电"@zh .
+
+# -----------------------------------------------------------------------------
+# Door Lock Event Example
+# -----------------------------------------------------------------------------
+
+:event_DoorLock_20240315 rdf:type :DoorLockEvent ;
+    rdfs:label "Door Lock Event - 2024-03-15"@en ;
+    rdfs:label "门锁锁止事件 - 2024-03-15"@zh ;
+    :hasEventId "EVT-DL-20240315-001" ;
+    :hasEventName "DoorLock" ;
+    :hasEventType "DoorLock" ;
+    :hasTimestamp "2024-03-15T18:45:25.000Z"^^xsd:dateTime ;
+    :hasSource :sourceUser ;
+    :hasEventPriority 8 ;
+    :hasEventSeverity 1 ;
+    :hasPreviousDoorLockState :DoorUnlocked ;
+    :hasNewDoorLockState :DoorLocked ;
+    :causes :event_PowerOff_DoorLock_20240315 ;
+    rdfs:comment "All doors locked via key fob"@en ;
+    rdfs:comment "通过遥控钥匙锁止所有车门"@zh .
+
+# -----------------------------------------------------------------------------
+# Key Validation Event Example
+# -----------------------------------------------------------------------------
+
+:event_KeyValid_BLE_20240315 rdf:type :KeyValidationSuccessEvent ;
+    rdfs:label "Key Validation Success BLE - 2024-03-15"@en ;
+    rdfs:label "蓝牙钥匙验证成功 - 2024-03-15"@zh ;
+    :hasEventId "EVT-KV-20240315-001" ;
+    :hasEventName "BLEKeyValidationSuccess" ;
+    :hasEventType "KeyValidation" ;
+    :hasTimestamp "2024-03-15T08:30:42.500Z"^^xsd:dateTime ;
+    :hasSource :sourceLDCU ;
+    :hasEventPriority 10 ;
+    :hasEventSeverity 1 ;
+    :hasPreviousKeyValidity :KeyInvalid ;
+    :hasNewKeyValidity :KeyValid ;
+    :causes :event_PowerOn_DoorOpen_20240315 ;
+    rdfs:comment "BLE key validated successfully near front left door"@en ;
+    rdfs:comment "蓝牙钥匙在前左门附近验证成功"@zh .
+
+# -----------------------------------------------------------------------------
+# Door Open Event Example
+# -----------------------------------------------------------------------------
+
+:event_DoorOpen_FL_20240315 rdf:type :DoorOpenEvent ;
+    rdfs:label "Front Left Door Open - 2024-03-15"@en ;
+    rdfs:label "前左门打开 - 2024-03-15"@zh ;
+    :hasEventId "EVT-DO-20240315-001" ;
+    :hasEventName "FrontLeftDoorOpen" ;
+    :hasEventType "DoorOpen" ;
+    :hasTimestamp "2024-03-15T08:30:40.000Z"^^xsd:dateTime ;
+    :hasSource :sourceUser ;
+    :hasEventPriority 8 ;
+    :hasEventSeverity 1 ;
+    :hasPreviousDoorState :DoorClosed ;
+    :hasNewDoorState :DoorOpen ;
+    :causes :event_KeyValid_BLE_20240315 ;
+    rdfs:comment "Front left door opened by driver"@en ;
+    rdfs:comment "驾驶员打开前左门"@zh .
+
+# -----------------------------------------------------------------------------
+# Timer Event Example
+# -----------------------------------------------------------------------------
+
+:event_Timer_AutoPowerOff_30Min_20240315 rdf:type :AutoPowerOff30MinTimerEvent ;
+    rdfs:label "Auto Power Off 30 Min Timer - 2024-03-15"@en ;
+    rdfs:label "30分钟自动下电计时器 - 2024-03-15"@zh ;
+    :hasEventId "EVT-TM-20240315-001" ;
+    :hasEventName "AutoPowerOff30MinTimer" ;
+    :hasEventType "TimerExpired" ;
+    :hasTimestamp "2024-03-15T19:15:30.000Z"^^xsd:dateTime ;
+    :hasSource :sourceLDCU ;
+    :hasEventPriority 5 ;
+    :hasEventSeverity 2 ;
+    rdfs:comment "30 minute auto power off timer expired"@en ;
+    rdfs:comment "30分钟自动下电计时器到期"@zh .
+
+# -----------------------------------------------------------------------------
+# Fault Event Example
+# -----------------------------------------------------------------------------
+
+:event_Fault_PowerOnError_20240315 rdf:type :PowerOnErrorEvent ;
+    rdfs:label "Power On Error - 2024-03-15"@en ;
+    rdfs:label "上电异常 - 2024-03-15"@zh ;
+    :hasEventId "EVT-FT-20240315-001" ;
+    :hasEventName "PowerOnError" ;
+    :hasEventType "Fault" ;
+    :hasTimestamp "2024-03-15T10:00:00.000Z"^^xsd:dateTime ;
+    :hasSource :sourceLDCU ;
+    :hasEventPriority 15 ;
+    :hasEventSeverity 3 ;
+    :hasFaultCode "PWR-ERR-001" ;
+    :hasFaultDescription "LDCU PowerMode=ON for 1s but RDCU_PowerSt=OFF"@en ;
+    :hasFaultDescription "LDCU电源模式=ON持续1秒但RDCU电源状态=OFF"@zh ;
+    :hasFaultSource :LDCU ;
+    rdfs:comment "Power on synchronization error between LDCU and RDCU"@en ;
+    rdfs:comment "LDCU与RDCU之间的上电同步异常"@zh .
+
+# -----------------------------------------------------------------------------
+# OTA Event Example
+# -----------------------------------------------------------------------------
+
+:event_OTA_Started_20240315 rdf:type :OTAUpdateStartedEvent ;
+    rdfs:label "OTA Update Started - 2024-03-15"@en ;
+    rdfs:label "OTA更新开始 - 2024-03-15"@zh ;
+    :hasEventId "EVT-OTA-20240315-001" ;
+    :hasEventName "OTAUpdateStarted" ;
+    :hasEventType "OTA" ;
+    :hasTimestamp "2024-03-15T02:00:00.000Z"^^xsd:dateTime ;
+    :hasSource :sourceOTA ;
+    :hasEventPriority 12 ;
+    :hasEventSeverity 1 ;
+    :causes :event_PowerOn_OTA_20240315 ;
+    rdfs:comment "OTA update initiated for firmware upgrade"@en ;
+    rdfs:comment "OTA更新启动固件升级"@zh .
+
+:event_PowerOn_OTA_20240315 rdf:type :OTAPowerOnEvent ;
+    rdfs:label "OTA Power On - 2024-03-15"@en ;
+    rdfs:label "OTA上电 - 2024-03-15"@zh ;
+    :hasEventId "EVT-PO-20240315-002" ;
+    :hasEventName "OTAPowerOn" ;
+    :hasEventType "PowerOn" ;
+    :hasTimestamp "2024-03-15T02:00:01.000Z"^^xsd:dateTime ;
+    :hasSource :sourceTBOX ;
+    :hasEventPriority 8 ;
+    :hasEventSeverity 1 ;
+    :hasPreviousPowerMode :OffMode ;
+    :hasNewPowerMode :RemoteOnMode ;
+    :causedBy :event_OTA_Started_20240315 ;
+    :triggersAction :action_OTAPowerOn ;
+    rdfs:comment "Vehicle powered on for OTA update"@en ;
+    rdfs:comment "车辆为OTA更新上电"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Event Sequences
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Power On Sequence Example
+# -----------------------------------------------------------------------------
+
+:sequence_PowerOnSequence rdf:type :CausationChain ;
+    rdfs:label "Power On Sequence"@en ;
+    rdfs:label "上电序列"@zh ;
+    :hasEventId "SEQ-PO-20240315-001" ;
+    :sequenceLength 4 ;
+    :sequenceStartTime "2024-03-15T08:30:40.000Z"^^xsd:dateTime ;
+    :sequenceEndTime "2024-03-15T08:30:45.500Z"^^xsd:dateTime ;
+    :hasFirstEvent :event_DoorOpen_FL_20240315 ;
+    :hasLastEvent :event_PowerOn_DoorOpen_20240315 ;
+    :containsEvent :event_DoorOpen_FL_20240315 ;
+    :containsEvent :event_KeyValid_BLE_20240315 ;
+    :containsEvent :event_PowerOn_DoorOpen_20240315 ;
+    rdfs:comment "Complete power on sequence from door open to vehicle powered on"@en ;
+    rdfs:comment "从车门打开到车辆上电的完整序列"@zh .
+
+# Link events in the sequence
+:event_DoorOpen_FL_20240315 
+    :hasNextEvent :event_KeyValid_BLE_20240315 ;
+    :sequencePosition 1 .
+
+:event_KeyValid_BLE_20240315 
+    :hasPreviousEvent :event_DoorOpen_FL_20240315 ;
+    :hasNextEvent :event_PowerOn_DoorOpen_20240315 ;
+    :sequencePosition 2 .
+
+:event_PowerOn_DoorOpen_20240315 
+    :hasPreviousEvent :event_KeyValid_BLE_20240315 ;
+    :sequencePosition 3 .
+
+# -----------------------------------------------------------------------------
+# Power Off Sequence Example
+# -----------------------------------------------------------------------------
+
+:sequence_PowerOffSequence rdf:type :CausationChain ;
+    rdfs:label "Power Off Sequence"@en ;
+    rdfs:label "下电序列"@zh ;
+    :hasEventId "SEQ-PF-20240315-001" ;
+    :sequenceLength 3 ;
+    :sequenceStartTime "2024-03-15T18:45:25.000Z"^^xsd:dateTime ;
+    :sequenceEndTime "2024-03-15T18:45:35.000Z"^^xsd:dateTime ;
+    :hasFirstEvent :event_DoorLock_20240315 ;
+    :hasLastEvent :event_PowerOff_DoorLock_20240315 ;
+    :containsEvent :event_DoorLock_20240315 ;
+    :containsEvent :event_PowerOff_DoorLock_20240315 ;
+    rdfs:comment "Complete power off sequence from door lock to vehicle powered off"@en ;
+    rdfs:comment "从门锁到车辆下电的完整序列"@zh .
+
+:event_DoorLock_20240315 
+    :hasNextEvent :event_PowerOff_DoorLock_20240315 ;
+    :sequencePosition 1 .
+
+:event_PowerOff_DoorLock_20240315 
+    :hasPreviousEvent :event_DoorLock_20240315 ;
+    :sequencePosition 2 .
+
+# =============================================================================
+# COMPLEX OWL CONSTRUCTS
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Critical Event (High Severity)
+# -----------------------------------------------------------------------------
+
+:CriticalEvent rdf:type owl:Class ;
+    rdfs:label "Critical Event"@en ;
+    rdfs:label "严重事件"@zh ;
+    rdfs:comment "Event with high severity level (>= 3)"@en ;
+    rdfs:comment "高严重性级别（>=3）的事件"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :Event
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasEventSeverity ;
+              owl:someValuesFrom [
+                  rdf:type rdfs:Datatype ;
+                  owl:onDatatype xsd:integer ;
+                  owl:withRestrictions ([ xsd:minInclusive 3 ])
+              ]
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Causally Linked Events
+# -----------------------------------------------------------------------------
+
+:CausallyLinkedEvent rdf:type owl:Class ;
+    rdfs:label "Causally Linked Event"@en ;
+    rdfs:label "因果链接事件"@zh ;
+    rdfs:comment "Event that is part of a causation chain"@en ;
+    rdfs:comment "作为因果链一部分的事件"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:unionOf (
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :causes ;
+              owl:someValuesFrom :Event
+            ]
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :causedBy ;
+              owl:someValuesFrom :Event
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Power On Event Chain
+# -----------------------------------------------------------------------------
+
+:PowerOnEventChain rdf:type owl:Class ;
+    rdfs:label "Power On Event Chain"@en ;
+    rdfs:label "上电事件链"@zh ;
+    rdfs:comment "A chain of events that leads to power on"@en ;
+    rdfs:comment "导致上电的事件链"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :CausationChain
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasLastEvent ;
+              owl:someValuesFrom :PowerOnEvent
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Power Off Event Chain
+# -----------------------------------------------------------------------------
+
+:PowerOffEventChain rdf:type owl:Class ;
+    rdfs:label "Power Off Event Chain"@en ;
+    rdfs:label "下电事件链"@zh ;
+    rdfs:comment "A chain of events that leads to power off"@en ;
+    rdfs:comment "导致下电的事件链"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :CausationChain
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasLastEvent ;
+              owl:someValuesFrom :PowerOffEvent
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Fault Event with ECU Source
+# -----------------------------------------------------------------------------
+
+:FaultEventWithECUSource rdf:type owl:Class ;
+    rdfs:label "Fault Event With ECU Source"@en ;
+    rdfs:label "具有ECU源的故障事件"@zh ;
+    rdfs:comment "Fault event that has an ECU as its source"@en ;
+    rdfs:comment "以ECU为源的故障事件"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :FaultDetectedEvent
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasFaultSource ;
+              owl:someValuesFrom :ECU
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Sequential Events (within a time window)
+# -----------------------------------------------------------------------------
+
+:SequentialEvents rdf:type owl:Class ;
+    rdfs:label "Sequential Events"@en ;
+    rdfs:label "顺序事件"@zh ;
+    rdfs:comment "Events that have explicit next/previous relationships"@en ;
+    rdfs:comment "具有明确下一/前一关系的事件"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:unionOf (
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasNextEvent ;
+              owl:someValuesFrom :Event
+            ]
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasPreviousEvent ;
+              owl:someValuesFrom :Event
+            ]
+        )
+    ] .
+
+# =============================================================================
+# USAGE NOTES
+# =============================================================================
+
+# This event model extends the vehicle_power_management_ontology.ttl and
+# action_model.ttl by adding event semantics with timestamps, causation,
+# and sequencing.
+#
+# Usage:
+# 1. Import this model into applications that need event tracking
+# 2. Use hasTimestamp for temporal ordering
+# 3. Use causedBy/causes for causation chains
+# 4. Use hasPreviousEvent/hasNextEvent for explicit sequencing
+# 5. Use EventSequence for grouping related events
+#
+# Example causation chain:
+# :event_DoorOpen :causes :event_KeyValidation .
+# :event_KeyValidation :causes :event_PowerOn .
+#
+# Example sequence:
+# :sequence_PowerOn
+#     :hasFirstEvent :event_DoorOpen ;
+#     :hasLastEvent :event_PowerOn ;
+#     :sequenceLength 3 .
+# :event_DoorOpen :hasNextEvent :event_KeyValidation ; :sequencePosition 1 .
+# :event_KeyValidation :hasNextEvent :event_PowerOn ; :sequencePosition 2 .
+# :event_PowerOn :sequencePosition 3 .

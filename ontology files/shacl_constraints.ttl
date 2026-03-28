@@ -1,0 +1,1015 @@
+@prefix : <http://example.org/vehicle-power-management#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# =============================================================================
+# SHACL Shapes for Vehicle Power Management Ontology
+# 车辆电源模式管理本体SHACL约束
+# =============================================================================
+
+<http://example.org/vehicle-power-management/shacl>
+    rdf:type owl:Ontology ;
+    rdfs:label "SHACL Constraints for Vehicle Power Management"@en ;
+    rdfs:label "车辆电源模式管理SHACL约束"@zh ;
+    rdfs:comment "Data validation constraints for vehicle power management ontology"@en ;
+    rdfs:comment "车辆电源模式管理本体的数据验证约束"@zh ;
+    owl:imports <http://example.org/vehicle-power-management/core> ;
+    owl:versionInfo "1.0" .
+
+# =============================================================================
+# NODE SHAPES
+# 节点形状
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Vehicle Shape
+# 车辆形状
+# -----------------------------------------------------------------------------
+
+:VehicleShape a sh:NodeShape ;
+    rdfs:label "Vehicle Shape"@en ;
+    rdfs:label "车辆形状"@zh ;
+    rdfs:comment "Validation constraints for Vehicle instances"@en ;
+    rdfs:comment "车辆实例的验证约束"@zh ;
+    sh:targetClass :Vehicle ;
+    
+    # VIN constraint - exactly one, 17 alphanumeric chars (no I, O, Q)
+    # VIN约束 - 必须有且仅有一个，17位字母数字（不含I、O、Q）
+    sh:property [
+        sh:path :vin ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^[A-HJ-NPR-Z0-9]{17}$" ;
+        sh:message "VIN must be exactly 17 alphanumeric characters (excluding I, O, Q)"@en ;
+        sh:message "VIN必须是17位字母数字组合（不含I、O、Q）"@zh ;
+        rdfs:comment "Vehicle Identification Number constraint"@en ;
+        rdfs:comment "车辆识别号约束"@zh ;
+    ] ;
+    
+    # Vehicle speed constraint - non-negative float
+    # 车速约束 - 非负浮点数
+    sh:property [
+        sh:path :vehicleSpeed ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:float ;
+        sh:minInclusive 0.0 ;
+        sh:message "Vehicle speed must be a non-negative float in km/h"@en ;
+        sh:message "车速必须为非负浮点数，单位km/h"@zh ;
+        rdfs:comment "Vehicle speed validation"@en ;
+        rdfs:comment "车速验证"@zh ;
+    ] ;
+    
+    # tKeySearch constraint - range 1-10 seconds
+    # 钥匙搜索计时器约束 - 范围1-10秒
+    sh:property [
+        sh:path :tKeySearch ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 10 ;
+        sh:message "Key search timer must be between 1 and 10 seconds"@en ;
+        sh:message "钥匙搜索计时器必须在1-10秒之间"@zh ;
+        rdfs:comment "Key search timer validation (default: 3 seconds)"@en ;
+        rdfs:comment "钥匙搜索计时器验证（默认：3秒）"@zh ;
+    ] ;
+    
+    # tLowBattPwrOff constraint - range 60-600 seconds
+    # 低电量下电计时器约束 - 范围60-600秒
+    sh:property [
+        sh:path :tLowBattPwrOff ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 60 ;
+        sh:maxInclusive 600 ;
+        sh:message "Low battery power off timer must be between 60 and 600 seconds"@en ;
+        sh:message "低电量下电计时器必须在60-600秒之间"@zh ;
+        rdfs:comment "Low battery power off timer validation (default: 30 seconds, configurable)"@en ;
+        rdfs:comment "低电量下电计时器验证（默认：30秒，可标定）"@zh ;
+    ] ;
+    
+    # tConvenienceMode constraint - range 60-3600 seconds (1 min to 1 hour)
+    # 舒适模式计时器约束 - 范围60-3600秒（1分钟到1小时）
+    sh:property [
+        sh:path :tConvenienceMode ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 60 ;
+        sh:maxInclusive 3600 ;
+        sh:message "Convenience mode timer must be between 60 and 3600 seconds"@en ;
+        sh:message "舒适模式计时器必须在60-3600秒之间"@zh ;
+        rdfs:comment "Convenience mode duration validation"@en ;
+        rdfs:comment "舒适模式持续时间验证"@zh ;
+    ] ;
+    
+    # tOTAPowerOnValid constraint - positive integer (minutes)
+    # OTA上电有效计时器约束 - 正整数（分钟）
+    sh:property [
+        sh:path :tOTAPowerOnValid ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 1 ;
+        sh:message "OTA power on valid timer must be a positive integer (minutes)"@en ;
+        sh:message "OTA上电有效计时器必须为正整数（分钟）"@zh ;
+        rdfs:comment "OTA power on valid timer validation (default: 1 minute)"@en ;
+        rdfs:comment "OTA上电有效计时器验证（默认：1分钟）"@zh ;
+    ] ;
+    
+    # tOTAPowerOnValidMax constraint - max 3 hours (180 minutes)
+    # OTA上电有效最大时长约束 - 最大3小时（180分钟）
+    sh:property [
+        sh:path :tOTAPowerOnValidMax ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:hasValue 180 ;
+        sh:message "OTA power on valid max duration must be 180 minutes (3 hours)"@en ;
+        sh:message "OTA上电有效最大时长必须为180分钟（3小时）"@zh ;
+        rdfs:comment "OTA power on valid maximum duration validation"@en ;
+        rdfs:comment "OTA上电有效最大时长验证"@zh ;
+    ] ;
+    
+    # forcePowerOffHoldTime constraint - range 1-10 seconds
+    # 强制下电按压时间约束 - 范围1-10秒
+    sh:property [
+        sh:path :forcePowerOffHoldTime ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 10 ;
+        sh:message "Forced power off hold time must be between 1 and 10 seconds"@en ;
+        sh:message "强制下电按压时间必须在1-10秒之间"@zh ;
+        rdfs:comment "Forced power off hold time validation (default: 3 seconds)"@en ;
+        rdfs:comment "强制下电按压时间验证（默认：3秒）"@zh ;
+    ] ;
+    
+    # forcePowerOffPressCount constraint - range 2-5 times
+    # 强制下电按压次数约束 - 范围2-5次
+    sh:property [
+        sh:path :forcePowerOffPressCount ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 2 ;
+        sh:maxInclusive 5 ;
+        sh:message "Forced power off press count must be between 2 and 5 times"@en ;
+        sh:message "强制下电按压次数必须在2-5次之间"@zh ;
+        rdfs:comment "Forced power off press count validation (default: 3 times)"@en ;
+        rdfs:comment "强制下电按压次数验证（默认：3次）"@zh ;
+    ] ;
+    
+    # forcePowerOffPressTimeWindow constraint - range 1-5 seconds
+    # 强制下电按压时间窗口约束 - 范围1-5秒
+    sh:property [
+        sh:path :forcePowerOffPressTimeWindow ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 5 ;
+        sh:message "Forced power off press time window must be between 1 and 5 seconds"@en ;
+        sh:message "强制下电按压时间窗口必须在1-5秒之间"@zh ;
+        rdfs:comment "Forced power off press time window validation (default: 2 seconds)"@en ;
+        rdfs:comment "强制下电按压时间窗口验证（默认：2秒）"@zh ;
+    ] ;
+    
+    # timeToPowerOffMinutes constraint - range 0-59
+    # 自动下电倒计时分钟约束 - 范围0-59
+    sh:property [
+        sh:path :timeToPowerOffMinutes ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 59 ;
+        sh:message "Time to power off minutes must be between 0 and 59"@en ;
+        sh:message "自动下电倒计时分钟必须在0-59之间"@zh ;
+        rdfs:comment "Auto power off countdown minutes validation"@en ;
+        rdfs:comment "自动下电倒计时分钟验证"@zh ;
+    ] ;
+    
+    # timeToPowerOffSeconds constraint - range 0-59
+    # 自动下电倒计时秒约束 - 范围0-59
+    sh:property [
+        sh:path :timeToPowerOffSeconds ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 59 ;
+        sh:message "Time to power off seconds must be between 0 and 59"@en ;
+        sh:message "自动下电倒计时秒必须在0-59之间"@zh ;
+        rdfs:comment "Auto power off countdown seconds validation"@en ;
+        rdfs:comment "自动下电倒计时秒验证"@zh ;
+    ] ;
+    
+    # nfcValidTime constraint - range 5-300 seconds
+    # NFC刷卡有效时间约束 - 范围5-300秒
+    sh:property [
+        sh:path :nfcValidTime ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 5 ;
+        sh:maxInclusive 300 ;
+        sh:message "NFC valid time must be between 5 and 300 seconds"@en ;
+        sh:message "NFC刷卡有效时间必须在5-300秒之间"@zh ;
+        rdfs:comment "NFC card swipe valid time validation (default: 30 seconds)"@en ;
+        rdfs:comment "NFC刷卡有效时间验证（默认：30秒）"@zh ;
+    ] ;
+    
+    # totalOdometer constraint - non-negative integer
+    # 总里程约束 - 非负整数
+    sh:property [
+        sh:path :totalOdometer ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:message "Total odometer must be a non-negative integer"@en ;
+        sh:message "总里程必须为非负整数"@zh ;
+        rdfs:comment "Total odometer validation"@en ;
+        rdfs:comment "总里程验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Power Mode Shape
+# 电源模式形状
+# -----------------------------------------------------------------------------
+
+:PowerModeShape a sh:NodeShape ;
+    rdfs:label "Power Mode Shape"@en ;
+    rdfs:label "电源模式形状"@zh ;
+    rdfs:comment "Validation constraints for Power Mode instances"@en ;
+    rdfs:comment "电源模式实例的验证约束"@zh ;
+    sh:targetClass :PowerMode ;
+    
+    # Power mode value constraint - enumerated values
+    # 电源模式值约束 - 枚举值
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1 2 3) ;
+        sh:message "Power mode signal value must be 0 (Off), 1 (LocalOn), 2 (RemoteOn), or 3 (Reserved)"@en ;
+        sh:message "电源模式信号值必须是0(Off)、1(LocalOn)、2(RemoteOn)或3(Reserved)"@zh ;
+        rdfs:comment "Power mode enumeration validation"@en ;
+        rdfs:comment "电源模式枚举验证"@zh ;
+    ] ;
+    
+    # Power mode hex value constraint
+    # 电源模式十六进制值约束
+    sh:property [
+        sh:path :signalValueHex ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^0x[0-3]$" ;
+        sh:message "Power mode hex value must be 0x0, 0x1, 0x2, or 0x3"@en ;
+        sh:message "电源模式十六进制值必须是0x0、0x1、0x2或0x3"@zh ;
+        rdfs:comment "Power mode hex value validation"@en ;
+        rdfs:comment "电源模式十六进制值验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# LDCU Power Mode Signal Shape
+# LDCU电源模式信号形状
+# -----------------------------------------------------------------------------
+
+:LDCUPowerModeSignalShape a sh:NodeShape ;
+    rdfs:label "LDCU Power Mode Signal Shape"@en ;
+    rdfs:label "LDCU电源模式信号形状"@zh ;
+    rdfs:comment "Validation constraints for LDCU_PowerMode signal"@en ;
+    rdfs:comment "LDCU_PowerMode信号的验证约束"@zh ;
+    sh:targetNode :signalLDCU_PowerMode ;
+    
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 3 ;
+        sh:message "LDCU_PowerMode value must be between 0 and 3"@en ;
+        sh:message "LDCU_PowerMode值必须在0-3之间"@zh ;
+        rdfs:comment "LDCU Power Mode signal range validation"@en ;
+        rdfs:comment "LDCU电源模式信号范围验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Key Shape
+# 钥匙形状
+# -----------------------------------------------------------------------------
+
+:KeyShape a sh:NodeShape ;
+    rdfs:label "Key Shape"@en ;
+    rdfs:label "钥匙形状"@zh ;
+    rdfs:comment "Validation constraints for Key instances"@en ;
+    rdfs:comment "钥匙实例的验证约束"@zh ;
+    sh:targetClass :Key ;
+    
+    # Key validity status constraint - enumerated values
+    # 钥匙有效性状态约束 - 枚举值
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1) ;
+        sh:message "Key validity status must be 0 (Invalid) or 1 (Valid)"@en ;
+        sh:message "钥匙有效性状态必须是0(无效)或1(有效)"@zh ;
+        rdfs:comment "Key validity enumeration validation"@en ;
+        rdfs:comment "钥匙有效性枚举验证"@zh ;
+    ] ;
+    
+    # Key validity hex value constraint
+    # 钥匙有效性十六进制值约束
+    sh:property [
+        sh:path :signalValueHex ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^0x[01]$" ;
+        sh:message "Key validity hex value must be 0x0 (Invalid) or 0x1 (Valid)"@en ;
+        sh:message "钥匙有效性十六进制值必须是0x0(无效)或0x1(有效)"@zh ;
+        rdfs:comment "Key validity hex value validation"@en ;
+        rdfs:comment "钥匙有效性十六进制值验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Key Validity Signal Shape
+# 钥匙有效性信号形状
+# -----------------------------------------------------------------------------
+
+:KeyValidStSignalShape a sh:NodeShape ;
+    rdfs:label "Key Validity Signal Shape"@en ;
+    rdfs:label "钥匙有效性信号形状"@zh ;
+    rdfs:comment "Validation constraints for KeyValidSt signal"@en ;
+    rdfs:comment "KeyValidSt信号的验证约束"@zh ;
+    sh:targetNode :signalKeyValidSt ;
+    
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1) ;
+        sh:message "KeyValidSt value must be 0 (Invalid) or 1 (Valid)"@en ;
+        sh:message "KeyValidSt值必须是0(无效)或1(有效)"@zh ;
+        rdfs:comment "Key validity status signal validation"@en ;
+        rdfs:comment "钥匙有效性状态信号验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Signal Shape
+# 信号形状
+# -----------------------------------------------------------------------------
+
+:SignalShape a sh:NodeShape ;
+    rdfs:label "Signal Shape"@en ;
+    rdfs:label "信号形状"@zh ;
+    rdfs:comment "Validation constraints for Signal instances"@en ;
+    rdfs:comment "信号实例的验证约束"@zh ;
+    sh:targetClass :Signal ;
+    
+    # Signal name constraint - required, non-empty string
+    # 信号名称约束 - 必填，非空字符串
+    sh:property [
+        sh:path :signalName ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:minLength 1 ;
+        sh:maxLength 128 ;
+        sh:message "Signal name is required and must be 1-128 characters"@en ;
+        sh:message "信号名称必填且长度必须在1-128个字符之间"@zh ;
+        rdfs:comment "Signal name validation"@en ;
+        rdfs:comment "信号名称验证"@zh ;
+    ] ;
+    
+    # Signal value decimal constraint - range 0-255 for 8-bit signals
+    # 信号十进制值约束 - 8位信号范围0-255
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 255 ;
+        sh:message "Signal decimal value must be between 0 and 255 (8-bit range)"@en ;
+        sh:message "信号十进制值必须在0-255之间（8位范围）"@zh ;
+        rdfs:comment "8-bit signal value range validation"@en ;
+        rdfs:comment "8位信号值范围验证"@zh ;
+    ] ;
+    
+    # Signal hex value constraint - pattern validation
+    # 信号十六进制值约束 - 格式验证
+    sh:property [
+        sh:path :signalValueHex ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^0x[0-9A-Fa-f]+$" ;
+        sh:message "Signal hex value must be in format 0xNN"@en ;
+        sh:message "信号十六进制值必须为0xNN格式"@zh ;
+        rdfs:comment "Signal hex value format validation"@en ;
+        rdfs:comment "信号十六进制值格式验证"@zh ;
+    ] ;
+    
+    # Signal description constraint
+    # 信号描述约束
+    sh:property [
+        sh:path :signalDescription ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:maxLength 512 ;
+        sh:message "Signal description must not exceed 512 characters"@en ;
+        sh:message "信号描述不得超过512个字符"@zh ;
+        rdfs:comment "Signal description length validation"@en ;
+        rdfs:comment "信号描述长度验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# CAN Signal Shape
+# CAN信号形状
+# -----------------------------------------------------------------------------
+
+:CANSignalShape a sh:NodeShape ;
+    rdfs:label "CAN Signal Shape"@en ;
+    rdfs:label "CAN信号形状"@zh ;
+    rdfs:comment "Validation constraints for CAN Signal instances"@en ;
+    rdfs:comment "CAN信号实例的验证约束"@zh ;
+    sh:targetClass :CANSignal ;
+    
+    # Inherits all constraints from SignalShape
+    # 继承SignalShape的所有约束
+    sh:property [
+        sh:path :signalName ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:minLength 1 ;
+        sh:maxLength 128 ;
+        sh:message "CAN signal name is required and must be 1-128 characters"@en ;
+        sh:message "CAN信号名称必填且长度必须在1-128个字符之间"@zh ;
+    ] ;
+    
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 255 ;
+        sh:message "CAN signal decimal value must be between 0 and 255"@en ;
+        sh:message "CAN信号十进制值必须在0-255之间"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# ECU Shape
+# ECU形状
+# -----------------------------------------------------------------------------
+
+:ECUShape a sh:NodeShape ;
+    rdfs:label "ECU Shape"@en ;
+    rdfs:label "ECU形状"@zh ;
+    rdfs:comment "Validation constraints for ECU instances"@en ;
+    rdfs:comment "ECU实例的验证约束"@zh ;
+    sh:targetClass :ECU ;
+    
+    # Voltage constraint - typical vehicle voltage range
+    # 电压约束 - 典型车辆电压范围
+    sh:property [
+        sh:path :voltage ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:float ;
+        sh:minInclusive 0.0 ;
+        sh:maxInclusive 18.0 ;
+        sh:message "ECU voltage must be between 0 and 18 volts"@en ;
+        sh:message "ECU电压必须在0-18伏特之间"@zh ;
+        rdfs:comment "ECU voltage validation for 12V system"@en ;
+        rdfs:comment "12V系统ECU电压验证"@zh ;
+    ] ;
+    
+    # Temperature constraint - typical operating range
+    # 温度约束 - 典型工作范围
+    sh:property [
+        sh:path :temperature ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:float ;
+        sh:minInclusive -40.0 ;
+        sh:maxInclusive 125.0 ;
+        sh:message "ECU temperature must be between -40 and 125 Celsius"@en ;
+        sh:message "ECU温度必须在-40至125摄氏度之间"@zh ;
+        rdfs:comment "ECU operating temperature validation"@en ;
+        rdfs:comment "ECU工作温度验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Door Shape
+# 车门形状
+# -----------------------------------------------------------------------------
+
+:DoorShape a sh:NodeShape ;
+    rdfs:label "Door Shape"@en ;
+    rdfs:label "车门形状"@zh ;
+    rdfs:comment "Validation constraints for Door instances"@en ;
+    rdfs:comment "车门实例的验证约束"@zh ;
+    sh:targetClass :Door ;
+    
+    # Door state constraint - enumerated values
+    # 车门状态约束 - 枚举值
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1) ;
+        sh:message "Door state must be 0 (Closed) or 1 (Open)"@en ;
+        sh:message "车门状态必须是0(关闭)或1(打开)"@zh ;
+        rdfs:comment "Door state enumeration validation"@en ;
+        rdfs:comment "车门状态枚举验证"@zh ;
+    ] ;
+    
+    # Door lock state constraint - enumerated values
+    # 门锁状态约束 - 枚举值
+    sh:property [
+        sh:path :hasDoorLockState ;
+        sh:maxCount 1 ;
+        sh:class :DoorLockState ;
+        sh:message "Door lock state must be a valid DoorLockState instance"@en ;
+        sh:message "门锁状态必须是有效的DoorLockState实例"@zh ;
+        rdfs:comment "Door lock state type validation"@en ;
+        rdfs:comment "门锁状态类型验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Ready Enable Shape
+# Ready使能形状
+# -----------------------------------------------------------------------------
+
+:ReadyEnableShape a sh:NodeShape ;
+    rdfs:label "Ready Enable Shape"@en ;
+    rdfs:label "Ready使能形状"@zh ;
+    rdfs:comment "Validation constraints for Ready Enable instances"@en ;
+    rdfs:comment "Ready使能实例的验证约束"@zh ;
+    sh:targetClass :ReadyEnable ;
+    
+    # Ready enable state constraint - enumerated values
+    # Ready使能状态约束 - 枚举值
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1) ;
+        sh:message "Ready enable state must be 0 (Disable) or 1 (Enable)"@en ;
+        sh:message "Ready使能状态必须是0(禁止)或1(允许)"@zh ;
+        rdfs:comment "Ready enable enumeration validation"@en ;
+        rdfs:comment "Ready使能枚举验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Diagnostic State Shape
+# 诊断状态形状
+# -----------------------------------------------------------------------------
+
+:DiagnosticStateShape a sh:NodeShape ;
+    rdfs:label "Diagnostic State Shape"@en ;
+    rdfs:label "诊断状态形状"@zh ;
+    rdfs:comment "Validation constraints for Diagnostic State instances"@en ;
+    rdfs:comment "诊断状态实例的验证约束"@zh ;
+    sh:targetClass :DiagnosticState ;
+    
+    # Diagnostic state value constraint - enumerated values
+    # 诊断状态值约束 - 枚举值
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1 2 3 4 5 6) ;
+        sh:message "Diagnostic state must be 0-6: No diagnostics(0), OBD-CAN(1), OBD-Ethernet(2), T1 Diag(3), Silent OTA(4), Normal OTA(5), Remote Diag(6)"@en ;
+        sh:message "诊断状态必须是0-6：无诊断(0)、OBD-CAN(1)、OBD-Ethernet(2)、T1诊断(3)、静默OTA(4)、普通OTA(5)、远程诊断(6)"@zh ;
+        rdfs:comment "Diagnostic state enumeration validation"@en ;
+        rdfs:comment "诊断状态枚举验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Vehicle Mode Shape
+# 车辆模式形状
+# -----------------------------------------------------------------------------
+
+:VehicleModeShape a sh:NodeShape ;
+    rdfs:label "Vehicle Mode Shape"@en ;
+    rdfs:label "车辆模式形状"@zh ;
+    rdfs:comment "Validation constraints for Vehicle Mode instances"@en ;
+    rdfs:comment "车辆模式实例的验证约束"@zh ;
+    sh:targetClass :VehicleMode ;
+    
+    # Vehicle mode value constraint - enumerated values
+    # 车辆模式值约束 - 枚举值
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1 2 3 4 5 6 7) ;
+        sh:message "Vehicle mode must be 0-7: Invalid(0), Normal(1), Maintenance(2), Exhibition(3), Transport(4), Factory(5), Production(6), Trial Drive(7)"@en ;
+        sh:message "车辆模式必须是0-7：无效(0)、正常(1)、维护(2)、展示(3)、运输(4)、工厂(5)、生产(6)、试驾(7)"@zh ;
+        rdfs:comment "Vehicle mode enumeration validation"@en ;
+        rdfs:comment "车辆模式枚举验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Emergency Power Off Switch Shape
+# 强制下电开关形状
+# -----------------------------------------------------------------------------
+
+:EmergencyPowerOffSwitchShape a sh:NodeShape ;
+    rdfs:label "Emergency Power Off Switch Shape"@en ;
+    rdfs:label "强制下电开关形状"@zh ;
+    rdfs:comment "Validation constraints for Emergency Power Off Switch"@en ;
+    rdfs:comment "强制下电开关的验证约束"@zh ;
+    sh:targetClass :EmergencyPowerOffSwitchState ;
+    
+    # Switch state constraint - enumerated values
+    # 开关状态约束 - 枚举值
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1 2 3) ;
+        sh:message "Emergency power off switch state must be 0 (Not Pressed), 1 (Pressed), 2 (Invalid), or 3 (Not Used)"@en ;
+        sh:message "强制下电开关状态必须是0(未按下)、1(已按下)、2(无效)或3(未使用)"@zh ;
+        rdfs:comment "Emergency power off switch enumeration validation"@en ;
+        rdfs:comment "强制下电开关枚举验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Alcohol Interlock Shape
+# 酒精锁形状
+# -----------------------------------------------------------------------------
+
+:AlcoholInterlockShape a sh:NodeShape ;
+    rdfs:label "Alcohol Interlock Shape"@en ;
+    rdfs:label "酒精锁形状"@zh ;
+    rdfs:comment "Validation constraints for Alcohol Interlock"@en ;
+    rdfs:comment "酒精锁的验证约束"@zh ;
+    sh:targetClass :AlcoholInterlock ;
+    
+    # Blocking state constraint - enumerated values
+    # 阻止状态约束 - 枚举值
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1) ;
+        sh:message "Alcohol interlock blocking state must be 0 (Not Blocking) or 1 (Blocking)"@en ;
+        sh:message "酒精锁阻止状态必须是0(未阻止)或1(阻止)"@zh ;
+        rdfs:comment "Alcohol interlock blocking enumeration validation"@en ;
+        rdfs:comment "酒精锁阻止枚举验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Requirement Shape
+# 需求形状
+# -----------------------------------------------------------------------------
+
+:RequirementShape a sh:NodeShape ;
+    rdfs:label "Requirement Shape"@en ;
+    rdfs:label "需求形状"@zh ;
+    rdfs:comment "Validation constraints for Requirement instances"@en ;
+    rdfs:comment "需求实例的验证约束"@zh ;
+    sh:targetClass :Requirement ;
+    
+    # Requirement ID constraint - required, pattern validation
+    # 需求编号约束 - 必填，格式验证
+    sh:property [
+        sh:path :requirementId ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^(VEEA|CEA)-SysR-[0-9]+$" ;
+        sh:message "Requirement ID must match pattern: VEEA-SysR-XXXXX or CEA-SysR-XXXXX"@en ;
+        sh:message "需求编号必须匹配格式：VEEA-SysR-XXXXX 或 CEA-SysR-XXXXX"@zh ;
+        rdfs:comment "Requirement ID format validation"@en ;
+        rdfs:comment "需求编号格式验证"@zh ;
+    ] ;
+    
+    # Priority constraint - range 1-10
+    # 优先级约束 - 范围1-10
+    sh:property [
+        sh:path :priority ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 10 ;
+        sh:message "Priority must be between 1 and 10"@en ;
+        sh:message "优先级必须在1-10之间"@zh ;
+        rdfs:comment "Requirement priority validation"@en ;
+        rdfs:comment "需求优先级验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Transition Rule Shape
+# 跳转规则形状
+# -----------------------------------------------------------------------------
+
+:TransitionRuleShape a sh:NodeShape ;
+    rdfs:label "Transition Rule Shape"@en ;
+    rdfs:label "跳转规则形状"@zh ;
+    rdfs:comment "Validation constraints for Transition Rule instances"@en ;
+    rdfs:comment "跳转规则实例的验证约束"@zh ;
+    sh:targetClass :TransitionRule ;
+    
+    # Rule ID constraint - required, pattern validation
+    # 规则编号约束 - 必填，格式验证
+    sh:property [
+        sh:path :ruleId ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^T_[0-9]+_[0-9]+$" ;
+        sh:message "Rule ID must match pattern: T_X_Y (e.g., T_1_1)"@en ;
+        sh:message "规则编号必须匹配格式：T_X_Y（例如T_1_1）"@zh ;
+        rdfs:comment "Transition rule ID format validation"@en ;
+        rdfs:comment "跳转规则编号格式验证"@zh ;
+    ] .
+
+# =============================================================================
+# PROPERTY SHAPES (Reusable)
+# 属性形状（可重用）
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# VIN Property Shape
+# VIN属性形状
+# -----------------------------------------------------------------------------
+
+:VinPropertyShape a sh:PropertyShape ;
+    rdfs:label "VIN Property Shape"@en ;
+    rdfs:label "VIN属性形状"@zh ;
+    rdfs:comment "Reusable shape for VIN property validation"@en ;
+    rdfs:comment "VIN属性验证的可重用形状"@zh ;
+    sh:path :vin ;
+    sh:datatype xsd:string ;
+    sh:pattern "^[A-HJ-NPR-Z0-9]{17}$" ;
+    sh:message "VIN must be exactly 17 alphanumeric characters (excluding I, O, Q)"@en ;
+    sh:message "VIN必须是17位字母数字组合（不含I、O、Q）"@zh .
+
+# -----------------------------------------------------------------------------
+# Timer Property Shape (1-10 seconds)
+# 计时器属性形状（1-10秒）
+# -----------------------------------------------------------------------------
+
+:Timer1to10SecondsShape a sh:PropertyShape ;
+    rdfs:label "Timer 1-10 Seconds Property Shape"@en ;
+    rdfs:label "计时器1-10秒属性形状"@zh ;
+    rdfs:comment "Reusable shape for timer values between 1-10 seconds"@en ;
+    rdfs:comment "1-10秒计时器值的可重用形状"@zh ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 1 ;
+    sh:maxInclusive 10 ;
+    sh:message "Timer value must be between 1 and 10 seconds"@en ;
+    sh:message "计时器值必须在1-10秒之间"@zh .
+
+# -----------------------------------------------------------------------------
+# Timer Property Shape (60-600 seconds)
+# 计时器属性形状（60-600秒）
+# -----------------------------------------------------------------------------
+
+:Timer60to600SecondsShape a sh:PropertyShape ;
+    rdfs:label "Timer 60-600 Seconds Property Shape"@en ;
+    rdfs:label "计时器60-600秒属性形状"@zh ;
+    rdfs:comment "Reusable shape for timer values between 60-600 seconds"@en ;
+    rdfs:comment "60-600秒计时器值的可重用形状"@zh ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 60 ;
+    sh:maxInclusive 600 ;
+    sh:message "Timer value must be between 60 and 600 seconds"@en ;
+    sh:message "计时器值必须在60-600秒之间"@zh .
+
+# -----------------------------------------------------------------------------
+# 8-bit Signal Value Property Shape
+# 8位信号值属性形状
+# -----------------------------------------------------------------------------
+
+:SignalValue8BitShape a sh:PropertyShape ;
+    rdfs:label "8-bit Signal Value Property Shape"@en ;
+    rdfs:label "8位信号值属性形状"@zh ;
+    rdfs:comment "Reusable shape for 8-bit signal values (0-255)"@en ;
+    rdfs:comment "8位信号值(0-255)的可重用形状"@zh ;
+    sh:path :signalValueDecimal ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 0 ;
+    sh:maxInclusive 255 ;
+    sh:message "Signal value must be between 0 and 255 (8-bit range)"@en ;
+    sh:message "信号值必须在0-255之间（8位范围）"@zh .
+
+# -----------------------------------------------------------------------------
+# Binary Value Property Shape (0-1)
+# 二进制值属性形状（0-1）
+# -----------------------------------------------------------------------------
+
+:BinaryValueShape a sh:PropertyShape ;
+    rdfs:label "Binary Value Property Shape"@en ;
+    rdfs:label "二进制值属性形状"@zh ;
+    rdfs:comment "Reusable shape for binary values (0 or 1)"@en ;
+    rdfs:comment "二进制值(0或1)的可重用形状"@zh ;
+    sh:datatype xsd:integer ;
+    sh:in (0 1) ;
+    sh:message "Value must be 0 or 1"@en ;
+    sh:message "值必须是0或1"@zh .
+
+# =============================================================================
+# COMPOSITE SHAPES
+# 复合形状
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Valid Vehicle for Power On Shape
+# 有效上电车辆形状
+# -----------------------------------------------------------------------------
+
+:ValidVehicleForPowerOnShape a sh:NodeShape ;
+    rdfs:label "Valid Vehicle for Power On Shape"@en ;
+    rdfs:label "有效上电车辆形状"@zh ;
+    rdfs:comment "Validation for vehicle that can be powered on"@en ;
+    rdfs:comment "可上电车辆的验证约束"@zh ;
+    
+    # Vehicle must have exactly one power mode
+    # 车辆必须有且仅有一个电源模式
+    sh:property [
+        sh:path :hasPowerMode ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class :PowerMode ;
+        sh:message "Vehicle must have exactly one power mode"@en ;
+        sh:message "车辆必须有且仅有一个电源模式"@zh ;
+    ] ;
+    
+    # Vehicle must have at least one key
+    # 车辆必须至少有一把钥匙
+    sh:property [
+        sh:path :hasKey ;
+        sh:minCount 1 ;
+        sh:class :Key ;
+        sh:message "Vehicle must have at least one key associated"@en ;
+        sh:message "车辆必须至少关联一把钥匙"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Valid Key Search State Shape
+# 有效钥匙搜索状态形状
+# -----------------------------------------------------------------------------
+
+:ValidKeySearchStateShape a sh:NodeShape ;
+    rdfs:label "Valid Key Search State Shape"@en ;
+    rdfs:label "有效钥匙搜索状态形状"@zh ;
+    rdfs:comment "Validation for key search state machine"@en ;
+    rdfs:comment "钥匙搜索状态机的验证约束"@zh ;
+    sh:targetClass :KeySearchingState ;
+    
+    # Key search state value constraint
+    # 钥匙搜索状态值约束
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1 2) ;
+        sh:message "Key search state must be 0 (Not Searching), 1 (Initial Search), or 2 (Timeout Research)"@en ;
+        sh:message "钥匙搜索状态必须是0(未搜索)、1(初始搜索)或2(超时重新搜索)"@zh ;
+        rdfs:comment "Key search state enumeration validation"@en ;
+        rdfs:comment "钥匙搜索状态枚举验证"@zh ;
+    ] .
+
+# -----------------------------------------------------------------------------
+# Power Control Error Shape
+# 电源控制异常形状
+# -----------------------------------------------------------------------------
+
+:PowerControlErrorShape a sh:NodeShape ;
+    rdfs:label "Power Control Error Shape"@en ;
+    rdfs:label "电源控制异常形状"@zh ;
+    rdfs:comment "Validation for power control error states"@en ;
+    rdfs:comment "电源控制异常状态的验证约束"@zh ;
+    sh:targetClass :PowerControlError ;
+    
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1 2) ;
+        sh:message "Power control error must be 0 (No Error), 1 (Power On Error), or 2 (Power Off Error)"@en ;
+        sh:message "电源控制异常必须是0(无异常)、1(上电异常)或2(下电异常)"@zh ;
+        rdfs:comment "Power control error enumeration validation"@en ;
+        rdfs:comment "电源控制异常枚举验证"@zh ;
+    ] .
+
+# =============================================================================
+# SPARQL-BASED CONSTRAINTS
+# 基于SPARQL的约束
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Power Mode Transition Validity
+# 电源模式跳转有效性
+# -----------------------------------------------------------------------------
+
+:PowerModeTransitionShape a sh:NodeShape ;
+    rdfs:label "Power Mode Transition Shape"@en ;
+    rdfs:label "电源模式跳转形状"@zh ;
+    rdfs:comment "SPARQL-based constraint for valid power mode transitions"@en ;
+    rdfs:comment "基于SPARQL的有效电源模式跳转约束"@zh ;
+    sh:targetClass :PowerMode ;
+    sh:sparql [
+        sh:message "Invalid power mode transition detected"@en ;
+        sh:message "检测到无效的电源模式跳转"@zh ;
+        sh:prefixes <http://example.org/vehicle-power-management> ;
+        sh:select """
+            PREFIX : <http://example.org/vehicle-power-management#>
+            SELECT $this ?target
+            WHERE {
+                $this :transitionsTo ?target .
+                FILTER NOT EXISTS {
+                    { $this a :OffMode . ?target a :LocalOnMode . }
+                    UNION
+                    { $this a :OffMode . ?target a :RemoteOnMode . }
+                    UNION
+                    { $this a :OffMode . ?target a :ConvenienceMode . }
+                    UNION
+                    { $this a :LocalOnMode . ?target a :OffMode . }
+                    UNION
+                    { $this a :LocalOnMode . ?target a :RemoteOnMode . }
+                    UNION
+                    { $this a :LocalOnMode . ?target a :ConvenienceMode . }
+                    UNION
+                    { $this a :RemoteOnMode . ?target a :OffMode . }
+                    UNION
+                    { $this a :RemoteOnMode . ?target a :LocalOnMode . }
+                    UNION
+                    { $this a :RemoteOnMode . ?target a :ConvenienceMode . }
+                    UNION
+                    { $this a :ConvenienceMode . ?target a :OffMode . }
+                    UNION
+                    { $this a :ConvenienceMode . ?target a :LocalOnMode . }
+                    UNION
+                    { $this a :ConvenienceMode . ?target a :RemoteOnMode . }
+                }
+            }
+        """ ;
+    ] .
+
+# =============================================================================
+# XPU POWER REQUEST SHAPE
+# XPU上电请求形状
+# =============================================================================
+
+:XPUPowerRequestShape a sh:NodeShape ;
+    rdfs:label "XPU Power Request Shape"@en ;
+    rdfs:label "XPU上电请求形状"@zh ;
+    rdfs:comment "Validation for XPU power request"@en ;
+    rdfs:comment "XPU上电请求的验证约束"@zh ;
+    sh:targetClass :XPUPowerRequest ;
+    
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1 2) ;
+        sh:message "XPU power request must be 0 (No Request), 1 (Power On Request), or 2 (Power Off Request)"@en ;
+        sh:message "XPU上电请求必须是0(无请求)、1(上电请求)或2(下电请求)"@zh ;
+        rdfs:comment "XPU power request enumeration validation"@en ;
+        rdfs:comment "XPU上电请求枚举验证"@zh ;
+    ] .
+
+# =============================================================================
+# GEAR POSITION SHAPE
+# 档位形状
+# =============================================================================
+
+:GearPositionShape a sh:NodeShape ;
+    rdfs:label "Gear Position Shape"@en ;
+    rdfs:label "档位形状"@zh ;
+    rdfs:comment "Validation for gear position"@en ;
+    rdfs:comment "档位的验证约束"@zh ;
+    sh:targetClass :GearPosition ;
+    
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1 2 3 4 5 6 7) ;
+        sh:message "Gear position signal value must be valid"@en ;
+        sh:message "档位信号值必须有效"@zh ;
+        rdfs:comment "Gear position enumeration validation"@en ;
+        rdfs:comment "档位枚举验证"@zh ;
+    ] .
+
+# =============================================================================
+# BRAKE PEDAL STATE SHAPE
+# 制动踏板状态形状
+# =============================================================================
+
+:BrakePedalStateShape a sh:NodeShape ;
+    rdfs:label "Brake Pedal State Shape"@en ;
+    rdfs:label "制动踏板状态形状"@zh ;
+    rdfs:comment "Validation for brake pedal state"@en ;
+    rdfs:comment "制动踏板状态的验证约束"@zh ;
+    sh:targetClass :BrakePedalState ;
+    
+    sh:property [
+        sh:path :signalValueDecimal ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:integer ;
+        sh:in (0 1) ;
+        sh:message "Brake pedal state must be 0 (Not Pressed) or 1 (Pressed)"@en ;
+        sh:message "制动踏板状态必须是0(未踩下)或1(已踩下)"@zh ;
+        rdfs:comment "Brake pedal state enumeration validation"@en ;
+        rdfs:comment "制动踏板状态枚举验证"@zh ;
+    ] .

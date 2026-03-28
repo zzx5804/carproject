@@ -1,0 +1,1786 @@
+@prefix : <http://example.org/vehicle-power-management#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+# =============================================================================
+# ONTOLOGY METADATA
+# =============================================================================
+
+<http://example.org/vehicle-power-management/action> rdf:type owl:Ontology ;
+    rdfs:label "Vehicle Power Management Action Model"@en ;
+    rdfs:label "车辆电源管理动作模型"@zh ;
+    rdfs:comment "Action component for Data Agent Design - defines actions, preconditions, effects, and execution semantics"@en ;
+    rdfs:comment "数据代理设计的动作组件 - 定义动作、前置条件、效果和执行语义"@zh ;
+    owl:versionInfo "1.0" ;
+    owl:imports <http://example.org/vehicle-power-management/core> .
+
+# =============================================================================
+# CLASSES - Core Action Framework
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Action Base Class
+# -----------------------------------------------------------------------------
+
+:Action rdf:type owl:Class ;
+    rdfs:label "Action"@en ;
+    rdfs:label "动作"@zh ;
+    rdfs:comment "Base class for all executable actions in the power management system"@en ;
+    rdfs:comment "电源管理系统中所有可执行动作的基类"@zh ;
+    skos:definition "An action is an operation that can be executed by an actor, with defined preconditions and effects"@en ;
+    skos:definition "动作是可以由执行者执行的操作，具有定义的前置条件和效果"@zh .
+
+# -----------------------------------------------------------------------------
+# Actor Class
+# -----------------------------------------------------------------------------
+
+:Actor rdf:type owl:Class ;
+    rdfs:label "Actor"@en ;
+    rdfs:label "执行者"@zh ;
+    rdfs:comment "An entity that can execute actions - can be a system component, user, or automated process"@en ;
+    rdfs:comment "可以执行动作的实体 - 可以是系统组件、用户或自动化流程"@zh .
+
+:SystemActor rdf:type owl:Class ;
+    rdfs:subClassOf :Actor ;
+    rdfs:label "System Actor"@en ;
+    rdfs:label "系统执行者"@zh ;
+    rdfs:comment "Automated system component that executes actions"@en ;
+    rdfs:comment "执行动作的自动化系统组件"@zh .
+
+:UserActor rdf:type owl:Class ;
+    rdfs:subClassOf :Actor ;
+    rdfs:label "User Actor"@en ;
+    rdfs:label "用户执行者"@zh ;
+    rdfs:comment "Human user that triggers actions"@en ;
+    rdfs:comment "触发动作的人类用户"@zh .
+
+:ECUActor rdf:type owl:Class ;
+    rdfs:subClassOf :SystemActor ;
+    rdfs:label "ECU Actor"@en ;
+    rdfs:label "ECU执行者"@zh ;
+    rdfs:comment "Electronic Control Unit that executes actions"@en ;
+    rdfs:comment "执行动作的电子控制单元"@zh .
+
+:LogicalComponentActor rdf:type owl:Class ;
+    rdfs:subClassOf :SystemActor ;
+    rdfs:label "Logical Component Actor"@en ;
+    rdfs:label "逻辑部件执行者"@zh ;
+    rdfs:comment "Logical software component that executes actions"@en ;
+    rdfs:comment "执行动作的逻辑软件部件"@zh .
+
+# -----------------------------------------------------------------------------
+# Condition Class (Preconditions)
+# -----------------------------------------------------------------------------
+
+:Condition rdf:type owl:Class ;
+    rdfs:label "Condition"@en ;
+    rdfs:label "条件"@zh ;
+    rdfs:comment "A condition that must be satisfied before an action can execute"@en ;
+    rdfs:comment "动作执行前必须满足的条件"@zh ;
+    skos:definition "A precondition or guard condition for action execution"@en ;
+    skos:definition "动作执行的前置条件或守卫条件"@zh .
+
+:Precondition rdf:type owl:Class ;
+    rdfs:subClassOf :Condition ;
+    rdfs:label "Precondition"@en ;
+    rdfs:label "前置条件"@zh ;
+    rdfs:comment "Condition that must be true before action execution"@en ;
+    rdfs:comment "动作执行前必须为真的条件"@zh .
+
+:GuardCondition rdf:type owl:Class ;
+    rdfs:subClassOf :Condition ;
+    rdfs:label "Guard Condition"@en ;
+    rdfs:label "守卫条件"@zh ;
+    rdfs:comment "Condition that guards action execution during runtime"@en ;
+    rdfs:comment "运行时守卫动作执行的条件"@zh .
+
+:StateCondition rdf:type owl:Class ;
+    rdfs:subClassOf :Condition ;
+    rdfs:label "State Condition"@en ;
+    rdfs:label "状态条件"@zh ;
+    rdfs:comment "Condition based on current system state"@en ;
+    rdfs:comment "基于当前系统状态的条件"@zh .
+
+:SignalCondition rdf:type owl:Class ;
+    rdfs:subClassOf :Condition ;
+    rdfs:label "Signal Condition"@en ;
+    rdfs:label "信号条件"@zh ;
+    rdfs:comment "Condition based on signal values"@en ;
+    rdfs:comment "基于信号值的条件"@zh .
+
+:TemporalCondition rdf:type owl:Class ;
+    rdfs:subClassOf :Condition ;
+    rdfs:label "Temporal Condition"@en ;
+    rdfs:label "时间条件"@zh ;
+    rdfs:comment "Condition based on time or timing constraints"@en ;
+    rdfs:comment "基于时间或时序约束的条件"@zh .
+
+:CompositeCondition rdf:type owl:Class ;
+    rdfs:subClassOf :Condition ;
+    rdfs:label "Composite Condition"@en ;
+    rdfs:label "复合条件"@zh ;
+    rdfs:comment "Condition composed of multiple sub-conditions using logical operators"@en ;
+    rdfs:comment "使用逻辑运算符组合多个子条件的复合条件"@zh .
+
+# -----------------------------------------------------------------------------
+# Effect Class (Post-conditions)
+# -----------------------------------------------------------------------------
+
+:Effect rdf:type owl:Class ;
+    rdfs:label "Effect"@en ;
+    rdfs:label "效果"@zh ;
+    rdfs:comment "The result or consequence of executing an action"@en ;
+    rdfs:comment "执行动作产生的结果或后果"@zh ;
+    skos:definition "A post-condition or outcome that holds after action execution"@en ;
+    skos:definition "动作执行后成立的后置条件或结果"@zh .
+
+:StateEffect rdf:type owl:Class ;
+    rdfs:subClassOf :Effect ;
+    rdfs:label "State Effect"@en ;
+    rdfs:label "状态效果"@zh ;
+    rdfs:comment "Effect that changes system state"@en ;
+    rdfs:comment "改变系统状态的效果"@zh .
+
+:SignalEffect rdf:type owl:Class ;
+    rdfs:subClassOf :Effect ;
+    rdfs:label "Signal Effect"@en ;
+    rdfs:label "信号效果"@zh ;
+    rdfs:comment "Effect that produces or modifies signals"@en ;
+    rdfs:comment "产生或修改信号的效果"@zh .
+
+:TransitionEffect rdf:type owl:Class ;
+    rdfs:subClassOf :Effect ;
+    rdfs:label "Transition Effect"@en ;
+    rdfs:label "跳转效果"@zh ;
+    rdfs:comment "Effect that causes state transitions"@en ;
+    rdfs:comment "引起状态跳转的效果"@zh .
+
+:OutputEffect rdf:type owl:Class ;
+    rdfs:subClassOf :Effect ;
+    rdfs:label "Output Effect"@en ;
+    rdfs:label "输出效果"@zh ;
+    rdfs:comment "Effect that produces output data or messages"@en ;
+    rdfs:comment "产生输出数据或消息的效果"@zh .
+
+# -----------------------------------------------------------------------------
+# Input/Output Classes
+# -----------------------------------------------------------------------------
+
+:ActionInput rdf:type owl:Class ;
+    rdfs:label "Action Input"@en ;
+    rdfs:label "动作输入"@zh ;
+    rdfs:comment "Input data required for action execution"@en ;
+    rdfs:comment "动作执行所需的输入数据"@zh .
+
+:ActionOutput rdf:type owl:Class ;
+    rdfs:label "Action Output"@en ;
+    rdfs:label "动作输出"@zh ;
+    rdfs:comment "Output data produced by action execution"@en ;
+    rdfs:comment "动作执行产生的输出数据"@zh .
+
+:SignalInput rdf:type owl:Class ;
+    rdfs:subClassOf :ActionInput ;
+    rdfs:label "Signal Input"@en ;
+    rdfs:label "信号输入"@zh ;
+    rdfs:comment "Input consisting of signal values"@en ;
+    rdfs:comment "由信号值组成的输入"@zh .
+
+:SignalOutput rdf:type owl:Class ;
+    rdfs:subClassOf :ActionOutput ;
+    rdfs:label "Signal Output"@en ;
+    rdfs:label "信号输出"@zh ;
+    rdfs:comment "Output consisting of signal values"@en ;
+    rdfs:comment "由信号值组成的输出"@zh .
+
+:StateInput rdf:type owl:Class ;
+    rdfs:subClassOf :ActionInput ;
+    rdfs:label "State Input"@en ;
+    rdfs:label "状态输入"@zh ;
+    rdfs:comment "Input consisting of state information"@en ;
+    rdfs:comment "由状态信息组成的输入"@zh .
+
+:StateOutput rdf:type owl:Class ;
+    rdfs:subClassOf :ActionOutput ;
+    rdfs:label "State Output"@en ;
+    rdfs:label "状态输出"@zh ;
+    rdfs:comment "Output consisting of state information"@en ;
+    rdfs:comment "由状态信息组成的输出"@zh .
+
+# =============================================================================
+# CLASSES - Action Subclasses
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Power Mode Actions
+# -----------------------------------------------------------------------------
+
+:PowerModeAction rdf:type owl:Class ;
+    rdfs:subClassOf :Action ;
+    rdfs:label "Power Mode Action"@en ;
+    rdfs:label "电源模式动作"@zh ;
+    rdfs:comment "Actions related to power mode changes"@en ;
+    rdfs:comment "与电源模式变更相关的动作"@zh .
+
+:PowerOnAction rdf:type owl:Class ;
+    rdfs:subClassOf :PowerModeAction ;
+    rdfs:label "Power On Action"@en ;
+    rdfs:label "上电动作"@zh ;
+    rdfs:comment "Action to power on the vehicle or component"@en ;
+    rdfs:comment "为车辆或部件上电的动作"@zh .
+
+:DoorOpenPowerOn rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnAction ;
+    rdfs:label "Door Open Power On"@en ;
+    rdfs:label "车门打开上电"@zh ;
+    rdfs:comment "Power on triggered by door open event"@en ;
+    rdfs:comment "由车门打开事件触发的上电"@zh .
+
+:BrakePressPowerOn rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnAction ;
+    rdfs:label "Brake Press Power On"@en ;
+    rdfs:label "制动踏板上电"@zh ;
+    rdfs:comment "Power on triggered by brake pedal press"@en ;
+    rdfs:comment "由制动踏板踩下触发的上电"@zh .
+
+:OTAPowerOn rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnAction ;
+    rdfs:label "OTA Power On"@en ;
+    rdfs:label "OTA上电"@zh ;
+    rdfs:comment "Power on triggered by OTA update request"@en ;
+    rdfs:comment "由OTA更新请求触发的上电"@zh .
+
+:RemoteDiagPowerOn rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnAction ;
+    rdfs:label "Remote Diagnostic Power On"@en ;
+    rdfs:label "远程诊断上电"@zh ;
+    rdfs:comment "Power on triggered by remote diagnostic request"@en ;
+    rdfs:comment "由远程诊断请求触发的上电"@zh .
+
+:XPURequestPowerOn rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOnAction ;
+    rdfs:label "XPU Request Power On"@en ;
+    rdfs:label "XPU请求上电"@zh ;
+    rdfs:comment "Power on triggered by XPU (autonomous driving unit) request"@en ;
+    rdfs:comment "由XPU（自动驾驶单元）请求触发的上电"@zh .
+
+:PowerOffAction rdf:type owl:Class ;
+    rdfs:subClassOf :PowerModeAction ;
+    rdfs:label "Power Off Action"@en ;
+    rdfs:label "下电动作"@zh ;
+    rdfs:comment "Action to power off the vehicle or component"@en ;
+    rdfs:comment "为车辆或部件下电的动作"@zh .
+
+:DoorLockPowerOff rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffAction ;
+    rdfs:label "Door Lock Power Off"@en ;
+    rdfs:label "门锁下电"@zh ;
+    rdfs:comment "Power off triggered by door lock event"@en ;
+    rdfs:comment "由门锁事件触发的下电"@zh .
+
+:TimeoutPowerOff rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffAction ;
+    rdfs:label "Timeout Power Off"@en ;
+    rdfs:label "超时下电"@zh ;
+    rdfs:comment "Power off triggered by timeout (auto power off)"@en ;
+    rdfs:comment "由超时触发的下电（自动下电）"@zh .
+
+:ForcedPowerOffAction rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffAction ;
+    rdfs:label "Forced Power Off Action"@en ;
+    rdfs:label "强制下电动作"@zh ;
+    rdfs:comment "Power off triggered by forced power off switch or button sequence"@en ;
+    rdfs:comment "由强制下电开关或按钮序列触发的下电"@zh .
+
+:LowBatteryPowerOff rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffAction ;
+    rdfs:label "Low Battery Power Off"@en ;
+    rdfs:label "低电量下电"@zh ;
+    rdfs:comment "Power off triggered by low battery condition"@en ;
+    rdfs:comment "由低电量状态触发的下电"@zh .
+
+:OTAPowerOff rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffAction ;
+    rdfs:label "OTA Power Off"@en ;
+    rdfs:label "OTA下电"@zh ;
+    rdfs:comment "Power off triggered by OTA completion or request"@en ;
+    rdfs:comment "由OTA完成或请求触发的下电"@zh .
+
+:XPURequestPowerOff rdf:type owl:Class ;
+    rdfs:subClassOf :PowerOffAction ;
+    rdfs:label "XPU Request Power Off"@en ;
+    rdfs:label "XPU请求下电"@zh ;
+    rdfs:comment "Power off triggered by XPU request"@en ;
+    rdfs:comment "由XPU请求触发的下电"@zh .
+
+# -----------------------------------------------------------------------------
+# Transition Actions
+# -----------------------------------------------------------------------------
+
+:TransitionAction rdf:type owl:Class ;
+    rdfs:subClassOf :Action ;
+    rdfs:label "Transition Action"@en ;
+    rdfs:label "跳转动作"@zh ;
+    rdfs:comment "Action that causes state transitions"@en ;
+    rdfs:comment "引起状态跳转的动作"@zh .
+
+:StateTransitionAction rdf:type owl:Class ;
+    rdfs:subClassOf :TransitionAction ;
+    rdfs:label "State Transition Action"@en ;
+    rdfs:label "状态跳转动作"@zh ;
+    rdfs:comment "Action that transitions between specific states"@en ;
+    rdfs:comment "在特定状态之间跳转的动作"@zh .
+
+:PowerModeTransition rdf:type owl:Class ;
+    rdfs:subClassOf :StateTransitionAction ;
+    rdfs:label "Power Mode Transition"@en ;
+    rdfs:label "电源模式跳转"@zh ;
+    rdfs:comment "Action that transitions power mode from one state to another"@en ;
+    rdfs:comment "将电源模式从一个状态跳转到另一个状态的动作"@zh .
+
+:ReadyEnableTransition rdf:type owl:Class ;
+    rdfs:subClassOf :StateTransitionAction ;
+    rdfs:label "Ready Enable Transition"@en ;
+    rdfs:label "Ready使能跳转"@zh ;
+    rdfs:comment "Action that transitions Ready Enable state"@en ;
+    rdfs:comment "跳转Ready使能状态的动作"@zh .
+
+# -----------------------------------------------------------------------------
+# Validation Actions
+# -----------------------------------------------------------------------------
+
+:ValidationAction rdf:type owl:Class ;
+    rdfs:subClassOf :Action ;
+    rdfs:label "Validation Action"@en ;
+    rdfs:label "验证动作"@zh ;
+    rdfs:comment "Action that validates some condition or data"@en ;
+    rdfs:comment "验证某些条件或数据的动作"@zh .
+
+:KeyValidationAction rdf:type owl:Class ;
+    rdfs:subClassOf :ValidationAction ;
+    rdfs:label "Key Validation Action"@en ;
+    rdfs:label "钥匙验证动作"@zh ;
+    rdfs:comment "Action that validates key presence and validity"@en ;
+    rdfs:comment "验证钥匙存在性和有效性的动作"@zh .
+
+:BLEKeyValidation rdf:type owl:Class ;
+    rdfs:subClassOf :KeyValidationAction ;
+    rdfs:label "BLE Key Validation"@en ;
+    rdfs:label "蓝牙钥匙验证"@zh ;
+    rdfs:comment "Validation of Bluetooth Low Energy key"@en ;
+    rdfs:comment "蓝牙低功耗钥匙的验证"@zh .
+
+:RKEKeyValidation rdf:type owl:Class ;
+    rdfs:subClassOf :KeyValidationAction ;
+    rdfs:label "RKE Key Validation"@en ;
+    rdfs:label "遥控钥匙验证"@zh ;
+    rdfs:comment "Validation of Remote Keyless Entry key"@en ;
+    rdfs:comment "遥控无钥匙进入钥匙的验证"@zh .
+
+:NFCKeyValidation rdf:type owl:Class ;
+    rdfs:subClassOf :KeyValidationAction ;
+    rdfs:label "NFC Key Validation"@en ;
+    rdfs:label "NFC钥匙验证"@zh ;
+    rdfs:comment "Validation of NFC key"@en ;
+    rdfs:comment "NFC钥匙的验证"@zh .
+
+:SignalValidationAction rdf:type owl:Class ;
+    rdfs:subClassOf :ValidationAction ;
+    rdfs:label "Signal Validation Action"@en ;
+    rdfs:label "信号验证动作"@zh ;
+    rdfs:comment "Action that validates signal values or integrity"@en ;
+    rdfs:comment "验证信号值或完整性的动作"@zh .
+
+:AuthenticationAction rdf:type owl:Class ;
+    rdfs:subClassOf :ValidationAction ;
+    rdfs:label "Authentication Action"@en ;
+    rdfs:label "认证动作"@zh ;
+    rdfs:comment "Action that performs authentication between units"@en ;
+    rdfs:comment "执行单元之间认证的动作"@zh .
+
+# -----------------------------------------------------------------------------
+# Diagnostic Actions
+# -----------------------------------------------------------------------------
+
+:DiagnosticAction rdf:type owl:Class ;
+    rdfs:subClassOf :Action ;
+    rdfs:label "Diagnostic Action"@en ;
+    rdfs:label "诊断动作"@zh ;
+    rdfs:comment "Action related to diagnostic operations"@en ;
+    rdfs:comment "与诊断操作相关的动作"@zh .
+
+:OBDDiagnosticAction rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticAction ;
+    rdfs:label "OBD Diagnostic Action"@en ;
+    rdfs:label "OBD诊断动作"@zh ;
+    rdfs:comment "On-board diagnostic action via CAN or Ethernet"@en ;
+    rdfs:comment "通过CAN或以太网的在线诊断动作"@zh .
+
+:RemoteDiagnosticAction rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticAction ;
+    rdfs:label "Remote Diagnostic Action"@en ;
+    rdfs:label "远程诊断动作"@zh ;
+    rdfs:comment "Remote diagnostic action via telematics"@en ;
+    rdfs:comment "通过远程通信的远程诊断动作"@zh .
+
+:OTAUpdateAction rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticAction ;
+    rdfs:label "OTA Update Action"@en ;
+    rdfs:label "OTA更新动作"@zh ;
+    rdfs:comment "Over-the-air software update action"@en ;
+    rdfs:comment "空中软件更新动作"@zh .
+
+:FaultDetectionAction rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticAction ;
+    rdfs:label "Fault Detection Action"@en ;
+    rdfs:label "故障检测动作"@zh ;
+    rdfs:comment "Action that detects and records faults"@en ;
+    rdfs:comment "检测并记录故障的动作"@zh .
+
+:ErrorMonitoringAction rdf:type owl:Class ;
+    rdfs:subClassOf :DiagnosticAction ;
+    rdfs:label "Error Monitoring Action"@en ;
+    rdfs:label "异常监控动作"@zh ;
+    rdfs:comment "Action that monitors for power control errors"@en ;
+    rdfs:comment "监控电源控制异常的动作"@zh .
+
+# -----------------------------------------------------------------------------
+# Control Actions
+# -----------------------------------------------------------------------------
+
+:ControlAction rdf:type owl:Class ;
+    rdfs:subClassOf :Action ;
+    rdfs:label "Control Action"@en ;
+    rdfs:label "控制动作"@zh ;
+    rdfs:comment "Action that controls system behavior"@en ;
+    rdfs:comment "控制系统行为的动作"@zh .
+
+:TimerAction rdf:type owl:Class ;
+    rdfs:subClassOf :ControlAction ;
+    rdfs:label "Timer Action"@en ;
+    rdfs:label "计时器动作"@zh ;
+    rdfs:comment "Action related to timer operations"@en ;
+    rdfs:comment "与计时器操作相关的动作"@zh .
+
+:StartTimer rdf:type owl:Class ;
+    rdfs:subClassOf :TimerAction ;
+    rdfs:label "Start Timer"@en ;
+    rdfs:label "启动计时器"@zh ;
+    rdfs:comment "Action to start a timer"@en ;
+    rdfs:comment "启动计时器的动作"@zh .
+
+:StopTimer rdf:type owl:Class ;
+    rdfs:subClassOf :TimerAction ;
+    rdfs:label "Stop Timer"@en ;
+    rdfs:label "停止计时器"@zh ;
+    rdfs:comment "Action to stop a timer"@en ;
+    rdfs:comment "停止计时器的动作"@zh .
+
+:ResetTimer rdf:type owl:Class ;
+    rdfs:subClassOf :TimerAction ;
+    rdfs:label "Reset Timer"@en ;
+    rdfs:label "重置计时器"@zh ;
+    rdfs:comment "Action to reset a timer"@en ;
+    rdfs:comment "重置计时器的动作"@zh .
+
+:CancelAction rdf:type owl:Class ;
+    rdfs:subClassOf :ControlAction ;
+    rdfs:label "Cancel Action"@en ;
+    rdfs:label "取消动作"@zh ;
+    rdfs:comment "Action that cancels another ongoing action"@en ;
+    rdfs:comment "取消另一个正在进行的动作的动作"@zh .
+
+# =============================================================================
+# OBJECT PROPERTIES - Action Properties
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Core Action Properties
+# -----------------------------------------------------------------------------
+
+:hasPrecondition rdf:type owl:ObjectProperty ;
+    rdfs:label "has precondition"@en ;
+    rdfs:label "具有前置条件"@zh ;
+    rdfs:comment "Links an action to its preconditions that must be satisfied before execution"@en ;
+    rdfs:comment "将动作链接到其执行前必须满足的前置条件"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range :Condition .
+
+:hasEffect rdf:type owl:ObjectProperty ;
+    rdfs:label "has effect"@en ;
+    rdfs:label "具有效果"@zh ;
+    rdfs:comment "Links an action to its effects that result from execution"@en ;
+    rdfs:comment "将动作链接到其执行产生的效果"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range :Effect .
+
+:hasActor rdf:type owl:ObjectProperty ;
+    rdfs:label "has actor"@en ;
+    rdfs:label "具有执行者"@zh ;
+    rdfs:comment "Links an action to the actor that executes it"@en ;
+    rdfs:comment "将动作链接到执行它的执行者"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range :Actor .
+
+:hasInput rdf:type owl:ObjectProperty ;
+    rdfs:label "has input"@en ;
+    rdfs:label "具有输入"@zh ;
+    rdfs:comment "Links an action to its required input data"@en ;
+    rdfs:comment "将动作链接到其所需的输入数据"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range :ActionInput .
+
+:hasOutput rdf:type owl:ObjectProperty ;
+    rdfs:label "has output"@en ;
+    rdfs:label "具有输出"@zh ;
+    rdfs:comment "Links an action to its output data"@en ;
+    rdfs:comment "将动作链接到其输出数据"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range :ActionOutput .
+
+# -----------------------------------------------------------------------------
+# Condition Properties
+# -----------------------------------------------------------------------------
+
+:hasSubCondition rdf:type owl:ObjectProperty ;
+    rdfs:label "has sub-condition"@en ;
+    rdfs:label "具有子条件"@zh ;
+    rdfs:comment "Links a composite condition to its sub-conditions"@en ;
+    rdfs:comment "将复合条件链接到其子条件"@zh ;
+    rdfs:domain :CompositeCondition ;
+    rdfs:range :Condition .
+
+:requiresState rdf:type owl:ObjectProperty ;
+    rdfs:label "requires state"@en ;
+    rdfs:label "要求状态"@zh ;
+    rdfs:comment "Condition requires a specific state"@en ;
+    rdfs:comment "条件要求特定状态"@zh ;
+    rdfs:domain :StateCondition ;
+    rdfs:range :PowerMode .
+
+:requiresSignalValue rdf:type owl:ObjectProperty ;
+    rdfs:label "requires signal value"@en ;
+    rdfs:label "要求信号值"@zh ;
+    rdfs:comment "Condition requires a specific signal value"@en ;
+    rdfs:comment "条件要求特定信号值"@zh ;
+    rdfs:domain :SignalCondition ;
+    rdfs:range :Signal .
+
+:hasTimeoutCondition rdf:type owl:ObjectProperty ;
+    rdfs:label "has timeout condition"@en ;
+    rdfs:label "具有超时条件"@zh ;
+    rdfs:comment "Condition has a timeout constraint"@en ;
+    rdfs:comment "条件具有超时约束"@zh ;
+    rdfs:domain :TemporalCondition ;
+    rdfs:range xsd:integer .
+
+:requiresKeyValidity rdf:type owl:ObjectProperty ;
+    rdfs:label "requires key validity"@en ;
+    rdfs:label "要求钥匙有效性"@zh ;
+    rdfs:comment "Condition requires specific key validity status"@en ;
+    rdfs:comment "条件要求特定钥匙有效性状态"@zh ;
+    rdfs:domain :StateCondition ;
+    rdfs:range :KeyValidityStatus .
+
+:requiresKeyLocation rdf:type owl:ObjectProperty ;
+    rdfs:label "requires key location"@en ;
+    rdfs:label "要求钥匙位置"@zh ;
+    rdfs:comment "Condition requires specific key location"@en ;
+    rdfs:comment "条件要求特定钥匙位置"@zh ;
+    rdfs:domain :StateCondition ;
+    rdfs:range :KeyLocation .
+
+:requiresDoorState rdf:type owl:ObjectProperty ;
+    rdfs:label "requires door state"@en ;
+    rdfs:label "要求车门状态"@zh ;
+    rdfs:comment "Condition requires specific door state"@en ;
+    rdfs:comment "条件要求特定车门状态"@zh ;
+    rdfs:domain :StateCondition ;
+    rdfs:range :DoorState .
+
+:requiresDoorLockState rdf:type owl:ObjectProperty ;
+    rdfs:label "requires door lock state"@en ;
+    rdfs:label "要求门锁状态"@zh ;
+    rdfs:comment "Condition requires specific door lock state"@en ;
+    rdfs:comment "条件要求特定门锁状态"@zh ;
+    rdfs:domain :StateCondition ;
+    rdfs:range :DoorLockState .
+
+:requiresBrakePedalState rdf:type owl:ObjectProperty ;
+    rdfs:label "requires brake pedal state"@en ;
+    rdfs:label "要求制动踏板状态"@zh ;
+    rdfs:comment "Condition requires specific brake pedal state"@en ;
+    rdfs:comment "条件要求特定制动踏板状态"@zh ;
+    rdfs:domain :StateCondition ;
+    rdfs:range :BrakePedalState .
+
+:requiresGearPosition rdf:type owl:ObjectProperty ;
+    rdfs:label "requires gear position"@en ;
+    rdfs:label "要求档位"@zh ;
+    rdfs:comment "Condition requires specific gear position"@en ;
+    rdfs:comment "条件要求特定档位"@zh ;
+    rdfs:domain :StateCondition ;
+    rdfs:range :GearPosition .
+
+:requiresDiagnosticState rdf:type owl:ObjectProperty ;
+    rdfs:label "requires diagnostic state"@en ;
+    rdfs:label "要求诊断状态"@zh ;
+    rdfs:comment "Condition requires specific diagnostic state"@en ;
+    rdfs:comment "条件要求特定诊断状态"@zh ;
+    rdfs:domain :StateCondition ;
+    rdfs:range :DiagnosticState .
+
+:requiresOTAPowerOnValidState rdf:type owl:ObjectProperty ;
+    rdfs:label "requires OTA power on valid state"@en ;
+    rdfs:label "要求OTA上电有效状态"@zh ;
+    rdfs:comment "Condition requires specific OTA power on valid state"@en ;
+    rdfs:comment "条件要求特定OTA上电有效状态"@zh ;
+    rdfs:domain :StateCondition ;
+    rdfs:range :OTAPowerOnValidState .
+
+# -----------------------------------------------------------------------------
+# Effect Properties
+# -----------------------------------------------------------------------------
+
+:producesState rdf:type owl:ObjectProperty ;
+    rdfs:label "produces state"@en ;
+    rdfs:label "产生状态"@zh ;
+    rdfs:comment "Effect produces a new state"@en ;
+    rdfs:comment "效果产生新状态"@zh ;
+    rdfs:domain :StateEffect ;
+    rdfs:range :PowerMode .
+
+:producesSignal rdf:type owl:ObjectProperty ;
+    rdfs:label "produces signal"@en ;
+    rdfs:label "产生信号"@zh ;
+    rdfs:comment "Effect produces a signal"@en ;
+    rdfs:comment "效果产生信号"@zh ;
+    rdfs:domain :SignalEffect ;
+    rdfs:range :Signal .
+
+:causesTransitionTo rdf:type owl:ObjectProperty ;
+    rdfs:label "causes transition to"@en ;
+    rdfs:label "导致跳转到"@zh ;
+    rdfs:comment "Effect causes transition to target state"@en ;
+    rdfs:comment "效果导致跳转到目标状态"@zh ;
+    rdfs:domain :TransitionEffect ;
+    rdfs:range :PowerMode .
+
+:causesTransitionFrom rdf:type owl:ObjectProperty ;
+    rdfs:label "causes transition from"@en ;
+    rdfs:label "导致从...跳转"@zh ;
+    rdfs:comment "Effect causes transition from source state"@en ;
+    rdfs:comment "效果导致从源状态跳转"@zh ;
+    rdfs:domain :TransitionEffect ;
+    rdfs:range :PowerMode .
+
+:setsKeyValidity rdf:type owl:ObjectProperty ;
+    rdfs:label "sets key validity"@en ;
+    rdfs:label "设置钥匙有效性"@zh ;
+    rdfs:comment "Effect sets key validity status"@en ;
+    rdfs:comment "效果设置钥匙有效性状态"@zh ;
+    rdfs:domain :StateEffect ;
+    rdfs:range :KeyValidityStatus .
+
+:setsPowerMode rdf:type owl:ObjectProperty ;
+    rdfs:label "sets power mode"@en ;
+    rdfs:label "设置电源模式"@zh ;
+    rdfs:comment "Effect sets the power mode"@en ;
+    rdfs:comment "效果设置电源模式"@zh ;
+    rdfs:domain :StateEffect ;
+    rdfs:range :PowerMode .
+
+:setsPowerOnSource rdf:type owl:ObjectProperty ;
+    rdfs:label "sets power on source"@en ;
+    rdfs:label "设置上电源"@zh ;
+    rdfs:comment "Effect sets the power on source"@en ;
+    rdfs:comment "效果设置上电源"@zh ;
+    rdfs:domain :StateEffect ;
+    rdfs:range :PowerOnSource .
+
+:setsPowerOffSource rdf:type owl:ObjectProperty ;
+    rdfs:label "sets power off source"@en ;
+    rdfs:label "设置下电源"@zh ;
+    rdfs:comment "Effect sets the power off source"@en ;
+    rdfs:comment "效果设置下电源"@zh ;
+    rdfs:domain :StateEffect ;
+    rdfs:range :PowerOffSource .
+
+:setsReadyEnableState rdf:type owl:ObjectProperty ;
+    rdfs:label "sets ready enable state"@en ;
+    rdfs:label "设置Ready使能状态"@zh ;
+    rdfs:comment "Effect sets the ready enable state"@en ;
+    rdfs:comment "效果设置Ready使能状态"@zh ;
+    rdfs:domain :StateEffect ;
+    rdfs:range :ReadyEnable .
+
+# -----------------------------------------------------------------------------
+# Action Relationship Properties
+# -----------------------------------------------------------------------------
+
+:triggersAction rdf:type owl:ObjectProperty ;
+    rdfs:label "triggers action"@en ;
+    rdfs:label "触发动作"@zh ;
+    rdfs:comment "One action triggers another action"@en ;
+    rdfs:comment "一个动作触发另一个动作"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range :Action .
+
+:followsAction rdf:type owl:ObjectProperty ;
+    rdfs:label "follows action"@en ;
+    rdfs:label "跟随动作"@zh ;
+    rdfs:comment "This action follows another action"@en ;
+    rdfs:comment "此动作跟随另一个动作"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range :Action ;
+    owl:inverseOf :triggersAction .
+
+:cancelsAction rdf:type owl:ObjectProperty ;
+    rdfs:label "cancels action"@en ;
+    rdfs:label "取消动作"@zh ;
+    rdfs:comment "This action cancels another action"@en ;
+    rdfs:comment "此动作取消另一个动作"@zh ;
+    rdfs:domain :CancelAction ;
+    rdfs:range :Action .
+
+:executedBy rdf:type owl:ObjectProperty ;
+    rdfs:label "executed by"@en ;
+    rdfs:label "由...执行"@zh ;
+    rdfs:comment "Action is executed by a logical component"@en ;
+    rdfs:comment "动作由逻辑部件执行"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range :LogicalComponent ;
+    owl:inverseOf :hasActor .
+
+# -----------------------------------------------------------------------------
+# Input/Output Properties
+# -----------------------------------------------------------------------------
+
+:hasSignalInput rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasInput ;
+    rdfs:label "has signal input"@en ;
+    rdfs:label "具有信号输入"@zh ;
+    rdfs:comment "Action has signal input"@en ;
+    rdfs:comment "动作具有信号输入"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range :Signal .
+
+:hasSignalOutput rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasOutput ;
+    rdfs:label "has signal output"@en ;
+    rdfs:label "具有信号输出"@zh ;
+    rdfs:comment "Action has signal output"@en ;
+    rdfs:comment "动作具有信号输出"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range :Signal .
+
+:hasStateInput rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasInput ;
+    rdfs:label "has state input"@en ;
+    rdfs:label "具有状态输入"@zh ;
+    rdfs:comment "Action has state input"@en ;
+    rdfs:comment "动作具有状态输入"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range :PowerMode .
+
+:hasStateOutput rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasOutput ;
+    rdfs:label "has state output"@en ;
+    rdfs:label "具有状态输出"@zh ;
+    rdfs:comment "Action has state output"@en ;
+    rdfs:comment "动作具有状态输出"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range :PowerMode .
+
+# =============================================================================
+# DATA PROPERTIES
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Action Data Properties
+# -----------------------------------------------------------------------------
+
+:actionId rdf:type owl:DatatypeProperty ;
+    rdfs:label "action ID"@en ;
+    rdfs:label "动作编号"@zh ;
+    rdfs:comment "Unique identifier for an action"@en ;
+    rdfs:comment "动作的唯一标识符"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range xsd:string .
+
+:actionName rdf:type owl:DatatypeProperty ;
+    rdfs:label "action name"@en ;
+    rdfs:label "动作名称"@zh ;
+    rdfs:comment "Human-readable name of the action"@en ;
+    rdfs:comment "动作的可读名称"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range xsd:string .
+
+:executionTimeout rdf:type owl:DatatypeProperty ;
+    rdfs:label "execution timeout"@en ;
+    rdfs:label "执行超时"@zh ;
+    rdfs:comment "Maximum time allowed for action execution in milliseconds"@en ;
+    rdfs:comment "动作执行允许的最大时间，单位：毫秒"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range xsd:integer .
+
+:retryCount rdf:type owl:DatatypeProperty ;
+    rdfs:label "retry count"@en ;
+    rdfs:label "重试次数"@zh ;
+    rdfs:comment "Number of times to retry action on failure"@en ;
+    rdfs:comment "失败时重试动作的次数"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range xsd:integer .
+
+:isReversible rdf:type owl:DatatypeProperty ;
+    rdfs:label "is reversible"@en ;
+    rdfs:label "可逆"@zh ;
+    rdfs:comment "Indicates if the action can be reversed"@en ;
+    rdfs:comment "表示动作是否可以逆转"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range xsd:boolean .
+
+:priorityLevel rdf:type owl:DatatypeProperty ;
+    rdfs:label "priority level"@en ;
+    rdfs:label "优先级"@zh ;
+    rdfs:comment "Priority level of the action (higher number = higher priority)"@en ;
+    rdfs:comment "动作的优先级（数字越大优先级越高）"@zh ;
+    rdfs:domain :Action ;
+    rdfs:range xsd:integer .
+
+# -----------------------------------------------------------------------------
+# Condition Data Properties
+# -----------------------------------------------------------------------------
+
+:conditionId rdf:type owl:DatatypeProperty ;
+    rdfs:label "condition ID"@en ;
+    rdfs:label "条件编号"@zh ;
+    rdfs:comment "Unique identifier for a condition"@en ;
+    rdfs:comment "条件的唯一标识符"@zh ;
+    rdfs:domain :Condition ;
+    rdfs:range xsd:string .
+
+:conditionExpression rdf:type owl:DatatypeProperty ;
+    rdfs:label "condition expression"@en ;
+    rdfs:label "条件表达式"@zh ;
+    rdfs:comment "Formal expression of the condition"@en ;
+    rdfs:comment "条件的正式表达式"@zh ;
+    rdfs:domain :Condition ;
+    rdfs:range xsd:string .
+
+:logicalOperator rdf:type owl:DatatypeProperty ;
+    rdfs:label "logical operator"@en ;
+    rdfs:label "逻辑运算符"@zh ;
+    rdfs:comment "Logical operator for composite conditions (AND, OR, NOT)"@en ;
+    rdfs:comment "复合条件的逻辑运算符（AND、OR、NOT）"@zh ;
+    rdfs:domain :CompositeCondition ;
+    rdfs:range xsd:string .
+
+:requiredValue rdf:type owl:DatatypeProperty ;
+    rdfs:label "required value"@en ;
+    rdfs:label "要求值"@zh ;
+    rdfs:comment "Required value for the condition"@en ;
+    rdfs:comment "条件要求的值"@zh ;
+    rdfs:domain :SignalCondition ;
+    rdfs:range xsd:string .
+
+:timeoutValue rdf:type owl:DatatypeProperty ;
+    rdfs:label "timeout value"@en ;
+    rdfs:label "超时值"@zh ;
+    rdfs:comment "Timeout value in milliseconds"@en ;
+    rdfs:comment "超时值，单位：毫秒"@zh ;
+    rdfs:domain :TemporalCondition ;
+    rdfs:range xsd:integer .
+
+# -----------------------------------------------------------------------------
+# Effect Data Properties
+# -----------------------------------------------------------------------------
+
+:effectId rdf:type owl:DatatypeProperty ;
+    rdfs:label "effect ID"@en ;
+    rdfs:label "效果编号"@zh ;
+    rdfs:comment "Unique identifier for an effect"@en ;
+    rdfs:comment "效果的唯一标识符"@zh ;
+    rdfs:domain :Effect ;
+    rdfs:range xsd:string .
+
+:effectDescription rdf:type owl:DatatypeProperty ;
+    rdfs:label "effect description"@en ;
+    rdfs:label "效果描述"@zh ;
+    rdfs:comment "Description of the effect"@en ;
+    rdfs:comment "效果的描述"@zh ;
+    rdfs:domain :Effect ;
+    rdfs:range xsd:string .
+
+:outputValue rdf:type owl:DatatypeProperty ;
+    rdfs:label "output value"@en ;
+    rdfs:label "输出值"@zh ;
+    rdfs:comment "Value produced by the effect"@en ;
+    rdfs:comment "效果产生的值"@zh ;
+    rdfs:domain :SignalEffect ;
+    rdfs:range xsd:string .
+
+# =============================================================================
+# INDIVIDUALS - Actors
+# =============================================================================
+
+:actorLDCU rdf:type :ECUActor ;
+    rdfs:label "LDCU Actor"@en ;
+    rdfs:label "LDCU执行者"@zh ;
+    rdfs:comment "Left Domain Control Unit as action executor"@en ;
+    rdfs:comment "作为动作执行者的左域控制器"@zh .
+
+:actorRDCU rdf:type :ECUActor ;
+    rdfs:label "RDCU Actor"@en ;
+    rdfs:label "RDCU执行者"@zh ;
+    rdfs:comment "Right Domain Control Unit as action executor"@en ;
+    rdfs:comment "作为动作执行者的右域控制器"@zh .
+
+:actorCDCU rdf:type :ECUActor ;
+    rdfs:label "CDCU Actor"@en ;
+    rdfs:label "CDCU执行者"@zh ;
+    rdfs:comment "Central Domain Control Unit as action executor"@en ;
+    rdfs:comment "作为动作执行者的中央域控制器"@zh .
+
+:actorTBOX rdf:type :ECUActor ;
+    rdfs:label "TBOX Actor"@en ;
+    rdfs:label "TBOX执行者"@zh ;
+    rdfs:comment "Telematics Box as action executor"@en ;
+    rdfs:comment "作为动作执行者的远程通信单元"@zh .
+
+:actorXPU rdf:type :ECUActor ;
+    rdfs:label "XPU Actor"@en ;
+    rdfs:label "XPU执行者"@zh ;
+    rdfs:comment "Autonomous Driving Unit as action executor"@en ;
+    rdfs:comment "作为动作执行者的自动驾驶单元"@zh .
+
+:actorPowerModeManagement rdf:type :LogicalComponentActor ;
+    rdfs:label "Power Mode Management Actor"@en ;
+    rdfs:label "电源模式管理执行者"@zh ;
+    rdfs:comment "LcPowerModeManagement as action executor"@en ;
+    rdfs:comment "作为动作执行者的电源模式管理逻辑部件"@zh .
+
+:actorKeySearchAndValidation rdf:type :LogicalComponentActor ;
+    rdfs:label "Key Search and Validation Actor"@en ;
+    rdfs:label "钥匙搜索验证执行者"@zh ;
+    rdfs:comment "LcKeySearchAndValidation as action executor"@en ;
+    rdfs:comment "作为动作执行者的钥匙搜索验证逻辑部件"@zh .
+
+:actorUser rdf:type :UserActor ;
+    rdfs:label "User Actor"@en ;
+    rdfs:label "用户执行者"@zh ;
+    rdfs:comment "Human user as action trigger"@en ;
+    rdfs:comment "作为动作触发者的人类用户"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Conditions
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Power On Preconditions
+# -----------------------------------------------------------------------------
+
+:cond_VehicleOffMode rdf:type :StateCondition ;
+    rdfs:label "Vehicle in Off Mode"@en ;
+    rdfs:label "车辆处于关闭模式"@zh ;
+    :conditionId "COND-001" ;
+    :requiresState :OffMode ;
+    rdfs:comment "Vehicle power mode must be Off"@en ;
+    rdfs:comment "车辆电源模式必须为关闭"@zh .
+
+:cond_DoorOpen rdf:type :StateCondition ;
+    rdfs:label "Door is Open"@en ;
+    rdfs:label "车门已打开"@zh ;
+    :conditionId "COND-002" ;
+    :requiresDoorState :DoorOpen ;
+    rdfs:comment "At least one door is open"@en ;
+    rdfs:comment "至少一个车门已打开"@zh .
+
+:cond_BrakePressed rdf:type :StateCondition ;
+    rdfs:label "Brake Pedal Pressed"@en ;
+    rdfs:label "制动踏板已踩下"@zh ;
+    :conditionId "COND-003" ;
+    :requiresBrakePedalState :BrakePressed ;
+    rdfs:comment "Brake pedal is pressed"@en ;
+    rdfs:comment "制动踏板已踩下"@zh .
+
+:cond_ValidKeyPresent rdf:type :StateCondition ;
+    rdfs:label "Valid Key Present"@en ;
+    rdfs:label "存在有效钥匙"@zh ;
+    :conditionId "COND-004" ;
+    :requiresKeyValidity :KeyValid ;
+    rdfs:comment "A valid key is present"@en ;
+    rdfs:comment "存在有效钥匙"@zh .
+
+:cond_KeyInCar rdf:type :StateCondition ;
+    rdfs:label "Key In Car"@en ;
+    rdfs:label "钥匙在车内"@zh ;
+    :conditionId "COND-005" ;
+    :requiresKeyLocation :KeyInCar ;
+    rdfs:comment "Key is located inside the vehicle"@en ;
+    rdfs:comment "钥匙位于车内"@zh .
+
+:cond_GearInP rdf:type :StateCondition ;
+    rdfs:label "Gear in P Position"@en ;
+    rdfs:label "档位在P档"@zh ;
+    :conditionId "COND-006" ;
+    :requiresGearPosition :GearP ;
+    rdfs:comment "Gear position is in Park"@en ;
+    rdfs:comment "档位在驻车档"@zh .
+
+:cond_OTAValid rdf:type :StateCondition ;
+    rdfs:label "OTA Power On Valid"@en ;
+    rdfs:label "OTA上电有效"@zh ;
+    :conditionId "COND-007" ;
+    :requiresOTAPowerOnValidState :OTAPowerOnValidValid ;
+    rdfs:comment "OTA power on validation is valid"@en ;
+    rdfs:comment "OTA上电验证有效"@zh .
+
+:cond_DiagnosticOTA rdf:type :StateCondition ;
+    rdfs:label "Diagnostic State is OTA or Remote Diag"@en ;
+    rdfs:label "诊断状态为OTA或远程诊断"@zh ;
+    :conditionId "COND-008" ;
+    :requiresDiagnosticState :NormalOTA ;
+    rdfs:comment "Diagnostic state is Normal OTA, Silent OTA, or Remote Diag"@en ;
+    rdfs:comment "诊断状态为普通OTA、静默OTA或远程诊断"@zh .
+
+:cond_XPUPowerOnRequest rdf:type :SignalCondition ;
+    rdfs:label "XPU Power On Request Signal"@en ;
+    rdfs:label "XPU上电请求信号"@zh ;
+    :conditionId "COND-009" ;
+    :requiresSignalValue :signalXPU_PowerReq ;
+    :requiredValue "0x1" ;
+    rdfs:comment "XPU has requested power on"@en ;
+    rdfs:comment "XPU已请求上电"@zh .
+
+# -----------------------------------------------------------------------------
+# Power Off Preconditions
+# -----------------------------------------------------------------------------
+
+:cond_VehicleLocalOn rdf:type :StateCondition ;
+    rdfs:label "Vehicle in Local On Mode"@en ;
+    rdfs:label "车辆处于本地开启模式"@zh ;
+    :conditionId "COND-010" ;
+    :requiresState :LocalOnMode ;
+    rdfs:comment "Vehicle power mode is Local On"@en ;
+    rdfs:comment "车辆电源模式为本地开启"@zh .
+
+:cond_VehicleRemoteOn rdf:type :StateCondition ;
+    rdfs:label "Vehicle in Remote On Mode"@en ;
+    rdfs:label "车辆处于远程开启模式"@zh ;
+    :conditionId "COND-011" ;
+    :requiresState :RemoteOnMode ;
+    rdfs:comment "Vehicle power mode is Remote On"@en ;
+    rdfs:comment "车辆电源模式为远程开启"@zh .
+
+:cond_DoorLocked rdf:type :StateCondition ;
+    rdfs:label "Door is Locked"@en ;
+    rdfs:label "车门已锁止"@zh ;
+    :conditionId "COND-012" ;
+    :requiresDoorLockState :DoorLocked ;
+    rdfs:comment "All doors are locked"@en ;
+    rdfs:comment "所有车门已锁止"@zh .
+
+:cond_AllDoorsClosed rdf:type :StateCondition ;
+    rdfs:label "All Doors Closed"@en ;
+    rdfs:label "所有车门关闭"@zh ;
+    :conditionId "COND-013" ;
+    :requiresDoorState :DoorClosed ;
+    rdfs:comment "All doors are closed"@en ;
+    rdfs:comment "所有车门已关闭"@zh .
+
+:cond_LowBattery rdf:type :SignalCondition ;
+    rdfs:label "Low Battery Condition"@en ;
+    rdfs:label "低电量条件"@zh ;
+    :conditionId "COND-014" ;
+    :requiresSignalValue :signalLVEM_LowBattPowerOff_Req ;
+    :requiredValue "0x1" ;
+    rdfs:comment "Low battery power off request is active"@en ;
+    rdfs:comment "低电量下电请求激活"@zh .
+
+:cond_TimeoutExpired rdf:type :TemporalCondition ;
+    rdfs:label "Timeout Expired"@en ;
+    rdfs:label "超时已过期"@zh ;
+    :conditionId "COND-015" ;
+    rdfs:comment "Auto power off timeout has expired"@en ;
+    rdfs:comment "自动下电超时已过期"@zh .
+
+:cond_ForcePowerOffSwitch rdf:type :SignalCondition ;
+    rdfs:label "Force Power Off Switch Pressed"@en ;
+    rdfs:label "强制下电开关已按下"@zh ;
+    :conditionId "COND-016" ;
+    :requiresSignalValue :signalEmergencyPowerOffSwSt ;
+    :requiredValue "0x1" ;
+    rdfs:comment "Emergency power off switch is pressed"@en ;
+    rdfs:comment "紧急下电开关已按下"@zh .
+
+:cond_CancelPowerOffNotActive rdf:type :SignalCondition ;
+    rdfs:label "Cancel Power Off Not Active"@en ;
+    rdfs:label "取消下电未激活"@zh ;
+    :conditionId "COND-017" ;
+    :requiresSignalValue :signalCDCU_CancelPowerOffSW ;
+    :requiredValue "0x0" ;
+    rdfs:comment "Cancel power off switch is not active"@en ;
+    rdfs:comment "取消下电开关未激活"@zh .
+
+# -----------------------------------------------------------------------------
+# Composite Conditions
+# -----------------------------------------------------------------------------
+
+:cond_DoorOpenPowerOnPrecondition rdf:type :CompositeCondition ;
+    rdfs:label "Door Open Power On Precondition"@en ;
+    rdfs:label "车门打开上电前置条件"@zh ;
+    :conditionId "COND-COMP-001" ;
+    :logicalOperator "AND" ;
+    :hasSubCondition :cond_VehicleOffMode ;
+    :hasSubCondition :cond_DoorOpen ;
+    :hasSubCondition :cond_ValidKeyPresent ;
+    rdfs:comment "Composite condition for door open power on: OffMode AND DoorOpen AND ValidKey"@en ;
+    rdfs:comment "车门打开上电的复合条件：关闭模式 且 车门打开 且 有效钥匙"@zh .
+
+:cond_BrakePressPowerOnPrecondition rdf:type :CompositeCondition ;
+    rdfs:label "Brake Press Power On Precondition"@en ;
+    rdfs:label "制动踏板上电前置条件"@zh ;
+    :conditionId "COND-COMP-002" ;
+    :logicalOperator "AND" ;
+    :hasSubCondition :cond_VehicleOffMode ;
+    :hasSubCondition :cond_BrakePressed ;
+    :hasSubCondition :cond_ValidKeyPresent ;
+    :hasSubCondition :cond_KeyInCar ;
+    rdfs:comment "Composite condition for brake press power on: OffMode AND BrakePressed AND ValidKey AND KeyInCar"@en ;
+    rdfs:comment "制动踏板上电的复合条件：关闭模式 且 制动踩下 且 有效钥匙 且 钥匙在车内"@zh .
+
+:cond_OTAPowerOnPrecondition rdf:type :CompositeCondition ;
+    rdfs:label "OTA Power On Precondition"@en ;
+    rdfs:label "OTA上电前置条件"@zh ;
+    :conditionId "COND-COMP-003" ;
+    :logicalOperator "AND" ;
+    :hasSubCondition :cond_VehicleOffMode ;
+    :hasSubCondition :cond_OTAValid ;
+    rdfs:comment "Composite condition for OTA power on: OffMode AND OTAValid"@en ;
+    rdfs:comment "OTA上电的复合条件：关闭模式 且 OTA上电有效"@zh .
+
+:cond_DoorLockPowerOffPrecondition rdf:type :CompositeCondition ;
+    rdfs:label "Door Lock Power Off Precondition"@en ;
+    rdfs:label "门锁下电前置条件"@zh ;
+    :conditionId "COND-COMP-004" ;
+    :logicalOperator "AND" ;
+    :hasSubCondition :cond_VehicleLocalOn ;
+    :hasSubCondition :cond_DoorLocked ;
+    :hasSubCondition :cond_AllDoorsClosed ;
+    rdfs:comment "Composite condition for door lock power off: LocalOn AND DoorLocked AND DoorsClosed"@en ;
+    rdfs:comment "门锁下电的复合条件：本地开启 且 门锁锁止 且 车门关闭"@zh .
+
+:cond_LowBatteryPowerOffPrecondition rdf:type :CompositeCondition ;
+    rdfs:label "Low Battery Power Off Precondition"@en ;
+    rdfs:label "低电量下电前置条件"@zh ;
+    :conditionId "COND-COMP-005" ;
+    :logicalOperator "AND" ;
+    :hasSubCondition :cond_VehicleLocalOn ;
+    :hasSubCondition :cond_LowBattery ;
+    rdfs:comment "Composite condition for low battery power off: LocalOn AND LowBattery"@en ;
+    rdfs:comment "低电量下电的复合条件：本地开启 且 低电量"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Effects
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Power On Effects
+# -----------------------------------------------------------------------------
+
+:effect_TransitionToLocalOn rdf:type :TransitionEffect ;
+    rdfs:label "Transition to Local On Mode"@en ;
+    rdfs:label "跳转到本地开启模式"@zh ;
+    :effectId "EFFECT-001" ;
+    :causesTransitionFrom :OffMode ;
+    :causesTransitionTo :LocalOnMode ;
+    rdfs:comment "Effect that transitions power mode from Off to Local On"@en ;
+    rdfs:comment "将电源模式从关闭跳转到本地开启的效果"@zh .
+
+:effect_TransitionToRemoteOn rdf:type :TransitionEffect ;
+    rdfs:label "Transition to Remote On Mode"@en ;
+    rdfs:label "跳转到远程开启模式"@zh ;
+    :effectId "EFFECT-002" ;
+    :causesTransitionFrom :OffMode ;
+    :causesTransitionTo :RemoteOnMode ;
+    rdfs:comment "Effect that transitions power mode from Off to Remote On"@en ;
+    rdfs:comment "将电源模式从关闭跳转到远程开启的效果"@zh .
+
+:effect_SetPowerOnSourceDoorOpen rdf:type :StateEffect ;
+    rdfs:label "Set Power On Source to Door Open"@en ;
+    rdfs:label "设置上电源为车门打开"@zh ;
+    :effectId "EFFECT-003" ;
+    :setsPowerOnSource :PowerOnDoorOpen ;
+    rdfs:comment "Effect that sets power on source to door open"@en ;
+    rdfs:comment "设置上电源为车门打开的效果"@zh .
+
+:effect_SetPowerOnSourceBrakePress rdf:type :StateEffect ;
+    rdfs:label "Set Power On Source to Brake Press"@en ;
+    rdfs:label "设置上电源为制动踏板"@zh ;
+    :effectId "EFFECT-004" ;
+    :setsPowerOnSource :PowerOnBrakePress ;
+    rdfs:comment "Effect that sets power on source to brake press"@en ;
+    rdfs:comment "设置上电源为制动踏板的效果"@zh .
+
+:effect_SetPowerOnSourceOTA rdf:type :StateEffect ;
+    rdfs:label "Set Power On Source to OTA"@en ;
+    rdfs:label "设置上电源为OTA"@zh ;
+    :effectId "EFFECT-005" ;
+    :setsPowerOnSource :PowerOnOTARemoteDiag ;
+    rdfs:comment "Effect that sets power on source to OTA/Remote Diag"@en ;
+    rdfs:comment "设置上电源为OTA/远程诊断的效果"@zh .
+
+:effect_StartKeySearch rdf:type :StateEffect ;
+    rdfs:label "Start Key Search"@en ;
+    rdfs:label "启动钥匙搜索"@zh ;
+    :effectId "EFFECT-006" ;
+    rdfs:comment "Effect that initiates key search process"@en ;
+    rdfs:comment "启动钥匙搜索流程的效果"@zh .
+
+:effect_EnableReady rdf:type :StateEffect ;
+    rdfs:label "Enable Ready Enable State"@en ;
+    rdfs:label "使能Ready使能状态"@zh ;
+    :effectId "EFFECT-007" ;
+    :setsReadyEnableState :EnableState ;
+    rdfs:comment "Effect that enables the ready enable state"@en ;
+    rdfs:comment "使能Ready使能状态的效果"@zh .
+
+# -----------------------------------------------------------------------------
+# Power Off Effects
+# -----------------------------------------------------------------------------
+
+:effect_TransitionToOff rdf:type :TransitionEffect ;
+    rdfs:label "Transition to Off Mode"@en ;
+    rdfs:label "跳转到关闭模式"@zh ;
+    :effectId "EFFECT-010" ;
+    :causesTransitionFrom :LocalOnMode ;
+    :causesTransitionTo :OffMode ;
+    rdfs:comment "Effect that transitions power mode to Off"@en ;
+    rdfs:comment "将电源模式跳转到关闭的效果"@zh .
+
+:effect_TransitionRemoteToOff rdf:type :TransitionEffect ;
+    rdfs:label "Transition Remote On to Off Mode"@en ;
+    rdfs:label "远程开启跳转到关闭模式"@zh ;
+    :effectId "EFFECT-011" ;
+    :causesTransitionFrom :RemoteOnMode ;
+    :causesTransitionTo :OffMode ;
+    rdfs:comment "Effect that transitions power mode from Remote On to Off"@en ;
+    rdfs:comment "将电源模式从远程开启跳转到关闭的效果"@zh .
+
+:effect_SetPowerOffSourceDoorLock rdf:type :StateEffect ;
+    rdfs:label "Set Power Off Source to Door Lock"@en ;
+    rdfs:label "设置下电源为门锁"@zh ;
+    :effectId "EFFECT-012" ;
+    :setsPowerOffSource :PowerOffDoorLock ;
+    rdfs:comment "Effect that sets power off source to door lock"@en ;
+    rdfs:comment "设置下电源为门锁的效果"@zh .
+
+:effect_SetPowerOffSourceForced rdf:type :StateEffect ;
+    rdfs:label "Set Power Off Source to Forced"@en ;
+    rdfs:label "设置下电源为强制下电"@zh ;
+    :effectId "EFFECT-013" ;
+    :setsPowerOffSource :PowerOffForcePowerOff ;
+    rdfs:comment "Effect that sets power off source to forced power off"@en ;
+    rdfs:comment "设置下电源为强制下电的效果"@zh .
+
+:effect_SetPowerOffSourceAuto rdf:type :StateEffect ;
+    rdfs:label "Set Power Off Source to Auto"@en ;
+    rdfs:label "设置下电源为自动下电"@zh ;
+    :effectId "EFFECT-014" ;
+    :setsPowerOffSource :PowerOffAutoPowerOff ;
+    rdfs:comment "Effect that sets power off source to auto power off"@en ;
+    rdfs:comment "设置下电源为自动下电的效果"@zh .
+
+:effect_SetPowerOffSourceLowBattery rdf:type :StateEffect ;
+    rdfs:label "Set Power Off Source to Low Battery"@en ;
+    rdfs:label "设置下电源为低电量"@zh ;
+    :effectId "EFFECT-015" ;
+    :setsPowerOffSource :PowerOffAutoPowerOff ;
+    rdfs:comment "Effect that sets power off source to low battery power off"@en ;
+    rdfs:comment "设置下电源为低电量下电的效果"@zh .
+
+:effect_DisableReady rdf:type :StateEffect ;
+    rdfs:label "Disable Ready Enable State"@en ;
+    rdfs:label "禁用Ready使能状态"@zh ;
+    :effectId "EFFECT-016" ;
+    :setsReadyEnableState :DisableState ;
+    rdfs:comment "Effect that disables the ready enable state"@en ;
+    rdfs:comment "禁用Ready使能状态的效果"@zh .
+
+:effect_StopKeySearch rdf:type :StateEffect ;
+    rdfs:label "Stop Key Search"@en ;
+    rdfs:label "停止钥匙搜索"@zh ;
+    :effectId "EFFECT-017" ;
+    rdfs:comment "Effect that stops key search process"@en ;
+    rdfs:comment "停止钥匙搜索流程的效果"@zh .
+
+:effect_TransmitPowerModeSignal rdf:type :SignalEffect ;
+    rdfs:label "Transmit Power Mode Signal"@en ;
+    rdfs:label "发送电源模式信号"@zh ;
+    :effectId "EFFECT-020" ;
+    :producesSignal :signalLDCU_PowerMode ;
+    rdfs:comment "Effect that transmits power mode signal via CAN"@en ;
+    rdfs:comment "通过CAN发送电源模式信号的效果"@zh .
+
+:effect_TransmitPowerOnSourceSignal rdf:type :SignalEffect ;
+    rdfs:label "Transmit Power On Source Signal"@en ;
+    rdfs:label "发送上电源信号"@zh ;
+    :effectId "EFFECT-021" ;
+    :producesSignal :signalLDCU_PowerONSource ;
+    rdfs:comment "Effect that transmits power on source signal via CAN"@en ;
+    rdfs:comment "通过CAN发送上电源信号的效果"@zh .
+
+:effect_TransmitPowerOffSourceSignal rdf:type :SignalEffect ;
+    rdfs:label "Transmit Power Off Source Signal"@en ;
+    rdfs:label "发送下电源信号"@zh ;
+    :effectId "EFFECT-022" ;
+    :producesSignal :signalLDCU_PowerOFFSource ;
+    rdfs:comment "Effect that transmits power off source signal via CAN"@en ;
+    rdfs:comment "通过CAN发送下电源信号的效果"@zh .
+
+:effect_TransmitReadyEnableSignal rdf:type :SignalEffect ;
+    rdfs:label "Transmit Ready Enable Signal"@en ;
+    rdfs:label "发送Ready使能信号"@zh ;
+    :effectId "EFFECT-023" ;
+    :producesSignal :signalLDCU_ReadyEnable ;
+    rdfs:comment "Effect that transmits ready enable signal via CAN"@en ;
+    rdfs:comment "通过CAN发送Ready使能信号的效果"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Actions
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Power On Actions
+# -----------------------------------------------------------------------------
+
+:action_DoorOpenPowerOn rdf:type :DoorOpenPowerOn ;
+    rdfs:label "Door Open Power On Action"@en ;
+    rdfs:label "车门打开上电动作"@zh ;
+    :actionId "ACT-PO-001" ;
+    :actionName "DoorOpenPowerOn" ;
+    :hasPrecondition :cond_DoorOpenPowerOnPrecondition ;
+    :hasEffect :effect_TransitionToLocalOn ;
+    :hasEffect :effect_SetPowerOnSourceDoorOpen ;
+    :hasEffect :effect_TransmitPowerModeSignal ;
+    :hasEffect :effect_TransmitPowerOnSourceSignal ;
+    :hasEffect :effect_StartKeySearch ;
+    :hasActor :actorPowerModeManagement ;
+    :executionTimeout 5000 ;
+    :priorityLevel 10 ;
+    :isReversible false ;
+    rdfs:comment "Power on action triggered by door open event with valid key"@en ;
+    rdfs:comment "由车门打开事件触发的上电动作，需要有效钥匙"@zh .
+
+:action_BrakePressPowerOn rdf:type :BrakePressPowerOn ;
+    rdfs:label "Brake Press Power On Action"@en ;
+    rdfs:label "制动踏板上电动作"@zh ;
+    :actionId "ACT-PO-002" ;
+    :actionName "BrakePressPowerOn" ;
+    :hasPrecondition :cond_BrakePressPowerOnPrecondition ;
+    :hasEffect :effect_TransitionToLocalOn ;
+    :hasEffect :effect_SetPowerOnSourceBrakePress ;
+    :hasEffect :effect_TransmitPowerModeSignal ;
+    :hasEffect :effect_TransmitPowerOnSourceSignal ;
+    :hasEffect :effect_EnableReady ;
+    :hasActor :actorPowerModeManagement ;
+    :executionTimeout 3000 ;
+    :priorityLevel 15 ;
+    :isReversible false ;
+    rdfs:comment "Power on action triggered by brake pedal press with valid key in car"@en ;
+    rdfs:comment "由制动踏板踩下触发的上电动作，需要有效钥匙在车内"@zh .
+
+:action_OTAPowerOn rdf:type :OTAPowerOn ;
+    rdfs:label "OTA Power On Action"@en ;
+    rdfs:label "OTA上电动作"@zh ;
+    :actionId "ACT-PO-003" ;
+    :actionName "OTAPowerOn" ;
+    :hasPrecondition :cond_OTAPowerOnPrecondition ;
+    :hasEffect :effect_TransitionToRemoteOn ;
+    :hasEffect :effect_SetPowerOnSourceOTA ;
+    :hasEffect :effect_TransmitPowerModeSignal ;
+    :hasEffect :effect_TransmitPowerOnSourceSignal ;
+    :hasActor :actorPowerModeManagement ;
+    :executionTimeout 10000 ;
+    :priorityLevel 8 ;
+    :isReversible false ;
+    rdfs:comment "Power on action triggered by OTA update request"@en ;
+    rdfs:comment "由OTA更新请求触发的上电动作"@zh .
+
+:action_RemoteDiagPowerOn rdf:type :RemoteDiagPowerOn ;
+    rdfs:label "Remote Diagnostic Power On Action"@en ;
+    rdfs:label "远程诊断上电动作"@zh ;
+    :actionId "ACT-PO-004" ;
+    :actionName "RemoteDiagPowerOn" ;
+    :hasPrecondition :cond_OTAPowerOnPrecondition ;
+    :hasEffect :effect_TransitionToRemoteOn ;
+    :hasEffect :effect_SetPowerOnSourceOTA ;
+    :hasEffect :effect_TransmitPowerModeSignal ;
+    :hasEffect :effect_TransmitPowerOnSourceSignal ;
+    :hasActor :actorPowerModeManagement ;
+    :executionTimeout 10000 ;
+    :priorityLevel 8 ;
+    :isReversible false ;
+    rdfs:comment "Power on action triggered by remote diagnostic request"@en ;
+    rdfs:comment "由远程诊断请求触发的上电动作"@zh .
+
+:action_XPURequestPowerOn rdf:type :XPURequestPowerOn ;
+    rdfs:label "XPU Request Power On Action"@en ;
+    rdfs:label "XPU请求上电动作"@zh ;
+    :actionId "ACT-PO-005" ;
+    :actionName "XPURequestPowerOn" ;
+    :hasPrecondition :cond_VehicleOffMode ;
+    :hasPrecondition :cond_XPUPowerOnRequest ;
+    :hasEffect :effect_TransitionToRemoteOn ;
+    :hasEffect :effect_TransmitPowerModeSignal ;
+    :hasEffect :effect_TransmitPowerOnSourceSignal ;
+    :hasActor :actorPowerModeManagement ;
+    :executionTimeout 5000 ;
+    :priorityLevel 12 ;
+    :isReversible false ;
+    rdfs:comment "Power on action triggered by XPU (autonomous driving) request"@en ;
+    rdfs:comment "由XPU（自动驾驶）请求触发的上电动作"@zh .
+
+# -----------------------------------------------------------------------------
+# Power Off Actions
+# -----------------------------------------------------------------------------
+
+:action_DoorLockPowerOff rdf:type :DoorLockPowerOff ;
+    rdfs:label "Door Lock Power Off Action"@en ;
+    rdfs:label "门锁下电动作"@zh ;
+    :actionId "ACT-PF-001" ;
+    :actionName "DoorLockPowerOff" ;
+    :hasPrecondition :cond_DoorLockPowerOffPrecondition ;
+    :hasEffect :effect_TransitionToOff ;
+    :hasEffect :effect_SetPowerOffSourceDoorLock ;
+    :hasEffect :effect_TransmitPowerModeSignal ;
+    :hasEffect :effect_TransmitPowerOffSourceSignal ;
+    :hasEffect :effect_DisableReady ;
+    :hasEffect :effect_StopKeySearch ;
+    :hasActor :actorPowerModeManagement ;
+    :executionTimeout 5000 ;
+    :priorityLevel 10 ;
+    :isReversible false ;
+    rdfs:comment "Power off action triggered by door lock event when all doors are closed"@en ;
+    rdfs:comment "由门锁事件触发的下电动作，需要所有车门关闭"@zh .
+
+:action_TimeoutPowerOff rdf:type :TimeoutPowerOff ;
+    rdfs:label "Timeout Power Off Action"@en ;
+    rdfs:label "超时下电动作"@zh ;
+    :actionId "ACT-PF-002" ;
+    :actionName "TimeoutPowerOff" ;
+    :hasPrecondition :cond_VehicleLocalOn ;
+    :hasPrecondition :cond_TimeoutExpired ;
+    :hasPrecondition :cond_CancelPowerOffNotActive ;
+    :hasEffect :effect_TransitionToOff ;
+    :hasEffect :effect_SetPowerOffSourceAuto ;
+    :hasEffect :effect_TransmitPowerModeSignal ;
+    :hasEffect :effect_TransmitPowerOffSourceSignal ;
+    :hasEffect :effect_DisableReady ;
+    :hasActor :actorPowerModeManagement ;
+    :executionTimeout 3000 ;
+    :priorityLevel 5 ;
+    :isReversible false ;
+    rdfs:comment "Power off action triggered by auto power off timeout"@en ;
+    rdfs:comment "由自动下电超时触发的下电动作"@zh .
+
+:action_ForcedPowerOff rdf:type :ForcedPowerOffAction ;
+    rdfs:label "Forced Power Off Action"@en ;
+    rdfs:label "强制下电动作"@zh ;
+    :actionId "ACT-PF-003" ;
+    :actionName "ForcedPowerOff" ;
+    :hasPrecondition :cond_VehicleLocalOn ;
+    :hasPrecondition :cond_ForcePowerOffSwitch ;
+    :hasEffect :effect_TransitionToOff ;
+    :hasEffect :effect_SetPowerOffSourceForced ;
+    :hasEffect :effect_TransmitPowerModeSignal ;
+    :hasEffect :effect_TransmitPowerOffSourceSignal ;
+    :hasEffect :effect_DisableReady ;
+    :hasActor :actorPowerModeManagement ;
+    :executionTimeout 1000 ;
+    :priorityLevel 20 ;
+    :isReversible false ;
+    rdfs:comment "Power off action triggered by forced power off switch or button sequence"@en ;
+    rdfs:comment "由强制下电开关或按钮序列触发的下电动作"@zh .
+
+:action_LowBatteryPowerOff rdf:type :LowBatteryPowerOff ;
+    rdfs:label "Low Battery Power Off Action"@en ;
+    rdfs:label "低电量下电动作"@zh ;
+    :actionId "ACT-PF-004" ;
+    :actionName "LowBatteryPowerOff" ;
+    :hasPrecondition :cond_LowBatteryPowerOffPrecondition ;
+    :hasEffect :effect_TransitionToOff ;
+    :hasEffect :effect_SetPowerOffSourceLowBattery ;
+    :hasEffect :effect_TransmitPowerModeSignal ;
+    :hasEffect :effect_TransmitPowerOffSourceSignal ;
+    :hasEffect :effect_DisableReady ;
+    :hasActor :actorPowerModeManagement ;
+    :executionTimeout 30000 ;
+    :priorityLevel 18 ;
+    :isReversible false ;
+    rdfs:comment "Power off action triggered by low battery condition"@en ;
+    rdfs:comment "由低电量状态触发的下电动作"@zh .
+
+:action_OTAPowerOff rdf:type :OTAPowerOff ;
+    rdfs:label "OTA Power Off Action"@en ;
+    rdfs:label "OTA下电动作"@zh ;
+    :actionId "ACT-PF-005" ;
+    :actionName "OTAPowerOff" ;
+    :hasPrecondition :cond_VehicleRemoteOn ;
+    :hasEffect :effect_TransitionRemoteToOff ;
+    :hasEffect :effect_TransmitPowerModeSignal ;
+    :hasEffect :effect_TransmitPowerOffSourceSignal ;
+    :hasActor :actorPowerModeManagement ;
+    :executionTimeout 5000 ;
+    :priorityLevel 8 ;
+    :isReversible false ;
+    rdfs:comment "Power off action triggered by OTA completion or request"@en ;
+    rdfs:comment "由OTA完成或请求触发的下电动作"@zh .
+
+:action_XPURequestPowerOff rdf:type :XPURequestPowerOff ;
+    rdfs:label "XPU Request Power Off Action"@en ;
+    rdfs:label "XPU请求下电动作"@zh ;
+    :actionId "ACT-PF-006" ;
+    :actionName "XPURequestPowerOff" ;
+    :hasPrecondition :cond_VehicleRemoteOn ;
+    :hasEffect :effect_TransitionRemoteToOff ;
+    :hasEffect :effect_TransmitPowerModeSignal ;
+    :hasEffect :effect_TransmitPowerOffSourceSignal ;
+    :hasActor :actorPowerModeManagement ;
+    :executionTimeout 5000 ;
+    :priorityLevel 12 ;
+    :isReversible false ;
+    rdfs:comment "Power off action triggered by XPU request"@en ;
+    rdfs:comment "由XPU请求触发的下电动作"@zh .
+
+# -----------------------------------------------------------------------------
+# Validation Actions
+# -----------------------------------------------------------------------------
+
+:action_KeyValidation rdf:type :KeyValidationAction ;
+    rdfs:label "Key Validation Action"@en ;
+    rdfs:label "钥匙验证动作"@zh ;
+    :actionId "ACT-VAL-001" ;
+    :actionName "KeyValidation" ;
+    :hasActor :actorKeySearchAndValidation ;
+    :executionTimeout 3000 ;
+    :retryCount 2 ;
+    :priorityLevel 10 ;
+    rdfs:comment "Action to validate key presence and validity"@en ;
+    rdfs:comment "验证钥匙存在性和有效性的动作"@zh .
+
+:action_BLEKeyValidation rdf:type :BLEKeyValidation ;
+    rdfs:label "BLE Key Validation Action"@en ;
+    rdfs:label "蓝牙钥匙验证动作"@zh ;
+    :actionId "ACT-VAL-002" ;
+    :actionName "BLEKeyValidation" ;
+    :hasActor :actorKeySearchAndValidation ;
+    :hasSignalInput :signalLDCU_BLEKeyValidSt ;
+    :executionTimeout 3000 ;
+    :priorityLevel 10 ;
+    rdfs:comment "Action to validate Bluetooth Low Energy key"@en ;
+    rdfs:comment "验证蓝牙低功耗钥匙的动作"@zh .
+
+:action_RKEKeyValidation rdf:type :RKEKeyValidation ;
+    rdfs:label "RKE Key Validation Action"@en ;
+    rdfs:label "遥控钥匙验证动作"@zh ;
+    :actionId "ACT-VAL-003" ;
+    :actionName "RKEKeyValidation" ;
+    :hasActor :actorKeySearchAndValidation ;
+    :hasSignalInput :signalLDCU_RKEKeyValidSt ;
+    :executionTimeout 3000 ;
+    :priorityLevel 10 ;
+    rdfs:comment "Action to validate Remote Keyless Entry key"@en ;
+    rdfs:comment "验证遥控无钥匙进入钥匙的动作"@zh .
+
+:action_SignalValidation rdf:type :SignalValidationAction ;
+    rdfs:label "Signal Validation Action"@en ;
+    rdfs:label "信号验证动作"@zh ;
+    :actionId "ACT-VAL-004" ;
+    :actionName "SignalValidation" ;
+    :hasActor :actorPowerModeManagement ;
+    :executionTimeout 1000 ;
+    :priorityLevel 5 ;
+    rdfs:comment "Action to validate signal values and integrity"@en ;
+    rdfs:comment "验证信号值和完整性的动作"@zh .
+
+# -----------------------------------------------------------------------------
+# Diagnostic Actions
+# -----------------------------------------------------------------------------
+
+:action_OBDDiagnostic rdf:type :OBDDiagnosticAction ;
+    rdfs:label "OBD Diagnostic Action"@en ;
+    rdfs:label "OBD诊断动作"@zh ;
+    :actionId "ACT-DIAG-001" ;
+    :actionName "OBDDiagnostic" ;
+    :hasActor :actorCDCU ;
+    :executionTimeout 60000 ;
+    :priorityLevel 15 ;
+    rdfs:comment "On-board diagnostic action via CAN or Ethernet"@en ;
+    rdfs:comment "通过CAN或以太网的在线诊断动作"@zh .
+
+:action_RemoteDiagnostic rdf:type :RemoteDiagnosticAction ;
+    rdfs:label "Remote Diagnostic Action"@en ;
+    rdfs:label "远程诊断动作"@zh ;
+    :actionId "ACT-DIAG-002" ;
+    :actionName "RemoteDiagnostic" ;
+    :hasActor :actorTBOX ;
+    :executionTimeout 120000 ;
+    :priorityLevel 12 ;
+    rdfs:comment "Remote diagnostic action via telematics"@en ;
+    rdfs:comment "通过远程通信的远程诊断动作"@zh .
+
+:action_OTAUpdate rdf:type :OTAUpdateAction ;
+    rdfs:label "OTA Update Action"@en ;
+    rdfs:label "OTA更新动作"@zh ;
+    :actionId "ACT-DIAG-003" ;
+    :actionName "OTAUpdate" ;
+    :hasActor :actorTBOX ;
+    :executionTimeout 3600000 ;
+    :priorityLevel 20 ;
+    :isReversible false ;
+    rdfs:comment "Over-the-air software update action"@en ;
+    rdfs:comment "空中软件更新动作"@zh .
+
+:action_ErrorMonitoring rdf:type :ErrorMonitoringAction ;
+    rdfs:label "Error Monitoring Action"@en ;
+    rdfs:label "异常监控动作"@zh ;
+    :actionId "ACT-DIAG-004" ;
+    :actionName "ErrorMonitoring" ;
+    :hasActor :actorPowerModeManagement ;
+    :hasSignalOutput :signalLDCU_PowerCtrlError ;
+    :executionTimeout 1000 ;
+    :priorityLevel 5 ;
+    rdfs:comment "Action that monitors for power control errors between LDCU and RDCU"@en ;
+    rdfs:comment "监控LDCU与RDCU之间电源控制异常的动作"@zh .
+
+# =============================================================================
+# COMPLEX OWL CONSTRUCTS
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Power On Action with Valid Key Restriction
+# -----------------------------------------------------------------------------
+
+:PowerOnActionWithValidKey rdf:type owl:Class ;
+    rdfs:label "Power On Action With Valid Key"@en ;
+    rdfs:label "具有有效钥匙的上电动作"@zh ;
+    rdfs:comment "Power on action that requires valid key"@en ;
+    rdfs:comment "需要有效钥匙的上电动作"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :PowerOnAction
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasPrecondition ;
+              owl:someValuesFrom [
+                  rdf:type owl:Class ;
+                  owl:intersectionOf (
+                      :StateCondition
+                      [ rdf:type owl:Restriction ;
+                        owl:onProperty :requiresKeyValidity ;
+                        owl:hasValue :KeyValid
+                      ]
+                  )
+              ]
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Emergency Action (High Priority)
+# -----------------------------------------------------------------------------
+
+:EmergencyAction rdf:type owl:Class ;
+    rdfs:label "Emergency Action"@en ;
+    rdfs:label "紧急动作"@zh ;
+    rdfs:comment "Action with high priority level (>= 15)"@en ;
+    rdfs:comment "高优先级（>=15）的动作"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :Action
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :priorityLevel ;
+              owl:someValuesFrom [
+                  rdf:type rdfs:Datatype ;
+                  owl:onDatatype xsd:integer ;
+                  owl:withRestrictions ([ xsd:minInclusive 15 ])
+              ]
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Reversible Action
+# -----------------------------------------------------------------------------
+
+:ReversibleAction rdf:type owl:Class ;
+    rdfs:label "Reversible Action"@en ;
+    rdfs:label "可逆动作"@zh ;
+    rdfs:comment "Action that can be reversed or undone"@en ;
+    rdfs:comment "可以逆转或撤销的动作"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :Action
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :isReversible ;
+              owl:hasValue true
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Action Chain (Sequence of Actions)
+# -----------------------------------------------------------------------------
+
+:ActionChain rdf:type owl:Class ;
+    rdfs:label "Action Chain"@en ;
+    rdfs:label "动作链"@zh ;
+    rdfs:comment "A sequence of actions where each action triggers the next"@en ;
+    rdfs:comment "一系列动作，每个动作触发下一个动作"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :Action
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :triggersAction ;
+              owl:someValuesFrom :Action
+            ]
+        )
+    ] .
+
+# =============================================================================
+# SIGNAL REFERENCE (Links to main ontology signals)
+# =============================================================================
+
+# Reference to signal from main ontology
+:signalLVEM_LowBattPowerOff_Req rdf:type owl:Class ;
+    rdfs:subClassOf :CANSignal ;
+    rdfs:label "Low Battery Power Off Request Signal Reference"@en ;
+    rdfs:label "低电量下电请求信号引用"@zh ;
+    rdfs:comment "Reference to signal defined in main ontology"@en ;
+    rdfs:comment "主本体中定义的信号引用"@zh .
+
+# =============================================================================
+# USAGE NOTES
+# =============================================================================
+
+# This action model extends the main vehicle_power_management_ontology.ttl
+# by adding action semantics with preconditions, effects, and execution properties.
+#
+# Usage:
+# 1. Import this model into the main ontology
+# 2. Use hasPrecondition, hasEffect, hasActor to define action semantics
+# 3. Create CompositeCondition for complex preconditions
+# 4. Use TransitionEffect to model state machine transitions
+#
+# Example:
+# :action_DoorOpenPowerOn
+#     :hasPrecondition :cond_DoorOpenPowerOnPrecondition ;
+#     :hasEffect :effect_TransitionToLocalOn ;
+#     :hasActor :actorPowerModeManagement .

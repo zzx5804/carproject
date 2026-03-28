@@ -1,0 +1,1338 @@
+@prefix : <http://example.org/vehicle-power-management#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+# =============================================================================
+# ONTOLOGY METADATA
+# =============================================================================
+
+<http://example.org/vehicle-power-management/subsystem> rdf:type owl:Ontology ;
+    rdfs:label "Vehicle Power Management Subsystem Model"@en ;
+    rdfs:label "车辆电源管理子系统模型"@zh ;
+    rdfs:comment "Subsystem component (L2 layer) for Data Agent Design - defines vehicle subsystems, categories, relationships, and ECU mappings"@en ;
+    rdfs:comment "数据代理设计的子系统组件（L2层） - 定义车辆子系统、分类、关系和ECU映射"@zh ;
+    owl:versionInfo "1.0" ;
+    owl:imports <http://example.org/vehicle-power-management/core> .
+
+# =============================================================================
+# CLASSES - Subsystem Framework
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Subsystem Base Class
+# -----------------------------------------------------------------------------
+
+:Subsystem rdf:type owl:Class ;
+    rdfs:label "Subsystem"@en ;
+    rdfs:label "子系统"@zh ;
+    rdfs:comment "Base class for all vehicle subsystems - L2 layer in Data Agent architecture. A subsystem is a logical grouping of ECUs and components that work together to provide specific vehicle functionality."@en ;
+    rdfs:comment "所有车辆子系统的基类 - Data Agent架构中的L2层。子系统是共同工作以提供特定车辆功能的ECU和组件的逻辑分组。"@zh ;
+    skos:definition "A subsystem represents a major functional domain of the vehicle, containing one or more ECUs and their associated functions"@en ;
+    skos:definition "子系统代表车辆的主要功能域，包含一个或多个ECU及其相关功能"@zh .
+
+# -----------------------------------------------------------------------------
+# Fault Information Class
+# -----------------------------------------------------------------------------
+
+:FaultInfo rdf:type owl:Class ;
+    rdfs:label "Fault Information"@en ;
+    rdfs:label "故障信息"@zh ;
+    rdfs:comment "Information about faults detected in subsystems or ECUs"@en ;
+    rdfs:comment "在子系统或ECU中检测到的故障信息"@zh .
+
+:ActiveFault rdf:type owl:Class ;
+    rdfs:subClassOf :FaultInfo ;
+    rdfs:label "Active Fault"@en ;
+    rdfs:label "活动故障"@zh ;
+    rdfs:comment "Currently active fault condition"@en ;
+    rdfs:comment "当前活动的故障状态"@zh .
+
+:HistoricalFault rdf:type owl:Class ;
+    rdfs:subClassOf :FaultInfo ;
+    rdfs:label "Historical Fault"@en ;
+    rdfs:label "历史故障"@zh ;
+    rdfs:comment "Previously recorded fault that has been resolved"@en ;
+    rdfs:comment "已解决的历史记录故障"@zh .
+
+:PendingFault rdf:type owl:Class ;
+    rdfs:subClassOf :FaultInfo ;
+    rdfs:label "Pending Fault"@en ;
+    rdfs:label "待定故障"@zh ;
+    rdfs:comment "Fault that has been detected but not yet confirmed"@en ;
+    rdfs:comment "已检测但尚未确认的故障"@zh .
+
+# -----------------------------------------------------------------------------
+# Subsystem Status Classes
+# -----------------------------------------------------------------------------
+
+:SubsystemStatus rdf:type owl:Class ;
+    rdfs:label "Subsystem Status"@en ;
+    rdfs:label "子系统状态"@zh ;
+    rdfs:comment "Operational status of a subsystem"@en ;
+    rdfs:comment "子系统的运行状态"@zh .
+
+:StatusNormal rdf:type owl:Class ;
+    rdfs:subClassOf :SubsystemStatus ;
+    rdfs:label "Status Normal"@en ;
+    rdfs:label "状态正常"@zh ;
+    rdfs:comment "Subsystem operating normally"@en ;
+    rdfs:comment "子系统运行正常"@zh .
+
+:StatusWarning rdf:type owl:Class ;
+    rdfs:subClassOf :SubsystemStatus ;
+    rdfs:label "Status Warning"@en ;
+    rdfs:label "状态警告"@zh ;
+    rdfs:comment "Subsystem has minor issues, still operational"@en ;
+    rdfs:comment "子系统有轻微问题，仍可运行"@zh .
+
+:StatusError rdf:type owl:Class ;
+    rdfs:subClassOf :SubsystemStatus ;
+    rdfs:label "Status Error"@en ;
+    rdfs:label "状态错误"@zh ;
+    rdfs:comment "Subsystem has errors, limited functionality"@en ;
+    rdfs:comment "子系统有错误，功能受限"@zh .
+
+:StatusCritical rdf:type owl:Class ;
+    rdfs:subClassOf :SubsystemStatus ;
+    rdfs:label "Status Critical"@en ;
+    rdfs:label "状态严重"@zh ;
+    rdfs:comment "Subsystem in critical state, requires immediate attention"@en ;
+    rdfs:comment "子系统处于严重状态，需要立即关注"@zh .
+
+:StatusOffline rdf:type owl:Class ;
+    rdfs:subClassOf :SubsystemStatus ;
+    rdfs:label "Status Offline"@en ;
+    rdfs:label "状态离线"@zh ;
+    rdfs:comment "Subsystem is offline or not responding"@en ;
+    rdfs:comment "子系统离线或无响应"@zh .
+
+# -----------------------------------------------------------------------------
+# Communication Bus Types
+# -----------------------------------------------------------------------------
+
+:CommunicationBus rdf:type owl:Class ;
+    rdfs:label "Communication Bus"@en ;
+    rdfs:label "通信总线"@zh ;
+    rdfs:comment "Type of communication bus used by subsystem"@en ;
+    rdfs:comment "子系统使用的通信总线类型"@zh .
+
+:CANBus rdf:type owl:Class ;
+    rdfs:subClassOf :CommunicationBus ;
+    rdfs:label "CAN Bus"@en ;
+    rdfs:label "CAN总线"@zh ;
+    rdfs:comment "Controller Area Network bus"@en ;
+    rdfs:comment "控制器局域网总线"@zh .
+
+:LINBus rdf:type owl:Class ;
+    rdfs:subClassOf :CommunicationBus ;
+    rdfs:label "LIN Bus"@en ;
+    rdfs:label "LIN总线"@zh ;
+    rdfs:comment "Local Interconnect Network bus"@en ;
+    rdfs:comment "本地互联网络总线"@zh .
+
+:EthernetBus rdf:type owl:Class ;
+    rdfs:subClassOf :CommunicationBus ;
+    rdfs:label "Ethernet Bus"@en ;
+    rdfs:label "以太网总线"@zh ;
+    rdfs:comment "Automotive Ethernet bus"@en ;
+    rdfs:comment "车载以太网总线"@zh .
+
+:FLEXRayBus rdf:type owl:Class ;
+    rdfs:subClassOf :CommunicationBus ;
+    rdfs:label "FlexRay Bus"@en ;
+    rdfs:label "FlexRay总线"@zh ;
+    rdfs:comment "FlexRay high-speed bus"@en ;
+    rdfs:comment "FlexRay高速总线"@zh .
+
+:MOSTBus rdf:type owl:Class ;
+    rdfs:subClassOf :CommunicationBus ;
+    rdfs:label "MOST Bus"@en ;
+    rdfs:label "MOST总线"@zh ;
+    rdfs:comment "Media Oriented Systems Transport bus"@en ;
+    rdfs:comment "面向媒体的系统传输总线"@zh .
+
+# =============================================================================
+# CLASSES - Subsystem Categories (L2 Layer)
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# POWERTRAIN Subsystem
+# -----------------------------------------------------------------------------
+
+:PowertrainSubsystem rdf:type owl:Class ;
+    rdfs:subClassOf :Subsystem ;
+    rdfs:label "Powertrain Subsystem"@en ;
+    rdfs:label "动力总成子系统"@zh ;
+    rdfs:comment "Subsystem responsible for vehicle propulsion and power generation - includes motor, inverter, transmission, and related control units"@en ;
+    rdfs:comment "负责车辆推进和发电的子系统 - 包括电机、逆变器、变速箱及相关控制单元"@zh ;
+    skos:altLabel "PT"@en ;
+    skos:altLabel "PT"@zh .
+
+# -----------------------------------------------------------------------------
+# CHASSIS Subsystem
+# -----------------------------------------------------------------------------
+
+:ChassisSubsystem rdf:type owl:Class ;
+    rdfs:subClassOf :Subsystem ;
+    rdfs:label "Chassis Subsystem"@en ;
+    rdfs:label "底盘子系统"@zh ;
+    rdfs:comment "Subsystem responsible for vehicle dynamics, braking, steering, and suspension control"@en ;
+    rdfs:comment "负责车辆动力学、制动、转向和悬架控制的子系统"@zh ;
+    skos:altLabel "CHS"@en ;
+    skos:altLabel "CHS"@zh .
+
+# -----------------------------------------------------------------------------
+# BODY Subsystem
+# -----------------------------------------------------------------------------
+
+:BodySubsystem rdf:type owl:Class ;
+    rdfs:subClassOf :Subsystem ;
+    rdfs:label "Body Subsystem"@en ;
+    rdfs:label "车身子系统"@zh ;
+    rdfs:comment "Subsystem responsible for body electronics - includes doors, windows, lights, wipers, and body control modules"@en ;
+    rdfs:comment "负责车身电子的子系统 - 包括车门、车窗、灯光、雨刮和车身控制模块"@zh ;
+    skos:altLabel "BDY"@en ;
+    skos:altLabel "BDY"@zh .
+
+# -----------------------------------------------------------------------------
+# ELECTRICAL Subsystem
+# -----------------------------------------------------------------------------
+
+:ElectricalSubsystem rdf:type owl:Class ;
+    rdfs:subClassOf :Subsystem ;
+    rdfs:label "Electrical Subsystem"@en ;
+    rdfs:label "电气子系统"@zh ;
+    rdfs:comment "Subsystem responsible for electrical power distribution, battery management, and charging systems"@en ;
+    rdfs:comment "负责配电、电池管理和充电系统的子系统"@zh ;
+    skos:altLabel "ELC"@en ;
+    skos:altLabel "ELC"@zh .
+
+# -----------------------------------------------------------------------------
+# THERMAL_MANAGEMENT Subsystem
+# -----------------------------------------------------------------------------
+
+:ThermalManagementSubsystem rdf:type owl:Class ;
+    rdfs:subClassOf :Subsystem ;
+    rdfs:label "Thermal Management Subsystem"@en ;
+    rdfs:label "热管理子系统"@zh ;
+    rdfs:comment "Subsystem responsible for thermal management - includes HVAC, battery thermal management, and motor cooling"@en ;
+    rdfs:comment "负责热管理的子系统 - 包括暖通空调、电池热管理和电机冷却"@zh ;
+    skos:altLabel "THM"@en ;
+    skos:altLabel "THM"@zh .
+
+# -----------------------------------------------------------------------------
+# NETWORK Subsystem
+# -----------------------------------------------------------------------------
+
+:NetworkSubsystem rdf:type owl:Class ;
+    rdfs:subClassOf :Subsystem ;
+    rdfs:label "Network Subsystem"@en ;
+    rdfs:label "网络子系统"@zh ;
+    rdfs:comment "Subsystem responsible for vehicle communication, telematics, and connectivity services"@en ;
+    rdfs:comment "负责车辆通信、远程信息处理和连接服务的子系统"@zh ;
+    skos:altLabel "NET"@en ;
+    skos:altLabel "NET"@zh .
+
+# -----------------------------------------------------------------------------
+# ADAS Subsystem
+# -----------------------------------------------------------------------------
+
+:ADASSubsystem rdf:type owl:Class ;
+    rdfs:subClassOf :Subsystem ;
+    rdfs:label "ADAS Subsystem"@en ;
+    rdfs:label "高级驾驶辅助系统子系统"@zh ;
+    rdfs:comment "Subsystem responsible for Advanced Driver Assistance Systems - includes autonomous driving functions, sensors, and perception"@en ;
+    rdfs:comment "负责高级驾驶辅助系统的子系统 - 包括自动驾驶功能、传感器和感知"@zh ;
+    skos:altLabel "ADAS"@en ;
+    skos:altLabel "ADAS"@zh .
+
+# -----------------------------------------------------------------------------
+# INFOTAINMENT Subsystem
+# -----------------------------------------------------------------------------
+
+:InfotainmentSubsystem rdf:type owl:Class ;
+    rdfs:subClassOf :Subsystem ;
+    rdfs:label "Infotainment Subsystem"@en ;
+    rdfs:label "信息娱乐子系统"@zh ;
+    rdfs:comment "Subsystem responsible for infotainment - includes audio, video, navigation, and human-machine interface"@en ;
+    rdfs:comment "负责信息娱乐的子系统 - 包括音频、视频、导航和人机界面"@zh ;
+    skos:altLabel "INF"@en ;
+    skos:altLabel "INF"@zh .
+
+# -----------------------------------------------------------------------------
+# SAFETY Subsystem
+# -----------------------------------------------------------------------------
+
+:SafetySubsystem rdf:type owl:Class ;
+    rdfs:subClassOf :Subsystem ;
+    rdfs:label "Safety Subsystem"@en ;
+    rdfs:label "安全子系统"@zh ;
+    rdfs:comment "Subsystem responsible for vehicle safety - includes airbags, seat belts, collision detection, and emergency systems"@en ;
+    rdfs:comment "负责车辆安全的子系统 - 包括安全气囊、安全带、碰撞检测和紧急系统"@zh ;
+    skos:altLabel "SAF"@en ;
+    skos:altLabel "SAF"@zh .
+
+# -----------------------------------------------------------------------------
+# COMFORT Subsystem
+# -----------------------------------------------------------------------------
+
+:ComfortSubsystem rdf:type owl:Class ;
+    rdfs:subClassOf :Subsystem ;
+    rdfs:label "Comfort Subsystem"@en ;
+    rdfs:label "舒适子系统"@zh ;
+    rdfs:comment "Subsystem responsible for passenger comfort - includes seats, climate control, ambient lighting, and convenience features"@en ;
+    rdfs:comment "负责乘客舒适性的子系统 - 包括座椅、空调控制、氛围灯和便利功能"@zh ;
+    skos:altLabel "CMF"@en ;
+    skos:altLabel "CMF"@zh .
+
+# =============================================================================
+# OBJECT PROPERTIES - Subsystem Relationships
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Structural Relationships
+# -----------------------------------------------------------------------------
+
+:isPartOf rdf:type owl:ObjectProperty ;
+    rdfs:label "is part of"@en ;
+    rdfs:label "属于"@zh ;
+    rdfs:comment "Indicates that a subsystem is part of a larger entity (Vehicle)"@en ;
+    rdfs:comment "表示子系统属于更大的实体（车辆）"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :Vehicle ;
+    owl:inverseOf :hasSubsystem .
+
+:hasSubsystem rdf:type owl:ObjectProperty ;
+    rdfs:label "has subsystem"@en ;
+    rdfs:label "具有子系统"@zh ;
+    rdfs:comment "Vehicle contains a subsystem"@en ;
+    rdfs:comment "车辆包含子系统"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range :Subsystem ;
+    owl:inverseOf :isPartOf .
+
+:containsECU rdf:type owl:ObjectProperty ;
+    rdfs:label "contains ECU"@en ;
+    rdfs:label "包含ECU"@zh ;
+    rdfs:comment "Subsystem contains one or more ECUs"@en ;
+    rdfs:comment "子系统包含一个或多个ECU"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :ECU ;
+    owl:inverseOf :belongsToSubsystem .
+
+:belongsToSubsystem rdf:type owl:ObjectProperty ;
+    rdfs:label "belongs to subsystem"@en ;
+    rdfs:label "属于子系统"@zh ;
+    rdfs:comment "ECU belongs to a subsystem"@en ;
+    rdfs:comment "ECU属于子系统"@zh ;
+    rdfs:domain :ECU ;
+    rdfs:range :Subsystem ;
+    owl:inverseOf :containsECU .
+
+# -----------------------------------------------------------------------------
+# Inter-Subsystem Dependencies
+# -----------------------------------------------------------------------------
+
+:dependsOn rdf:type owl:ObjectProperty ;
+    rdfs:label "depends on"@en ;
+    rdfs:label "依赖于"@zh ;
+    rdfs:comment "Subsystem depends on another subsystem for functionality"@en ;
+    rdfs:comment "子系统依赖于另一个子系统的功能"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :Subsystem .
+
+:providesTo rdf:type owl:ObjectProperty ;
+    rdfs:label "provides to"@en ;
+    rdfs:label "提供给"@zh ;
+    rdfs:comment "Subsystem provides functionality to another subsystem"@en ;
+    rdfs:comment "子系统向另一个子系统提供功能"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :Subsystem ;
+    owl:inverseOf :dependsOn .
+
+:controls rdf:type owl:ObjectProperty ;
+    rdfs:label "controls"@en ;
+    rdfs:label "控制"@zh ;
+    rdfs:comment "Subsystem controls another subsystem's operation"@en ;
+    rdfs:comment "子系统控制另一个子系统的操作"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :Subsystem .
+
+:controlledBy rdf:type owl:ObjectProperty ;
+    rdfs:label "controlled by"@en ;
+    rdfs:label "被控制"@zh ;
+    rdfs:comment "Subsystem is controlled by another subsystem"@en ;
+    rdfs:comment "子系统被另一个子系统控制"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :Subsystem ;
+    owl:inverseOf :controls .
+
+:monitors rdf:type owl:ObjectProperty ;
+    rdfs:label "monitors"@en ;
+    rdfs:label "监控"@zh ;
+    rdfs:comment "Subsystem monitors another subsystem's status or performance"@en ;
+    rdfs:comment "子系统监控另一个子系统的状态或性能"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :Subsystem .
+
+:monitoredBy rdf:type owl:ObjectProperty ;
+    rdfs:label "monitored by"@en ;
+    rdfs:label "被监控"@zh ;
+    rdfs:comment "Subsystem is monitored by another subsystem"@en ;
+    rdfs:comment "子系统被另一个子系统监控"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :Subsystem ;
+    owl:inverseOf :monitors .
+
+:communicatesWith rdf:type owl:ObjectProperty ;
+    rdfs:label "communicates with"@en ;
+    rdfs:label "通信"@zh ;
+    rdfs:comment "Subsystem communicates with another subsystem"@en ;
+    rdfs:comment "子系统与另一个子系统通信"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :Subsystem .
+
+# -----------------------------------------------------------------------------
+# Fault and Status Relationships
+# -----------------------------------------------------------------------------
+
+:hasFault rdf:type owl:ObjectProperty ;
+    rdfs:label "has fault"@en ;
+    rdfs:label "具有故障"@zh ;
+    rdfs:comment "Subsystem has an associated fault"@en ;
+    rdfs:comment "子系统具有相关故障"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :FaultInfo .
+
+:hasActiveFault rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasFault ;
+    rdfs:label "has active fault"@en ;
+    rdfs:label "具有活动故障"@zh ;
+    rdfs:comment "Subsystem currently has an active fault"@en ;
+    rdfs:comment "子系统当前具有活动故障"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :ActiveFault .
+
+:hasHistoricalFault rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf :hasFault ;
+    rdfs:label "has historical fault"@en ;
+    rdfs:label "具有历史故障"@zh ;
+    rdfs:comment "Subsystem has a historical fault record"@en ;
+    rdfs:comment "子系统具有历史故障记录"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :HistoricalFault .
+
+:hasOverallStatus rdf:type owl:ObjectProperty ;
+    rdfs:label "has overall status"@en ;
+    rdfs:label "具有总体状态"@zh ;
+    rdfs:comment "Current overall operational status of the subsystem"@en ;
+    rdfs:comment "子系统的当前总体运行状态"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :SubsystemStatus .
+
+:hasCategory rdf:type owl:ObjectProperty ;
+    rdfs:label "has category"@en ;
+    rdfs:label "具有分类"@zh ;
+    rdfs:comment "Subsystem belongs to a specific category"@en ;
+    rdfs:comment "子系统属于特定分类"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :Subsystem .
+
+:usesCommunicationBus rdf:type owl:ObjectProperty ;
+    rdfs:label "uses communication bus"@en ;
+    rdfs:label "使用通信总线"@zh ;
+    rdfs:comment "Subsystem uses a specific communication bus type"@en ;
+    rdfs:comment "子系统使用特定类型的通信总线"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :CommunicationBus .
+
+:hasPowerMode rdf:type owl:ObjectProperty ;
+    rdfs:label "has power mode"@en ;
+    rdfs:label "具有电源模式"@zh ;
+    rdfs:comment "Current power mode of the subsystem"@en ;
+    rdfs:comment "子系统的当前电源模式"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range :PowerMode .
+
+# =============================================================================
+# DATA PROPERTIES - Subsystem Properties
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Identification Properties
+# -----------------------------------------------------------------------------
+
+:hasSubsystemId rdf:type owl:DatatypeProperty ;
+    rdfs:label "has subsystem ID"@en ;
+    rdfs:label "具有子系统编号"@zh ;
+    rdfs:comment "Unique identifier for the subsystem"@en ;
+    rdfs:comment "子系统的唯一标识符"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:string .
+
+:hasSubsystemName rdf:type owl:DatatypeProperty ;
+    rdfs:label "has subsystem name"@en ;
+    rdfs:label "具有子系统名称"@zh ;
+    rdfs:comment "Human-readable name of the subsystem"@en ;
+    rdfs:comment "子系统的可读名称"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:string .
+
+:hasSubsystemCode rdf:type owl:DatatypeProperty ;
+    rdfs:label "has subsystem code"@en ;
+    rdfs:label "具有子系统代码"@zh ;
+    rdfs:comment "Short code or abbreviation for the subsystem"@en ;
+    rdfs:comment "子系统的短代码或缩写"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:string .
+
+:hasCategoryCode rdf:type owl:DatatypeProperty ;
+    rdfs:label "has category code"@en ;
+    rdfs:label "具有分类代码"@zh ;
+    rdfs:comment "Category enumeration code for the subsystem (POWERTRAIN, CHASSIS, BODY, etc.)"@en ;
+    rdfs:comment "子系统的分类枚举代码（动力总成、底盘、车身等）"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:string .
+
+# -----------------------------------------------------------------------------
+# Functional Properties
+# -----------------------------------------------------------------------------
+
+:hasPrimaryFunction rdf:type owl:DatatypeProperty ;
+    rdfs:label "has primary function"@en ;
+    rdfs:label "具有主要功能"@zh ;
+    rdfs:comment "Primary function description of the subsystem"@en ;
+    rdfs:comment "子系统的主要功能描述"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:string .
+
+:hasSecondaryFunctions rdf:type owl:DatatypeProperty ;
+    rdfs:label "has secondary functions"@en ;
+    rdfs:label "具有次要功能"@zh ;
+    rdfs:comment "Secondary functions provided by the subsystem"@en ;
+    rdfs:comment "子系统提供的次要功能"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:string .
+
+# -----------------------------------------------------------------------------
+# Technical Specifications
+# -----------------------------------------------------------------------------
+
+:hasRatedPower rdf:type owl:DatatypeProperty ;
+    rdfs:label "has rated power"@en ;
+    rdfs:label "具有额定功率"@zh ;
+    rdfs:comment "Rated power of the subsystem in kilowatts (kW)"@en ;
+    rdfs:comment "子系统的额定功率，单位：千瓦(kW)"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:float .
+
+:hasOperatingVoltage rdf:type owl:DatatypeProperty ;
+    rdfs:label "has operating voltage"@en ;
+    rdfs:label "具有工作电压"@zh ;
+    rdfs:comment "Operating voltage of the subsystem in volts (V)"@en ;
+    rdfs:comment "子系统的工作电压，单位：伏特(V)"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:float .
+
+:hasOperatingTempMin rdf:type owl:DatatypeProperty ;
+    rdfs:label "has operating temperature min"@en ;
+    rdfs:label "具有最低工作温度"@zh ;
+    rdfs:comment "Minimum operating temperature in Celsius"@en ;
+    rdfs:comment "最低工作温度，单位：摄氏度"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:float .
+
+:hasOperatingTempMax rdf:type owl:DatatypeProperty ;
+    rdfs:label "has operating temperature max"@en ;
+    rdfs:label "具有最高工作温度"@zh ;
+    rdfs:comment "Maximum operating temperature in Celsius"@en ;
+    rdfs:comment "最高工作温度，单位：摄氏度"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:float .
+
+# -----------------------------------------------------------------------------
+# Health and Performance Properties
+# -----------------------------------------------------------------------------
+
+:hasHealthScore rdf:type owl:DatatypeProperty ;
+    rdfs:label "has health score"@en ;
+    rdfs:label "具有健康分数"@zh ;
+    rdfs:comment "Health score of the subsystem (0-100, where 100 is perfect health)"@en ;
+    rdfs:comment "子系统的健康分数（0-100，100表示完美状态）"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:integer .
+
+:hasPerformanceScore rdf:type owl:DatatypeProperty ;
+    rdfs:label "has performance score"@en ;
+    rdfs:label "具有性能分数"@zh ;
+    rdfs:comment "Performance score of the subsystem (0-100)"@en ;
+    rdfs:comment "子系统的性能分数（0-100）"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:integer .
+
+:hasAvailabilityScore rdf:type owl:DatatypeProperty ;
+    rdfs:label "has availability score"@en ;
+    rdfs:label "具有可用性分数"@zh ;
+    rdfs:comment "Availability score of the subsystem (0-100)"@en ;
+    rdfs:comment "子系统的可用性分数（0-100）"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:integer .
+
+# -----------------------------------------------------------------------------
+# Communication Properties
+# -----------------------------------------------------------------------------
+
+:hasCommunicationBusType rdf:type owl:DatatypeProperty ;
+    rdfs:label "has communication bus type"@en ;
+    rdfs:label "具有通信总线类型"@zh ;
+    rdfs:comment "Type of communication bus used (CAN, LIN, Ethernet, FlexRay, MOST)"@en ;
+    rdfs:comment "使用的通信总线类型（CAN、LIN、以太网、FlexRay、MOST）"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:string .
+
+:hasNetworkAddress rdf:type owl:DatatypeProperty ;
+    rdfs:label "has network address"@en ;
+    rdfs:label "具有网络地址"@zh ;
+    rdfs:comment "Network address or ID of the subsystem"@en ;
+    rdfs:comment "子系统的网络地址或标识"@zh ;
+    rdfs:domain :Subsystem ;
+    rdfs:range xsd:string .
+
+# -----------------------------------------------------------------------------
+# Fault Properties
+# -----------------------------------------------------------------------------
+
+:hasFaultCode rdf:type owl:DatatypeProperty ;
+    rdfs:label "has fault code"@en ;
+    rdfs:label "具有故障码"@zh ;
+    rdfs:comment "Diagnostic trouble code (DTC) for the fault"@en ;
+    rdfs:comment "故障的诊断故障码(DTC)"@zh ;
+    rdfs:domain :FaultInfo ;
+    rdfs:range xsd:string .
+
+:hasFaultDescription rdf:type owl:DatatypeProperty ;
+    rdfs:label "has fault description"@en ;
+    rdfs:label "具有故障描述"@zh ;
+    rdfs:comment "Human-readable description of the fault"@en ;
+    rdfs:comment "故障的可读描述"@zh ;
+    rdfs:domain :FaultInfo ;
+    rdfs:range xsd:string .
+
+:hasFaultSeverity rdf:type owl:DatatypeProperty ;
+    rdfs:label "has fault severity"@en ;
+    rdfs:label "具有故障严重性"@zh ;
+    rdfs:comment "Severity level of the fault (1=info, 2=warning, 3=error, 4=critical)"@en ;
+    rdfs:comment "故障的严重性级别（1=信息，2=警告，3=错误，4=严重）"@zh ;
+    rdfs:domain :FaultInfo ;
+    rdfs:range xsd:integer .
+
+:hasFaultTimestamp rdf:type owl:DatatypeProperty ;
+    rdfs:label "has fault timestamp"@en ;
+    rdfs:label "具有故障时间戳"@zh ;
+    rdfs:comment "Timestamp when the fault was detected"@en ;
+    rdfs:comment "检测到故障的时间戳"@zh ;
+    rdfs:domain :FaultInfo ;
+    rdfs:range xsd:dateTime .
+
+:hasFaultCount rdf:type owl:DatatypeProperty ;
+    rdfs:label "has fault count"@en ;
+    rdfs:label "具有故障计数"@zh ;
+    rdfs:comment "Number of times this fault has occurred"@en ;
+    rdfs:comment "此故障发生的次数"@zh ;
+    rdfs:domain :FaultInfo ;
+    rdfs:range xsd:integer .
+
+# =============================================================================
+# INDIVIDUALS - Communication Bus Types
+# =============================================================================
+
+:busCAN_HS rdf:type :CANBus ;
+    rdfs:label "High-Speed CAN"@en ;
+    rdfs:label "高速CAN"@zh ;
+    rdfs:comment "High-speed CAN bus (500 kbps)"@en ;
+    rdfs:comment "高速CAN总线（500 kbps）"@zh .
+
+:busCAN_FD rdf:type :CANBus ;
+    rdfs:label "CAN FD"@en ;
+    rdfs:label "CAN FD"@zh ;
+    rdfs:comment "CAN with Flexible Data-rate"@en ;
+    rdfs:comment "灵活数据速率CAN"@zh .
+
+:busLIN rdf:type :LINBus ;
+    rdfs:label "LIN"@en ;
+    rdfs:label "LIN"@zh ;
+    rdfs:comment "Local Interconnect Network (20 kbps)"@en ;
+    rdfs:comment "本地互联网络（20 kbps）"@zh .
+
+:busEthernet_100Mbps rdf:type :EthernetBus ;
+    rdfs:label "100Mbps Ethernet"@en ;
+    rdfs:label "100Mbps以太网"@zh ;
+    rdfs:comment "Automotive Ethernet 100Mbps"@en ;
+    rdfs:comment "车载以太网100Mbps"@zh .
+
+:busEthernet_1Gbps rdf:type :EthernetBus ;
+    rdfs:label "1Gbps Ethernet"@en ;
+    rdfs:label "1Gbps以太网"@zh ;
+    rdfs:comment "Automotive Ethernet 1Gbps"@en ;
+    rdfs:comment "车载以太网1Gbps"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Subsystem Status
+# =============================================================================
+
+:statusNormal rdf:type :StatusNormal ;
+    rdfs:label "Normal"@en ;
+    rdfs:label "正常"@zh ;
+    :signalValueHex "0x0" .
+
+:statusWarning rdf:type :StatusWarning ;
+    rdfs:label "Warning"@en ;
+    rdfs:label "警告"@zh ;
+    :signalValueHex "0x1" .
+
+:statusError rdf:type :StatusError ;
+    rdfs:label "Error"@en ;
+    rdfs:label "错误"@zh ;
+    :signalValueHex "0x2" .
+
+:statusCritical rdf:type :StatusCritical ;
+    rdfs:label "Critical"@en ;
+    rdfs:label "严重"@zh ;
+    :signalValueHex "0x3" .
+
+:statusOffline rdf:type :StatusOffline ;
+    rdfs:label "Offline"@en ;
+    rdfs:label "离线"@zh ;
+    :signalValueHex "0x4" .
+
+# =============================================================================
+# INDIVIDUALS - Subsystem Examples
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Body Electronics Subsystem
+# -----------------------------------------------------------------------------
+
+:subsystem_BodyElectronics rdf:type :BodySubsystem ;
+    rdfs:label "Body Electronics Subsystem"@en ;
+    rdfs:label "车身电子子系统"@zh ;
+    :hasSubsystemId "SUB-BDY-001" ;
+    :hasSubsystemName "Body Electronics" ;
+    :hasSubsystemCode "BDY" ;
+    :hasCategoryCode "BODY" ;
+    :hasPrimaryFunction "Controls vehicle body functions including doors, windows, lights, and mirrors"@en ;
+    :hasPrimaryFunction "控制车门、车窗、灯光和后视镜等车身功能"@zh ;
+    :hasSecondaryFunctions "Keyless entry, alarm system, central locking"@en ;
+    :hasSecondaryFunctions "无钥匙进入、报警系统、中控锁"@zh ;
+    :hasRatedPower "2.5"^^xsd:float ;
+    :hasOperatingVoltage "12.0"^^xsd:float ;
+    :hasOperatingTempMin "-40.0"^^xsd:float ;
+    :hasOperatingTempMax "85.0"^^xsd:float ;
+    :hasHealthScore 95 ;
+    :hasPerformanceScore 92 ;
+    :hasOverallStatus :statusNormal ;
+    :usesCommunicationBus :busCAN_HS ;
+    :isPartOf :vehicleInstance ;
+    :containsECU :LDCU ;
+    :containsECU :RDCU ;
+    :containsECU :BCM ;
+    :dependsOn :subsystem_PowerManagement ;
+    :communicatesWith :subsystem_Comfort ;
+    :communicatesWith :subsystem_Safety ;
+    rdfs:comment "Primary body control subsystem managing all body-related functions"@en ;
+    rdfs:comment "管理所有车身相关功能的主要车身控制子系统"@zh .
+
+# -----------------------------------------------------------------------------
+# Power Management Subsystem
+# -----------------------------------------------------------------------------
+
+:subsystem_PowerManagement rdf:type :PowertrainSubsystem ;
+    rdfs:label "Power Management Subsystem"@en ;
+    rdfs:label "电源管理子系统"@zh ;
+    :hasSubsystemId "SUB-PT-001" ;
+    :hasSubsystemName "Power Management" ;
+    :hasSubsystemCode "PM" ;
+    :hasCategoryCode "POWERTRAIN" ;
+    :hasPrimaryFunction "Manages vehicle power modes, battery, and power distribution"@en ;
+    :hasPrimaryFunction "管理车辆电源模式、电池和配电"@zh ;
+    :hasSecondaryFunctions "Energy optimization, charging control, power state management"@en ;
+    :hasSecondaryFunctions "能量优化、充电控制、电源状态管理"@zh ;
+    :hasRatedPower "150.0"^^xsd:float ;
+    :hasOperatingVoltage "400.0"^^xsd:float ;
+    :hasOperatingTempMin "-30.0"^^xsd:float ;
+    :hasOperatingTempMax "60.0"^^xsd:float ;
+    :hasHealthScore 98 ;
+    :hasPerformanceScore 95 ;
+    :hasOverallStatus :statusNormal ;
+    :usesCommunicationBus :busCAN_HS ;
+    :usesCommunicationBus :busCAN_FD ;
+    :isPartOf :vehicleInstance ;
+    :containsECU :VCU ;
+    :containsECU :BMS ;
+    :containsECU :OBC ;
+    :controls :subsystem_BodyElectronics ;
+    :controls :subsystem_ThermalManagement ;
+    :monitors :subsystem_BatterySystem ;
+    rdfs:comment "Core power management subsystem controlling vehicle power states"@en ;
+    rdfs:comment "控制车辆电源状态的核心电源管理子系统"@zh .
+
+# -----------------------------------------------------------------------------
+# Infotainment Subsystem
+# -----------------------------------------------------------------------------
+
+:subsystem_Infotainment rdf:type :InfotainmentSubsystem ;
+    rdfs:label "Infotainment Subsystem"@en ;
+    rdfs:label "信息娱乐子系统"@zh ;
+    :hasSubsystemId "SUB-INF-001" ;
+    :hasSubsystemName "Infotainment System" ;
+    :hasSubsystemCode "INF" ;
+    :hasCategoryCode "INFOTAINMENT" ;
+    :hasPrimaryFunction "Provides audio, video, navigation, and connectivity services"@en ;
+    :hasPrimaryFunction "提供音频、视频、导航和连接服务"@zh ;
+    :hasSecondaryFunctions "Voice control, smartphone integration, OTA updates"@en ;
+    :hasSecondaryFunctions "语音控制、智能手机集成、OTA更新"@zh ;
+    :hasRatedPower "0.5"^^xsd:float ;
+    :hasOperatingVoltage "12.0"^^xsd:float ;
+    :hasOperatingTempMin "-20.0"^^xsd:float ;
+    :hasOperatingTempMax "70.0"^^xsd:float ;
+    :hasHealthScore 90 ;
+    :hasPerformanceScore 88 ;
+    :hasOverallStatus :statusNormal ;
+    :usesCommunicationBus :busEthernet_100Mbps ;
+    :usesCommunicationBus :busCAN_HS ;
+    :isPartOf :vehicleInstance ;
+    :containsECU :CDCU ;
+    :dependsOn :subsystem_PowerManagement ;
+    :dependsOn :subsystem_Network ;
+    :communicatesWith :subsystem_ADAS ;
+    rdfs:comment "Infotainment subsystem providing multimedia and connectivity functions"@en ;
+    rdfs:comment "提供多媒体和连接功能的信息娱乐子系统"@zh .
+
+# -----------------------------------------------------------------------------
+# ADAS Subsystem
+# -----------------------------------------------------------------------------
+
+:subsystem_ADAS rdf:type :ADASSubsystem ;
+    rdfs:label "ADAS Subsystem"@en ;
+    rdfs:label "高级驾驶辅助系统子系统"@zh ;
+    :hasSubsystemId "SUB-ADAS-001" ;
+    :hasSubsystemName "Advanced Driver Assistance System" ;
+    :hasSubsystemCode "ADAS" ;
+    :hasCategoryCode "ADAS" ;
+    :hasPrimaryFunction "Provides autonomous driving and driver assistance functions"@en ;
+    :hasPrimaryFunction "提供自动驾驶和驾驶辅助功能"@zh ;
+    :hasSecondaryFunctions "Parking assist, lane keeping, adaptive cruise control"@en ;
+    :hasSecondaryFunctions "泊车辅助、车道保持、自适应巡航控制"@zh ;
+    :hasRatedPower "5.0"^^xsd:float ;
+    :hasOperatingVoltage "12.0"^^xsd:float ;
+    :hasOperatingTempMin "-40.0"^^xsd:float ;
+    :hasOperatingTempMax "85.0"^^xsd:float ;
+    :hasHealthScore 97 ;
+    :hasPerformanceScore 95 ;
+    :hasOverallStatus :statusNormal ;
+    :usesCommunicationBus :busEthernet_1Gbps ;
+    :usesCommunicationBus :busCAN_FD ;
+    :isPartOf :vehicleInstance ;
+    :containsECU :XPU ;
+    :controls :subsystem_Chassis ;
+    :dependsOn :subsystem_PowerManagement ;
+    :dependsOn :subsystem_Network ;
+    :monitors :subsystem_BodyElectronics ;
+    rdfs:comment "ADAS subsystem for autonomous driving and driver assistance"@en ;
+    rdfs:comment "用于自动驾驶和驾驶辅助的ADAS子系统"@zh .
+
+# -----------------------------------------------------------------------------
+# Comfort Subsystem
+# -----------------------------------------------------------------------------
+
+:subsystem_Comfort rdf:type :ComfortSubsystem ;
+    rdfs:label "Comfort Subsystem"@en ;
+    rdfs:label "舒适子系统"@zh ;
+    :hasSubsystemId "SUB-CMF-001" ;
+    :hasSubsystemName "Comfort System" ;
+    :hasSubsystemCode "CMF" ;
+    :hasCategoryCode "COMFORT" ;
+    :hasPrimaryFunction "Manages passenger comfort features including seats, climate, and ambiance"@en ;
+    :hasPrimaryFunction "管理座椅、空调和氛围等乘客舒适功能"@zh ;
+    :hasSecondaryFunctions "Seat heating/ventilation, ambient lighting, massage"@en ;
+    :hasSecondaryFunctions "座椅加热/通风、氛围灯、按摩"@zh ;
+    :hasRatedPower "1.5"^^xsd:float ;
+    :hasOperatingVoltage "12.0"^^xsd:float ;
+    :hasOperatingTempMin "-40.0"^^xsd:float ;
+    :hasOperatingTempMax "85.0"^^xsd:float ;
+    :hasHealthScore 94 ;
+    :hasPerformanceScore 90 ;
+    :hasOverallStatus :statusNormal ;
+    :usesCommunicationBus :busLIN ;
+    :usesCommunicationBus :busCAN_HS ;
+    :isPartOf :vehicleInstance ;
+    :containsECU :CDCU ;
+    :dependsOn :subsystem_BodyElectronics ;
+    :dependsOn :subsystem_ThermalManagement ;
+    rdfs:comment "Comfort subsystem for passenger convenience features"@en ;
+    rdfs:comment "用于乘客便利功能的舒适子系统"@zh .
+
+# -----------------------------------------------------------------------------
+# Network Subsystem
+# -----------------------------------------------------------------------------
+
+:subsystem_Network rdf:type :NetworkSubsystem ;
+    rdfs:label "Network Subsystem"@en ;
+    rdfs:label "网络子系统"@zh ;
+    :hasSubsystemId "SUB-NET-001" ;
+    :hasSubsystemName "Network and Telematics" ;
+    :hasSubsystemCode "NET" ;
+    :hasCategoryCode "NETWORK" ;
+    :hasPrimaryFunction "Provides vehicle connectivity, telematics, and communication services"@en ;
+    :hasPrimaryFunction "提供车辆连接、远程通信和通信服务"@zh ;
+    :hasSecondaryFunctions "GPS, cellular connectivity, V2X communication, remote services"@en ;
+    :hasSecondaryFunctions "GPS、蜂窝连接、V2X通信、远程服务"@zh ;
+    :hasRatedPower "0.3"^^xsd:float ;
+    :hasOperatingVoltage "12.0"^^xsd:float ;
+    :hasOperatingTempMin "-40.0"^^xsd:float ;
+    :hasOperatingTempMax "85.0"^^xsd:float ;
+    :hasHealthScore 96 ;
+    :hasPerformanceScore 93 ;
+    :hasOverallStatus :statusNormal ;
+    :usesCommunicationBus :busCAN_HS ;
+    :usesCommunicationBus :busEthernet_100Mbps ;
+    :isPartOf :vehicleInstance ;
+    :containsECU :TBOX ;
+    :dependsOn :subsystem_PowerManagement ;
+    :communicatesWith :subsystem_Infotainment ;
+    :communicatesWith :subsystem_ADAS ;
+    rdfs:comment "Network subsystem for connectivity and telematics services"@en ;
+    rdfs:comment "用于连接和远程通信服务的网络子系统"@zh .
+
+# -----------------------------------------------------------------------------
+# Safety Subsystem
+# -----------------------------------------------------------------------------
+
+:subsystem_Safety rdf:type :SafetySubsystem ;
+    rdfs:label "Safety Subsystem"@en ;
+    rdfs:label "安全子系统"@zh ;
+    :hasSubsystemId "SUB-SAF-001" ;
+    :hasSubsystemName "Safety System" ;
+    :hasSubsystemCode "SAF" ;
+    :hasCategoryCode "SAFETY" ;
+    :hasPrimaryFunction "Manages vehicle safety systems including airbags and seat belts"@en ;
+    :hasPrimaryFunction "管理安全气囊和安全带等车辆安全系统"@zh ;
+    :hasSecondaryFunctions "Collision detection, emergency call, rollover protection"@en ;
+    :hasSecondaryFunctions "碰撞检测、紧急呼叫、翻滚保护"@zh ;
+    :hasRatedPower "0.2"^^xsd:float ;
+    :hasOperatingVoltage "12.0"^^xsd:float ;
+    :hasOperatingTempMin "-40.0"^^xsd:float ;
+    :hasOperatingTempMax "105.0"^^xsd:float ;
+    :hasHealthScore 99 ;
+    :hasPerformanceScore 98 ;
+    :hasOverallStatus :statusNormal ;
+    :usesCommunicationBus :busCAN_HS ;
+    :isPartOf :vehicleInstance ;
+    :containsECU :ACU ;
+    :dependsOn :subsystem_PowerManagement ;
+    :communicatesWith :subsystem_ADAS ;
+    :monitors :subsystem_BodyElectronics ;
+    rdfs:comment "Safety subsystem for passive and active safety systems"@en ;
+    rdfs:comment "用于被动和主动安全系统的安全子系统"@zh .
+
+# -----------------------------------------------------------------------------
+# Thermal Management Subsystem
+# -----------------------------------------------------------------------------
+
+:subsystem_ThermalManagement rdf:type :ThermalManagementSubsystem ;
+    rdfs:label "Thermal Management Subsystem"@en ;
+    rdfs:label "热管理子系统"@zh ;
+    :hasSubsystemId "SUB-THM-001" ;
+    :hasSubsystemName "Thermal Management System" ;
+    :hasSubsystemCode "THM" ;
+    :hasCategoryCode "THERMAL_MANAGEMENT" ;
+    :hasPrimaryFunction "Manages vehicle thermal systems including HVAC and battery cooling"@en ;
+    :hasPrimaryFunction "管理暖通空调和电池冷却等车辆热系统"@zh ;
+    :hasSecondaryFunctions "Motor cooling, cabin preconditioning, heat pump"@en ;
+    :hasSecondaryFunctions "电机冷却、座舱预热、热泵"@zh ;
+    :hasRatedPower "8.0"^^xsd:float ;
+    :hasOperatingVoltage "400.0"^^xsd:float ;
+    :hasOperatingTempMin "-40.0"^^xsd:float ;
+    :hasOperatingTempMax "85.0"^^xsd:float ;
+    :hasHealthScore 93 ;
+    :hasPerformanceScore 91 ;
+    :hasOverallStatus :statusNormal ;
+    :usesCommunicationBus :busCAN_HS ;
+    :usesCommunicationBus :busLIN ;
+    :isPartOf :vehicleInstance ;
+    :dependsOn :subsystem_PowerManagement ;
+    :communicatesWith :subsystem_Comfort ;
+    :monitors :subsystem_BatterySystem ;
+    rdfs:comment "Thermal management subsystem for temperature control"@en ;
+    rdfs:comment "用于温度控制的热管理子系统"@zh .
+
+# -----------------------------------------------------------------------------
+# Chassis Subsystem
+# -----------------------------------------------------------------------------
+
+:subsystem_Chassis rdf:type :ChassisSubsystem ;
+    rdfs:label "Chassis Subsystem"@en ;
+    rdfs:label "底盘子系统"@zh ;
+    :hasSubsystemId "SUB-CHS-001" ;
+    :hasSubsystemName "Chassis System" ;
+    :hasSubsystemCode "CHS" ;
+    :hasCategoryCode "CHASSIS" ;
+    :hasPrimaryFunction "Controls vehicle dynamics including braking, steering, and suspension"@en ;
+    :hasPrimaryFunction "控制制动、转向和悬架等车辆动力学"@zh ;
+    :hasSecondaryFunctions "ABS, ESC, electronic power steering, air suspension"@en ;
+    :hasSecondaryFunctions "ABS、ESC、电动助力转向、空气悬架"@zh ;
+    :hasRatedPower "3.0"^^xsd:float ;
+    :hasOperatingVoltage "12.0"^^xsd:float ;
+    :hasOperatingTempMin "-40.0"^^xsd:float ;
+    :hasOperatingTempMax "85.0"^^xsd:float ;
+    :hasHealthScore 97 ;
+    :hasPerformanceScore 96 ;
+    :hasOverallStatus :statusNormal ;
+    :usesCommunicationBus :busCAN_FD ;
+    :usesCommunicationBus :busCAN_HS ;
+    :isPartOf :vehicleInstance ;
+    :containsECU :IPB ;
+    :dependsOn :subsystem_PowerManagement ;
+    :controlledBy :subsystem_ADAS ;
+    rdfs:comment "Chassis subsystem for vehicle dynamics control"@en ;
+    rdfs:comment "用于车辆动力学控制的底盘子系统"@zh .
+
+# -----------------------------------------------------------------------------
+# Electrical Subsystem
+# -----------------------------------------------------------------------------
+
+:subsystem_Electrical rdf:type :ElectricalSubsystem ;
+    rdfs:label "Electrical Subsystem"@en ;
+    rdfs:label "电气子系统"@zh ;
+    :hasSubsystemId "SUB-ELC-001" ;
+    :hasSubsystemName "Electrical System" ;
+    :hasSubsystemCode "ELC" ;
+    :hasCategoryCode "ELECTRICAL" ;
+    :hasPrimaryFunction "Manages electrical power distribution and battery systems"@en ;
+    :hasPrimaryFunction "管理配电和电池系统"@zh ;
+    :hasSecondaryFunctions "DC-DC conversion, power distribution, ground management"@en ;
+    :hasSecondaryFunctions "DC-DC转换、配电、接地管理"@zh ;
+    :hasRatedPower "5.0"^^xsd:float ;
+    :hasOperatingVoltage "400.0"^^xsd:float ;
+    :hasOperatingTempMin "-40.0"^^xsd:float ;
+    :hasOperatingTempMax "85.0"^^xsd:float ;
+    :hasHealthScore 98 ;
+    :hasPerformanceScore 97 ;
+    :hasOverallStatus :statusNormal ;
+    :usesCommunicationBus :busCAN_HS ;
+    :isPartOf :vehicleInstance ;
+    :dependsOn :subsystem_PowerManagement ;
+    :providesTo :subsystem_BodyElectronics ;
+    :providesTo :subsystem_Infotainment ;
+    rdfs:comment "Electrical subsystem for power distribution"@en ;
+    rdfs:comment "用于配电的电气子系统"@zh .
+
+# -----------------------------------------------------------------------------
+# Battery System Subsystem (Additional)
+# -----------------------------------------------------------------------------
+
+:subsystem_BatterySystem rdf:type :ElectricalSubsystem ;
+    rdfs:label "Battery System Subsystem"@en ;
+    rdfs:label "电池系统子系统"@zh ;
+    :hasSubsystemId "SUB-ELC-002" ;
+    :hasSubsystemName "High Voltage Battery System" ;
+    :hasSubsystemCode "BAT" ;
+    :hasCategoryCode "ELECTRICAL" ;
+    :hasPrimaryFunction "High voltage battery management and energy storage"@en ;
+    :hasPrimaryFunction "高压电池管理和能量存储"@zh ;
+    :hasSecondaryFunctions "Cell balancing, SOC estimation, thermal management integration"@en ;
+    :hasSecondaryFunctions "电芯均衡、SOC估算、热管理集成"@zh ;
+    :hasRatedPower "100.0"^^xsd:float ;
+    :hasOperatingVoltage "400.0"^^xsd:float ;
+    :hasOperatingTempMin "-30.0"^^xsd:float ;
+    :hasOperatingTempMax "55.0"^^xsd:float ;
+    :hasHealthScore 94 ;
+    :hasPerformanceScore 92 ;
+    :hasOverallStatus :statusNormal ;
+    :usesCommunicationBus :busCAN_HS ;
+    :isPartOf :vehicleInstance ;
+    :containsECU :BMS ;
+    :dependsOn :subsystem_ThermalManagement ;
+    :monitoredBy :subsystem_PowerManagement ;
+    rdfs:comment "High voltage battery subsystem for EV"@en ;
+    rdfs:comment "电动汽车高压电池子系统"@zh .
+
+# =============================================================================
+# INDIVIDUALS - ECU to Subsystem Mappings
+# =============================================================================
+
+# ECU mappings to their primary subsystems
+# These are defined using belongsToSubsystem property
+
+:ecu_LDCU_BodyMap rdf:type :LDCU ;
+    rdfs:label "LDCU Body Mapping"@en ;
+    rdfs:label "LDCU车身映射"@zh ;
+    :belongsToSubsystem :subsystem_BodyElectronics ;
+    rdfs:comment "LDCU is primarily part of the Body Electronics subsystem"@en ;
+    rdfs:comment "LDCU主要属于车身电子子系统"@zh .
+
+:ecu_RDCU_BodyMap rdf:type :RDCU ;
+    rdfs:label "RDCU Body Mapping"@en ;
+    rdfs:label "RDCU车身映射"@zh ;
+    :belongsToSubsystem :subsystem_BodyElectronics ;
+    rdfs:comment "RDCU is primarily part of the Body Electronics subsystem"@en ;
+    rdfs:comment "RDCU主要属于车身电子子系统"@zh .
+
+:ecu_CDCU_ComfortMap rdf:type :CDCU ;
+    rdfs:label "CDCU Comfort Mapping"@en ;
+    rdfs:label "CDCU舒适映射"@zh ;
+    :belongsToSubsystem :subsystem_Comfort ;
+    rdfs:comment "CDCU is part of Comfort subsystem for infotainment and comfort"@en ;
+    rdfs:comment "CDCU属于舒适子系统，用于信息娱乐和舒适功能"@zh .
+
+:ecu_TBOX_NetworkMap rdf:type :TBOX ;
+    rdfs:label "TBOX Network Mapping"@en ;
+    rdfs:label "TBOX网络映射"@zh ;
+    :belongsToSubsystem :subsystem_Network ;
+    rdfs:comment "TBOX is part of Network subsystem for telematics"@en ;
+    rdfs:comment "TBOX属于网络子系统，用于远程通信"@zh .
+
+:ecu_XPU_ADASMap rdf:type :XPU ;
+    rdfs:label "XPU ADAS Mapping"@en ;
+    rdfs:label "XPU ADAS映射"@zh ;
+    :belongsToSubsystem :subsystem_ADAS ;
+    rdfs:comment "XPU is part of ADAS subsystem for autonomous parking"@en ;
+    rdfs:comment "XPU属于ADAS子系统，用于自动泊车"@zh .
+
+:ecu_BCM_BodyMap rdf:type :BCM ;
+    rdfs:label "BCM Body Mapping"@en ;
+    rdfs:label "BCM车身映射"@zh ;
+    :belongsToSubsystem :subsystem_BodyElectronics ;
+    rdfs:comment "BCM is part of Body Electronics subsystem"@en ;
+    rdfs:comment "BCM属于车身电子子系统"@zh .
+
+:ecu_VCU_PowertrainMap rdf:type :VCU ;
+    rdfs:label "VCU Powertrain Mapping"@en ;
+    rdfs:label "VCU动力总成映射"@zh ;
+    :belongsToSubsystem :subsystem_PowerManagement ;
+    rdfs:comment "VCU is part of Powertrain/Power Management subsystem"@en ;
+    rdfs:comment "VCU属于动力总成/电源管理子系统"@zh .
+
+:ecu_BMS_PowertrainMap rdf:type :BMS ;
+    rdfs:label "BMS Powertrain Mapping"@en ;
+    rdfs:label "BMS动力总成映射"@zh ;
+    :belongsToSubsystem :subsystem_PowerManagement ;
+    rdfs:comment "BMS is part of Powertrain subsystem for battery management"@en ;
+    rdfs:comment "BMS属于动力总成子系统，用于电池管理"@zh .
+
+:ecu_OBC_PowertrainMap rdf:type :OBC ;
+    rdfs:label "OBC Powertrain Mapping"@en ;
+    rdfs:label "OBC动力总成映射"@zh ;
+    :belongsToSubsystem :subsystem_PowerManagement ;
+    rdfs:comment "OBC is part of Powertrain subsystem for charging"@en ;
+    rdfs:comment "OBC属于动力总成子系统，用于充电"@zh .
+
+:ecu_ACU_SafetyMap rdf:type :ACU ;
+    rdfs:label "ACU Safety Mapping"@en ;
+    rdfs:label "ACU安全映射"@zh ;
+    :belongsToSubsystem :subsystem_Safety ;
+    rdfs:comment "ACU is part of Safety subsystem for airbag control"@en ;
+    rdfs:comment "ACU属于安全子系统，用于安全气囊控制"@zh .
+
+:ecu_IPB_ChassisMap rdf:type :IPB ;
+    rdfs:label "IPB Chassis Mapping"@en ;
+    rdfs:label "IPB底盘映射"@zh ;
+    :belongsToSubsystem :subsystem_Chassis ;
+    rdfs:comment "IPB is part of Chassis subsystem for braking"@en ;
+    rdfs:comment "IPB属于底盘子系统，用于制动"@zh .
+
+# =============================================================================
+# INDIVIDUALS - Example Faults
+# =============================================================================
+
+:fault_BatteryHighTemp rdf:type :ActiveFault ;
+    rdfs:label "Battery High Temperature Fault"@en ;
+    rdfs:label "电池高温故障"@zh ;
+    :hasFaultCode "P0A7F" ;
+    :hasFaultDescription "Battery pack temperature exceeds safe operating limit"@en ;
+    :hasFaultDescription "电池包温度超过安全工作限值"@zh ;
+    :hasFaultSeverity 4 ;
+    :hasFaultTimestamp "2024-03-15T14:30:00.000Z"^^xsd:dateTime ;
+    :hasFaultCount 1 .
+
+:fault_BodyModuleCommLoss rdf:type :ActiveFault ;
+    rdfs:label "Body Module Communication Loss"@en ;
+    rdfs:label "车身模块通信丢失"@zh ;
+    :hasFaultCode "U0140" ;
+    :hasFaultDescription "Lost communication with body control module"@en ;
+    :hasFaultDescription "与车身控制模块失去通信"@zh ;
+    :hasFaultSeverity 3 ;
+    :hasFaultTimestamp "2024-03-15T10:15:00.000Z"^^xsd:dateTime ;
+    :hasFaultCount 2 .
+
+:fault_ADASSensorDegraded rdf:type :PendingFault ;
+    rdfs:label "ADAS Sensor Degraded"@en ;
+    rdfs:label "ADAS传感器降级"@zh ;
+    :hasFaultCode "C1103" ;
+    :hasFaultDescription "Front camera sensor degraded performance"@en ;
+    :hasFaultDescription "前摄像头传感器性能降级"@zh ;
+    :hasFaultSeverity 2 ;
+    :hasFaultTimestamp "2024-03-15T09:00:00.000Z"^^xsd:dateTime ;
+    :hasFaultCount 1 .
+
+:fault_Historical_PowerOnError rdf:type :HistoricalFault ;
+    rdfs:label "Historical Power On Error"@en ;
+    rdfs:label "历史上电异常"@zh ;
+    :hasFaultCode "PWR-ERR-001" ;
+    :hasFaultDescription "LDCU-RDCU power synchronization error - resolved"@en ;
+    :hasFaultDescription "LDCU-RDCU电源同步异常 - 已解决"@zh ;
+    :hasFaultSeverity 3 ;
+    :hasFaultTimestamp "2024-03-10T08:00:00.000Z"^^xsd:dateTime ;
+    :hasFaultCount 1 .
+
+# =============================================================================
+# INDIVIDUALS - Vehicle Instance Reference
+# =============================================================================
+
+:vehicleInstance rdf:type :Vehicle ;
+    rdfs:label "Vehicle Instance"@en ;
+    rdfs:label "车辆实例"@zh ;
+    :hasSubsystem :subsystem_BodyElectronics ;
+    :hasSubsystem :subsystem_PowerManagement ;
+    :hasSubsystem :subsystem_Infotainment ;
+    :hasSubsystem :subsystem_ADAS ;
+    :hasSubsystem :subsystem_Comfort ;
+    :hasSubsystem :subsystem_Network ;
+    :hasSubsystem :subsystem_Safety ;
+    :hasSubsystem :subsystem_ThermalManagement ;
+    :hasSubsystem :subsystem_Chassis ;
+    :hasSubsystem :subsystem_Electrical ;
+    :hasSubsystem :subsystem_BatterySystem ;
+    rdfs:comment "Reference vehicle instance for subsystem relationships"@en ;
+    rdfs:comment "用于子系统关系的参考车辆实例"@zh .
+
+# =============================================================================
+# COMPLEX OWL CONSTRUCTS
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Subsystem with Active Fault
+# -----------------------------------------------------------------------------
+
+:SubsystemWithActiveFault rdf:type owl:Class ;
+    rdfs:label "Subsystem With Active Fault"@en ;
+    rdfs:label "具有活动故障的子系统"@zh ;
+    rdfs:comment "Subsystem that has at least one active fault"@en ;
+    rdfs:comment "至少具有一个活动故障的子系统"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :hasActiveFault ;
+        owl:someValuesFrom :ActiveFault
+    ] .
+
+# -----------------------------------------------------------------------------
+# Healthy Subsystem
+# -----------------------------------------------------------------------------
+
+:HealthySubsystem rdf:type owl:Class ;
+    rdfs:label "Healthy Subsystem"@en ;
+    rdfs:label "健康子系统"@zh ;
+    rdfs:comment "Subsystem with health score above 80 and no active faults"@en ;
+    rdfs:comment "健康分数高于80且无活动故障的子系统"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :Subsystem
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasHealthScore ;
+              owl:someValuesFrom [
+                  rdf:type rdfs:Datatype ;
+                  owl:onDatatype xsd:integer ;
+                  owl:withRestrictions ([xsd:minInclusive 80])
+              ]
+            ]
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasActiveFault ;
+              owl:cardinality 0
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Critical Subsystem
+# -----------------------------------------------------------------------------
+
+:CriticalSubsystem rdf:type owl:Class ;
+    rdfs:label "Critical Subsystem"@en ;
+    rdfs:label "关键子系统"@zh ;
+    rdfs:comment "Subsystem with critical status or health score below 50"@en ;
+    rdfs:comment "状态严重或健康分数低于50的子系统"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:unionOf (
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasOverallStatus ;
+              owl:hasValue :statusCritical
+            ]
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasHealthScore ;
+              owl:someValuesFrom [
+                  rdf:type rdfs:Datatype ;
+                  owl:onDatatype xsd:integer ;
+                  owl:withRestrictions ([xsd:maxExclusive 50])
+              ]
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Powertrain Subsystem with High Voltage
+# -----------------------------------------------------------------------------
+
+:HighVoltageSubsystem rdf:type owl:Class ;
+    rdfs:label "High Voltage Subsystem"@en ;
+    rdfs:label "高压子系统"@zh ;
+    rdfs:comment "Subsystem operating at high voltage (>60V)"@en ;
+    rdfs:comment "工作电压大于60V的子系统"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Class ;
+        owl:intersectionOf (
+            :Subsystem
+            [ rdf:type owl:Restriction ;
+              owl:onProperty :hasOperatingVoltage ;
+              owl:someValuesFrom [
+                  rdf:type rdfs:Datatype ;
+                  owl:onDatatype xsd:float ;
+                  owl:withRestrictions ([xsd:minExclusive 60.0])
+              ]
+            ]
+        )
+    ] .
+
+# -----------------------------------------------------------------------------
+# Connected Subsystem
+# -----------------------------------------------------------------------------
+
+:ConnectedSubsystem rdf:type owl:Class ;
+    rdfs:label "Connected Subsystem"@en ;
+    rdfs:label "已连接子系统"@zh ;
+    rdfs:comment "Subsystem that communicates with at least one other subsystem"@en ;
+    rdfs:comment "与至少一个其他子系统通信的子系统"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :communicatesWith ;
+        owl:someValuesFrom :Subsystem
+    ] .
+
+# -----------------------------------------------------------------------------
+# Controlling Subsystem
+# -----------------------------------------------------------------------------
+
+:ControllingSubsystem rdf:type owl:Class ;
+    rdfs:label "Controlling Subsystem"@en ;
+    rdfs:label "控制子系统"@zh ;
+    rdfs:comment "Subsystem that controls at least one other subsystem"@en ;
+    rdfs:comment "控制至少一个其他子系统的子系统"@zh ;
+    owl:equivalentClass [
+        rdf:type owl:Restriction ;
+        owl:onProperty :controls ;
+        owl:someValuesFrom :Subsystem
+    ] .

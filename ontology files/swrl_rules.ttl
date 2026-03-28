@@ -1,0 +1,1557 @@
+@prefix : <http://example.org/vehicle-power-management#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+
+# =============================================================================
+# SWRL RULES FOR VEHICLE POWER MANAGEMENT ONTOLOGY
+# =============================================================================
+
+<http://example.org/vehicle-power-management/swrl> rdf:type owl:Ontology ;
+    rdfs:label "Vehicle Power Management SWRL Rules"@en ;
+    rdfs:label "车辆电源管理SWRL规则"@zh ;
+    rdfs:comment "SWRL reasoning rules for vehicle power management"@en ;
+    rdfs:comment "车辆电源管理的SWRL推理规则"@zh ;
+    owl:versionInfo "1.0" ;
+    owl:imports <http://example.org/vehicle-power-management/core> .
+#
+# This file contains SWRL (Semantic Web Rule Language) rules for the vehicle
+# power management ontology. Rules are defined according to W3C SWRL specification.
+#
+# Rule Categories:
+# 1. Power Mode Transition Rules (T_1_3 through T_4_3)
+# 2. Key Validation Rules
+# 3. Auto Power Off Rules
+# 4. Forced Power Off Rules
+#
+# =============================================================================
+
+# =============================================================================
+# SWRL VARIABLES
+# =============================================================================
+
+:vehicle rdf:type swrl:Variable ;
+    rdfs:label "Vehicle Variable"@en ;
+    rdfs:label "车辆变量"@zh .
+
+:fromMode rdf:type swrl:Variable ;
+    rdfs:label "From Mode Variable"@en ;
+    rdfs:label "源模式变量"@zh .
+
+:toMode rdf:type swrl:Variable ;
+    rdfs:label "To Mode Variable"@en ;
+    rdfs:label "目标模式变量"@zh .
+
+:key rdf:type swrl:Variable ;
+    rdfs:label "Key Variable"@en ;
+    rdfs:label "钥匙变量"@zh .
+
+:signal rdf:type swrl:Variable ;
+    rdfs:label "Signal Variable"@en ;
+    rdfs:label "信号变量"@zh .
+
+:source rdf:type swrl:Variable ;
+    rdfs:label "Source Variable"@en ;
+    rdfs:label "源变量"@zh .
+
+:speed rdf:type swrl:Variable ;
+    rdfs:label "Speed Variable"@en ;
+    rdfs:label "速度变量"@zh .
+
+:voltage rdf:type swrl:Variable ;
+    rdfs:label "Voltage Variable"@en ;
+    rdfs:label "电压变量"@zh .
+
+:duration rdf:type swrl:Variable ;
+    rdfs:label "Duration Variable"@en ;
+    rdfs:label "持续时间变量"@zh .
+
+:timer rdf:type swrl:Variable ;
+    rdfs:label "Timer Variable"@en ;
+    rdfs:label "计时器变量"@zh .
+
+# =============================================================================
+# SECTION 1: POWER MODE TRANSITION RULES
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# T_1_3: Off → Local On (按启动按钮上电 / 踩刹车按启动按钮上电)
+# -----------------------------------------------------------------------------
+# IF: Vehicle in OffMode AND KeyValidSt=1 AND (BrakePressed OR StartButtonPressed)
+# THEN: transitionsTo LocalOnMode, PowerONSource=StartButton
+
+:ruleT_1_3_StartButton rdf:type swrl:Imp ;
+    rdfs:label "T_1_3: Off to Local On via Start Button"@en ;
+    rdfs:label "T_1_3: 按启动按钮从Off到Local On"@zh ;
+    rdfs:comment "Transition from Off mode to Local On mode when start button is pressed with valid key"@en ;
+    rdfs:comment "当按下启动按钮且钥匙有效时，从Off模式跳转到Local On模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "0"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :KeyValidSt ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "1"^^xsd:integer ] ;
+                rdf:rest [ rdf:type swrl:AtomList ;
+                    rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                        swrl:propertyPredicate :StartButtonPressed ;
+                        swrl:argument1 :vehicle ;
+                        swrl:argument2 "true"^^xsd:boolean ] ;
+                    rdf:rest rdf:nil ] ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "1"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerONSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_1_3_BrakePress rdf:type swrl:Imp ;
+    rdfs:label "T_1_3: Off to Local On via Brake Press"@en ;
+    rdfs:label "T_1_3: 踩刹车从Off到Local On"@zh ;
+    rdfs:comment "Transition from Off mode to Local On mode when brake is pressed with valid key"@en ;
+    rdfs:comment "当踩下刹车且钥匙有效时，从Off模式跳转到Local On模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "0"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :KeyValidSt ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "1"^^xsd:integer ] ;
+                rdf:rest [ rdf:type swrl:AtomList ;
+                    rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                        swrl:propertyPredicate :BrakePressedSt ;
+                        swrl:argument1 :vehicle ;
+                        swrl:argument2 "true"^^xsd:boolean ] ;
+                    rdf:rest rdf:nil ] ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "1"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerONSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "2"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+# -----------------------------------------------------------------------------
+# T_1_4: Off → Remote On (OTA/远程诊断上电 / 自动泊车上电)
+# -----------------------------------------------------------------------------
+# IF: Vehicle in OffMode AND (OTAPowerOnValid=1 OR RemoteDiagRequest=1 OR XPUPowerReq=1)
+# THEN: transitionsTo RemoteOnMode
+
+:ruleT_1_4_OTA rdf:type swrl:Imp ;
+    rdfs:label "T_1_4: Off to Remote On via OTA"@en ;
+    rdfs:label "T_1_4: OTA上电从Off到Remote On"@zh ;
+    rdfs:comment "Transition from Off mode to Remote On mode via OTA request"@en ;
+    rdfs:comment "通过OTA请求从Off模式跳转到Remote On模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "0"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :OTAPowerOnValid ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "1"^^xsd:integer ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "2"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerONSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "3"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_1_4_RemoteDiag rdf:type swrl:Imp ;
+    rdfs:label "T_1_4: Off to Remote On via Remote Diag"@en ;
+    rdfs:label "T_1_4: 远程诊断上电从Off到Remote On"@zh ;
+    rdfs:comment "Transition from Off mode to Remote On mode via remote diagnostics request"@en ;
+    rdfs:comment "通过远程诊断请求从Off模式跳转到Remote On模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "0"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :RemoteDiagRequest ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "1"^^xsd:integer ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "2"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerONSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "3"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_1_4_XPU rdf:type swrl:Imp ;
+    rdfs:label "T_1_4: Off to Remote On via XPU"@en ;
+    rdfs:label "T_1_4: XPU请求上电从Off到Remote On"@zh ;
+    rdfs:comment "Transition from Off mode to Remote On mode via XPU power request (auto parking)"@en ;
+    rdfs:comment "通过XPU请求（自动泊车）从Off模式跳转到Remote On模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "0"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :XPUPowerReq ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "1"^^xsd:integer ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "2"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerONSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "4"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+# -----------------------------------------------------------------------------
+# T_2_1: Convenience → Off
+# -----------------------------------------------------------------------------
+# IF: Vehicle in ConvenienceMode AND (DoorLockEvent OR DoorOpenEvent OR 
+#     AutoPowerOffTimerExpired OR LowBattery)
+# THEN: transitionsTo OffMode
+
+:ruleT_2_1_DoorLock rdf:type swrl:Imp ;
+    rdfs:label "T_2_1: Convenience to Off via Door Lock"@en ;
+    rdfs:label "T_2_1: 门锁事件从Convenience到Off"@zh ;
+    rdfs:comment "Transition from Convenience mode to Off mode on door lock event"@en ;
+    rdfs:comment "门锁事件触发从Convenience模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "4"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :DoorLockEvent ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_2_1_DoorOpen rdf:type swrl:Imp ;
+    rdfs:label "T_2_1: Convenience to Off via Door Open"@en ;
+    rdfs:label "T_2_1: 车门打开从Convenience到Off"@zh ;
+    rdfs:comment "Transition from Convenience mode to Off mode on door open event"@en ;
+    rdfs:comment "车门打开事件触发从Convenience模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "4"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :DoorOpenEvent ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_2_1_AutoPowerOff rdf:type swrl:Imp ;
+    rdfs:label "T_2_1: Convenience to Off via Auto Power Off Timer"@en ;
+    rdfs:label "T_2_1: 自动下电超时从Convenience到Off"@zh ;
+    rdfs:comment "Transition from Convenience mode to Off mode on auto power off timer expiration"@en ;
+    rdfs:comment "自动下电计时器到期触发从Convenience模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "4"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :AutoPowerOffTimerExpired ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "5"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_2_1_LowBattery rdf:type swrl:Imp ;
+    rdfs:label "T_2_1: Convenience to Off via Low Battery"@en ;
+    rdfs:label "T_2_1: 低电量从Convenience到Off"@zh ;
+    rdfs:comment "Transition from Convenience mode to Off mode on low battery condition"@en ;
+    rdfs:comment "低电量状态触发从Convenience模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "4"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :LowBatteryCondition ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "5"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+# -----------------------------------------------------------------------------
+# T_3_1: Local On → Off
+# -----------------------------------------------------------------------------
+# IF: Vehicle in LocalOnMode AND (DoorOpenWithStartButton OR AutoPowerOffTimerExpired OR 
+#     ForcedPowerOff OR DiagCommand OR LowBattery OR DoorLockAfterLeave)
+# THEN: transitionsTo OffMode
+
+:ruleT_3_1_DoorOpenWithButton rdf:type swrl:Imp ;
+    rdfs:label "T_3_1: Local On to Off via Door Open with Start Button"@en ;
+    rdfs:label "T_3_1: 开门按启动按钮从Local On到Off"@zh ;
+    rdfs:comment "Transition from Local On mode to Off mode on door open with start button press"@en ;
+    rdfs:comment "开门并按下启动按钮触发从Local On模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :DoorOpenWithStartButton ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_3_1_AutoPowerOff rdf:type swrl:Imp ;
+    rdfs:label "T_3_1: Local On to Off via Auto Power Off Timer"@en ;
+    rdfs:label "T_3_1: 自动下电超时从Local On到Off"@zh ;
+    rdfs:comment "Transition from Local On mode to Off mode on auto power off timer expiration"@en ;
+    rdfs:comment "自动下电计时器到期触发从Local On模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :AutoPowerOffTimerExpired ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "5"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_3_1_ForcedPowerOff rdf:type swrl:Imp ;
+    rdfs:label "T_3_1: Local On to Off via Forced Power Off"@en ;
+    rdfs:label "T_3_1: 强制下电从Local On到Off"@zh ;
+    rdfs:comment "Transition from Local On mode to Off mode via forced power off"@en ;
+    rdfs:comment "强制下电触发从Local On模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :ForcedPowerOffRequest ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "2"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_3_1_DiagCommand rdf:type swrl:Imp ;
+    rdfs:label "T_3_1: Local On to Off via Diagnostic Command"@en ;
+    rdfs:label "T_3_1: 诊断命令从Local On到Off"@zh ;
+    rdfs:comment "Transition from Local On mode to Off mode via diagnostic command"@en ;
+    rdfs:comment "诊断命令触发从Local On模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :DiagPowerOffCommand ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "3"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_3_1_LowBattery rdf:type swrl:Imp ;
+    rdfs:label "T_3_1: Local On to Off via Low Battery"@en ;
+    rdfs:label "T_3_1: 低电量从Local On到Off"@zh ;
+    rdfs:comment "Transition from Local On mode to Off mode on low battery condition"@en ;
+    rdfs:comment "低电量状态触发从Local On模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :LowBatteryCondition ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "5"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_3_1_DoorLockAfterLeave rdf:type swrl:Imp ;
+    rdfs:label "T_3_1: Local On to Off via Door Lock After Leave"@en ;
+    rdfs:label "T_3_1: 离车锁门从Local On到Off"@zh ;
+    rdfs:comment "Transition from Local On mode to Off mode on door lock after driver leaves"@en ;
+    rdfs:comment "驾驶员离车后锁门触发从Local On模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :DoorLockAfterLeave ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+# -----------------------------------------------------------------------------
+# T_3_2: Local On → Convenience
+# -----------------------------------------------------------------------------
+# IF: Vehicle in LocalOnMode AND StartButtonShortPress
+# THEN: transitionsTo ConvenienceMode
+
+:ruleT_3_2 rdf:type swrl:Imp ;
+    rdfs:label "T_3_2: Local On to Convenience via Short Press"@en ;
+    rdfs:label "T_3_2: 短按启动按钮从Local On到Convenience"@zh ;
+    rdfs:comment "Transition from Local On mode to Convenience mode on start button short press"@en ;
+    rdfs:comment "短按启动按钮触发从Local On模式跳转到Convenience模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :StartButtonShortPress ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "4"^^xsd:integer ] ;
+        rdf:rest rdf:nil ] .
+
+# -----------------------------------------------------------------------------
+# T_4_1: Remote On → Off
+# -----------------------------------------------------------------------------
+# IF: Vehicle in RemoteOnMode AND (ExitRemoteDiag OR DoorLock OR ForcedPowerOff OR LowBattery)
+# THEN: transitionsTo OffMode
+
+:ruleT_4_1_ExitRemoteDiag rdf:type swrl:Imp ;
+    rdfs:label "T_4_1: Remote On to Off via Exit Remote Diag"@en ;
+    rdfs:label "T_4_1: 退出远程诊断从Remote On到Off"@zh ;
+    rdfs:comment "Transition from Remote On mode to Off mode on exit remote diagnostics"@en ;
+    rdfs:comment "退出远程诊断触发从Remote On模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "2"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :ExitRemoteDiagRequest ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "3"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_4_1_DoorLock rdf:type swrl:Imp ;
+    rdfs:label "T_4_1: Remote On to Off via Door Lock"@en ;
+    rdfs:label "T_4_1: 门锁事件从Remote On到Off"@zh ;
+    rdfs:comment "Transition from Remote On mode to Off mode on door lock event"@en ;
+    rdfs:comment "门锁事件触发从Remote On模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "2"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :DoorLockEvent ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_4_1_ForcedPowerOff rdf:type swrl:Imp ;
+    rdfs:label "T_4_1: Remote On to Off via Forced Power Off"@en ;
+    rdfs:label "T_4_1: 强制下电从Remote On到Off"@zh ;
+    rdfs:comment "Transition from Remote On mode to Off mode via forced power off"@en ;
+    rdfs:comment "强制下电触发从Remote On模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "2"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :ForcedPowerOffRequest ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "2"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_4_1_LowBattery rdf:type swrl:Imp ;
+    rdfs:label "T_4_1: Remote On to Off via Low Battery"@en ;
+    rdfs:label "T_4_1: 低电量从Remote On到Off"@zh ;
+    rdfs:comment "Transition from Remote On mode to Off mode on low battery condition"@en ;
+    rdfs:comment "低电量状态触发从Remote On模式跳转到Off模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "2"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :LowBatteryCondition ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "5"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+# -----------------------------------------------------------------------------
+# T_4_3: Remote On → Local On
+# -----------------------------------------------------------------------------
+# IF: Vehicle in RemoteOnMode AND (StartButtonPressed OR BrakePressedWithStartButton)
+# THEN: transitionsTo LocalOnMode
+
+:ruleT_4_3_StartButton rdf:type swrl:Imp ;
+    rdfs:label "T_4_3: Remote On to Local On via Start Button"@en ;
+    rdfs:label "T_4_3: 按启动按钮从Remote On到Local On"@zh ;
+    rdfs:comment "Transition from Remote On mode to Local On mode on start button press"@en ;
+    rdfs:comment "按下启动按钮触发从Remote On模式跳转到Local On模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "2"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :StartButtonPressed ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "1"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerONSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+:ruleT_4_3_BrakeWithButton rdf:type swrl:Imp ;
+    rdfs:label "T_4_3: Remote On to Local On via Brake with Start Button"@en ;
+    rdfs:label "T_4_3: 踩刹车按启动按钮从Remote On到Local On"@zh ;
+    rdfs:comment "Transition from Remote On mode to Local On mode on brake press with start button"@en ;
+    rdfs:comment "踩刹车并按启动按钮触发从Remote On模式跳转到Local On模式"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "2"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :BrakePressedWithStartButton ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "1"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerONSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "2"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+# =============================================================================
+# SECTION 2: KEY VALIDATION RULES
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Rule: Key in vehicle + valid signal → KeyValid
+# -----------------------------------------------------------------------------
+
+:ruleKeyValidation_InCar rdf:type swrl:Imp ;
+    rdfs:label "Key Validation: Key In Car"@en ;
+    rdfs:label "钥匙验证：钥匙在车内"@zh ;
+    rdfs:comment "Key is valid when located in vehicle and authentication passed"@en ;
+    rdfs:comment "钥匙位于车内且认证通过时为有效钥匙"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:ObjectPropertyAtom ;
+                swrl:propertyPredicate :hasKey ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 :key ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :KeyLocation ;
+                    swrl:argument1 :key ;
+                    swrl:argument2 "1"^^xsd:integer ] ;
+                rdf:rest [ rdf:type swrl:AtomList ;
+                    rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                        swrl:propertyPredicate :BLEKeyValidSt ;
+                        swrl:argument1 :vehicle ;
+                        swrl:argument2 "1"^^xsd:integer ] ;
+                    rdf:rest rdf:nil ] ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :KeyValidSt ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "1"^^xsd:integer ] ;
+        rdf:rest rdf:nil ] .
+
+:ruleKeyValidation_RKE rdf:type swrl:Imp ;
+    rdfs:label "Key Validation: RKE Key Valid"@en ;
+    rdfs:label "钥匙验证：RKE钥匙有效"@zh ;
+    rdfs:comment "RKE key validation when valid signal received"@en ;
+    rdfs:comment "当接收到有效信号时RKE钥匙验证通过"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :RKEKeyValidSt ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :KeyLocation ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "1"^^xsd:integer ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :KeyValidSt ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "1"^^xsd:integer ] ;
+        rdf:rest rdf:nil ] .
+
+# -----------------------------------------------------------------------------
+# Rule: Key out of vehicle → KeyInvalid
+# -----------------------------------------------------------------------------
+
+:ruleKeyValidation_OutOfCar rdf:type swrl:Imp ;
+    rdfs:label "Key Validation: Key Out of Car"@en ;
+    rdfs:label "钥匙验证：钥匙不在车内"@zh ;
+    rdfs:comment "Key is invalid when located outside vehicle and no valid authentication"@en ;
+    rdfs:comment "钥匙位于车外且无有效认证时为无效钥匙"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :KeyLocation ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "5"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :KeyValidSt ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest rdf:nil ] .
+
+:ruleKeyValidation_Timeout rdf:type swrl:Imp ;
+    rdfs:label "Key Validation: Search Timeout"@en ;
+    rdfs:label "钥匙验证：搜索超时"@zh ;
+    rdfs:comment "Key is invalid when search timeout occurs (tKeySearch expired)"@en ;
+    rdfs:comment "钥匙搜索超时（tKeySearch到期）时钥匙为无效"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :KeySearchTimeout ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "true"^^xsd:boolean ] ;
+            rdf:rest rdf:nil ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :KeyValidSt ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest rdf:nil ] .
+
+# =============================================================================
+# SECTION 3: AUTO POWER OFF RULES
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Rule: LocalOnMode + timeout (tKeySearch expired) → PowerOff
+# -----------------------------------------------------------------------------
+
+:ruleAutoPowerOff_KeySearchExpired rdf:type swrl:Imp ;
+    rdfs:label "Auto Power Off: Key Search Expired in Local On"@en ;
+    rdfs:label "自动下电：Local On模式下钥匙搜索超时"@zh ;
+    rdfs:comment "Auto power off when key search timer expires in Local On mode"@en ;
+    rdfs:comment "Local On模式下钥匙搜索计时器到期时自动下电"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :KeySearchTimeout ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "true"^^xsd:boolean ] ;
+                rdf:rest [ rdf:type swrl:AtomList ;
+                    rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                        swrl:propertyPredicate :KeyValidSt ;
+                        swrl:argument1 :vehicle ;
+                        swrl:argument2 "0"^^xsd:integer ] ;
+                    rdf:rest rdf:nil ] ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LDCU_PowerMode ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "0"^^xsd:integer ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "5"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] .
+
+# -----------------------------------------------------------------------------
+# Rule: LowBattery (voltage < threshold) → PowerOff
+# -----------------------------------------------------------------------------
+
+:ruleAutoPowerOff_LowBattery rdf:type swrl:Imp ;
+    rdfs:label "Auto Power Off: Low Battery Voltage"@en ;
+    rdfs:label "自动下电：低电量电压"@zh ;
+    rdfs:comment "Auto power off when battery voltage is below threshold (11.5V)"@en ;
+    rdfs:comment "电池电压低于阈值(11.5V)时自动下电"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :BatteryVoltage ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 :voltage ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:BuiltinAtom ;
+                    swrl:builtin swrlb:lessThan ;
+                    swrl:arguments ( :voltage "11.5"^^xsd:float ) ] ;
+                rdf:rest [ rdf:type swrl:AtomList ;
+                    rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                        swrl:propertyPredicate :LVEM_LowBattPowerOff_Req ;
+                        swrl:argument1 :vehicle ;
+                        swrl:argument2 "1"^^xsd:integer ] ;
+                    rdf:rest rdf:nil ] ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :LowBatteryCondition ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "true"^^xsd:boolean ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_PowerMode ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "0"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :LDCU_PowerOFFSource ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "5"^^xsd:integer ] ;
+                rdf:rest rdf:nil ] ] ] .
+
+# -----------------------------------------------------------------------------
+# Rule: 30min countdown complete in LocalOn/RemoteOn → PowerOff
+# -----------------------------------------------------------------------------
+
+:ruleAutoPowerOff_30MinCountdown rdf:type swrl:Imp ;
+    rdfs:label "Auto Power Off: 30 Minute Countdown Complete"@en ;
+    rdfs:label "自动下电：30分钟倒计时完成"@zh ;
+    rdfs:comment "Auto power off after 30 minute countdown in Local On or Remote On mode"@en ;
+    rdfs:comment "Local On或Remote On模式下30分钟倒计时完成后自动下电"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_AutoPowerOffFuncSt ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "4"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :AutoPowerOffTimerExpired ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "true"^^xsd:boolean ] ;
+        rdf:rest rdf:nil ] .
+
+# -----------------------------------------------------------------------------
+# Rule: 10min countdown complete in Convenience → PowerOff
+# -----------------------------------------------------------------------------
+
+:ruleAutoPowerOff_10MinCountdown rdf:type swrl:Imp ;
+    rdfs:label "Auto Power Off: 10 Minute Countdown Complete"@en ;
+    rdfs:label "自动下电：10分钟倒计时完成"@zh ;
+    rdfs:comment "Auto power off after 10 minute countdown in Convenience mode"@en ;
+    rdfs:comment "Convenience模式下10分钟倒计时完成后自动下电"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :LDCU_AutoPowerOffFuncSt ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "3"^^xsd:integer ] ;
+            rdf:rest rdf:nil ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :AutoPowerOffTimerExpired ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "true"^^xsd:boolean ] ;
+        rdf:rest rdf:nil ] .
+
+# =============================================================================
+# SECTION 4: FORCED POWER OFF RULES
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Rule: EmergencySwitch + 5s duration + speed < 3km/h → ForcePowerOff
+# -----------------------------------------------------------------------------
+
+:ruleForcedPowerOff_Static rdf:type swrl:Imp ;
+    rdfs:label "Forced Power Off: Static (Low Speed)"@en ;
+    rdfs:label "强制下电：静态（低速）"@zh ;
+    rdfs:comment "Forced power off when emergency switch held for 5s with speed below 3km/h"@en ;
+    rdfs:comment "紧急开关持续按下5秒且车速低于3km/h时强制下电"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :EmergencyPowerOffSwSt ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :EmergencySwitchHoldDuration ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 :duration ] ;
+                rdf:rest [ rdf:type swrl:AtomList ;
+                    rdf:first [ rdf:type swrl:BuiltinAtom ;
+                        swrl:builtin swrlb:greaterThanOrEqual ;
+                        swrl:arguments ( :duration "5"^^xsd:integer ) ] ;
+                    rdf:rest [ rdf:type swrl:AtomList ;
+                        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                            swrl:propertyPredicate :VehicleSpeed ;
+                            swrl:argument1 :vehicle ;
+                            swrl:argument2 :speed ] ;
+                        rdf:rest [ rdf:type swrl:AtomList ;
+                            rdf:first [ rdf:type swrl:BuiltinAtom ;
+                                swrl:builtin swrlb:lessThan ;
+                                swrl:arguments ( :speed "3"^^xsd:float ) ] ;
+                            rdf:rest rdf:nil ] ] ] ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :ForcedPowerOffRequest ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "true"^^xsd:boolean ] ;
+        rdf:rest rdf:nil ] .
+
+# -----------------------------------------------------------------------------
+# Rule: EmergencySwitch + 5s duration + speed >= 3km/h → ForcePowerOffWithConfirmation
+# -----------------------------------------------------------------------------
+
+:ruleForcedPowerOff_Dynamic rdf:type swrl:Imp ;
+    rdfs:label "Forced Power Off: Dynamic (High Speed)"@en ;
+    rdfs:label "强制下电：动态（高速）"@zh ;
+    rdfs:comment "Forced power off with confirmation when emergency switch held for 5s with speed at or above 3km/h"@en ;
+    rdfs:comment "紧急开关持续按下5秒且车速大于等于3km/h时需要确认后强制下电"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :EmergencyPowerOffSwSt ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "1"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :EmergencySwitchHoldDuration ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 :duration ] ;
+                rdf:rest [ rdf:type swrl:AtomList ;
+                    rdf:first [ rdf:type swrl:BuiltinAtom ;
+                        swrl:builtin swrlb:greaterThanOrEqual ;
+                        swrl:arguments ( :duration "5"^^xsd:integer ) ] ;
+                    rdf:rest [ rdf:type swrl:AtomList ;
+                        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                            swrl:propertyPredicate :VehicleSpeed ;
+                            swrl:argument1 :vehicle ;
+                            swrl:argument2 :speed ] ;
+                        rdf:rest [ rdf:type swrl:AtomList ;
+                            rdf:first [ rdf:type swrl:BuiltinAtom ;
+                                swrl:builtin swrlb:greaterThanOrEqual ;
+                                swrl:arguments ( :speed "3"^^xsd:float ) ] ;
+                            rdf:rest rdf:nil ] ] ] ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :ForcePowerOffConfirmationRequired ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "true"^^xsd:boolean ] ;
+        rdf:rest rdf:nil ] .
+
+# -----------------------------------------------------------------------------
+# Rule: Dynamic force power off with second confirmation → ForcePowerOff
+# -----------------------------------------------------------------------------
+
+:ruleForcedPowerOff_DynamicConfirmed rdf:type swrl:Imp ;
+    rdfs:label "Forced Power Off: Dynamic with Confirmation"@en ;
+    rdfs:label "强制下电：动态确认后下电"@zh ;
+    rdfs:comment "Forced power off after second confirmation for high speed scenario"@en ;
+    rdfs:comment "高速场景下二次确认后强制下电"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :ForcePowerOffConfirmationRequired ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "true"^^xsd:boolean ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :SecondOffResult ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 "1"^^xsd:integer ] ;
+                rdf:rest rdf:nil ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :ForcedPowerOffRequest ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "true"^^xsd:boolean ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :ForcePowerOffConfirmationRequired ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "false"^^xsd:boolean ] ;
+            rdf:rest rdf:nil ] ] .
+
+# -----------------------------------------------------------------------------
+# Rule: 3 presses within 2 seconds → ForcePowerOff
+# -----------------------------------------------------------------------------
+
+:ruleForcedPowerOff_RapidPress rdf:type swrl:Imp ;
+    rdfs:label "Forced Power Off: Rapid Press (3 times in 2s)"@en ;
+    rdfs:label "强制下电：快速按压（2秒内3次）"@zh ;
+    rdfs:comment "Forced power off when start button pressed 3 times within 2 seconds"@en ;
+    rdfs:comment "2秒内按压启动按钮3次触发强制下电"@zh ;
+    swrl:body [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:ClassAtom ;
+            swrl:classPredicate :Vehicle ;
+            swrl:argument1 :vehicle ] ;
+        rdf:rest [ rdf:type swrl:AtomList ;
+            rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                swrl:propertyPredicate :StartButtonPressCount ;
+                swrl:argument1 :vehicle ;
+                swrl:argument2 "3"^^xsd:integer ] ;
+            rdf:rest [ rdf:type swrl:AtomList ;
+                rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                    swrl:propertyPredicate :StartButtonPressTimeWindow ;
+                    swrl:argument1 :vehicle ;
+                    swrl:argument2 :timer ] ;
+                rdf:rest [ rdf:type swrl:AtomList ;
+                    rdf:first [ rdf:type swrl:BuiltinAtom ;
+                        swrl:builtin swrlb:lessThanOrEqual ;
+                        swrl:arguments ( :timer "2"^^xsd:integer ) ] ;
+                    rdf:rest rdf:nil ] ] ] ] ;
+    swrl:head [ rdf:type swrl:AtomList ;
+        rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+            swrl:propertyPredicate :ForcedPowerOffRequest ;
+            swrl:argument1 :vehicle ;
+            swrl:argument2 "true"^^xsd:boolean ] ;
+        rdf:rest rdf:nil ] .
+
+# =============================================================================
+# SECTION 5: AUXILIARY DATA PROPERTIES FOR SWRL RULES
+# =============================================================================
+
+# These properties are used by the SWRL rules above and extend the main ontology
+
+# -----------------------------------------------------------------------------
+# Signal Status Properties
+# -----------------------------------------------------------------------------
+
+:LDCU_PowerMode rdf:type owl:DatatypeProperty ;
+    rdfs:label "LDCU Power Mode"@en ;
+    rdfs:label "LDCU电源模式"@zh ;
+    rdfs:comment "Current power mode signal value (0=OFF, 1=Local ON, 2=Remote ON, 3=Reserved, 4=Convenience)"@en ;
+    rdfs:comment "当前电源模式信号值 (0=关闭, 1=本地开启, 2=远程开启, 3=保留, 4=舒适模式)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:LDCU_PowerONSource rdf:type owl:DatatypeProperty ;
+    rdfs:label "LDCU Power On Source"@en ;
+    rdfs:label "LDCU上电源"@zh ;
+    rdfs:comment "Power on source signal (0=Invalid, 1=Door Open, 2=Brake Press, 3=OTA/Remote Diag, 4=XPU Request)"@en ;
+    rdfs:comment "上电源信号 (0=无效, 1=车门打开, 2=制动踏板, 3=OTA/远程诊断, 4=XPU请求)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:LDCU_PowerOFFSource rdf:type owl:DatatypeProperty ;
+    rdfs:label "LDCU Power Off Source"@en ;
+    rdfs:label "LDCU下电源"@zh ;
+    rdfs:comment "Power off source signal (0=Invalid, 1=Door Lock, 2=Force Power Off, 3=OTA/Remote Diag, 4=XPU Request, 5=Auto Power Off)"@en ;
+    rdfs:comment "下电源信号 (0=无效, 1=门锁, 2=强制下电, 3=OTA/远程诊断, 4=XPU请求, 5=自动下电)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:KeyValidSt rdf:type owl:DatatypeProperty ;
+    rdfs:label "Key Valid Status"@en ;
+    rdfs:label "钥匙有效状态"@zh ;
+    rdfs:comment "Overall key validity status (0=Invalid, 1=Valid)"@en ;
+    rdfs:comment "整体钥匙有效状态 (0=无效, 1=有效)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:KeyLocation rdf:type owl:DatatypeProperty ;
+    rdfs:label "Key Location Signal"@en ;
+    rdfs:label "钥匙位置信号"@zh ;
+    rdfs:comment "Key location signal value (0=Not Searched, 1=In Car, 2=Near FL Door, 3=In Trunk, 4=Near Trunk, 5=Not Found, 6=Near FR Door)"@en ;
+    rdfs:comment "钥匙位置信号值 (0=未搜索, 1=车内, 2=前左门附近, 3=后备箱, 4=后备箱附近, 5=未找到, 6=前右门附近)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+# -----------------------------------------------------------------------------
+# Event/Trigger Properties
+# -----------------------------------------------------------------------------
+
+:StartButtonPressed rdf:type owl:DatatypeProperty ;
+    rdfs:label "Start Button Pressed"@en ;
+    rdfs:label "启动按钮按下"@zh ;
+    rdfs:comment "Start button press event flag"@en ;
+    rdfs:comment "启动按钮按下事件标志"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+:StartButtonShortPress rdf:type owl:DatatypeProperty ;
+    rdfs:label "Start Button Short Press"@en ;
+    rdfs:label "启动按钮短按"@zh ;
+    rdfs:comment "Start button short press event (less than 500ms)"@en ;
+    rdfs:comment "启动按钮短按事件（小于500毫秒）"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+:BrakePressedSt rdf:type owl:DatatypeProperty ;
+    rdfs:label "Brake Pressed Status"@en ;
+    rdfs:label "制动踏板踩下状态"@zh ;
+    rdfs:comment "Brake pedal pressed status"@en ;
+    rdfs:comment "制动踏板踩下状态"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+:BrakePressedWithStartButton rdf:type owl:DatatypeProperty ;
+    rdfs:label "Brake Pressed with Start Button"@en ;
+    rdfs:label "踩刹车并按启动按钮"@zh ;
+    rdfs:comment "Brake pedal pressed together with start button"@en ;
+    rdfs:comment "同时踩下制动踏板和按下启动按钮"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+:DoorOpenEvent rdf:type owl:DatatypeProperty ;
+    rdfs:label "Door Open Event"@en ;
+    rdfs:label "车门打开事件"@zh ;
+    rdfs:comment "Door open event flag"@en ;
+    rdfs:comment "车门打开事件标志"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+:DoorLockEvent rdf:type owl:DatatypeProperty ;
+    rdfs:label "Door Lock Event"@en ;
+    rdfs:label "门锁事件"@zh ;
+    rdfs:comment "Door lock event flag"@en ;
+    rdfs:comment "门锁事件标志"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+:DoorOpenWithStartButton rdf:type owl:DatatypeProperty ;
+    rdfs:label "Door Open with Start Button"@en ;
+    rdfs:label "开门并按启动按钮"@zh ;
+    rdfs:comment "Door open event combined with start button press"@en ;
+    rdfs:comment "车门打开并按下启动按钮"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+:DoorLockAfterLeave rdf:type owl:DatatypeProperty ;
+    rdfs:label "Door Lock After Leave"@en ;
+    rdfs:label "离车后锁门"@zh ;
+    rdfs:comment "Door lock event after driver leaves vehicle"@en ;
+    rdfs:comment "驾驶员离车后的门锁事件"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+# -----------------------------------------------------------------------------
+# Remote/Diagnostic Properties
+# -----------------------------------------------------------------------------
+
+:OTAPowerOnValid rdf:type owl:DatatypeProperty ;
+    rdfs:label "OTA Power On Valid"@en ;
+    rdfs:label "OTA上电有效"@zh ;
+    rdfs:comment "OTA power on validity status (0=Invalid, 1=Valid)"@en ;
+    rdfs:comment "OTA上电有效性状态 (0=无效, 1=有效)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:RemoteDiagRequest rdf:type owl:DatatypeProperty ;
+    rdfs:label "Remote Diagnostics Request"@en ;
+    rdfs:label "远程诊断请求"@zh ;
+    rdfs:comment "Remote diagnostics power on request"@en ;
+    rdfs:comment "远程诊断上电请求"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:XPUPowerReq rdf:type owl:DatatypeProperty ;
+    rdfs:label "XPU Power Request"@en ;
+    rdfs:label "XPU上电请求"@zh ;
+    rdfs:comment "XPU power request signal (0=No Request, 1=Power On, 2=Power Off)"@en ;
+    rdfs:comment "XPU上电请求信号 (0=无请求, 1=上电, 2=下电)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:ExitRemoteDiagRequest rdf:type owl:DatatypeProperty ;
+    rdfs:label "Exit Remote Diagnostics Request"@en ;
+    rdfs:label "退出远程诊断请求"@zh ;
+    rdfs:comment "Request to exit remote diagnostics mode"@en ;
+    rdfs:comment "退出远程诊断模式请求"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+:DiagPowerOffCommand rdf:type owl:DatatypeProperty ;
+    rdfs:label "Diagnostic Power Off Command"@en ;
+    rdfs:label "诊断下电命令"@zh ;
+    rdfs:comment "Power off command from diagnostic service"@en ;
+    rdfs:comment "来自诊断服务的下电命令"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+# -----------------------------------------------------------------------------
+# Key Validation Properties
+# -----------------------------------------------------------------------------
+
+:BLEKeyValidSt rdf:type owl:DatatypeProperty ;
+    rdfs:label "BLE Key Valid Status"@en ;
+    rdfs:label "蓝牙钥匙有效状态"@zh ;
+    rdfs:comment "BLE key validity status (0=Invalid, 1=Valid)"@en ;
+    rdfs:comment "蓝牙钥匙有效性状态 (0=无效, 1=有效)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:RKEKeyValidSt rdf:type owl:DatatypeProperty ;
+    rdfs:label "RKE Key Valid Status"@en ;
+    rdfs:label "遥控钥匙有效状态"@zh ;
+    rdfs:comment "RKE key validity status (0=Invalid, 1=Valid)"@en ;
+    rdfs:comment "遥控钥匙有效性状态 (0=无效, 1=有效)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:KeySearchTimeout rdf:type owl:DatatypeProperty ;
+    rdfs:label "Key Search Timeout"@en ;
+    rdfs:label "钥匙搜索超时"@zh ;
+    rdfs:comment "Key search timer timeout flag"@en ;
+    rdfs:comment "钥匙搜索计时器超时标志"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+# -----------------------------------------------------------------------------
+# Auto Power Off Properties
+# -----------------------------------------------------------------------------
+
+:AutoPowerOffTimerExpired rdf:type owl:DatatypeProperty ;
+    rdfs:label "Auto Power Off Timer Expired"@en ;
+    rdfs:label "自动下电计时器到期"@zh ;
+    rdfs:comment "Auto power off countdown timer expired flag"@en ;
+    rdfs:comment "自动下电倒计时器到期标志"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+:LowBatteryCondition rdf:type owl:DatatypeProperty ;
+    rdfs:label "Low Battery Condition"@en ;
+    rdfs:label "低电量状态"@zh ;
+    rdfs:comment "Low battery condition flag"@en ;
+    rdfs:comment "低电量状态标志"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+:LDCU_AutoPowerOffFuncSt rdf:type owl:DatatypeProperty ;
+    rdfs:label "LDCU Auto Power Off Function State"@en ;
+    rdfs:label "LDCU自动下电功能状态"@zh ;
+    rdfs:comment "Auto power off function state (0=Not Active, 2=30min Countdown, 3=10min Countdown, 4=Countdown Completed)"@en ;
+    rdfs:comment "自动下电功能状态 (0=未激活, 2=30分钟倒计时, 3=10分钟倒计时, 4=倒计时完成)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:LVEM_LowBattPowerOff_Req rdf:type owl:DatatypeProperty ;
+    rdfs:label "Low Battery Power Off Request"@en ;
+    rdfs:label "低电量下电请求"@zh ;
+    rdfs:comment "Low battery power off request signal (0=Not Active, 1=Active)"@en ;
+    rdfs:comment "低电量下电请求信号 (0=未激活, 1=激活)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:BatteryVoltage rdf:type owl:DatatypeProperty ;
+    rdfs:label "Battery Voltage"@en ;
+    rdfs:label "电池电压"@zh ;
+    rdfs:comment "12V battery voltage in volts"@en ;
+    rdfs:comment "12V电池电压，单位：伏特"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:float .
+
+# -----------------------------------------------------------------------------
+# Emergency/Forced Power Off Properties
+# -----------------------------------------------------------------------------
+
+:EmergencyPowerOffSwSt rdf:type owl:DatatypeProperty ;
+    rdfs:label "Emergency Power Off Switch Status"@en ;
+    rdfs:label "强制下电开关状态"@zh ;
+    rdfs:comment "Emergency power off switch status (0=Not Pressed, 1=Pressed, 2=Invalid, 3=Not Used)"@en ;
+    rdfs:comment "强制下电开关状态 (0=未按下, 1=已按下, 2=无效, 3=未使用)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:EmergencySwitchHoldDuration rdf:type owl:DatatypeProperty ;
+    rdfs:label "Emergency Switch Hold Duration"@en ;
+    rdfs:label "紧急开关按压持续时间"@zh ;
+    rdfs:comment "Duration that emergency switch has been held in seconds"@en ;
+    rdfs:comment "紧急开关持续按压时间，单位：秒"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:ForcedPowerOffRequest rdf:type owl:DatatypeProperty ;
+    rdfs:label "Forced Power Off Request"@en ;
+    rdfs:label "强制下电请求"@zh ;
+    rdfs:comment "Forced power off request flag"@en ;
+    rdfs:comment "强制下电请求标志"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+:ForcePowerOffConfirmationRequired rdf:type owl:DatatypeProperty ;
+    rdfs:label "Force Power Off Confirmation Required"@en ;
+    rdfs:label "强制下电需要确认"@zh ;
+    rdfs:comment "Flag indicating confirmation is required for forced power off"@en ;
+    rdfs:comment "指示强制下电需要确认的标志"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:boolean .
+
+:SecondOffResult rdf:type owl:DatatypeProperty ;
+    rdfs:label "Second Off Result"@en ;
+    rdfs:label "强制下电二次确认结果"@zh ;
+    rdfs:comment "Result of second confirmation (0=No Command, 1=OK, 2=Cancel)"@en ;
+    rdfs:comment "二次确认结果 (0=无命令, 1=确认, 2=取消)"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:StartButtonPressCount rdf:type owl:DatatypeProperty ;
+    rdfs:label "Start Button Press Count"@en ;
+    rdfs:label "启动按钮按压次数"@zh ;
+    rdfs:comment "Number of start button presses within time window"@en ;
+    rdfs:comment "时间窗口内启动按钮按压次数"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:StartButtonPressTimeWindow rdf:type owl:DatatypeProperty ;
+    rdfs:label "Start Button Press Time Window"@en ;
+    rdfs:label "启动按钮按压时间窗口"@zh ;
+    rdfs:comment "Time window for press count in seconds"@en ;
+    rdfs:comment "按压次数计时时间窗口，单位：秒"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:integer .
+
+:VehicleSpeed rdf:type owl:DatatypeProperty ;
+    rdfs:label "Vehicle Speed"@en ;
+    rdfs:label "车速"@zh ;
+    rdfs:comment "Vehicle speed in km/h"@en ;
+    rdfs:comment "车速，单位：公里/小时"@zh ;
+    rdfs:domain :Vehicle ;
+    rdfs:range xsd:float .
+
+# =============================================================================
+# END OF SWRL RULES
+# =============================================================================

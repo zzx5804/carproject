@@ -1,0 +1,33 @@
+# FastAPI and WebSocket
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+websockets>=12.0
+
+# RDF/OWL Ontology Processing
+rdflib>=7.0.0
+owlrl>=6.0.0
+
+# Async support
+asyncio>=3.4.3
+aiofiles>=23.2.1
+
+# Data validation
+pydantic>=2.5.0
+
+# LLM integration
+httpx>=0.27.0          # HTTP client for custom REST API
+pydantic-settings>=2.5.0  # Configuration management
+tenacity>=8.2.0        # Retry logic
+litellm>=1.40.0        # LLM gateway support (LiteLLM)
+# Optional: OpenAI compatible
+# openai>=1.10.0
+# anthropic>=0.18.0
+
+# Utilities
+python-dotenv>=1.0.0
+loguru>=0.7.2
+
+# Testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+pytest-mock>=3.10.0

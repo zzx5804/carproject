@@ -1,0 +1,88 @@
+2026-03-25 18:24:41.981 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-25 18:24:41.981 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-25 18:24:42.136 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\taihfep\AppData\Local\Temp\pytest-of-TAIHFEP\pytest-25\test_load_single_file_backward0\test_onto.ttl
+2026-03-25 18:24:42.151 | INFO     | ontology.parser:load:156 - Loaded ontology with 3 triples from C:\Users\taihfep\AppData\Local\Temp\pytest-of-TAIHFEP\pytest-25\test_load_single_file_backward0\test_onto.ttl
+2026-03-25 18:24:42.151 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode#
+2026-03-25 18:24:42.151 | INFO     | ontology.parser:_parse_swrl_rules:509 - Parsed 0 SWRL rules from file comments
+2026-03-25 18:24:42.151 | INFO     | ontology.parser:load:173 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-25 18:24:42.167 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\taihfep\AppData\Local\Temp\pytest-of-TAIHFEP\pytest-25\test_load_folder_with_ttl_file0
+2026-03-25 18:24:42.167 | INFO     | ontology.parser:load:145 - Loaded ontology file: ontology_part1.ttl (3 triples)
+2026-03-25 18:24:42.167 | INFO     | ontology.parser:load:145 - Loaded ontology file: ontology_part2.ttl (3 triples)
+2026-03-25 18:24:42.167 | INFO     | ontology.parser:load:145 - Loaded ontology file: ontology_part3.ttl (3 triples)
+2026-03-25 18:24:42.167 | INFO     | ontology.parser:load:149 - Loaded 3 ontology files with 3 total triples
+2026-03-25 18:24:42.167 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode#
+2026-03-25 18:24:42.167 | INFO     | ontology.parser:_parse_swrl_rules:509 - Parsed 0 SWRL rules from file comments
+2026-03-25 18:24:42.167 | INFO     | ontology.parser:load:173 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-25 18:24:42.181 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\taihfep\AppData\Local\Temp\pytest-of-TAIHFEP\pytest-25\test_load_empty_folder0
+2026-03-25 18:24:42.181 | WARNING  | ontology.parser:load:132 - No TTL files found in folder: C:\Users\taihfep\AppData\Local\Temp\pytest-of-TAIHFEP\pytest-25\test_load_empty_folder0
+2026-03-25 18:24:42.183 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: /nonexistent/path/to/ontology.ttl
+2026-03-25 18:24:42.183 | ERROR    | ontology.parser:load:159 - Ontology source not found: /nonexistent/path/to/ontology.ttl
+2026-03-25 18:24:42.183 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\taihfep\AppData\Local\Temp\pytest-of-TAIHFEP\pytest-25\test_load_folder_logs_each_fil0
+2026-03-25 18:24:42.183 | INFO     | ontology.parser:load:145 - Loaded ontology file: module_a.ttl (3 triples)
+2026-03-25 18:24:42.199 | INFO     | ontology.parser:load:145 - Loaded ontology file: module_b.ttl (3 triples)
+2026-03-25 18:24:42.199 | INFO     | ontology.parser:load:149 - Loaded 2 ontology files with 3 total triples
+2026-03-25 18:24:42.199 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode#
+2026-03-25 18:24:42.199 | INFO     | ontology.parser:_parse_swrl_rules:509 - Parsed 0 SWRL rules from file comments
+2026-03-25 18:24:42.199 | INFO     | ontology.parser:load:173 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-25 18:24:42.199 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\taihfep\AppData\Local\Temp\pytest-of-TAIHFEP\pytest-25\test_swrl_rules_from_multiple_0
+2026-03-25 18:24:42.199 | INFO     | ontology.parser:load:145 - Loaded ontology file: rules_part1.ttl (3 triples)
+2026-03-25 18:24:42.199 | INFO     | ontology.parser:load:145 - Loaded ontology file: rules_part2.ttl (3 triples)
+2026-03-25 18:24:42.199 | INFO     | ontology.parser:load:149 - Loaded 2 ontology files with 6 total triples
+2026-03-25 18:24:42.199 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode#
+2026-03-25 18:24:42.214 | INFO     | ontology.parser:_parse_swrl_rules:509 - Parsed 2 SWRL rules from file comments
+2026-03-25 18:24:42.214 | INFO     | ontology.parser:load:173 - Parsed 2 classes, 0 object properties, 0 datatype properties, 0 individuals, 2 SWRL rules, 0 transition rules
+2026-03-25 18:24:42.214 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\taihfep\AppData\Local\Temp\pytest-of-TAIHFEP\pytest-25\test_loaded_files_is_list0\test.ttl
+2026-03-25 18:24:42.214 | INFO     | ontology.parser:load:156 - Loaded ontology with 3 triples from C:\Users\taihfep\AppData\Local\Temp\pytest-of-TAIHFEP\pytest-25\test_loaded_files_is_list0\test.ttl
+2026-03-25 18:24:42.214 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode#
+2026-03-25 18:24:42.214 | INFO     | ontology.parser:_parse_swrl_rules:509 - Parsed 0 SWRL rules from file comments
+2026-03-25 18:24:42.214 | INFO     | ontology.parser:load:173 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-25 18:24:42.230 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\taihfep\AppData\Local\Temp\pytest-of-TAIHFEP\pytest-25\test_loaded_files_contains_abs0\test.ttl
+2026-03-25 18:24:42.230 | INFO     | ontology.parser:load:156 - Loaded ontology with 3 triples from C:\Users\taihfep\AppData\Local\Temp\pytest-of-TAIHFEP\pytest-25\test_loaded_files_contains_abs0\test.ttl
+2026-03-25 18:24:42.230 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode#
+2026-03-25 18:24:42.230 | INFO     | ontology.parser:_parse_swrl_rules:509 - Parsed 0 SWRL rules from file comments
+2026-03-25 18:24:42.230 | INFO     | ontology.parser:load:173 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-25 18:24:42.230 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\taihfep\AppData\Local\Temp\pytest-of-TAIHFEP\pytest-25\test_load_folder_with_subfolde0
+2026-03-25 18:24:42.230 | INFO     | ontology.parser:load:145 - Loaded ontology file: root.ttl (3 triples)
+2026-03-25 18:24:42.230 | INFO     | ontology.parser:load:149 - Loaded 1 ontology files with 3 total triples
+2026-03-25 18:24:42.230 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode#
+2026-03-25 18:24:42.230 | INFO     | ontology.parser:_parse_swrl_rules:509 - Parsed 0 SWRL rules from file comments
+2026-03-25 18:24:42.230 | INFO     | ontology.parser:load:173 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-25 18:24:42.245 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\taihfep\AppData\Local\Temp\pytest-of-TAIHFEP\pytest-25\test_load_mixed_content_folder0
+2026-03-25 18:24:42.245 | INFO     | ontology.parser:load:145 - Loaded ontology file: ontology.ttl (3 triples)
+2026-03-25 18:24:42.245 | INFO     | ontology.parser:load:149 - Loaded 1 ontology files with 3 total triples
+2026-03-25 18:24:42.245 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode#
+2026-03-25 18:24:42.245 | INFO     | ontology.parser:_parse_swrl_rules:509 - Parsed 0 SWRL rules from file comments
+2026-03-25 18:24:42.245 | INFO     | ontology.parser:load:173 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-25 18:54:32.957 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-25 18:54:32.957 | INFO     | __main__:start_server:338 - ============================================================
+2026-03-25 18:54:32.957 | INFO     | __main__:start_server:339 - Vehicle Power Diagnosis System v1.0.0
+2026-03-25 18:54:32.957 | INFO     | __main__:start_server:340 - ============================================================
+2026-03-25 18:54:32.957 | INFO     | __main__:start_server:344 - Loading ontology from folder: C:\Users\taihfep\Documents\Workspace\ontology\ontology files
+2026-03-25 18:54:32.957 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\taihfep\Documents\Workspace\ontology\ontology files
+2026-03-25 18:54:33.058 | INFO     | ontology.parser:load:145 - Loaded ontology file: vehicle_power_management_ontology.ttl (2094 triples)
+2026-03-25 18:54:33.058 | INFO     | ontology.parser:load:149 - Loaded 1 ontology files with 2094 total triples
+2026-03-25 18:54:33.058 | INFO     | ontology.parser:_detect_namespace:207 - Auto-detected ontology namespace: http://example.org/vehicle-power-management#
+2026-03-25 18:54:33.074 | INFO     | ontology.parser:_parse_swrl_rules:509 - Parsed 0 SWRL rules from file comments
+2026-03-25 18:54:33.074 | INFO     | ontology.parser:_parse_transition_rules:976 - Parsed 3 transition rules from ontology individuals
+2026-03-25 18:54:33.074 | INFO     | ontology.parser:load:173 - Parsed 283 classes, 40 object properties, 32 datatype properties, 66 individuals, 0 SWRL rules, 3 transition rules
+2026-03-25 18:54:33.074 | INFO     | __main__:start_server:348 - Ontology loaded successfully!
+2026-03-25 18:54:33.074 | INFO     | __main__:start_server:349 -   Loaded files: 1
+2026-03-25 18:54:33.074 | INFO     | __main__:start_server:350 -   Total classes: 283
+2026-03-25 18:54:33.074 | INFO     | __main__:start_server:351 -   Object Properties: 40
+2026-03-25 18:54:33.074 | INFO     | __main__:start_server:352 -   Datatype Properties: 32
+2026-03-25 18:54:33.074 | INFO     | __main__:start_server:353 -   Individuals: 66
+2026-03-25 18:54:33.074 | INFO     | __main__:__init__:78 - LLM Diagnosis Agent enabled
+2026-03-25 18:54:33.074 | INFO     | __main__:__init__:89 - DiagnosisPipeline initialized (LLM智能诊断模式) with agents:
+2026-03-25 18:54:33.074 | INFO     | __main__:__init__:91 -   - orch
+2026-03-25 18:54:33.074 | INFO     | __main__:__init__:91 -   - dtc
+2026-03-25 18:54:33.074 | INFO     | __main__:__init__:91 -   - sym
+2026-03-25 18:54:33.074 | INFO     | __main__:__init__:91 -   - ont
+2026-03-25 18:54:33.074 | INFO     | __main__:__init__:91 -   - rule
+2026-03-25 18:54:33.074 | INFO     | __main__:__init__:91 -   - conf
+2026-03-25 18:54:33.074 | INFO     | __main__:__init__:91 -   - out
+2026-03-25 18:54:33.074 | INFO     | __main__:__init__:91 -   - llm
+2026-03-25 18:54:33.074 | INFO     | server:initialize_app:85 - Application initialized
+2026-03-25 18:54:33.124 | INFO     | __main__:start_server:366 - Starting server on ws://localhost:8765
+2026-03-25 18:54:33.124 | INFO     | __main__:start_server:367 - Open the frontend at: http://localhost:8000
+2026-03-25 18:54:33.124 | INFO     | __main__:start_server:368 - WebSocket endpoint: ws://localhost:8765/ws
+2026-03-25 18:54:33.124 | INFO     | __main__:start_server:369 - ============================================================

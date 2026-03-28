@@ -1,0 +1,55 @@
+# LLM Configuration for Vehicle Power Diagnosis System
+# 
+# This file contains configuration for the internal LLM endpoint.
+# You can also use environment variables with LLM_ prefix.
+
+# Provider: custom, openai, azure, anthropic, litellm
+provider: litellm
+
+# Custom REST API endpoint (internal LLM)
+# Update this to your company's LLM API endpoint
+custom_endpoint: "https://llm-gateway.dev.cn-vwa.volkswagen-cea.com/v1/chat/completions"
+
+# API key for authentication (can also use LLM_CUSTOM_API_KEY env var)
+# For security, use environment variable: set LLM_CUSTOM_API_KEY=sk-yoD2XidsaH9pQErJhiiJpg
+# Or add to your system environment variables
+custom_api_key: ""  # Leave empty, use env var instead
+
+# Authentication header configuration
+# custom_auth_header: "Authorization"  # Header name
+# custom_auth_prefix: "Bearer"         # Prefix (Bearer, Token, or empty)
+
+# Model configuration
+model: "GLM-5-FP8"
+temperature: 0.7
+max_tokens: 2048
+
+# Request configuration
+timeout: 60          # seconds
+max_retries: 3
+retry_delay: 1.0     # seconds
+
+# Feature flags
+enable_streaming: false
+enable_fallback: true   # Use hardcoded rules when LLM fails
+log_requests: true
+
+# ============================================================================
+# Usage Instructions:
+# ============================================================================
+#
+# 1. Configure your internal LLM endpoint:
+#    - Set custom_endpoint to your company's LLM API URL
+#    - Set custom_api_key or use LLM_CUSTOM_API_KEY environment variable
+#
+# 2. To disable LLM and use rule-based diagnosis only:
+#    - Set USE_LLM_MODE = False in main.py
+#    - Or set provider to an invalid value
+#
+# 3. Environment variables (override this file):
+#    - LLM_PROVIDER: Override provider
+#    - LLM_CUSTOM_ENDPOINT: Override endpoint
+#    - LLM_CUSTOM_API_KEY: Set API key
+#    - LLM_MODEL: Override model
+#
+# ============================================================================
