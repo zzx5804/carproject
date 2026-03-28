@@ -297,6 +297,38 @@ class SignalRecommendationMessage(BaseModel):
     scenario: str  # Which scenario this applies to
 
 
+# =============================================================================
+# Ontology Activation Models
+# =============================================================================
+
+
+class ActivatedNode(BaseModel):
+    """An ontology node activated during diagnosis."""
+
+    node_id: str          # e.g. "T_1_2"
+    node_type: str        # "rule" | "class" | "individual"
+    label_zh: str         # e.g. "Disable跳转至Enable"
+    confidence: float     # 0.0–1.0
+    source_triple: str    # e.g. "rules_model.ttl#ruleT_1_2"
+
+
+class ActivatedKnowledge(BaseModel):
+    """Structured ontology knowledge activated for this diagnosis."""
+
+    activated_rules: List[ActivatedNode] = Field(default_factory=list)
+    activated_classes: List[ActivatedNode] = Field(default_factory=list)
+    signal_mappings: Dict[str, str] = Field(default_factory=dict)
+    sparql_queries: List[str] = Field(default_factory=list)
+
+
+class OntoActivatedMessage(BaseModel):
+    """WebSocket message: ontology nodes activated."""
+
+    type: Literal["onto_activated"] = "onto_activated"
+    nodes: List[ActivatedNode] = Field(default_factory=list)
+    signal_mappings: Dict[str, str] = Field(default_factory=dict)
+
+
 # Union type for all response messages
 ResponseMessage = (
     AgentStatusMessage
@@ -312,6 +344,7 @@ ResponseMessage = (
     | BackendStatusMessage
     | PipelineDoneMessage
     | SignalRecommendationMessage
+    | OntoActivatedMessage
     | ErrorMessage
 )
 
@@ -393,3 +426,6 @@ class DiagnosisContext(BaseModel):
     ontology_classes: Dict[str, Any] = Field(default_factory=dict)
     ontology_properties: Dict[str, Any] = Field(default_factory=dict)
     ontology_individuals: Dict[str, Any] = Field(default_factory=dict)
+
+    # Activated ontology knowledge (populated by OntologyFetcher)
+    activated_knowledge: Optional[ActivatedKnowledge] = None
