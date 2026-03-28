@@ -306,9 +306,9 @@ class ActivatedNode(BaseModel):
     """An ontology node activated during diagnosis."""
 
     node_id: str          # e.g. "T_1_2"
-    node_type: str        # "rule" | "class" | "individual"
+    node_type: Literal["rule", "class", "individual"]
     label_zh: str         # e.g. "Disable跳转至Enable"
-    confidence: float     # 0.0–1.0
+    confidence: float = Field(..., ge=0.0, le=1.0)
     source_triple: str    # e.g. "rules_model.ttl#ruleT_1_2"
 
 

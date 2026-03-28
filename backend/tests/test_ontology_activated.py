@@ -50,3 +50,43 @@ def test_onto_activated_message():
     )
     assert msg.type == "onto_activated"
     assert len(msg.nodes) == 1
+
+
+def test_activated_node_confidence_boundary_values():
+    """Test boundary values for confidence field."""
+    node_min = ActivatedNode(
+        node_id="T_1_2", node_type="rule", label_zh="测试",
+        confidence=0.0, source_triple="rules_model.ttl#ruleT_1_2"
+    )
+    assert node_min.confidence == 0.0
+
+    node_max = ActivatedNode(
+        node_id="T_1_2", node_type="rule", label_zh="测试",
+        confidence=1.0, source_triple="rules_model.ttl#ruleT_1_2"
+    )
+    assert node_max.confidence == 1.0
+
+
+def test_activated_node_confidence_out_of_range():
+    """Test that confidence values outside [0, 1] are rejected."""
+    from pydantic import ValidationError
+    with pytest.raises(ValidationError):
+        ActivatedNode(
+            node_id="T_1_2", node_type="rule", label_zh="测试",
+            confidence=1.5, source_triple="rules_model.ttl#ruleT_1_2"
+        )
+    with pytest.raises(ValidationError):
+        ActivatedNode(
+            node_id="T_1_2", node_type="rule", label_zh="测试",
+            confidence=-0.1, source_triple="rules_model.ttl#ruleT_1_2"
+        )
+
+
+def test_activated_node_invalid_type():
+    """Test that invalid node_type values are rejected."""
+    from pydantic import ValidationError
+    with pytest.raises(ValidationError):
+        ActivatedNode(
+            node_id="T_1_2", node_type="invalid_type", label_zh="测试",
+            confidence=0.5, source_triple="rules_model.ttl#ruleT_1_2"
+        )
