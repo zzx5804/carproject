@@ -5,7 +5,7 @@ This module provides LLM integration for intelligent diagnosis,
 replacing hardcoded rules with semantic reasoning.
 """
 
-from llm.config import LLMConfig, get_llm_config
+from llm.config import LLMConfig, get_llm_config, LLMProviderEnum
 from llm.service import LLMService, LLMTools, get_llm_service
 from llm.schemas import (
     DiagnosisRequest,
@@ -22,6 +22,7 @@ from llm.fallback import FallbackHandler, get_fallback_handler
 __all__ = [
     # Config
     "LLMConfig",
+    "LLMProviderEnum",
     "get_llm_config",
     # Service
     "LLMService",
