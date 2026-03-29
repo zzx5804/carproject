@@ -720,7 +720,9 @@ class LLMTools:
             data = json.loads(response_text)
 
             # ✨ 验证必要字段，如果缺失则使用 fallback 数据填充
-            data = self._validate_and_fill_missing_fields(data, request)
+            data = self._validate_and_fill_missing_fields(
+                data, request, activated_knowledge=activated_knowledge
+            )
 
             # Build DiagnosisResponse
             response = DiagnosisResponse(
@@ -767,7 +769,10 @@ class LLMTools:
             raise LLMResponseError(f"Diagnosis generation failed: {e}") from e
 
     def _validate_and_fill_missing_fields(
-        self, data: Dict[str, Any], request: DiagnosisRequest
+        self,
+        data: Dict[str, Any],
+        request: DiagnosisRequest,
+        activated_knowledge: Optional[Any] = None,
     ) -> Dict[str, Any]:
         """
         验证 LLM 返回的数据并填充缺失的必要字段。
@@ -852,9 +857,9 @@ class LLMTools:
                 },
                 {
                     "label": "规则可信度",
-                    "value": 0.85,
+                    "value": 0.90 if activated_knowledge else 0.85,
                     "weight": 0.35,
-                    "explanation": "来自知识库规则",
+                    "explanation": "来自本体知识库规则" if activated_knowledge else "来自知识库规则",
                 },
                 {
                     "label": "数据质量",

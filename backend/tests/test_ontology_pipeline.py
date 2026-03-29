@@ -44,3 +44,59 @@ class TestKeywordExtraction:
         symptom = "屏幕弹出\u2018钥匙未找到\u2019"  # Unicode left/right single quotes
         keywords = self._extract_keywords(symptom, [])
         assert "钥匙未找到" in keywords, f"'钥匙未找到' not found in {keywords}"
+
+
+class TestConfidenceFallback:
+    """Test that confidence fallback differs between ontology and pure-LLM modes."""
+
+    def _make_tools(self):
+        from llm.service import LLMTools
+        from llm.config import get_llm_config
+        return LLMTools(get_llm_config())
+
+    def _make_request(self):
+        from llm.schemas import DiagnosisRequest, SignalInfo, Role
+        return DiagnosisRequest(
+            symptom="踩刹车按启动按钮，车辆无法上电",
+            role=Role.OWNER,
+            signals=[SignalInfo(key="sv-kv", value="INVALID")],
+        )
+
+    def test_fallback_confidence_differs_by_mode(self):
+        """Rule confidence fallback must be higher when activated_knowledge is present."""
+        tools = self._make_tools()
+        request = self._make_request()
+
+        class FakeKnowledge:
+            pass
+
+        data_onto = tools._validate_and_fill_missing_fields(
+            {}, request, activated_knowledge=FakeKnowledge()
+        )
+        data_llm = tools._validate_and_fill_missing_fields(
+            {}, request, activated_knowledge=None
+        )
+
+        onto_rule_conf = next(
+            f["value"] for f in data_onto["confidence_factors"]
+            if f["label"] == "规则可信度"
+        )
+        llm_rule_conf = next(
+            f["value"] for f in data_llm["confidence_factors"]
+            if f["label"] == "规则可信度"
+        )
+        assert onto_rule_conf > llm_rule_conf, (
+            f"Onto rule confidence ({onto_rule_conf}) should be > LLM ({llm_rule_conf})"
+        )
+
+    def test_fallback_not_triggered_when_factors_present(self):
+        """When LLM provides confidence_factors, fallback should NOT overwrite them."""
+        tools = self._make_tools()
+        request = self._make_request()
+        existing_factors = [
+            {"label": "自定义", "value": 0.42, "weight": 1.0, "explanation": "test"}
+        ]
+        data = tools._validate_and_fill_missing_fields(
+            {"confidence_factors": existing_factors}, request, activated_knowledge=None
+        )
+        assert data["confidence_factors"][0]["value"] == 0.42
