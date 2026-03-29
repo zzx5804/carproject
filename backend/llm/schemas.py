@@ -5,8 +5,9 @@ Defines request/response structures for LLM-powered diagnosis.
 """
 
 from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from enum import Enum
+import re
 
 
 class Role(str, Enum):
@@ -62,6 +63,17 @@ class DiagnosisRequest(BaseModel):
         }
 
 
+class SignalRef(BaseModel):
+    """A signal referenced in a reasoning step."""
+    key: str = Field(description="Signal key, e.g. 'BLE_Auth_Error'")
+    value: str = Field(description="Signal value, e.g. 'AUTH_ERR(0x05)'")
+    level: str = Field(
+        default="ok",
+        pattern=r"^(error|warn|ok)$",
+        description="Anomaly level: error | warn | ok"
+    )
+
+
 class ReasoningStep(BaseModel):
     """A single reasoning step in the diagnosis chain."""
     step_number: int = Field(description="Step number (1, 2, 3, ...)")
@@ -79,17 +91,25 @@ class ReasoningStep(BaseModel):
         le=1.0,
         description="Change in confidence vs previous step (can be negative)"
     )
-    signals_referenced: Optional[List[Dict[str, str]]] = Field(
+    signals_referenced: Optional[List[SignalRef]] = Field(
         default=None,
-        description=(
-            "Signals referenced in this step. "
-            "Each item: {key, value, level} where level in error|warn|ok"
-        )
+        description="Signals referenced in this step."
     )
     rules_matched: Optional[List[str]] = Field(
         default=None,
         description="Ontology rule IDs matched in this step, e.g. ['T_1_3', 'T_2_1']"
     )
+
+    @field_validator("rules_matched")
+    @classmethod
+    def validate_rule_ids(cls, v):
+        if v is None:
+            return v
+        pattern = re.compile(r'^T_\d+_\d+$')
+        for rid in v:
+            if not pattern.match(rid):
+                raise ValueError(f"Invalid rule ID format: {rid!r}. Expected T_N_N")
+        return v
     elapsed_ms: Optional[int] = Field(
         default=None,
         ge=0,
