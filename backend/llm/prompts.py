@@ -96,8 +96,15 @@ $matched_rules
     {
       "step_number": 1,
       "title": "步骤标题",
-      "body": "详细分析内容",
-      "confidence": 0.95
+      "body": "详细分析内容，引用规则格式 [T_x_x]，引用个体格式 :ClassName",
+      "confidence": 0.88,
+      "confidence_delta": 0.88,
+      "signals_referenced": [
+        {"key": "BLE_Auth_Error", "value": "AUTH_ERR(0x05)", "level": "error"},
+        {"key": "KeyValidSt", "value": "INVALID", "level": "error"}
+      ],
+      "rules_matched": ["T_1_3"],
+      "elapsed_ms": null
     }
   ],
   "primary_hypothesis": {
@@ -285,6 +292,12 @@ class PromptBuilder:
 1. 引用具体规则 ID，格式：[T_x_x]（例如 [T_1_2]）
 2. 引用本体个体名，格式：:ClassName（例如 :ReadyEnableDisable）
 3. 每个推理步骤必须说明依据了哪条 Ontology 规则
+
+在 reasoning_steps 的新字段中：
+- signals_referenced：仅列出本步骤实际引用的信号，不要列全部信号；level 取 error/warn/ok
+- confidence_delta：第一步等于 confidence，后续步骤为本步减上步值
+- rules_matched：仅列出本步骤命中的规则 ID 列表，格式必须是 T_N_N（如 T_1_3）
+- elapsed_ms：填 null，由后端注入
 
 示例：
 "根据规则 [T_1_2]，当信号 :ReadyEnableDisable 时，状态转移到 :ReadyEnableEnable 失败，确认为上电链路异常。"
