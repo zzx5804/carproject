@@ -134,6 +134,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
 .cs-sig-row.err{color:var(--red)}.cs-sig-row.warn{color:var(--yellow)}.cs-sig-row.ok{color:var(--green)}
 .cs-elapsed{font-family:var(--mono);font-size:8px;color:var(--tx3);background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:1px 5px;opacity:0;transition:opacity .3s .2s}
 .cs-elapsed.vis{opacity:1}
+.cs-rule-tag{background:rgba(167,139,250,0.2);border:1px solid #a78bfa;border-radius:3px;padding:1px 4px;color:#a78bfa;font-family:var(--mono);font-size:8px;cursor:pointer;display:inline-block;margin-bottom:2px}
 .cs-line{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0}
 .cs-dot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;transition:all .3s;font-family:var(--mono);color:var(--tx3)}
 .cs-dot.active{border-color:var(--accent);color:var(--accent);box-shadow:0 0 8px rgba(0,180,255,0.25)}
@@ -593,7 +594,7 @@ function addChain(step,i){
   }
   let rulesCell='';
   if(step.rules_matched&&step.rules_matched.length>0){
-    const ruleSpans=step.rules_matched.map(r=>`<span class="rule-tag" onclick="highlightOntologyNode('${r}')" style="background:rgba(167,139,250,0.2);border:1px solid #a78bfa;border-radius:3px;padding:1px 4px;color:#a78bfa;font-family:var(--mono);font-size:8px;cursor:pointer;display:inline-block;margin-bottom:2px">${r} ↗</span>`).join(' ');
+    const ruleSpans=step.rules_matched.map(r=>`<span class="rule-tag cs-rule-tag" onclick="highlightOntologyNode('${r}')">${r} ↗</span>`).join(' ');
     rulesCell=`<div class="cs-ev-cell"><div class="cs-ev-label">命中规则</div>${ruleSpans}</div>`;
   }
   const hasEvidence=confCell||sigCell||rulesCell;
