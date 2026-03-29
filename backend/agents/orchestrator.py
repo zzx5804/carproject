@@ -138,8 +138,8 @@ class OrchestratorAgent(BaseAgent):
         # When use_ontology=True, run SymptomParser then OntologyFetcher first so that
         # context.activated_knowledge is populated before the LLM agent runs.
         if getattr(context, "use_ontology", True):
-            await self._execute_phase("sym", context)
-            await self._execute_phase("ont", context)
+            context = await self._execute_phase("sym", context)
+            context = await self._execute_phase("ont", context)
 
         llm_agent = self.agents[AgentID.LLM]
 
@@ -166,26 +166,26 @@ class OrchestratorAgent(BaseAgent):
         """Execute legacy multi-agent pipeline."""
         
         # Phase 1: SymptomParser
-        await self._execute_phase("sym", context)
-        
+        context = await self._execute_phase("sym", context)
+
         # Phase 2: OntologyFetcher (parallel with RuleEngine)
-        await self._execute_phase("ont", context)
-        
+        context = await self._execute_phase("ont", context)
+
         # Phase 3: RuleEngine (includes hypothesis generation)
-        await self._execute_phase("rule", context)
-        
+        context = await self._execute_phase("rule", context)
+
         # Phase 3.5: SignalRecommender (after rule engine, before confidence)
-        await self._execute_phase("sig", context)
-        
+        context = await self._execute_phase("sig", context)
+
         # Phase 4: ConfidenceCalc
-        await self._execute_phase("conf", context)
-        
+        context = await self._execute_phase("conf", context)
+
         # Phase 5: OutputAdapter
-        await self._execute_phase("out", context)
+        context = await self._execute_phase("out", context)
         
         return context
     
-    async def _execute_phase(self, phase: str, context: DiagnosisContext):
+    async def _execute_phase(self, phase: str, context: DiagnosisContext) -> DiagnosisContext:
         """Execute a specific pipeline phase."""
         
         # Map phase to agent
@@ -202,7 +202,7 @@ class OrchestratorAgent(BaseAgent):
         agent_id = phase_map.get(phase)
         if not agent_id or agent_id not in self.agents:
             logger.warning(f"No agent registered for phase: {phase}")
-            return
+            return context
         
         agent = self.agents[agent_id]
         
@@ -248,6 +248,7 @@ class OrchestratorAgent(BaseAgent):
             "out": 95
         }
         await self.update_status(AgentState.RUNNING, progress_map.get(phase, 50))
+        return context
     
     async def broadcast(self, message: Dict[str, Any]):
         """Broadcast message to all registered agents."""
