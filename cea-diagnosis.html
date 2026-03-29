@@ -369,6 +369,8 @@ function setOntologyMode(enabled) {
                 </div>`;
         }
     }
+    document.getElementById('reasonChain').innerHTML='<div class="idle" id="chainIdle"><div class="idle-icon">🔗</div><div class="idle-txt">切换模式后请重新运行诊断</div></div>';
+    stepIndex=0;
 }
 
 function renderOntologyActivated(data) {
@@ -597,6 +599,9 @@ function addChain(step,i){
     const ruleSpans=step.rules_matched.map(r=>`<span class="rule-tag cs-rule-tag" onclick="highlightOntologyNode('${r}')">${r} ↗</span>`).join(' ');
     rulesCell=`<div class="cs-ev-cell"><div class="cs-ev-label">命中规则</div>${ruleSpans}</div>`;
   }
+  if(!_useOntology&&!rulesCell){
+    rulesCell=`<div class="cs-ev-cell"><div class="cs-ev-label">命中规则</div><div style="font-size:8px;color:var(--tx3);font-family:var(--mono)">— 无本体规则</div></div>`;
+  }
   const hasEvidence=confCell||sigCell||rulesCell;
   const evidenceHtml=hasEvidence?`<div class="cs-evidence">${confCell}${sigCell}${rulesCell}</div>`:'';
   const isLast=step.agent==='output'||(step.title&&step.title.includes('根因'));
@@ -604,6 +609,7 @@ function addChain(step,i){
   const el=document.createElement('div');
   el.className='chain-step';
   el.innerHTML=`<div class="cs-line"><div class="cs-dot">${i+1}</div><div class="cs-conn"></div></div><div class="cs-body" style="${cardBorder};border-radius:8px;padding:8px 10px"><div class="cs-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px"><span>[S${i+1}] ${step.title} ${tag}</span>${elapsedBadge}</div><div class="cs-content">${step.body}</div>${evidenceHtml}</div>`;
+  if(!_useOntology&&i===0&&!document.getElementById('llm-only-banner')){const banner=document.createElement('div');banner.id='llm-only-banner';banner.style.cssText='background:rgba(0,180,255,0.06);border:1px solid rgba(0,180,255,0.2);border-radius:6px;padding:6px 10px;margin-bottom:8px;font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:1px;';banner.textContent='// 纯 LLM 模式 · 无本体规则约束 · 结论仅供参考';ch.insertBefore(banner,el);}
   ch.appendChild(el);
   setTimeout(()=>{el.classList.add('vis');el.querySelector('.cs-dot').classList.add('active')},50);
   if(step.elapsed_ms!=null){setTimeout(()=>{const badge=document.getElementById(`cs-elapsed-${i}`);if(badge)badge.classList.add('vis')},250);}
