@@ -104,7 +104,8 @@ $matched_rules
         {"key": "KeyValidSt", "value": "INVALID", "level": "error"}
       ],
       "rules_matched": ["T_1_3"],
-      "elapsed_ms": null
+      "elapsed_ms": null,
+      "agent": "llm"
     }
   ],
   "primary_hypothesis": {
@@ -298,6 +299,10 @@ class PromptBuilder:
 - confidence_delta：第一步等于 confidence，后续步骤为本步减上步值
 - rules_matched：仅列出本步骤命中的规则 ID 列表，格式必须是 T_N_N（如 T_1_3）
 - elapsed_ms：填 null，由后端注入
+- agent：标注本步骤由哪个来源执行：
+  * "ont" — 本步骤主要依赖 Ontology/SPARQL 规则链（body 中引用了 [T_x_x] 且以规则验证为主）
+  * "output" — 根因确认步骤（最后一步）
+  * "llm" — 其余步骤（症状分析、假设生成、信号识别等）
 
 示例：
 "根据规则 [T_1_2]，当信号 :ReadyEnableDisable 时，状态转移到 :ReadyEnableEnable 失败，确认为上电链路异常。"

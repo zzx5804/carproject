@@ -79,3 +79,21 @@ def test_reasoning_step_rules_matched_invalid_format():
             step_number=1, title="T", body="B",
             rules_matched=["INVALID_RULE"]
         )
+
+
+def test_reasoning_step_agent_default():
+    """agent field defaults to 'llm' when not provided."""
+    step = ReasoningStep(step_number=1, title="t", body="b")
+    assert step.agent == "llm"
+
+
+def test_reasoning_step_agent_ont():
+    """agent field accepts 'ont'."""
+    step = ReasoningStep(step_number=1, title="t", body="b", agent="ont")
+    assert step.agent == "ont"
+
+
+def test_reasoning_step_agent_output():
+    """agent field accepts 'output'."""
+    step = ReasoningStep(step_number=1, title="t", body="b", agent="output")
+    assert step.agent == "output"

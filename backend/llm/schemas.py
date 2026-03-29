@@ -115,6 +115,10 @@ class ReasoningStep(BaseModel):
         ge=0,
         description="Time spent on this reasoning step in milliseconds (injected by backend)"
     )
+    agent: Optional[str] = Field(
+        default="llm",
+        description="Step source agent: 'llm' | 'ont' | 'output'"
+    )
 
 
 class ConfidenceFactor(BaseModel):
