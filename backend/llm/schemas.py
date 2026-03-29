@@ -103,6 +103,10 @@ class ReasoningStep(BaseModel):
         default=None,
         description="Ontology rule IDs matched in this step, e.g. ['T_1_3', 'T_2_1']"
     )
+    deficit_note: Optional[str] = Field(
+        default=None,
+        description="LLM-only 模式下说明本步骤缺失内容的注释，Ontology 模式为 None"
+    )
 
     @field_validator("rules_matched")
     @classmethod

@@ -103,3 +103,18 @@ def test_reasoning_step_agent_invalid_value():
     """Invalid agent value should raise ValidationError."""
     with pytest.raises(ValidationError):
         ReasoningStep(step_number=1, title="t", body="b", agent="unknown")
+
+
+def test_reasoning_step_deficit_note_default():
+    """deficit_note defaults to None when not provided."""
+    step = ReasoningStep(step_number=1, title="t", body="b")
+    assert step.deficit_note is None
+
+
+def test_reasoning_step_deficit_note_string():
+    """deficit_note accepts any string value."""
+    step = ReasoningStep(
+        step_number=1, title="t", body="b",
+        deficit_note="识别到信号异常，但未通过本体规则链验证"
+    )
+    assert step.deficit_note == "识别到信号异常，但未通过本体规则链验证"
