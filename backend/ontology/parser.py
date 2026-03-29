@@ -1013,9 +1013,11 @@ class OntologyParser:
         graph = self._require_graph()
         ns = self.ns
 
-        # SPARQL: fetch all TransitionRule individuals with their metadata
+        # SPARQL: fetch all TransitionRule individuals with their metadata.
+        # :faultScenario has multiple values per rule, so OPTIONAL expansion
+        # produces multiple rows per rule — we merge in Python below.
         sparql = """
-        SELECT ?rule ?ruleId ?labelZh ?commentZh ?fromState ?toState
+        SELECT ?rule ?ruleId ?labelZh ?commentZh ?fromState ?toState ?faultScenario
         WHERE {
             ?rule rdf:type :TransitionRule .
             OPTIONAL { ?rule :ruleId ?ruleId . }
@@ -1023,6 +1025,7 @@ class OntologyParser:
             OPTIONAL { ?rule rdfs:comment ?commentZh FILTER(lang(?commentZh) = "zh") . }
             OPTIONAL { ?rule :fromState ?fromState . }
             OPTIONAL { ?rule :toState ?toState . }
+            OPTIONAL { ?rule :faultScenario ?faultScenario FILTER(lang(?faultScenario) = "zh") . }
         }
         """
         results = graph.query(
@@ -1030,37 +1033,68 @@ class OntologyParser:
             initNs={"rdf": RDF, "rdfs": RDFS, "": ns},
         )
 
+        # Step 1: merge multi-row results (one row per faultScenario value) by rule URI
+        rule_map: Dict[str, Dict] = {}
+        for row in results:
+            rule_uri = str(row.rule) if row.rule else ""
+            if not rule_uri:
+                continue
+            if rule_uri not in rule_map:
+                rule_map[rule_uri] = {
+                    "ruleId": str(row.ruleId) if row.ruleId else rule_uri.split("#")[-1],
+                    "labelZh": str(row.labelZh) if row.labelZh else "",
+                    "commentZh": str(row.commentZh) if row.commentZh else "",
+                    "fromState": str(row.fromState).split("#")[-1] if row.fromState else "",
+                    "toState": str(row.toState).split("#")[-1] if row.toState else "",
+                    "faultScenarios": [],
+                }
+            entry = rule_map[rule_uri]
+            if not entry["labelZh"] and row.labelZh:
+                entry["labelZh"] = str(row.labelZh)
+            if not entry["commentZh"] and row.commentZh:
+                entry["commentZh"] = str(row.commentZh)
+            if not entry["fromState"] and row.fromState:
+                entry["fromState"] = str(row.fromState).split("#")[-1]
+            if not entry["toState"] and row.toState:
+                entry["toState"] = str(row.toState).split("#")[-1]
+            if row.faultScenario:
+                fs = str(row.faultScenario)
+                if fs not in entry["faultScenarios"]:
+                    entry["faultScenarios"].append(fs)
+
+        # Step 2: score each rule with fault phrase hits weighted ×2 vs base text hits
         activated: List[Any] = []
         keywords_lower = [k.lower() for k in keywords]
 
-        for row in results:
-            rule_uri = str(row.rule) if row.rule else ""
-            rule_id = str(row.ruleId) if row.ruleId else rule_uri.split("#")[-1]
-            label_zh = str(row.labelZh) if row.labelZh else rule_id
-            comment_zh = str(row.commentZh) if row.commentZh else ""
-            from_state = str(row.fromState).split("#")[-1] if row.fromState else ""
-            to_state = str(row.toState).split("#")[-1] if row.toState else ""
+        for rule_uri, data in rule_map.items():
+            rule_id = data["ruleId"]
+            label_zh = data["labelZh"] or rule_id
+            comment_zh = data["commentZh"]
+            from_state = data["fromState"]
+            to_state = data["toState"]
 
-            # Score: count keyword hits across label + comment + state names
-            searchable = f"{label_zh} {comment_zh} {from_state} {to_state}".lower()
-            hits = sum(1 for kw in keywords_lower if kw in searchable)
+            base_searchable = f"{label_zh} {comment_zh} {from_state} {to_state}".lower()
+            fault_searchable = " ".join(data["faultScenarios"]).lower()
 
-            if hits == 0:
+            base_hits = sum(1 for kw in keywords_lower if kw in base_searchable)
+            fault_hits = sum(1 for kw in keywords_lower if kw in fault_searchable)
+
+            # Fault scenario phrases carry double weight (more semantically precise)
+            total_hits = base_hits + fault_hits * 2
+            if total_hits == 0:
                 continue
 
-            confidence = min(0.5 + (hits / max(len(keywords_lower), 1)) * 0.5, 1.0)
+            total_kw = max(len(keywords_lower), 1)
+            confidence = min(0.5 + (total_hits / (total_kw * 3)) * 0.5, 1.0)
 
-            # Build source_triple reference
             local_name = rule_uri.split("#")[-1] if "#" in rule_uri else rule_id
-            source = f"rules_model.ttl#{local_name}"
-
             activated.append(
                 ActivatedNode(
                     node_id=rule_id,
                     node_type="rule",
                     label_zh=label_zh,
                     confidence=round(confidence, 2),
-                    source_triple=source,
+                    source_triple=f"rules_model.ttl#{local_name}",
                 )
             )
 

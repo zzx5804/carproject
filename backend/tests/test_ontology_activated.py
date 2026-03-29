@@ -254,3 +254,24 @@ def test_build_diagnosis_prompt_includes_signal_mappings():
     )
     assert ":ReadyEnableDisable" in prompt
     assert ":OffMode" in prompt
+
+
+def test_fault_scenario_weighted_higher(real_parser):
+    """faultScenario keyword must yield >= confidence vs label-only keyword for same rule."""
+    fault_results = real_parser.query_matching_rules(["钥匙未找到"])
+    label_results = real_parser.query_matching_rules(["Enable"])
+    fault_node = next((n for n in fault_results if n.node_id == "T_1_2"), None)
+    label_node = next((n for n in label_results if n.node_id == "T_1_2"), None)
+    if fault_node and label_node:
+        assert fault_node.confidence >= label_node.confidence, (
+            f"faultScenario hit ({fault_node.confidence}) should be >= "
+            f"label-only hit ({label_node.confidence})"
+        )
+
+
+def test_multiple_fault_scenarios_all_searchable(real_parser):
+    """Multiple :faultScenario values for the same rule must all be matchable."""
+    results1 = real_parser.query_matching_rules(["远程启动失败"])
+    results2 = real_parser.query_matching_rules(["APP下发远程上电无响应"])
+    assert "T_1_3" in [n.node_id for n in results1], "T_1_3 should match '远程启动失败'"
+    assert "T_1_3" in [n.node_id for n in results2], "T_1_3 should match 'APP下发远程上电无响应'"

@@ -235,3 +235,67 @@ class TestOrchestratorPipeline:
 
         assert "ont" not in call_order, "OntologyFetcher must NOT be called in pure-LLM mode"
         assert "llm" in call_order
+
+
+class TestFaultScenarioMatching:
+    """
+    Integration tests: verify :faultScenario phrases in rules_model.ttl
+    enable query_matching_rules() to match user fault descriptions.
+    These tests load real TTL files and must not use mocks.
+    """
+
+    @pytest.fixture(scope="class")
+    def parser(self):
+        from pathlib import Path
+        from ontology.parser import OntologyParser
+        folder = Path(__file__).parent.parent.parent / "ontology files"
+        if not folder.exists():
+            pytest.skip(f"Ontology folder not found: {folder}")
+        p = OntologyParser(str(folder))
+        if not p.load():
+            pytest.skip("Failed to load ontology")
+        return p
+
+    def test_key_not_found_hits_t12(self, parser):
+        """'钥匙未找到' must activate T_1_2 (Disable→Enable)."""
+        results = parser.query_matching_rules(["踩刹车按启动按钮", "无法上电", "钥匙未找到"])
+        rule_ids = [n.node_id for n in results]
+        assert "T_1_2" in rule_ids, f"T_1_2 must be activated for '钥匙未找到', got: {rule_ids}"
+
+    def test_remote_start_failure_hits_t13(self, parser):
+        """'远程启动失败' must activate T_1_3 (Off→RemoteOn)."""
+        results = parser.query_matching_rules(["远程启动失败", "APP无响应"])
+        rule_ids = [n.node_id for n in results]
+        assert "T_1_3" in rule_ids, f"T_1_3 must be activated, got: {rule_ids}"
+
+    def test_local_start_failure_hits_t11(self, parser):
+        """'按启动按钮无法上电' must activate T_1_1 (Off→LocalOn)."""
+        results = parser.query_matching_rules(["按启动按钮无法上电"])
+        rule_ids = [n.node_id for n in results]
+        assert "T_1_1" in rule_ids, f"T_1_1 must be activated, got: {rule_ids}"
+
+    def test_fault_scenario_hit_gives_higher_confidence_than_label_only(self, parser):
+        """A faultScenario keyword must yield higher confidence than a label-only keyword."""
+        results_fault = parser.query_matching_rules(["钥匙未找到"])
+        results_label = parser.query_matching_rules(["Enable"])
+        fault_node = next((n for n in results_fault if n.node_id == "T_1_2"), None)
+        label_node = next((n for n in results_label if n.node_id == "T_1_2"), None)
+        assert fault_node is not None, "T_1_2 should be activated by fault phrase"
+        assert label_node is not None, "T_1_2 should be activated by label keyword"
+        assert fault_node.confidence >= label_node.confidence, (
+            f"Fault phrase confidence ({fault_node.confidence}) should be >= "
+            f"label-only confidence ({label_node.confidence})"
+        )
+
+    def test_no_false_positive_on_unrelated_keyword(self, parser):
+        """A completely unrelated keyword must not activate any rule."""
+        results = parser.query_matching_rules(["轮胎气压不足"])
+        assert results == [], f"No rules should match unrelated keyword, got: {results}"
+
+    def test_full_symptom_sentence_hits_at_least_one_rule(self, parser):
+        """The original bug-trigger symptom must now activate at least one rule."""
+        kws = ["踩刹车按启动按钮", "车辆无法上电", "屏幕弹出", "钥匙未找到"]
+        results = parser.query_matching_rules(kws)
+        assert len(results) > 0, (
+            "Original bug: full symptom sentence should now hit at least one rule"
+        )
