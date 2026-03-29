@@ -123,6 +123,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
 .chain{display:flex;flex-direction:column;gap:0}
 .chain-step{display:flex;gap:10px;opacity:0;transform:translateX(-6px);transition:all .4s}
 .chain-step.vis{opacity:1;transform:translateX(0)}
+.cs-deficit{color:var(--orange);font-size:8px;font-family:var(--mono);margin-top:4px;opacity:0.85}
 .cs-evidence{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:5px;margin-top:7px}
 .cs-ev-cell{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:4px 6px}
 .cs-ev-label{font-family:var(--mono);font-size:7px;color:var(--tx3);letter-spacing:.5px;margin-bottom:3px}
@@ -587,6 +588,13 @@ function addChain(step,i){
   if(idle)idle.style.display='none';
   // In pure-LLM mode, suppress any "ont" tags the LLM may have hallucinated
   const effectiveAgent = (!_useOntology && step.agent !== 'output') ? 'llm' : step.agent;
+  const DOT_COLORS = ['#00b4ff','#a78bfa','#ffc53d','#ff4d6a','#00e68a'];
+  const dotColor = _useOntology ? DOT_COLORS[i % DOT_COLORS.length] : '#2a3a60';
+  const dotShadow = _useOntology ? `0 0 8px ${dotColor}66` : 'none';
+  const nextColor = _useOntology ? DOT_COLORS[(i + 1) % DOT_COLORS.length] : '#253050';
+  const connStyle = _useOntology
+      ? `background:linear-gradient(${dotColor},${nextColor})`
+      : 'background:#253050';
   const tag=effectiveAgent==='llm'?'<span class="prov-tag llm">LLM</span>':effectiveAgent==='ont'?'<span class="prov-tag ont">Ontology</span>':effectiveAgent==='sym'?'<span class="prov-tag llm">NLU</span>':'<span class="prov-tag rule">Output</span>';
   const elapsedBadge=(step.elapsed_ms!=null)?`<span class="cs-elapsed" id="cs-elapsed-${i}">⏱ ${(step.elapsed_ms/1000).toFixed(1)}s</span>`:'';
   let confCell='';
@@ -612,13 +620,20 @@ function addChain(step,i){
   if(!_useOntology&&!rulesCell){
     rulesCell=`<div class="cs-ev-cell"><div class="cs-ev-label">命中规则</div><div style="font-size:8px;color:var(--tx3);font-family:var(--mono)">— 无本体规则</div></div>`;
   }
+  const deficitHtml = step.deficit_note
+      ? `<div class="cs-deficit">※ ${step.deficit_note}</div>`
+      : '';
   const hasEvidence=confCell||sigCell||rulesCell;
   const evidenceHtml=hasEvidence?`<div class="cs-evidence">${confCell}${sigCell}${rulesCell}</div>`:'';
   const isLast=step.agent==='output'||(step.title&&step.title.includes('根因'));
-  const cardBorder=isLast?'border:1px solid var(--red);box-shadow:0 0 12px rgba(255,77,106,0.08)':'';
+  const cardBorder=isLast
+      ? (_useOntology
+          ? 'border:1px solid var(--red);box-shadow:0 0 12px rgba(255,77,106,0.08)'
+          : 'border:1px solid rgba(0,180,255,0.3);box-shadow:0 0 8px rgba(0,180,255,0.06)')
+      : '';
   const el=document.createElement('div');
   el.className='chain-step';
-  el.innerHTML=`<div class="cs-line"><div class="cs-dot">${i+1}</div><div class="cs-conn"></div></div><div class="cs-body" style="${cardBorder};border-radius:8px;padding:8px 10px"><div class="cs-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px"><span>[S${i+1}] ${step.title} ${tag}</span>${elapsedBadge}</div><div class="cs-content">${step.body}</div>${evidenceHtml}</div>`;
+  el.innerHTML=`<div class="cs-line"><div class="cs-dot" style="background:${dotColor};box-shadow:${dotShadow};color:${_useOntology?'#000':'#7a8ba8'}">${i+1}</div><div class="cs-conn" style="${connStyle}"></div></div><div class="cs-body" style="${cardBorder};border-radius:8px;padding:8px 10px"><div class="cs-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px"><span>[S${i+1}] ${step.title} ${tag}</span>${elapsedBadge}</div><div class="cs-content">${step.body}</div>${deficitHtml}${evidenceHtml}</div>`;
   ch.appendChild(el);
   if(!_useOntology&&i===0&&!document.getElementById('llm-only-banner')){const banner=document.createElement('div');banner.id='llm-only-banner';banner.style.cssText='background:rgba(0,180,255,0.06);border:1px solid rgba(0,180,255,0.2);border-radius:6px;padding:6px 10px;margin-bottom:8px;font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:1px;';banner.textContent='// 纯 LLM 模式 · 无本体规则约束 · 结论仅供参考';ch.insertBefore(banner,ch.firstChild);}
   setTimeout(()=>{el.classList.add('vis');el.querySelector('.cs-dot').classList.add('active')},50);
