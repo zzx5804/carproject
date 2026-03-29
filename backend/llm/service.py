@@ -677,6 +677,22 @@ class LLMTools:
 - 若规则前置条件与当前症状不符，说明原因即可
 - 不强制每个步骤都引用规则，以诊断准确性为优先
 """
+        elif activated_knowledge and activated_knowledge.signal_mappings:
+            # 无规则命中，但信号映射可用：注入信号上下文提示
+            signals_dict = {s.key: s.value for s in request.signals}
+            signal_hint_lines = [
+                f"  {k}=\"{signals_dict.get(k, '?')}\" → 本体映射: {v}"
+                for k, v in activated_knowledge.signal_mappings.items()
+            ]
+            reasoning_requirement = (
+                "\n\n## 信号上下文（无规则命中，仅供参考）\n"
+                "本次诊断未命中 Ontology 规则，但以下信号已映射至本体个体，"
+                "可作为推理锚点：\n"
+                "# 信号上下文（无规则命中，仅供参考）\n"
+                "当前信号状态：\n"
+                + "\n".join(signal_hint_lines)
+                + "\n"
+            )
 
         user_message = f"""## 诊断任务
 
