@@ -805,24 +805,37 @@ function renderComparePanel() {
     const ontoConf  = Math.round((ontoData.confidence || 0) * 100);
     const llmConf   = Math.round((llmData.confidence || 0) * 100);
 
+    const confDiff = ontoConf - llmConf;
+    const ruleDesc = ontoRules > 0
+        ? `本体模式命中 <strong style="color:#a78bfa">${ontoRules}</strong> 条规则，信号引用 <strong style="color:#a78bfa">${ontoSigs}</strong> 处，推理有结构化依据`
+        : `本体模式未命中规则（症状关键词未匹配 :faultScenario）`;
+    const llmRuleDesc = llmRules > 0
+        ? `纯LLM模式命中 <strong style="color:var(--accent)">${llmRules}</strong> 条规则`
+        : `纯LLM模式无规则命中，信号引用 <strong style="color:var(--accent)">${llmSigs}</strong> 处，结论依赖语义推断`;
     diffEl.innerHTML = `
-      <div style="font-family:var(--mono);font-size:9px;color:var(--yellow);letter-spacing:1px;margin-bottom:8px">▎ 关键差异摘要</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);margin-bottom:4px">最终置信度</div>
-          <div style="font-size:13px;font-weight:700"><span style="color:#a78bfa">${ontoConf}%</span> vs <span style="color:var(--accent)">${llmConf}%</span></div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--yellow);letter-spacing:1px;margin-bottom:10px">▎ 关键差异摘要</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div style="background:rgba(0,230,138,0.05);border:1px solid rgba(0,230,138,0.2);border-radius:6px;padding:8px 10px;font-size:10px;line-height:1.6">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--green);margin-bottom:4px">✅ Ontology+LLM — 规则与信号利用</div>
+          ${ruleDesc}
         </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);margin-bottom:4px">规则命中</div>
-          <div style="font-size:13px;font-weight:700"><span style="color:#a78bfa">${ontoRules}</span> vs <span style="color:var(--accent)">${llmRules}</span></div>
+        <div style="background:rgba(255,77,106,0.04);border:1px solid rgba(255,77,106,0.15);border-radius:6px;padding:8px 10px;font-size:10px;line-height:1.6">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--red);margin-bottom:4px">❌ 纯LLM — 规则与信号利用</div>
+          ${llmRuleDesc}
         </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);margin-bottom:4px">信号引用</div>
-          <div style="font-size:13px;font-weight:700"><span style="color:#a78bfa">${ontoSigs}</span> vs <span style="color:var(--accent)">${llmSigs}</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:rgba(0,230,138,0.05);border:1px solid rgba(0,230,138,0.2);border-radius:6px;padding:8px 10px;font-size:10px;line-height:1.6">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--green);margin-bottom:6px">✅ Ontology+LLM — 置信度</div>
+          <div style="font-size:18px;font-weight:700;color:#a78bfa;margin-bottom:4px">${ontoConf}%</div>
+          <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:4px"><div style="height:100%;width:${ontoConf}%;background:linear-gradient(90deg,#a78bfa,var(--green));border-radius:2px"></div></div>
+          <div style="font-size:9px;color:var(--tx3)">基于规则权重加权计算，含本体激活加成</div>
         </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px">
-          <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);margin-bottom:4px">推理步骤数</div>
-          <div style="font-size:13px;font-weight:700"><span style="color:#a78bfa">${ontoData.steps.length}</span> vs <span style="color:var(--accent)">${llmData.steps.length}</span></div>
+        <div style="background:rgba(0,180,255,0.04);border:1px solid rgba(0,180,255,0.15);border-radius:6px;padding:8px 10px;font-size:10px;line-height:1.6">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--accent);margin-bottom:6px">${confDiff > 0 ? '⚠️' : 'ℹ️'} 纯LLM — 置信度</div>
+          <div style="font-size:18px;font-weight:700;color:var(--accent);margin-bottom:4px">${llmConf}%</div>
+          <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:4px"><div style="height:100%;width:${llmConf}%;background:var(--accent);border-radius:2px"></div></div>
+          <div style="font-size:9px;color:var(--tx3)">${confDiff > 0 ? `较本体模式低 ${confDiff}%，无规则约束` : '置信度与本体模式相近'}</div>
         </div>
       </div>`;
     diffEl.style.display = 'block';
