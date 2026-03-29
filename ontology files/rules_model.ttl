@@ -87,6 +87,14 @@
     rdfs:domain :TransitionRule ;
     rdfs:range :Action .
 
+:faultScenario rdf:type owl:DatatypeProperty ;
+    rdfs:label "Fault Scenario Phrase"@en ;
+    rdfs:label "故障场景短语"@zh ;
+    rdfs:comment "User-facing Chinese phrase describing a fault symptom that triggers this rule"@en ;
+    rdfs:comment "用于匹配用户故障描述的中文触发短语"@zh ;
+    rdfs:domain :TransitionRule ;
+    rdfs:range rdf:langString .
+
 # =============================================================================
 # POWER MANAGEMENT FUNCTIONS (Related to Rules)
 # =============================================================================
@@ -145,7 +153,11 @@
     rdfs:comment "Transition from Off mode to Local On mode"@en ;
     rdfs:comment "从Off模式跳转到Local On模式"@zh ;
     :fromState :OffMode ;
-    :toState :LocalOnMode .
+    :toState :LocalOnMode ;
+    :faultScenario "按启动按钮无法上电"@zh ;
+    :faultScenario "踩刹车按启动键车辆不响应"@zh ;
+    :faultScenario "车辆本地启动失败"@zh ;
+    :faultScenario "按启动键屏幕不亮"@zh .
 
 # T_1_2: Disable跳转至Enable (ReadyEnable state machine)
 :ruleT_1_2 rdf:type :TransitionRule ;
@@ -155,7 +167,11 @@
     rdfs:comment "Transition from Disable to Enable"@en ;
     rdfs:comment "从Disable跳转到Enable"@zh ;
     :fromState :ReadyEnableDisable ;
-    :toState :ReadyEnableEnable .
+    :toState :ReadyEnableEnable ;
+    :faultScenario "钥匙未找到"@zh ;
+    :faultScenario "钥匙认证失败"@zh ;
+    :faultScenario "蓝牙钥匙无法识别"@zh ;
+    :faultScenario "PKE无法启动"@zh .
 
 # T_1_3: Off跳转至RemoteOn
 :ruleT_1_3 rdf:type :TransitionRule ;
@@ -165,7 +181,11 @@
     rdfs:comment "Transition from Off mode to Remote On mode"@en ;
     rdfs:comment "从Off模式跳转到Remote On模式"@zh ;
     :fromState :OffMode ;
-    :toState :RemoteOnMode .
+    :toState :RemoteOnMode ;
+    :faultScenario "远程启动失败"@zh ;
+    :faultScenario "APP下发远程上电无响应"@zh ;
+    :faultScenario "手机远程启动车辆无反应"@zh ;
+    :faultScenario "OTA远程上电异常"@zh .
 
 # T_2_1: Convenience跳转至Off
 :ruleT_2_1 rdf:type :TransitionRule ;
@@ -175,7 +195,10 @@
     rdfs:comment "Transition from Convenience mode to Off mode"@en ;
     rdfs:comment "从Convenience模式跳转到Off模式"@zh ;
     :fromState :ConvenienceMode ;
-    :toState :OffMode .
+    :toState :OffMode ;
+    :faultScenario "舒适模式异常断电"@zh ;
+    :faultScenario "等待上电超时自动关闭"@zh ;
+    :faultScenario "舒适模式无故下电"@zh .
 
 # T_2_3: Convenience跳转至LocalOn
 :ruleT_2_3 rdf:type :TransitionRule ;
@@ -185,7 +208,10 @@
     rdfs:comment "Transition from Convenience mode to Local On mode"@en ;
     rdfs:comment "从Convenience模式跳转到Local On模式"@zh ;
     :fromState :ConvenienceMode ;
-    :toState :LocalOnMode .
+    :toState :LocalOnMode ;
+    :faultScenario "解锁后无法进入本地开启"@zh ;
+    :faultScenario "舒适模式转本地启动失败"@zh ;
+    :faultScenario "进入车辆后无法切换到本地模式"@zh .
 
 # T_3_1: Remote On跳转至Off
 :ruleT_3_1 rdf:type :TransitionRule ;
@@ -195,7 +221,10 @@
     rdfs:comment "Transition from Remote On mode to Off mode"@en ;
     rdfs:comment "从Remote On模式跳转到Off模式"@zh ;
     :fromState :RemoteOnMode ;
-    :toState :OffMode .
+    :toState :OffMode ;
+    :faultScenario "远程上电后自动下电"@zh ;
+    :faultScenario "远程维持失败车辆断电"@zh ;
+    :faultScenario "车辆远程开启后又自动关闭"@zh .
 
 # T_3_2: LocalOn跳转至Convenience
 :ruleT_3_2 rdf:type :TransitionRule ;
@@ -205,7 +234,10 @@
     rdfs:comment "Transition from Local On mode to Convenience mode"@en ;
     rdfs:comment "从Local On模式跳转到Convenience模式"@zh ;
     :fromState :LocalOnMode ;
-    :toState :ConvenienceMode .
+    :toState :ConvenienceMode ;
+    :faultScenario "钥匙离开车辆后进入等待状态"@zh ;
+    :faultScenario "退出本地开启进入舒适模式"@zh ;
+    :faultScenario "人离开后车辆自动降级"@zh .
 
 # T_3_4: LocalOn跳转至RemoteOn
 :ruleT_3_4 rdf:type :TransitionRule ;
@@ -215,7 +247,10 @@
     rdfs:comment "Transition from Local On mode to Remote On mode"@en ;
     rdfs:comment "从Local On模式跳转到Remote On模式"@zh ;
     :fromState :LocalOnMode ;
-    :toState :RemoteOnMode .
+    :toState :RemoteOnMode ;
+    :faultScenario "本地转远程模式异常"@zh ;
+    :faultScenario "Ready状态切换失败"@zh ;
+    :faultScenario "本地上电无法切换到远程模式"@zh .
 
 # T_4_1: RemoteOn跳转至Off
 :ruleT_4_1 rdf:type :TransitionRule ;
@@ -225,7 +260,10 @@
     rdfs:comment "Transition from Remote On mode to Off mode"@en ;
     rdfs:comment "从Remote On模式跳转到Off模式"@zh ;
     :fromState :RemoteOnMode ;
-    :toState :OffMode .
+    :toState :OffMode ;
+    :faultScenario "远程模式超时自动关闭"@zh ;
+    :faultScenario "强制下电无法阻止"@zh ;
+    :faultScenario "远程上电超时断电"@zh .
 
 # T_4_3: RemoteOn跳转至LocalOn
 :ruleT_4_3 rdf:type :TransitionRule ;
@@ -235,7 +273,10 @@
     rdfs:comment "Transition from Remote On mode to Local On mode"@en ;
     rdfs:comment "从Remote On模式跳转到Local On模式"@zh ;
     :fromState :RemoteOnMode ;
-    :toState :LocalOnMode .
+    :toState :LocalOnMode ;
+    :faultScenario "远程模式进入本地驾驶失败"@zh ;
+    :faultScenario "远程上电后无法切换本地控制"@zh ;
+    :faultScenario "远程转本地模式异常"@zh .
 
 # =============================================================================
 # END OF RULES MODEL
