@@ -52,8 +52,11 @@ class OntologyFetcherAgent(BaseAgent):
             return context
 
         # Extract keywords from parsed symptoms + raw symptom
+        # Use regex to normalize Chinese punctuation before splitting
+        import re
         keywords = list(context.parsed_symptoms)
-        for word in context.symptom.replace("，", " ").replace("。", " ").split():
+        normalized = re.sub(r"[，。！？、：；''""（）【】《》\s]+", " ", context.symptom)
+        for word in normalized.split():
             if len(word) >= 2 and word not in keywords:
                 keywords.append(word)
 
