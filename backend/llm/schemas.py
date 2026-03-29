@@ -79,6 +79,10 @@ class ReasoningStep(BaseModel):
     step_number: int = Field(description="Step number (1, 2, 3, ...)")
     title: str = Field(description="Step title")
     body: str = Field(description="Step content/details")
+    agent: Literal["llm", "ont", "output"] = Field(
+        default="llm",
+        description="Step source agent: 'llm' | 'ont' | 'output'"
+    )
     confidence: Optional[float] = Field(
         default=None,
         ge=0.0,
@@ -110,14 +114,11 @@ class ReasoningStep(BaseModel):
             if not pattern.match(rid):
                 raise ValueError(f"Invalid rule ID format: {rid!r}. Expected T_N_N")
         return v
+
     elapsed_ms: Optional[int] = Field(
         default=None,
         ge=0,
         description="Time spent on this reasoning step in milliseconds (injected by backend)"
-    )
-    agent: Literal["llm", "ont", "output"] = Field(
-        default="llm",
-        description="Step source agent: 'llm' | 'ont' | 'output'"
     )
 
 

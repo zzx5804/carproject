@@ -106,6 +106,30 @@ $matched_rules
       "rules_matched": ["T_1_3"],
       "elapsed_ms": null,
       "agent": "llm"
+    },
+    {
+      "step_number": 2,
+      "title": "本体规则链验证",
+      "body": "SPARQL 确认规则链命中：[T_1_3] → [T_2_1]，上电状态机阻断点定位至 :Off→:LocalOn",
+      "confidence": 0.93,
+      "confidence_delta": 0.05,
+      "signals_referenced": [
+        {"key": "PowerMode", "value": "0:Off", "level": "warn"}
+      ],
+      "rules_matched": ["T_1_3", "T_2_1"],
+      "elapsed_ms": null,
+      "agent": "ont"
+    },
+    {
+      "step_number": 3,
+      "title": "根因确认",
+      "body": "根因确认：BLE 认证模块硬件握手失败（AUTH_ERR 0x05）",
+      "confidence": 0.91,
+      "confidence_delta": -0.02,
+      "signals_referenced": [],
+      "rules_matched": [],
+      "elapsed_ms": null,
+      "agent": "output"
     }
   ],
   "primary_hypothesis": {
@@ -299,10 +323,10 @@ class PromptBuilder:
 - confidence_delta：第一步等于 confidence，后续步骤为本步减上步值
 - rules_matched：仅列出本步骤命中的规则 ID 列表，格式必须是 T_N_N（如 T_1_3）
 - elapsed_ms：填 null，由后端注入
-- agent：标注本步骤由哪个来源执行：
-  * "ont" — 本步骤主要依赖 Ontology/SPARQL 规则链（body 中引用了 [T_x_x] 且以规则验证为主）
-  * "output" — 根因确认步骤（最后一步）
-  * "llm" — 其余步骤（症状分析、假设生成、信号识别等）
+- agent：标注本步骤由哪个来源执行（按优先级判断）：
+  * "output" — 最后一步（根因确认/结论输出）
+  * "ont"    — 非最后步且 body 主要依赖 [T_x_x] 规则验证/SPARQL 查询
+  * "llm"    — 其余步骤（症状分析、假设生成、信号识别等）
 
 示例：
 "根据规则 [T_1_2]，当信号 :ReadyEnableDisable 时，状态转移到 :ReadyEnableEnable 失败，确认为上电链路异常。"
