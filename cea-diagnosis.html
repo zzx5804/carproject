@@ -349,6 +349,9 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
 <script>
 let role='owner',running=false,scenarioKey='ble_auth',ws=null,stepIndex=0;
 let _useOntology = true;
+const DOT_COLORS = ['#00b4ff','#a78bfa','#ffc53d','#ff4d6a','#00e68a'];
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 function setOntologyMode(enabled) {
     if(running)return;
@@ -588,7 +591,6 @@ function addChain(step,i){
   if(idle)idle.style.display='none';
   // In pure-LLM mode, suppress any "ont" tags the LLM may have hallucinated
   const effectiveAgent = (!_useOntology && step.agent !== 'output') ? 'llm' : step.agent;
-  const DOT_COLORS = ['#00b4ff','#a78bfa','#ffc53d','#ff4d6a','#00e68a'];
   const dotColor = _useOntology ? DOT_COLORS[i % DOT_COLORS.length] : '#2a3a60';
   const dotShadow = _useOntology ? `0 0 8px ${dotColor}66` : 'none';
   const nextColor = _useOntology ? DOT_COLORS[(i + 1) % DOT_COLORS.length] : '#253050';
@@ -621,7 +623,7 @@ function addChain(step,i){
     rulesCell=`<div class="cs-ev-cell"><div class="cs-ev-label">命中规则</div><div style="font-size:8px;color:var(--tx3);font-family:var(--mono)">— 无本体规则</div></div>`;
   }
   const deficitHtml = step.deficit_note
-      ? `<div class="cs-deficit">※ ${step.deficit_note}</div>`
+      ? `<div class="cs-deficit">※ ${esc(step.deficit_note)}</div>`
       : '';
   const hasEvidence=confCell||sigCell||rulesCell;
   const evidenceHtml=hasEvidence?`<div class="cs-evidence">${confCell}${sigCell}${rulesCell}</div>`:'';
