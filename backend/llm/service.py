@@ -1035,6 +1035,7 @@ class LLMTools:
 
         Only called when activated_knowledge is None (pure LLM mode).
         Returns the same list with deficit_note set in-place.
+        Modifies steps in-place; the returned list is the same object as the input.
         """
         if activated_knowledge is not None:
             return steps
@@ -1045,8 +1046,8 @@ class LLMTools:
                 step.deficit_note = None
                 continue
 
-            has_rules = bool(step.rules_matched)
-            has_signals = bool(step.signals_referenced)
+            has_rules = step.rules_matched is not None and len(step.rules_matched) > 0
+            has_signals = step.signals_referenced is not None and len(step.signals_referenced) > 0
 
             # Priority 2: hallucinated rules
             if has_rules:
