@@ -1,0 +1,96 @@
+<h2>设计方案 · 第5段：实施路线图</h2>
+<p class="subtitle">3-5 天，分4个阶段，每天结束有可演示成果</p>
+
+<div class="section">
+  <div class="mockup">
+    <div class="mockup-header">Day-by-Day 实施计划</div>
+    <div class="mockup-body">
+      <div style="font-size:10px;font-family:monospace;line-height:1.9;color:#c8d6e5">
+
+        <!-- Day 1 -->
+        <div style="border-left:2px solid #a78bfa;padding-left:10px;margin-bottom:14px">
+          <div style="color:#a78bfa;font-weight:600;margin-bottom:4px">Day 1 — Ontology 查询层</div>
+          <div style="color:#7a8ba8;font-size:9px;margin-bottom:6px">文件：ontology/parser.py · models.py</div>
+          <div>☐ 新增 <code style="color:#00e68a">ActivatedNode</code> / <code style="color:#00e68a">ActivatedKnowledge</code> 数据模型</div>
+          <div>☐ 实现 <code style="color:#00e68a">query_matching_rules(keywords)</code></div>
+          <div>☐ 实现 <code style="color:#00e68a">query_signal_individuals(signals)</code></div>
+          <div>☐ 实现 <code style="color:#00e68a">query_rule_chain(rule_id)</code></div>
+          <div style="color:#00e68a;font-size:9px;margin-top:4px">✓ 可验证：命令行跑 SPARQL 查询，确认返回正确规则节点</div>
+        </div>
+
+        <!-- Day 2 -->
+        <div style="border-left:2px solid #a78bfa;padding-left:10px;margin-bottom:14px">
+          <div style="color:#a78bfa;font-weight:600;margin-bottom:4px">Day 2 — OntologyFetcher 改造</div>
+          <div style="color:#7a8ba8;font-size:9px;margin-bottom:6px">文件：agents/ontology_fetcher.py</div>
+          <div>☐ 替换硬编码 HTML 为 SPARQL 查询逻辑</div>
+          <div>☐ 组装 <code style="color:#a78bfa">ActivatedKnowledge</code> 对象写入 context</div>
+          <div>☐ 发送 <code style="color:#a78bfa">onto_activated</code> WebSocket 事件</div>
+          <div>☐ 动态生成 Ontology HTML（基于真实查询结果）</div>
+          <div style="color:#00e68a;font-size:9px;margin-top:4px">✓ 可验证：跑完整 pipeline，后端日志中可见 SPARQL 查询和激活节点</div>
+        </div>
+
+        <!-- Day 3 -->
+        <div style="border-left:2px solid #00e68a;padding-left:10px;margin-bottom:14px">
+          <div style="color:#00e68a;font-weight:600;margin-bottom:4px">Day 3 — LLM Prompt 注入改造</div>
+          <div style="color:#7a8ba8;font-size:9px;margin-bottom:6px">文件：llm/prompts.py</div>
+          <div>☐ 修改 <code style="color:#00e68a">build_diagnosis_prompt()</code>，接收 ActivatedKnowledge</div>
+          <div>☐ 注入结构化规则 ID 和信号→本体映射</div>
+          <div>☐ 新增 Prompt 指令：强制 LLM 引用 [R-xxx] 标签</div>
+          <div>☐ 测试：确认 LLM 输出中出现规则引用</div>
+          <div style="color:#00e68a;font-size:9px;margin-top:4px">✓ 可验证：LLM 推理步骤中出现 "[R-BLE-001]" 等显式引用</div>
+        </div>
+
+        <!-- Day 4-5 -->
+        <div style="border-left:2px solid #ffc53d;padding-left:10px">
+          <div style="color:#ffc53d;font-weight:600;margin-bottom:4px">Day 4-5 — 前端可视化</div>
+          <div style="color:#7a8ba8;font-size:9px;margin-bottom:6px">文件：cea-diagnosis.html</div>
+          <div>☐ 处理 <code style="color:#a78bfa">onto_activated</code> 事件，渲染激活面板</div>
+          <div>☐ reasoning_step 中正则匹配 [R-xxx]，渲染高亮标签</div>
+          <div>☐ 头部新增 With/Without Ontology 切换开关</div>
+          <div>☐ 对比模式：切换发送不同参数触发两种 pipeline</div>
+          <div style="color:#00e68a;font-size:9px;margin-top:4px">✓ 可验证：完整 demo 流程，4个高光时刻全部出现</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">汇报演示脚本（给你参考）</div>
+  <div class="mockup">
+    <div class="mockup-body">
+      <div style="font-size:10px;line-height:2;color:#c8d6e5">
+        <div style="color:#ffc53d;font-size:9px;letter-spacing:1px;margin-bottom:6px">现场演示顺序</div>
+        <div><span style="color:#a78bfa;font-family:monospace">Step 1</span> 先跑"纯 LLM 模式"——让老板看到没有 Ontology 时，输出是模糊的、无依据的</div>
+        <div><span style="color:#a78bfa;font-family:monospace">Step 2</span> 切换到"Ontology + LLM 模式"——Ontology 面板开始激活，节点逐一点亮</div>
+        <div><span style="color:#a78bfa;font-family:monospace">Step 3</span> LLM 推理步骤出现 [R-BLE-001] 规则引用——点击跳转，面板高亮对应节点</div>
+        <div><span style="color:#a78bfa;font-family:monospace">Step 4</span> 指向"来源：rules_model.ttl · L47"——说明这不是 LLM 在猜，是从本体推理出来的</div>
+        <div style="margin-top:6px;padding:6px;background:rgba(0,180,255,0.05);border-left:2px solid #00b4ff;font-size:9px;color:#7a8ba8">
+          关键台词：<br>
+          "Ontology 在这里不是配角，它是整个推理过程的知识约束层。<br>
+          LLM 的每一步结论都必须有本体规则作为依据，这保证了诊断结果的可解释性和可追溯性。"
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="options">
+    <div class="option" data-choice="ok" onclick="toggleSelect(this)">
+      <div class="letter">✓</div>
+      <div class="content">
+        <h3>整体设计没问题，写成文档</h3>
+        <p>将完整设计保存到 docs/superpowers/specs/ 并 commit</p>
+      </div>
+    </div>
+    <div class="option" data-choice="adjust" onclick="toggleSelect(this)">
+      <div class="letter">?</div>
+      <div class="content">
+        <h3>需要调整某些地方</h3>
+        <p>告诉我哪里有问题</p>
+      </div>
+    </div>
+  </div>
+</div>

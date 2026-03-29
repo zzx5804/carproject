@@ -1,0 +1,33 @@
+<h2>因果推理链展示 — 你最想强化哪个维度？</h2>
+<p class="subtitle">目前推理链只展示步骤标题 + 文字内容 + 规则 tag。给老板汇报时，哪个方向最能体现系统价值？（可多选）</p>
+
+<div class="options" data-multiselect>
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>🔍 可解释性 — 让人看懂 AI 在想什么</h3>
+      <p>每步推理展示：依据了哪条本体规则、引用了哪些信号值、为什么得出这个结论。强调"AI 不是黑箱"。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>📊 量化证据 — 每步有数字支撑</h3>
+      <p>每个推理步骤显示置信度变化曲线、信号异常程度打分、本体规则命中权重。让汇报有数据感，而非纯文字。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>🗺️ 可视化图谱 — 推理路径变成图</h3>
+      <p>将推理步骤渲染为流程图/因果图，节点为推理结论，边为规则依据，直观展示"从信号到根因"的完整路径。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="d" onclick="toggleSelect(this)">
+    <div class="letter">D</div>
+    <div class="content">
+      <h3>⚡ 实时感 — 体现 AI 流式思考过程</h3>
+      <p>流式逐字出现 + 推理步骤动画 + 时间轴 + 每步耗时。让观看者感受到"AI 正在实时推理"的震撼效果。</p>
+    </div>
+  </div>
+</div>

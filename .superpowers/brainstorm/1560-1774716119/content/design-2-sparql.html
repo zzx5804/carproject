@@ -1,0 +1,106 @@
+<h2>设计方案 · 第2段：SPARQL 查询 + 数据结构</h2>
+<p class="subtitle">Ontology 推理的核心机制——从症状关键词到结构化知识的映射</p>
+
+<div class="section">
+  <div class="label">新增数据模型：ActivatedKnowledge</div>
+  <div class="mockup">
+    <div class="mockup-header">models.py — 新增</div>
+    <div class="mockup-body">
+      <div style="font-size:10px;font-family:monospace;line-height:1.9;color:#c8d6e5">
+<span style="color:#a78bfa">@dataclass</span>
+<span style="color:#ffc53d">class</span> <span style="color:#00b4ff">ActivatedNode</span>:
+    node_id: <span style="color:#00e68a">str</span>          <span style="color:#4a5a78"># e.g. "R-BLE-001"</span>
+    node_type: <span style="color:#00e68a">str</span>       <span style="color:#4a5a78"># "rule" | "class" | "individual"</span>
+    label_zh: <span style="color:#00e68a">str</span>        <span style="color:#4a5a78"># "BLE认证失败规则"</span>
+    confidence: <span style="color:#00e68a">float</span>    <span style="color:#4a5a78"># 匹配置信度 0.0-1.0</span>
+    source_triple: <span style="color:#00e68a">str</span>   <span style="color:#4a5a78"># 来源 TTL 文件 + 行号</span>
+
+<span style="color:#a78bfa">@dataclass</span>
+<span style="color:#ffc53d">class</span> <span style="color:#00b4ff">ActivatedKnowledge</span>:
+    activated_rules: List[ActivatedNode]    <span style="color:#4a5a78"># 命中的诊断规则</span>
+    activated_classes: List[ActivatedNode]  <span style="color:#4a5a78"># 涉及的本体类</span>
+    signal_mappings: Dict[str, str]         <span style="color:#4a5a78"># 信号 → Ontology 个体映射</span>
+    sparql_queries: List[str]               <span style="color:#4a5a78"># 实际执行的查询（供前端展示）</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">三类核心 SPARQL 查询</div>
+  <div class="mockup">
+    <div class="mockup-header">ontology/parser.py — 新增方法</div>
+    <div class="mockup-body">
+      <div style="font-size:10px;font-family:monospace;line-height:1.9;color:#c8d6e5">
+
+<div style="color:#7a8ba8;margin-bottom:4px"># ① 根据症状关键词匹配诊断规则</div>
+<span style="color:#ffc53d">def</span> <span style="color:#00b4ff">query_matching_rules</span>(keywords: List[str]) → List[ActivatedNode]:
+    <span style="color:#4a5a78">"""
+    SPARQL: 在 rules_model.ttl 中找与关键词匹配的规则
+    返回规则ID、中文描述、触发条件
+    """</span>
+
+<div style="color:#7a8ba8;margin-top:8px;margin-bottom:4px"># ② 根据信号值定位 Ontology 个体</div>
+<span style="color:#ffc53d">def</span> <span style="color:#00b4ff">query_signal_individuals</span>(signals: Dict[str,str]) → Dict[str,str]:
+    <span style="color:#4a5a78">"""
+    SPARQL: sv-pm="0:Off" → :PowerMode_Off (个体)
+            sv-kv="INVALID" → :KeyValidStatus_Invalid
+    信号值与本体个体的精确映射
+    """</span>
+
+<div style="color:#7a8ba8;margin-top:8px;margin-bottom:4px"># ③ 获取规则的完整推理链</div>
+<span style="color:#ffc53d">def</span> <span style="color:#00b4ff">query_rule_chain</span>(rule_id: str) → str:
+    <span style="color:#4a5a78">"""
+    SPARQL: 给定规则ID，返回 前提条件 → 结论 的完整三元组链
+    供 LLM prompt 和前端溯源展示使用
+    """</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">改造后的 OntologyFetcher 流程</div>
+  <div class="mockup">
+    <div class="mockup-header">agents/ontology_fetcher.py — process() 新逻辑</div>
+    <div class="mockup-body">
+      <div style="font-size:10px;font-family:monospace;line-height:1.9;color:#c8d6e5">
+<span style="color:#7a8ba8">1.</span> 从 context.parsed_symptoms 提取关键词
+   <span style="color:#4a5a78">→ ["BLE", "上电", "认证", "TBOX"]</span>
+
+<span style="color:#7a8ba8">2.</span> 调用 query_matching_rules(keywords)
+   <span style="color:#4a5a78">→ [R-BLE-001(置信0.92), R-PM-003(置信0.78)]</span>
+
+<span style="color:#7a8ba8">3.</span> 调用 query_signal_individuals(signals)
+   <span style="color:#4a5a78">→ {sv-pm → PowerMode_Off, sv-kv → KeyValid_Invalid}</span>
+
+<span style="color:#7a8ba8">4.</span> 组装 ActivatedKnowledge 对象
+
+<span style="color:#7a8ba8">5.</span> 发送 <span style="color:#a78bfa">onto_activated</span> 事件到前端 <span style="color:#00e68a">← 新增WebSocket消息</span>
+   <span style="color:#4a5a78">→ 前端节点高亮动画触发</span>
+
+<span style="color:#7a8ba8">6.</span> 生成 HTML 展示（基于真实查询结果）
+<span style="color:#7a8ba8">7.</span> 将 ActivatedKnowledge 写入 context <span style="color:#00e68a">← 传递给下游 LLM Agent</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="options">
+    <div class="option" data-choice="ok" onclick="toggleSelect(this)">
+      <div class="letter">✓</div>
+      <div class="content">
+        <h3>没问题，看第3段</h3>
+        <p>进入：LLM Prompt 结构化注入 + 规则引用机制</p>
+      </div>
+    </div>
+    <div class="option" data-choice="adjust" onclick="toggleSelect(this)">
+      <div class="letter">?</div>
+      <div class="content">
+        <h3>需要调整</h3>
+        <p>告诉我哪里有问题</p>
+      </div>
+    </div>
+  </div>
+</div>

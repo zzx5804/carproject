@@ -1,0 +1,51 @@
+<h2>问题 2 / 4 — Ontology 目前在 demo 里扮演什么角色？</h2>
+<p class="subtitle">帮我理解现在的展示效果，才能判断哪里有提升空间</p>
+
+<div class="section">
+  <div class="label">现状快照</div>
+  <div class="mockup">
+    <div class="mockup-header">OntologyFetcher → 前端展示区（现在的效果）</div>
+    <div class="mockup-body">
+      <div style="font-size:11px;font-family:monospace;color:#c8d6e5;line-height:1.9">
+        <div style="color:#7a8ba8;margin-bottom:6px">// CEA Vehicle Ontology v1.0 · C1:Objects · C5:Rules · C7:Events</div>
+        <div style="color:#00b4ff">// L1 整车层 — LDCU_PowerMode</div>
+        <div><span style="color:#7a8ba8">LDCU_PowerMode:</span> <span style="color:#ff4d6a">0:Off</span> &nbsp;<span style="color:#7a8ba8">KL15:</span> <span style="color:#7a8ba8">off</span></div>
+        <div style="color:#ffc53d;margin-top:6px">// L2 子系统层 — KeySearch & Flag</div>
+        <div><span style="color:#7a8ba8">KeyValidSt:</span> <span style="color:#ff4d6a">INVALID</span> &nbsp;<span style="color:#7a8ba8">Flag_BLE:</span> <span style="color:#ffc53d">0</span></div>
+        <div style="color:#ff4d6a;margin-top:6px">// L3 ECU层 — TBOX BLE认证</div>
+        <div><span style="color:#7a8ba8">TBOX BLE_ErrorCode:</span> <span style="color:#ff4d6a">0x05 AUTH_ERROR</span></div>
+        <div style="margin-top:8px;padding:6px;background:rgba(255,77,106,0.08);border-radius:4px;font-size:9px;color:#ff8c42">
+          ⚠️ 这段 HTML 是 OntologyFetcher 硬编码生成的，<br>
+          并非真正从 TTL 文件中动态推理得出
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">你的判断是？</div>
+  <div class="options">
+    <div class="option" data-choice="a" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>老板不懂技术细节，现在的展示已够用</h3>
+        <p>视觉上有 Ontology 面板、有分层标注就够了，不需要展示真实推理过程，重点在整体流程的流畅感</p>
+      </div>
+    </div>
+    <div class="option" data-choice="b" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>老板会追问"Ontology 到底起了什么作用"</h3>
+        <p>需要能清楚解释：Ontology 的哪些类/规则被激活了，LLM 是基于这些知识产出结论的——有说服力的因果链</p>
+      </div>
+    </div>
+    <div class="option" data-choice="c" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>这是技术评审，老板就是技术专家</h3>
+        <p>需要展示架构深度：SPARQL 查询、OWL 推理链、SHACL 约束校验等技术细节都要经得起追问</p>
+      </div>
+    </div>
+  </div>
+</div>

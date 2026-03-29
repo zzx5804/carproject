@@ -1,0 +1,145 @@
+<h2>实现方案对比</h2>
+<p class="subtitle">同样展示全部信息，区别在于"密度"与"交互方式"</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="font-family:monospace;font-size:11px;padding:10px;background:#0a0e1a;color:#c8d6e5;border-radius:6px;min-height:220px">
+        <div style="color:#00b4ff;margin-bottom:8px;font-size:10px;letter-spacing:1px">◉ 因果推理链  [LLM+Ontology]</div>
+
+        <!-- Step 1 - Always expanded rich card -->
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <div style="display:flex;flex-direction:column;align-items:center;min-width:22px">
+            <div style="width:22px;height:22px;border-radius:50%;background:#00b4ff;color:#000;font-size:9px;font-weight:bold;display:flex;align-items:center;justify-content:center;box-shadow:0 0 8px rgba(0,180,255,0.4)">1</div>
+            <div style="width:2px;flex:1;background:#253050;margin:3px 0"></div>
+          </div>
+          <div style="flex:1;background:#1a2340;border:1px solid #253050;border-radius:8px;padding:8px 10px">
+            <!-- Header -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+              <div style="font-size:10px;color:#e8f0fa;font-weight:600">[S1] 信号异常识别</div>
+              <div style="display:flex;gap:4px;align-items:center">
+                <span style="background:rgba(139,92,246,0.2);border:1px solid #8b5cf6;border-radius:3px;padding:1px 4px;font-size:8px;color:#a78bfa">LLM</span>
+                <span style="font-size:8px;color:#4a5a78;background:#0f1525;padding:1px 5px;border-radius:3px">0.8s</span>
+              </div>
+            </div>
+            <!-- Body text -->
+            <div style="font-size:9px;color:#7a8ba8;margin-bottom:6px;line-height:1.5">检测到 BLE 认证错误码 <span style="color:#ff4d6a">AUTH_ERR(0x05)</span>，结合 KeyValidSt=INVALID，触发本体规则 <span style="color:#a78bfa;border:1px solid #a78bfa;border-radius:2px;padding:0 3px;font-size:8px">[T_1_3] ↗</span></div>
+            <!-- Evidence row -->
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+              <div style="background:#0f1525;border-radius:4px;padding:4px 6px">
+                <div style="font-size:7px;color:#4a5a78;margin-bottom:2px">步骤置信度</div>
+                <div style="height:3px;background:#253050;border-radius:2px"><div style="width:88%;height:100%;background:#00e68a;border-radius:2px"></div></div>
+                <div style="font-size:9px;color:#00e68a;font-weight:600;margin-top:2px">↑ 88%</div>
+              </div>
+              <div style="background:#0f1525;border-radius:4px;padding:4px 6px">
+                <div style="font-size:7px;color:#4a5a78;margin-bottom:2px">引用信号</div>
+                <div style="font-size:8px;color:#ff4d6a">AUTH_ERR</div>
+                <div style="font-size:8px;color:#ff4d6a">INVALID</div>
+              </div>
+              <div style="background:#0f1525;border-radius:4px;padding:4px 6px">
+                <div style="font-size:7px;color:#4a5a78;margin-bottom:2px">命中规则</div>
+                <div style="font-size:8px;color:#a78bfa">T_1_3</div>
+                <div style="font-size:7px;color:#4a5a78">BLE认证失败</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 compact (still running) -->
+        <div style="display:flex;gap:8px">
+          <div style="display:flex;flex-direction:column;align-items:center;min-width:22px">
+            <div style="width:22px;height:22px;border-radius:50%;border:2px solid #a78bfa;color:#a78bfa;font-size:9px;font-weight:bold;display:flex;align-items:center;justify-content:center;animation:pulse 1s infinite">2</div>
+          </div>
+          <div style="flex:1;background:#1a2340;border:1px solid #a78bfa;border-radius:8px;padding:8px 10px;box-shadow:0 0 8px rgba(167,139,250,0.15)">
+            <div style="font-size:10px;color:#a78bfa">[S2] 本体规则链验证 <span style="font-size:8px;color:#4a5a78">— 推理中...</span></div>
+            <div style="display:flex;gap:3px;margin-top:4px">
+              <div style="width:5px;height:5px;border-radius:50%;background:#a78bfa;animation:pulse 0.8s infinite"></div>
+              <div style="width:5px;height:5px;border-radius:50%;background:#a78bfa;animation:pulse 0.8s 0.2s infinite"></div>
+              <div style="width:5px;height:5px;border-radius:50%;background:#a78bfa;animation:pulse 0.8s 0.4s infinite"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>方案 A · 始终展开的富卡片 <span style="font-size:11px;color:#00e68a">（推荐）</span></h3>
+      <p>每步自动展开，直接显示置信度条 + 引用信号 + 命中规则 + 耗时。无需点击，信息一览无余。汇报展示时效果最佳——老板不需要操作任何东西。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="font-family:monospace;font-size:11px;padding:10px;background:#0a0e1a;color:#c8d6e5;border-radius:6px;min-height:220px">
+        <div style="color:#00b4ff;margin-bottom:8px;font-size:10px;letter-spacing:1px">◉ 因果推理链  [LLM+Ontology]</div>
+
+        <!-- Step 1 - collapsed -->
+        <div style="display:flex;gap:8px;margin-bottom:5px">
+          <div style="display:flex;flex-direction:column;align-items:center;min-width:22px">
+            <div style="width:22px;height:22px;border-radius:50%;background:#4a5a78;color:#c8d6e5;font-size:9px;font-weight:bold;display:flex;align-items:center;justify-content:center">1</div>
+            <div style="width:2px;flex:1;background:#253050;margin:3px 0"></div>
+          </div>
+          <div style="flex:1;background:#1a2340;border:1px solid #253050;border-radius:8px;padding:6px 10px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:10px;color:#7a8ba8">[S1] 信号异常识别</div>
+              <div style="display:flex;gap:4px;align-items:center">
+                <span style="font-size:8px;color:#00e68a">88%</span>
+                <span style="font-size:8px;color:#4a5a78;background:#0f1525;padding:1px 4px;border-radius:2px">0.8s</span>
+                <span style="font-size:9px;color:#4a5a78">▼</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 - expanded (active) -->
+        <div style="display:flex;gap:8px;margin-bottom:5px">
+          <div style="display:flex;flex-direction:column;align-items:center;min-width:22px">
+            <div style="width:22px;height:22px;border-radius:50%;background:#00b4ff;color:#000;font-size:9px;font-weight:bold;display:flex;align-items:center;justify-content:center;box-shadow:0 0 8px rgba(0,180,255,0.4)">2</div>
+            <div style="width:2px;flex:1;background:#253050;margin:3px 0"></div>
+          </div>
+          <div style="flex:1;background:#1a2340;border:1px solid #00b4ff;border-radius:8px;padding:8px 10px;box-shadow:0 0 10px rgba(0,180,255,0.1)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+              <div style="font-size:10px;color:#e8f0fa;font-weight:600">[S2] 本体规则链验证</div>
+              <div style="display:flex;gap:4px;align-items:center">
+                <span style="background:rgba(0,230,138,0.2);border:1px solid #00e68a;border-radius:3px;padding:1px 4px;font-size:8px;color:#00e68a">Ontology</span>
+                <span style="font-size:8px;color:#4a5a78;background:#0f1525;padding:1px 5px;border-radius:3px">1.1s</span>
+                <span style="font-size:9px;color:#00b4ff">▲</span>
+              </div>
+            </div>
+            <div style="font-size:9px;color:#7a8ba8;margin-bottom:6px">T_1_3 → T_2_1 → T_4_2 规则链全部命中，上电条件不满足已确认</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+              <div style="background:#0f1525;border-radius:4px;padding:4px 6px">
+                <div style="font-size:7px;color:#4a5a78;margin-bottom:2px">步骤置信度</div>
+                <div style="height:3px;background:#253050;border-radius:2px"><div style="width:93%;height:100%;background:#00b4ff;border-radius:2px"></div></div>
+                <div style="font-size:9px;color:#00b4ff;font-weight:600;margin-top:2px">↑ 93%</div>
+              </div>
+              <div style="background:#0f1525;border-radius:4px;padding:4px 6px">
+                <div style="font-size:7px;color:#4a5a78;margin-bottom:2px">引用信号</div>
+                <div style="font-size:8px;color:#ffc53d">PowerMode: Off</div>
+              </div>
+              <div style="background:#0f1525;border-radius:4px;padding:4px 6px">
+                <div style="font-size:7px;color:#4a5a78;margin-bottom:2px">命中规则</div>
+                <div style="font-size:8px;color:#a78bfa">T_1_3 T_2_1</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 - placeholder -->
+        <div style="display:flex;gap:8px">
+          <div style="min-width:22px;display:flex;justify-content:center">
+            <div style="width:22px;height:22px;border-radius:50%;border:1px dashed #253050;color:#4a5a78;font-size:9px;display:flex;align-items:center;justify-content:center">3</div>
+          </div>
+          <div style="flex:1;background:#0f1525;border:1px dashed #253050;border-radius:8px;padding:6px 10px">
+            <div style="font-size:9px;color:#4a5a78">等待推理...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>方案 B · 手风琴展开（当前步骤高亮）</h3>
+      <p>完成的步骤折叠为摘要行，当前进行中的步骤自动展开显示完整证据。支持点击任意步骤展开/折叠。可互动，但汇报时需要操作。</p>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l D:/work/carproject/script*.js)",
+      "Bash(bash \"C:/Users/Toby/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.6/skills/brainstorming/scripts/start-server.sh\" --project-dir \"D:/work/carproject\")",
+      "Bash(python -m pytest tests/test_ontology_activated.py -v)"
+    ]
+  }
+}

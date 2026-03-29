@@ -1,0 +1,171 @@
+<h2>增强因果推理链 — 完整设计预览</h2>
+<p class="subtitle">模拟完整诊断运行后的推理链效果。每步自动展开，无需操作。</p>
+
+<div class="mockup">
+  <div class="mockup-header">因果推理链  [LLM+Ontology] · 场景：BLE 认证失败无法上电</div>
+  <div class="mockup-body" style="font-family:monospace;font-size:11px;background:#0a0e1a;color:#c8d6e5;padding:14px">
+
+    <!-- Ontology Activated Banner -->
+    <div style="background:#0f1525;border:1px solid #253050;border-radius:6px;padding:8px 12px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="color:#a78bfa;font-size:9px;letter-spacing:1px">SPARQL 激活节点 · 3 条规则</span>
+      <span style="background:rgba(167,139,250,0.15);border:1px solid #a78bfa;border-radius:4px;padding:2px 7px;font-size:9px;color:#a78bfa">[T_1_3] BLE认证失败 · 88%</span>
+      <span style="background:rgba(167,139,250,0.15);border:1px solid #a78bfa;border-radius:4px;padding:2px 7px;font-size:9px;color:#a78bfa">[T_2_1] 上电条件不满足 · 93%</span>
+      <span style="background:rgba(167,139,250,0.15);border:1px solid #a78bfa;border-radius:4px;padding:2px 7px;font-size:9px;color:#a78bfa">[T_4_2] 钥匙有效性 · 79%</span>
+    </div>
+
+    <!-- ── Step 1 ── -->
+    <div style="display:flex;gap:10px;margin-bottom:10px">
+      <div style="display:flex;flex-direction:column;align-items:center;min-width:24px">
+        <div style="width:24px;height:24px;border-radius:50%;background:#00b4ff;color:#000;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(0,180,255,0.4)">1</div>
+        <div style="width:2px;flex:1;min-height:20px;background:linear-gradient(#00b4ff,#a78bfa);margin:4px 0;opacity:0.4"></div>
+      </div>
+      <div style="flex:1;background:#1a2340;border:1px solid #2a3a60;border-radius:8px;padding:10px 12px">
+        <!-- Header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:4px">
+          <div style="font-size:11px;color:#e8f0fa;font-weight:600">[S1] 信号异常识别与分类</div>
+          <div style="display:flex;gap:5px;align-items:center">
+            <span style="background:rgba(139,92,246,0.2);border:1px solid #8b5cf6;border-radius:3px;padding:1px 6px;font-size:8px;color:#a78bfa">LLM</span>
+            <span style="font-size:8px;color:#4a5a78;background:#0f1525;padding:2px 6px;border-radius:3px;border:1px solid #253050">⏱ 0.8s</span>
+          </div>
+        </div>
+        <!-- Body -->
+        <div style="font-size:10px;color:#7a8ba8;margin-bottom:8px;line-height:1.6">
+          检测到 BLE 认证错误码 <span style="color:#ff4d6a;font-weight:600">AUTH_ERR(0x05)</span>，同时 <span style="color:#ff4d6a">KeyValidSt=INVALID</span>。两个信号共同指向钥匙认证层故障，触发本体规则 <span style="background:rgba(167,139,250,0.2);border:1px solid #a78bfa;border-radius:3px;padding:1px 5px;font-size:9px;color:#a78bfa;cursor:pointer">[T_1_3] ↗</span>。
+        </div>
+        <!-- Evidence grid -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+          <div style="background:#0f1525;border:1px solid #1e2a4a;border-radius:5px;padding:6px 8px">
+            <div style="font-size:7px;color:#4a5a78;letter-spacing:0.5px;margin-bottom:4px">步骤置信度</div>
+            <div style="height:4px;background:#253050;border-radius:2px;margin-bottom:3px"><div style="width:88%;height:100%;background:linear-gradient(90deg,#00b4ff,#00e68a);border-radius:2px"></div></div>
+            <div style="font-size:10px;color:#00e68a;font-weight:700">↑ 88%</div>
+            <div style="font-size:7px;color:#4a5a78">较上步 +88%</div>
+          </div>
+          <div style="background:#0f1525;border:1px solid #1e2a4a;border-radius:5px;padding:6px 8px">
+            <div style="font-size:7px;color:#4a5a78;letter-spacing:0.5px;margin-bottom:4px">引用信号</div>
+            <div style="font-size:8px;color:#ff4d6a;margin-bottom:1px">AUTH_ERR: 0x05</div>
+            <div style="font-size:8px;color:#ff4d6a">KeyValidSt: INVALID</div>
+          </div>
+          <div style="background:#0f1525;border:1px solid #1e2a4a;border-radius:5px;padding:6px 8px">
+            <div style="font-size:7px;color:#4a5a78;letter-spacing:0.5px;margin-bottom:4px">命中规则</div>
+            <div style="font-size:8px;color:#a78bfa;font-weight:600">[T_1_3]</div>
+            <div style="font-size:7px;color:#4a5a78">BLE认证失败</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Step 2 ── -->
+    <div style="display:flex;gap:10px;margin-bottom:10px">
+      <div style="display:flex;flex-direction:column;align-items:center;min-width:24px">
+        <div style="width:24px;height:24px;border-radius:50%;background:#a78bfa;color:#000;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(167,139,250,0.4)">2</div>
+        <div style="width:2px;flex:1;min-height:20px;background:linear-gradient(#a78bfa,#ffc53d);margin:4px 0;opacity:0.4"></div>
+      </div>
+      <div style="flex:1;background:#1a2340;border:1px solid #2a3a60;border-radius:8px;padding:10px 12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:4px">
+          <div style="font-size:11px;color:#e8f0fa;font-weight:600">[S2] 本体规则链验证</div>
+          <div style="display:flex;gap:5px;align-items:center">
+            <span style="background:rgba(0,230,138,0.15);border:1px solid #00e68a;border-radius:3px;padding:1px 6px;font-size:8px;color:#00e68a">Ontology</span>
+            <span style="font-size:8px;color:#4a5a78;background:#0f1525;padding:2px 6px;border-radius:3px;border:1px solid #253050">⏱ 1.1s</span>
+          </div>
+        </div>
+        <div style="font-size:10px;color:#7a8ba8;margin-bottom:8px;line-height:1.6">
+          SPARQL 查询确认规则链完整命中：<span style="background:rgba(167,139,250,0.2);border:1px solid #a78bfa;border-radius:3px;padding:1px 5px;font-size:9px;color:#a78bfa">[T_1_3] ↗</span> → <span style="background:rgba(167,139,250,0.2);border:1px solid #a78bfa;border-radius:3px;padding:1px 5px;font-size:9px;color:#a78bfa">[T_2_1] ↗</span>。上电前置条件（刹车+钥匙有效）中钥匙条件未满足，权重置信度提升至 93%。
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+          <div style="background:#0f1525;border:1px solid #1e2a4a;border-radius:5px;padding:6px 8px">
+            <div style="font-size:7px;color:#4a5a78;letter-spacing:0.5px;margin-bottom:4px">步骤置信度</div>
+            <div style="height:4px;background:#253050;border-radius:2px;margin-bottom:3px"><div style="width:93%;height:100%;background:linear-gradient(90deg,#a78bfa,#00b4ff);border-radius:2px"></div></div>
+            <div style="font-size:10px;color:#00b4ff;font-weight:700">↑ 93%</div>
+            <div style="font-size:7px;color:#4a5a78">较上步 +5%</div>
+          </div>
+          <div style="background:#0f1525;border:1px solid #1e2a4a;border-radius:5px;padding:6px 8px">
+            <div style="font-size:7px;color:#4a5a78;letter-spacing:0.5px;margin-bottom:4px">引用信号</div>
+            <div style="font-size:8px;color:#ffc53d">PowerMode: 0:Off</div>
+            <div style="font-size:8px;color:#ffc53d">Brake: PRESSED</div>
+          </div>
+          <div style="background:#0f1525;border:1px solid #1e2a4a;border-radius:5px;padding:6px 8px">
+            <div style="font-size:7px;color:#4a5a78;letter-spacing:0.5px;margin-bottom:4px">命中规则</div>
+            <div style="font-size:8px;color:#a78bfa;font-weight:600">[T_1_3] [T_2_1]</div>
+            <div style="font-size:7px;color:#4a5a78">上电条件链</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Step 3 ── -->
+    <div style="display:flex;gap:10px;margin-bottom:10px">
+      <div style="display:flex;flex-direction:column;align-items:center;min-width:24px">
+        <div style="width:24px;height:24px;border-radius:50%;background:#ffc53d;color:#000;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(255,197,61,0.4)">3</div>
+        <div style="width:2px;flex:1;min-height:20px;background:linear-gradient(#ffc53d,#ff4d6a);margin:4px 0;opacity:0.4"></div>
+      </div>
+      <div style="flex:1;background:#1a2340;border:1px solid #2a3a60;border-radius:8px;padding:10px 12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:4px">
+          <div style="font-size:11px;color:#e8f0fa;font-weight:600">[S3] 假设排序与根因定位</div>
+          <div style="display:flex;gap:5px;align-items:center">
+            <span style="background:rgba(139,92,246,0.2);border:1px solid #8b5cf6;border-radius:3px;padding:1px 6px;font-size:8px;color:#a78bfa">LLM</span>
+            <span style="font-size:8px;color:#4a5a78;background:#0f1525;padding:2px 6px;border-radius:3px;border:1px solid #253050">⏱ 1.4s</span>
+          </div>
+        </div>
+        <div style="font-size:10px;color:#7a8ba8;margin-bottom:8px;line-height:1.6">
+          综合信号证据与本体规则链，共生成 3 个假设，H1（BLE密钥认证模块故障）置信度最高，排除 H2（刹车信号误读）和 H3（系统软件异常）。
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+          <div style="background:#0f1525;border:1px solid #1e2a4a;border-radius:5px;padding:6px 8px">
+            <div style="font-size:7px;color:#4a5a78;letter-spacing:0.5px;margin-bottom:4px">步骤置信度</div>
+            <div style="height:4px;background:#253050;border-radius:2px;margin-bottom:3px"><div style="width:91%;height:100%;background:linear-gradient(90deg,#ffc53d,#ff8c42);border-radius:2px"></div></div>
+            <div style="font-size:10px;color:#ffc53d;font-weight:700">→ 91%</div>
+            <div style="font-size:7px;color:#4a5a78">较上步 -2%</div>
+          </div>
+          <div style="background:#0f1525;border:1px solid #1e2a4a;border-radius:5px;padding:6px 8px">
+            <div style="font-size:7px;color:#4a5a78;letter-spacing:0.5px;margin-bottom:4px">假设数量</div>
+            <div style="font-size:14px;color:#ffc53d;font-weight:700">3</div>
+            <div style="font-size:7px;color:#4a5a78">H1 采纳 · H2/H3 排除</div>
+          </div>
+          <div style="background:#0f1525;border:1px solid #1e2a4a;border-radius:5px;padding:6px 8px">
+            <div style="font-size:7px;color:#4a5a78;letter-spacing:0.5px;margin-bottom:4px">命中规则</div>
+            <div style="font-size:8px;color:#a78bfa;font-weight:600">[T_4_2]</div>
+            <div style="font-size:7px;color:#4a5a78">钥匙有效性</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Step 4 ── -->
+    <div style="display:flex;gap:10px">
+      <div style="display:flex;flex-direction:column;align-items:center;min-width:24px">
+        <div style="width:24px;height:24px;border-radius:50%;background:#ff4d6a;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(255,77,106,0.4)">4</div>
+      </div>
+      <div style="flex:1;background:#1a2340;border:1px solid #ff4d6a;border-radius:8px;padding:10px 12px;box-shadow:0 0 12px rgba(255,77,106,0.08)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:4px">
+          <div style="font-size:11px;color:#ff4d6a;font-weight:600">[S4] 根因确认与置信度收敛</div>
+          <div style="display:flex;gap:5px;align-items:center">
+            <span style="background:rgba(255,77,106,0.15);border:1px solid #ff4d6a;border-radius:3px;padding:1px 6px;font-size:8px;color:#ff4d6a">Output</span>
+            <span style="font-size:8px;color:#4a5a78;background:#0f1525;padding:2px 6px;border-radius:3px;border:1px solid #253050">⏱ 0.6s</span>
+          </div>
+        </div>
+        <div style="font-size:10px;color:#7a8ba8;margin-bottom:8px;line-height:1.6">
+          根因确认：<span style="color:#ff4d6a;font-weight:600">BLE 密钥认证模块通信故障</span>。建议操作：重启车机后重新配对，若问题持续请联系售后检测 BLE 模块天线或固件版本。
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+          <div style="background:#0f1525;border:1px solid #ff4d6a;border-radius:5px;padding:6px 8px">
+            <div style="font-size:7px;color:#4a5a78;letter-spacing:0.5px;margin-bottom:4px">最终置信度</div>
+            <div style="height:4px;background:#253050;border-radius:2px;margin-bottom:3px"><div style="width:89%;height:100%;background:linear-gradient(90deg,#ff4d6a,#ff8c42);border-radius:2px"></div></div>
+            <div style="font-size:10px;color:#ff4d6a;font-weight:700">🔴 89%</div>
+            <div style="font-size:7px;color:#4a5a78">高置信度</div>
+          </div>
+          <div style="background:#0f1525;border:1px solid #1e2a4a;border-radius:5px;padding:6px 8px">
+            <div style="font-size:7px;color:#4a5a78;letter-spacing:0.5px;margin-bottom:4px">总推理耗时</div>
+            <div style="font-size:14px;color:#e8f0fa;font-weight:700">3.9s</div>
+            <div style="font-size:7px;color:#4a5a78">4步推理完成</div>
+          </div>
+          <div style="background:#0f1525;border:1px solid #1e2a4a;border-radius:5px;padding:6px 8px">
+            <div style="font-size:7px;color:#4a5a78;letter-spacing:0.5px;margin-bottom:4px">数据来源</div>
+            <div style="font-size:8px;color:#c8d6e5">LLM × Ontology</div>
+            <div style="font-size:7px;color:#4a5a78">6信号 · 3规则</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

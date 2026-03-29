@@ -1,0 +1,112 @@
+<h2>设计方案 · 第3段：LLM Prompt 结构化注入</h2>
+<p class="subtitle">让 LLM 不再"凭感觉"——每个推理步骤都有 Ontology 规则ID作为依据</p>
+
+<div class="section">
+  <div class="label">现在 vs 改造后的 Prompt 对比</div>
+  <div class="split">
+
+    <div class="mockup">
+      <div class="mockup-header" style="color:#ff4d6a">❌ 现在：字符串拼接</div>
+      <div class="mockup-body">
+        <div style="font-size:10px;font-family:monospace;line-height:1.8;color:#c8d6e5">
+<div style="color:#7a8ba8">### Ontology知识库上下文</div>
+<div style="color:#ff8c42">### PowerMode (电源模式)
+- 关闭模式
+- 远程控制模式
+- 正常模式
+
+### KeyValidSt
+BLE钥匙有效性状态...</div>
+<div style="margin-top:6px;padding:4px;background:rgba(255,77,106,0.1);border-radius:3px;font-size:9px;color:#ff4d6a">
+  问题：LLM 看不到规则ID<br>
+  LLM 不知道引用哪条规则<br>
+  推理步骤无法溯源
+</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mockup">
+      <div class="mockup-header" style="color:#00e68a">✅ 改造后：结构化知识注入</div>
+      <div class="mockup-body">
+        <div style="font-size:10px;font-family:monospace;line-height:1.8;color:#c8d6e5">
+<div style="color:#a78bfa">### 激活的 Ontology 规则</div>
+<div style="color:#00e68a">[R-BLE-001] BLE认证失败诊断规则
+  前提: KeyValidSt=INVALID ∧ BLE_ErrorCode=0x05
+  结论: → T_1_2转移失败, 置信度0.92
+  来源: rules_model.ttl#L47
+
+[R-PM-003] 上电失败规则
+  前提: PowerMode=Off ∧ StartButtonPressed
+  结论: → 诊断上电链路, 置信度0.78
+  来源: rules_model.ttl#L89</div>
+<div style="color:#a78bfa;margin-top:4px">### 信号→本体映射</div>
+<div style="color:#00b4ff">sv-pm="0:Off" → :PowerMode_Off
+sv-kv="INVALID" → :KeyValidStatus_Invalid</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">Prompt 新增指令：强制引用规则ID</div>
+  <div class="mockup">
+    <div class="mockup-header">llm/prompts.py — DIAGNOSIS_PROMPT_TEMPLATE 新增段落</div>
+    <div class="mockup-body">
+      <div style="font-size:10px;font-family:monospace;line-height:1.9;color:#c8d6e5">
+<span style="color:#ffc53d">## 推理要求（重要）</span>
+
+在 reasoning_steps 中，每个步骤的 body 字段必须：
+<span style="color:#00e68a">1. 引用具体的规则ID，格式：[R-xxx]</span>
+<span style="color:#00e68a">2. 引用具体的本体类名，格式：:ClassName</span>
+<span style="color:#00e68a">3. 说明该步骤依据了哪条 Ontology 规则</span>
+
+示例输出：
+<span style="color:#a78bfa">"body": "根据规则 [R-BLE-001]，当 :KeyValidStatus_Invalid
+且 BLE_ErrorCode=0x05 时，判断为 T_1_2 状态转移失败。
+结合信号 sv-kv=INVALID 确认该规则被触发，置信度 0.92。"</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">前端：推理步骤中高亮规则引用</div>
+  <div class="mockup">
+    <div class="mockup-header">cea-diagnosis.html — reasoning_step 渲染增强</div>
+    <div class="mockup-body">
+      <div style="font-size:11px;line-height:1.9;color:#c8d6e5;padding:4px">
+        <div style="color:#7a8ba8;font-size:9px;margin-bottom:6px">[推理步骤 2] BLE认证链路分析</div>
+        <div style="font-size:10px">
+          根据规则
+          <span style="background:rgba(167,139,250,0.2);border:1px solid #a78bfa;border-radius:3px;padding:1px 5px;color:#a78bfa;font-family:monospace;font-size:9px;cursor:pointer" title="点击跳转到 Ontology 面板">R-BLE-001 ↗</span>
+          ，当
+          <span style="background:rgba(0,180,255,0.15);border-radius:3px;padding:1px 5px;color:#00b4ff;font-family:monospace;font-size:9px">:KeyValidStatus_Invalid</span>
+          且 BLE_ErrorCode=0x05 时，判断为 T_1_2 状态转移失败。
+        </div>
+        <div style="font-size:9px;color:#7a8ba8;margin-top:4px">← R-xxx 标签可点击，高亮左侧 Ontology 面板中对应节点</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="options">
+    <div class="option" data-choice="ok" onclick="toggleSelect(this)">
+      <div class="letter">✓</div>
+      <div class="content">
+        <h3>没问题，看第4段</h3>
+        <p>进入：前端激活可视化 + With/Without 对比模式</p>
+      </div>
+    </div>
+    <div class="option" data-choice="adjust" onclick="toggleSelect(this)">
+      <div class="letter">?</div>
+      <div class="content">
+        <h3>需要调整</h3>
+        <p>告诉我哪里有问题</p>
+      </div>
+    </div>
+  </div>
+</div>

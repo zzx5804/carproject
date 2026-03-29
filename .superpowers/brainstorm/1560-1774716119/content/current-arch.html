@@ -1,0 +1,119 @@
+<h2>当前系统架构 — 现状诊断</h2>
+<p class="subtitle">在讨论优化方向之前，先看清楚现在的样子。请告诉我你最想强化哪个维度。</p>
+
+<div class="section">
+  <div class="label">当前架构全貌</div>
+  <div class="mockup">
+    <div class="mockup-header">Vehicle Power Diagnosis System · 现有数据流</div>
+    <div class="mockup-body">
+      <div style="font-family:monospace;font-size:12px;line-height:1.8;color:#c8d6e5">
+
+        <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">
+
+          <!-- Ontology Layer -->
+          <div style="background:#1a2340;border:1px solid #a78bfa;border-radius:8px;padding:12px;min-width:180px;">
+            <div style="color:#a78bfa;font-size:10px;letter-spacing:2px;margin-bottom:8px">ONTOLOGY LAYER</div>
+            <div style="color:#e8f0fa;font-size:11px;font-weight:600;margin-bottom:6px">11 个 TTL 文件</div>
+            <div style="color:#7a8ba8;font-size:10px;line-height:1.6">
+              core_model.ttl<br>
+              rules_model.ttl<br>
+              event_model.ttl<br>
+              context_model.ttl<br>
+              <span style="color:#a78bfa">+ 7 more...</span>
+            </div>
+            <div style="margin-top:8px;padding:4px 8px;background:rgba(167,139,250,0.1);border-radius:4px;font-size:9px;color:#a78bfa">
+              ⚠️ 仅用于静态查询<br>实际推理未启用
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:18px;color:#4a5a78;padding-top:30px">→</div>
+
+          <!-- Agent Pipeline -->
+          <div style="background:#1a2340;border:1px solid #00b4ff;border-radius:8px;padding:12px;min-width:200px;">
+            <div style="color:#00b4ff;font-size:10px;letter-spacing:2px;margin-bottom:8px">AGENT PIPELINE</div>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <div style="background:#141c30;border:1px solid #253050;border-radius:4px;padding:4px 8px;font-size:10px;color:#c8d6e5">
+                🎯 Orchestrator
+              </div>
+              <div style="font-size:10px;color:#4a5a78;text-align:center">↓</div>
+              <div style="background:#141c30;border:1px solid #a78bfa;border-radius:4px;padding:4px 8px;font-size:10px;color:#a78bfa">
+                🔍 OntologyFetcher <span style="color:#ff4d6a;font-size:8px">← 仅HTML展示</span>
+              </div>
+              <div style="font-size:10px;color:#4a5a78;text-align:center">↓</div>
+              <div style="background:#141c30;border:1px solid #00e68a;border-radius:4px;padding:4px 8px;font-size:10px;color:#00e68a">
+                🤖 LLMDiagnosisAgent
+              </div>
+              <div style="font-size:10px;color:#4a5a78;text-align:center">↓ prompt注入</div>
+              <div style="background:rgba(0,230,138,0.08);border:1px solid #00e68a;border-radius:4px;padding:4px 8px;font-size:10px;color:#00e68a">
+                ☁️ LLM API (OpenRouter)
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:18px;color:#4a5a78;padding-top:30px">→</div>
+
+          <!-- Frontend -->
+          <div style="background:#1a2340;border:1px solid #ffc53d;border-radius:8px;padding:12px;min-width:160px;">
+            <div style="color:#ffc53d;font-size:10px;letter-spacing:2px;margin-bottom:8px">FRONTEND</div>
+            <div style="color:#e8f0fa;font-size:11px;font-weight:600;margin-bottom:6px">cea-diagnosis.html</div>
+            <div style="color:#7a8ba8;font-size:10px;line-height:1.6">
+              WebSocket 实时流<br>
+              多 Agent 状态可视化<br>
+              角色切换输出<br>
+              Ontology 静态展示区
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Pain Points -->
+        <div style="margin-top:16px;padding:10px;background:rgba(255,77,106,0.05);border:1px solid rgba(255,77,106,0.3);border-radius:6px;">
+          <div style="color:#ff4d6a;font-size:10px;letter-spacing:1px;margin-bottom:6px">⚡ 当前 Ontology-LLM 协同的薄弱点</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap">
+            <div style="font-size:10px;color:#7a8ba8">
+              <span style="color:#ff8c42">①</span> Ontology 内容只是"填进 prompt 的字符串"<br>
+              &nbsp;&nbsp;→ LLM 看不到类层级、属性关系
+            </div>
+            <div style="font-size:10px;color:#7a8ba8">
+              <span style="color:#ff8c42">②</span> 规则匹配是硬编码字典<br>
+              &nbsp;&nbsp;→ 没有利用 SWRL/SHACL 推理
+            </div>
+            <div style="font-size:10px;color:#7a8ba8">
+              <span style="color:#ff8c42">③</span> 置信度因子是 LLM 凭感觉给的<br>
+              &nbsp;&nbsp;→ 没有 Ontology 约束校验作为基础
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">第一个问题 — 汇报重点</div>
+  <p class="subtitle">这个 demo 给老板汇报，最核心要展示的是哪一点？</p>
+  <div class="options">
+    <div class="option" data-choice="a" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Ontology 驱动 LLM 推理</h3>
+        <p>让老板看到：Ontology 结构化知识如何约束和引导 LLM 产出更可信的诊断结果，而不是"LLM 随便说"</p>
+      </div>
+    </div>
+    <div class="option" data-choice="b" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>多 Agent 协作可视化</h3>
+        <p>让老板看到：各 Agent 如何分工协作，数据在 pipeline 中的流转过程——重在展示系统的智能化架构</p>
+      </div>
+    </div>
+    <div class="option" data-choice="c" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>端到端业务价值</h3>
+        <p>让老板看到：输入一句话症状 → 自动生成面向不同角色的专业诊断报告——重在展示落地价值</p>
+      </div>
+    </div>
+  </div>
+</div>

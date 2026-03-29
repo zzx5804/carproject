@@ -1,0 +1,99 @@
+<h2>设计方案 · 第1段：架构变化全景</h2>
+<p class="subtitle">对比"现在"和"改造后"的数据流，确认改动边界</p>
+
+<div class="section">
+  <div class="split">
+
+    <div class="mockup">
+      <div class="mockup-header" style="color:#ff4d6a">❌ 现在（Ontology 是装饰品）</div>
+      <div class="mockup-body">
+        <div style="font-size:10px;font-family:monospace;line-height:2;color:#c8d6e5">
+
+          <div style="opacity:0.5">用户输入症状</div>
+          <div style="color:#4a5a78">↓</div>
+          <div style="color:#a78bfa">OntologyFetcher</div>
+          <div style="font-size:9px;color:#ff4d6a;padding-left:16px">→ 硬编码 HTML 字符串</div>
+          <div style="font-size:9px;color:#ff4d6a;padding-left:16px">→ 不读 TTL，不跑查询</div>
+          <div style="color:#4a5a78">↓</div>
+          <div style="color:#00e68a">LLMDiagnosisAgent</div>
+          <div style="font-size:9px;color:#ff4d6a;padding-left:16px">→ build_context_summary()</div>
+          <div style="font-size:9px;color:#ff4d6a;padding-left:16px">→ 字符串拼接传给 LLM</div>
+          <div style="font-size:9px;color:#ff4d6a;padding-left:16px">→ LLM 不知道规则 ID</div>
+          <div style="color:#4a5a78">↓</div>
+          <div style="opacity:0.5">输出（无 Ontology 溯源）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mockup">
+      <div class="mockup-header" style="color:#00e68a">✅ 改造后（Ontology 是引擎）</div>
+      <div class="mockup-body">
+        <div style="font-size:10px;font-family:monospace;line-height:2;color:#c8d6e5">
+
+          <div>用户输入症状</div>
+          <div style="color:#4a5a78">↓</div>
+          <div style="color:#a78bfa">OntologyFetcher <span style="color:#00e68a">★ 改造</span></div>
+          <div style="font-size:9px;color:#00e68a;padding-left:16px">→ SPARQL 查相关类/规则/个体</div>
+          <div style="font-size:9px;color:#00e68a;padding-left:16px">→ 发送 onto_activated 事件</div>
+          <div style="font-size:9px;color:#a78bfa;padding-left:16px">→ 返回 ActivatedKnowledge 对象</div>
+          <div style="color:#4a5a78">↓</div>
+          <div style="color:#00e68a">LLMDiagnosisAgent <span style="color:#00e68a">★ 改造</span></div>
+          <div style="font-size:9px;color:#00e68a;padding-left:16px">→ 注入带规则ID的结构化知识</div>
+          <div style="font-size:9px;color:#00e68a;padding-left:16px">→ LLM 输出引用 R-xxx 规则</div>
+          <div style="color:#4a5a78">↓</div>
+          <div>输出 <span style="color:#a78bfa">+ Ontology 溯源链</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">改动文件清单（4个后端 + 1个前端）</div>
+  <div class="mockup">
+    <div class="mockup-body">
+      <div style="font-size:10px;font-family:monospace;line-height:2;color:#c8d6e5">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div>
+            <div style="color:#ffc53d;font-size:9px;letter-spacing:1px;margin-bottom:4px">BACKEND 改造</div>
+            <div><span style="color:#a78bfa">ontology/parser.py</span> — 新增 SPARQL 查询方法</div>
+            <div><span style="color:#a78bfa">agents/ontology_fetcher.py</span> — 替换硬编码逻辑</div>
+            <div><span style="color:#00e68a">llm/prompts.py</span> — 注入结构化规则ID</div>
+            <div><span style="color:#00e68a">models.py</span> — 新增 ActivatedKnowledge 模型</div>
+          </div>
+          <div>
+            <div style="color:#ffc53d;font-size:9px;letter-spacing:1px;margin-bottom:4px">FRONTEND 改造</div>
+            <div><span style="color:#ffc53d">cea-diagnosis.html</span></div>
+            <div style="padding-left:12px;font-size:9px;color:#7a8ba8">① 激活节点可视化面板</div>
+            <div style="padding-left:12px;font-size:9px;color:#7a8ba8">② With/Without Ontology 切换</div>
+            <div style="padding-left:12px;font-size:9px;color:#7a8ba8">③ LLM 推理步骤中高亮规则引用</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;padding:6px;background:rgba(0,180,255,0.05);border:1px solid rgba(0,180,255,0.2);border-radius:4px;font-size:9px;color:#7a8ba8">
+          ⚠️ 不动：orchestrator.py、server.py、config.py、其他 agent 文件
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">这段架构设计，看起来如何？</div>
+  <div class="options">
+    <div class="option" data-choice="ok" onclick="toggleSelect(this)">
+      <div class="letter">✓</div>
+      <div class="content">
+        <h3>没问题，继续看下一段</h3>
+        <p>进入第2段：SPARQL 查询设计 + ActivatedKnowledge 数据结构</p>
+      </div>
+    </div>
+    <div class="option" data-choice="adjust" onclick="toggleSelect(this)">
+      <div class="letter">?</div>
+      <div class="content">
+        <h3>需要调整</h3>
+        <p>告诉我哪里有问题，我来修改</p>
+      </div>
+    </div>
+  </div>
+</div>

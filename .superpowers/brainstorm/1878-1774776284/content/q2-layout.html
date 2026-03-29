@@ -1,0 +1,143 @@
+<h2>推理链区域的布局方向</h2>
+<p class="subtitle">目前推理链是一列纵向步骤卡片。给老板汇报时，哪种整体布局让"因果推理链"更有冲击力？</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="font-family:monospace;font-size:11px;padding:10px;background:#0a0e1a;color:#c8d6e5;border-radius:6px;min-height:180px">
+        <div style="color:#00b4ff;margin-bottom:8px;font-size:10px">◉ 因果推理链  [LLM+Ontology]</div>
+        <!-- Step 1 -->
+        <div style="display:flex;gap:8px;margin-bottom:6px">
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="width:18px;height:18px;border-radius:50%;background:#00b4ff;color:#000;font-size:9px;font-weight:bold;display:flex;align-items:center;justify-content:center">1</div>
+            <div style="width:2px;flex:1;background:#253050;margin:2px 0"></div>
+          </div>
+          <div style="flex:1;background:#1a2340;border:1px solid #253050;border-radius:6px;padding:6px 8px">
+            <div style="font-size:10px;color:#e8f0fa;font-weight:600">[S1] 信号异常识别 <span style="background:rgba(139,92,246,0.2);border:1px solid #8b5cf6;border-radius:3px;padding:1px 4px;font-size:8px;color:#a78bfa">LLM</span></div>
+            <div style="font-size:9px;color:#7a8ba8;margin-top:3px">BLE_Auth_Error=AUTH_ERR(0x05) 触发 <span style="color:#a78bfa;border:1px solid #a78bfa;border-radius:2px;padding:0 3px;font-size:8px">[T_1_3] ↗</span></div>
+            <div style="display:flex;gap:4px;margin-top:4px">
+              <div style="flex:1;background:#0f1525;border-radius:3px;padding:3px 5px">
+                <div style="font-size:7px;color:#4a5a78">信号置信度</div>
+                <div style="height:3px;background:#253050;border-radius:2px;margin-top:2px"><div style="width:88%;height:100%;background:#00e68a;border-radius:2px"></div></div>
+                <div style="font-size:8px;color:#00e68a;margin-top:1px">88%</div>
+              </div>
+              <div style="flex:1;background:#0f1525;border-radius:3px;padding:3px 5px">
+                <div style="font-size:7px;color:#4a5a78">规则命中</div>
+                <div style="height:3px;background:#253050;border-radius:2px;margin-top:2px"><div style="width:100%;height:100%;background:#a78bfa;border-radius:2px"></div></div>
+                <div style="font-size:8px;color:#a78bfa;margin-top:1px">T_1_3</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Step 2 -->
+        <div style="display:flex;gap:8px;margin-bottom:6px">
+          <div style="display:flex;flex-direction:column;align-items:center">
+            <div style="width:18px;height:18px;border-radius:50%;background:#00e68a;color:#000;font-size:9px;font-weight:bold;display:flex;align-items:center;justify-content:center">2</div>
+            <div style="width:2px;flex:1;background:#253050;margin:2px 0"></div>
+          </div>
+          <div style="flex:1;background:#1a2340;border:1px solid #253050;border-radius:6px;padding:6px 8px">
+            <div style="font-size:10px;color:#e8f0fa;font-weight:600">[S2] 本体规则验证 <span style="background:rgba(0,230,138,0.15);border:1px solid #00e68a;border-radius:3px;padding:1px 4px;font-size:8px;color:#00e68a">Ontology</span></div>
+            <div style="font-size:9px;color:#7a8ba8;margin-top:3px">命中规则链: T_1_3 → T_2_1 → T_4_2</div>
+          </div>
+        </div>
+        <div style="text-align:center;color:#4a5a78;font-size:9px">▼ 更多步骤...</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A · 增强纵向时间线</h3>
+      <p>保持现有纵向布局，每步内嵌微型证据面板（信号数值 + 置信度条 + 规则标签）。信息密度高，步骤感强。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="font-family:monospace;font-size:11px;padding:10px;background:#0a0e1a;color:#c8d6e5;border-radius:6px;min-height:180px">
+        <div style="color:#00b4ff;margin-bottom:8px;font-size:10px">◉ 因果推理图谱  [LLM+Ontology]</div>
+        <!-- Flow diagram mockup -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;min-height:140px">
+          <div style="background:#1a2340;border:1px solid #00b4ff;border-radius:6px;padding:5px 8px;font-size:9px;color:#00b4ff;text-align:center">
+            <div>📶 信号输入</div>
+            <div style="font-size:7px;color:#4a5a78;margin-top:2px">BLE_AUTH_ERR</div>
+          </div>
+          <div style="color:#a78bfa;font-size:14px">→</div>
+          <div style="background:#1a2340;border:1px solid #a78bfa;border-radius:6px;padding:5px 8px;font-size:9px;color:#a78bfa;text-align:center">
+            <div>🔍 异常识别</div>
+            <div style="font-size:7px;color:#4a5a78;margin-top:2px">[T_1_3] 88%</div>
+          </div>
+          <div style="color:#a78bfa;font-size:14px">→</div>
+          <div style="background:#1a2340;border:1px solid #ffc53d;border-radius:6px;padding:5px 8px;font-size:9px;color:#ffc53d;text-align:center">
+            <div>📦 规则链</div>
+            <div style="font-size:7px;color:#4a5a78;margin-top:2px">T_1_3→T_2_1</div>
+          </div>
+          <div style="color:#a78bfa;font-size:14px">→</div>
+          <div style="background:#1a2340;border:1px solid #00e68a;border-radius:6px;padding:5px 8px;font-size:9px;color:#00e68a;text-align:center">
+            <div>💡 假设</div>
+            <div style="font-size:7px;color:#4a5a78;margin-top:2px">BLE认证失败 92%</div>
+          </div>
+          <div style="color:#a78bfa;font-size:14px">→</div>
+          <div style="background:#1a2340;border:2px solid #ff4d6a;border-radius:6px;padding:5px 8px;font-size:9px;color:#ff4d6a;text-align:center">
+            <div>⚠️ 根因</div>
+            <div style="font-size:7px;color:#4a5a78;margin-top:2px">密钥认证异常</div>
+          </div>
+        </div>
+        <div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap">
+          <span style="font-size:8px;background:rgba(0,180,255,0.1);border:1px solid #00b4ff;color:#00b4ff;padding:1px 5px;border-radius:3px">总置信度 89%</span>
+          <span style="font-size:8px;background:rgba(0,230,138,0.1);border:1px solid #00e68a;color:#00e68a;padding:1px 5px;border-radius:3px">规则命中 3条</span>
+          <span style="font-size:8px;background:rgba(167,139,250,0.1);border:1px solid #a78bfa;color:#a78bfa;padding:1px 5px;border-radius:3px">本体激活 5节点</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B · 横向因果流程图</h3>
+      <p>将推理路径渲染为横向流程：信号→异常→规则→假设→根因。每个节点可点击展开详情，整体一目了然。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="font-family:monospace;font-size:11px;padding:10px;background:#0a0e1a;color:#c8d6e5;border-radius:6px;min-height:180px">
+        <div style="color:#00b4ff;margin-bottom:6px;font-size:10px">◉ 因果推理链  [双栏布局]</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <!-- Left: steps -->
+          <div>
+            <div style="font-size:8px;color:#4a5a78;margin-bottom:4px;letter-spacing:1px">REASONING STEPS</div>
+            <div style="background:#1a2340;border-left:2px solid #00b4ff;padding:4px 6px;margin-bottom:4px;border-radius:0 4px 4px 0">
+              <div style="font-size:9px;color:#e8f0fa">S1 · 信号异常识别</div>
+              <div style="font-size:8px;color:#7a8ba8">BLE_AUTH_ERR → [T_1_3]</div>
+            </div>
+            <div style="background:#1a2340;border-left:2px solid #a78bfa;padding:4px 6px;margin-bottom:4px;border-radius:0 4px 4px 0">
+              <div style="font-size:9px;color:#e8f0fa">S2 · 本体规则验证</div>
+              <div style="font-size:8px;color:#7a8ba8">规则链: T_1_3 → T_2_1</div>
+            </div>
+            <div style="background:#1a2340;border-left:2px solid #00e68a;padding:4px 6px;border-radius:0 4px 4px 0">
+              <div style="font-size:9px;color:#e8f0fa">S3 · 根因定位</div>
+              <div style="font-size:8px;color:#7a8ba8">BLE密钥认证异常</div>
+            </div>
+          </div>
+          <!-- Right: evidence -->
+          <div>
+            <div style="font-size:8px;color:#4a5a78;margin-bottom:4px;letter-spacing:1px">EVIDENCE PANEL</div>
+            <div style="background:#0f1525;border:1px solid #253050;border-radius:4px;padding:5px 6px;margin-bottom:4px">
+              <div style="font-size:8px;color:#ffc53d;margin-bottom:3px">📶 信号值</div>
+              <div style="font-size:8px;color:#ff4d6a">BLE_AUTH_ERR: 0x05</div>
+              <div style="font-size:8px;color:#ff4d6a">KeyValidSt: INVALID</div>
+            </div>
+            <div style="background:#0f1525;border:1px solid #253050;border-radius:4px;padding:5px 6px">
+              <div style="font-size:8px;color:#a78bfa;margin-bottom:3px">📦 本体规则</div>
+              <div style="font-size:8px;color:#c8d6e5">[T_1_3] BLE认证失败</div>
+              <div style="font-size:8px;color:#c8d6e5">[T_2_1] 上电条件不满足</div>
+              <div style="height:3px;background:#253050;border-radius:2px;margin-top:4px"><div style="width:89%;height:100%;background:linear-gradient(90deg,#a78bfa,#00b4ff);border-radius:2px"></div></div>
+              <div style="font-size:8px;color:#00b4ff;margin-top:1px">综合置信度 89%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C · 双栏：步骤 + 证据面板</h3>
+      <p>左侧保持推理步骤时间线，右侧同步展示当前步骤的完整证据（信号值、规则详情、置信度）。信息分离清晰。</p>
+    </div>
+  </div>
+
+</div>

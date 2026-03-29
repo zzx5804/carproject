@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>诊断对比：Ontology+LLM vs 纯LLM</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;color:#c8d6e5;font-family:'Noto Sans SC',sans-serif;padding:20px;min-height:100vh}
+:root{--bg:#0a0e1a;--bg2:#0f1525;--bg3:#141c30;--surface:#1a2340;--surface2:#1e2a4a;--border:#253050;--border2:#2a3a60;--accent:#00b4ff;--green:#00e68a;--yellow:#ffc53d;--orange:#ff8c42;--red:#ff4d6a;--purple:#a78bfa;--purple2:#8b5cf6;--pink:#f472b6;--cyan:#22d3ee;--tx:#c8d6e5;--tx2:#7a8ba8;--tx3:#4a5a78;--txw:#e8f0fa;--mono:'JetBrains Mono',monospace}
+
+h1{font-size:16px;color:#e8f0fa;font-weight:600;margin-bottom:4px}
+.subtitle{font-size:11px;color:#7a8ba8;margin-bottom:20px;font-family:var(--mono)}
+
+.scenario-bar{background:#1a2340;border:1px solid #253050;border-radius:8px;padding:10px 14px;margin-bottom:20px;display:flex;align-items:flex-start;gap:12px}
+.scenario-icon{font-size:20px;margin-top:2px}
+.scenario-title{font-family:var(--mono);font-size:9px;color:#00b4ff;letter-spacing:1px;margin-bottom:4px}
+.scenario-text{font-size:12px;color:#e8f0fa}
+.signals{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.sig{font-family:var(--mono);font-size:8px;padding:2px 7px;border-radius:3px;border:1px solid}
+.sig.err{color:#ff4d6a;border-color:rgba(255,77,106,0.3);background:rgba(255,77,106,0.06)}
+.sig.warn{color:#ffc53d;border-color:rgba(255,197,61,0.3);background:rgba(255,197,61,0.06)}
+.sig.ok{color:#00e68a;border-color:rgba(0,230,138,0.3);background:rgba(0,230,138,0.06)}
+
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.compare-grid{grid-template-columns:1fr}}
+
+.col-header{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:6px;margin-bottom:12px}
+.col-header .badge{font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:4px;font-weight:600}
+.badge-onto{background:rgba(167,139,250,0.2);border:1px solid #a78bfa;color:#a78bfa}
+.badge-llm{background:rgba(0,180,255,0.15);border:1px solid #00b4ff;color:#00b4ff}
+.col-title{font-size:13px;font-weight:600}
+
+/* Chain steps */
+.chain{display:flex;flex-direction:column;gap:8px}
+.step{display:flex;gap:10px}
+.step-line{display:flex;flex-direction:column;align-items:center;min-width:22px}
+.dot{width:22px;height:22px;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.conn{width:2px;flex:1;min-height:12px;margin:3px 0;opacity:0.4}
+.step-body{flex:1;background:#1a2340;border:1px solid #253050;border-radius:7px;padding:8px 10px;margin-bottom:0}
+.step-body.last-root{border-color:#ff4d6a;box-shadow:0 0 10px rgba(255,77,106,0.1)}
+.step-title{font-size:10px;color:#e8f0fa;font-weight:600;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:3px}
+.step-body-text{font-size:9px;color:#7a8ba8;line-height:1.6;margin-bottom:6px}
+.rtag{display:inline-block;background:rgba(167,139,250,0.2);border:1px solid #a78bfa;border-radius:3px;padding:1px 4px;color:#a78bfa;font-family:var(--mono);font-size:8px;cursor:default}
+.evidence{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:6px}
+.ev{background:#0f1525;border:1px solid #1e2a4a;border-radius:4px;padding:4px 6px}
+.ev-lbl{font-family:var(--mono);font-size:7px;color:#4a5a78;margin-bottom:3px}
+.ev-bar{height:3px;background:#253050;border-radius:2px;margin-bottom:2px;overflow:hidden}
+.ev-bar-fill{height:100%;border-radius:2px}
+.ev-val{font-family:var(--mono);font-size:9px;font-weight:600}
+.ev-sub{font-family:var(--mono);font-size:7px;color:#4a5a78;margin-top:1px}
+.sig-row{font-family:var(--mono);font-size:8px;margin-bottom:1px}
+.sig-row.err{color:#ff4d6a}.sig-row.warn{color:#ffc53d}.sig-row.ok{color:#00e68a}
+.elapsed{font-family:var(--mono);font-size:8px;color:#4a5a78;background:#0f1525;border:1px solid #253050;border-radius:3px;padding:1px 5px}
+.prov{font-family:var(--mono);font-size:8px;padding:1px 5px;border-radius:3px}
+.prov.llm{background:rgba(139,92,246,0.2);border:1px solid #8b5cf6;color:#a78bfa}
+.prov.ont{background:rgba(0,230,138,0.15);border:1px solid #00e68a;color:#00e68a}
+
+/* Diff highlights */
+.diff-section{margin-top:16px}
+.diff-title{font-family:var(--mono);font-size:9px;color:#ffc53d;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.diff-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px}
+.diff-cell{background:#1a2340;border:1px solid #253050;border-radius:6px;padding:8px 10px;font-size:10px;line-height:1.6}
+.diff-cell.better{border-color:rgba(0,230,138,0.3)}
+.diff-cell.worse{border-color:rgba(255,77,106,0.2)}
+.diff-label{font-family:var(--mono);font-size:8px;margin-bottom:4px}
+.diff-label.g{color:#00e68a}.diff-label.r{color:#ff4d6a}
+.verdict{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.verdict-card{border-radius:8px;padding:12px 14px;font-size:10px}
+.verdict-card.onto{background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.3)}
+.verdict-card.llm-only{background:rgba(0,180,255,0.06);border:1px solid rgba(0,180,255,0.2)}
+.verdict-title{font-size:12px;font-weight:600;margin-bottom:8px}
+.verdict-item{display:flex;align-items:flex-start;gap:6px;margin-bottom:4px;color:#7a8ba8}
+.verdict-item .icon{flex-shrink:0;width:14px}
+</style>
+</head>
+<body>
+
+<h1>诊断对比分析</h1>
+<p class="subtitle">案例：踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"</p>
+
+<!-- Scenario -->
+<div class="scenario-bar">
+  <div class="scenario-icon">🚗</div>
+  <div style="flex:1">
+    <div class="scenario-title">SCENARIO · BLE_AUTH_FAILURE</div>
+    <div class="scenario-text">踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"</div>
+    <div class="signals">
+      <span class="sig err">PowerMode: 0:Off</span>
+      <span class="sig err">KeyValidSt: INVALID</span>
+      <span class="sig ok">BrakeStatus: PRESSED</span>
+      <span class="sig ok">GearPos: P(0x5)</span>
+      <span class="sig warn">BLE_Flag: DETECTED_FAIL</span>
+      <span class="sig err">BLE_ErrorCode: AUTH_ERR(0x05)</span>
+    </div>
+  </div>
+</div>
+
+<div class="compare-grid">
+
+  <!-- ═══ COL A: Ontology + LLM ═══ -->
+  <div>
+    <div class="col-header" style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.25)">
+      <span class="badge badge-onto">Ontology + LLM</span>
+      <span class="col-title" style="color:#a78bfa">结构化知识 + 语义推理</span>
+    </div>
+
+    <div class="chain">
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-line">
+          <div class="dot" style="background:#00b4ff;color:#000;box-shadow:0 0 8px rgba(0,180,255,0.3)">1</div>
+          <div class="conn" style="background:linear-gradient(#00b4ff,#a78bfa)"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">
+            <span>[S1] 信号异常识别与分类 <span class="prov llm">LLM</span></span>
+            <span class="elapsed">⏱ 0.8s</span>
+          </div>
+          <div class="step-body-text">
+            检测到 <strong style="color:#ff4d6a">BLE_ErrorCode=AUTH_ERR(0x05)</strong> 与 <strong style="color:#ff4d6a">KeyValidSt=INVALID</strong> 同时异常，而 BrakeStatus=PRESSED、GearPos=P 满足上电前置条件，排除操作失误。触发本体规则 <span class="rtag">[T_1_3] ↗</span>，定位认证层故障。
+          </div>
+          <div class="evidence">
+            <div class="ev">
+              <div class="ev-lbl">步骤置信度</div>
+              <div class="ev-bar"><div class="ev-bar-fill" style="width:90%;background:var(--green)"></div></div>
+              <div class="ev-val" style="color:var(--green)">↑ 90%</div>
+            </div>
+            <div class="ev">
+              <div class="ev-lbl">引用信号</div>
+              <div class="sig-row err">AUTH_ERR: 0x05</div>
+              <div class="sig-row err">KeyValidSt: INVALID</div>
+            </div>
+            <div class="ev">
+              <div class="ev-lbl">命中规则</div>
+              <div class="rtag" style="font-size:8px">T_1_3</div>
+              <div class="ev-sub">BLE认证失败</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-line">
+          <div class="dot" style="background:#a78bfa;color:#000;box-shadow:0 0 8px rgba(167,139,250,0.3)">2</div>
+          <div class="conn" style="background:linear-gradient(#a78bfa,#ffc53d)"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">
+            <span>[S2] 本体规则链验证 <span class="prov ont">Ontology</span></span>
+            <span class="elapsed">⏱ 1.2s</span>
+          </div>
+          <div class="step-body-text">
+            SPARQL 查询确认规则链完整命中：<span class="rtag">[T_1_3] ↗</span> → <span class="rtag">[T_2_1] ↗</span> → <span class="rtag">[T_4_2] ↗</span>。上电状态机 <strong style="color:#a78bfa">:Off → :LocalOn</strong> 的转移条件中，钥匙有效性（:KeyValidSt）不满足，明确阻断原因已定位到 BLE 认证模块。
+          </div>
+          <div class="evidence">
+            <div class="ev">
+              <div class="ev-lbl">步骤置信度</div>
+              <div class="ev-bar"><div class="ev-bar-fill" style="width:94%;background:#00b4ff"></div></div>
+              <div class="ev-val" style="color:#00b4ff">↑ 94%</div>
+              <div class="ev-sub">较上步 +4%</div>
+            </div>
+            <div class="ev">
+              <div class="ev-lbl">引用信号</div>
+              <div class="sig-row err">PowerMode: 0:Off</div>
+              <div class="sig-row ok">Brake: PRESSED</div>
+            </div>
+            <div class="ev">
+              <div class="ev-lbl">命中规则</div>
+              <div class="rtag" style="font-size:8px;display:block;margin-bottom:2px">T_2_1</div>
+              <div class="rtag" style="font-size:8px;display:block">T_4_2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-line">
+          <div class="dot" style="background:#ffc53d;color:#000;box-shadow:0 0 8px rgba(255,197,61,0.3)">3</div>
+          <div class="conn" style="background:linear-gradient(#ffc53d,#ff4d6a)"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">
+            <span>[S3] 假设排序与竞争排除 <span class="prov llm">LLM</span></span>
+            <span class="elapsed">⏱ 1.4s</span>
+          </div>
+          <div class="step-body-text">
+            生成 3 个假设：H1=BLE密钥认证模块故障（92%）、H2=手机App蓝牙权限未授权（63%）、H3=TBOX固件异常（41%）。依据 <span class="rtag">[T_1_3] ↗</span> 的错误码层级：<strong style="color:#ff4d6a">AUTH_ERR(0x05)</strong> 明确指向硬件认证握手失败，排除 H2（App层错误码为 0x01），降低 H3 优先级。
+          </div>
+          <div class="evidence">
+            <div class="ev">
+              <div class="ev-lbl">步骤置信度</div>
+              <div class="ev-bar"><div class="ev-bar-fill" style="width:92%;background:#ffc53d"></div></div>
+              <div class="ev-val" style="color:#ffc53d">→ 92%</div>
+              <div class="ev-sub">较上步 -2%</div>
+            </div>
+            <div class="ev">
+              <div class="ev-lbl">假设数量</div>
+              <div class="ev-val" style="color:#ffc53d;font-size:14px">3</div>
+              <div class="ev-sub">H1采纳·H2/H3排除</div>
+            </div>
+            <div class="ev">
+              <div class="ev-lbl">错误码依据</div>
+              <div class="sig-row err">0x05 = HW_AUTH</div>
+              <div class="sig-row ok">0x01 = APP_AUTH</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-line">
+          <div class="dot" style="background:#ff4d6a;color:#fff;box-shadow:0 0 8px rgba(255,77,106,0.3)">4</div>
+        </div>
+        <div class="step-body last-root">
+          <div class="step-title">
+            <span>[S4] 根因确认 <span class="prov" style="background:rgba(255,77,106,0.15);border:1px solid #ff4d6a;color:#ff4d6a">Output</span></span>
+            <span class="elapsed">⏱ 0.6s</span>
+          </div>
+          <div class="step-body-text">
+            根因确认：<strong style="color:#ff4d6a">BLE 密钥认证模块硬件握手失败（0x05）</strong>。状态机阻断点：<span class="rtag">[T_2_1] ↗</span> :Off→:LocalOn 转移失败。建议操作：① 重启车机重新配对 ② 若复现检测 BLE 模块天线信号强度 ③ 排查 TBOX 固件版本是否需升级（FRS-BLE-4.2+）
+          </div>
+          <div class="evidence">
+            <div class="ev">
+              <div class="ev-lbl">最终置信度</div>
+              <div class="ev-bar"><div class="ev-bar-fill" style="width:91%;background:linear-gradient(90deg,#ff4d6a,#ff8c42)"></div></div>
+              <div class="ev-val" style="color:#ff4d6a">🔴 91%</div>
+              <div class="ev-sub">高置信度</div>
+            </div>
+            <div class="ev">
+              <div class="ev-lbl">总耗时</div>
+              <div class="ev-val" style="color:#e8f0fa;font-size:13px">4.0s</div>
+              <div class="ev-sub">4步·6信号·3规则</div>
+            </div>
+            <div class="ev">
+              <div class="ev-lbl">数据来源</div>
+              <div style="font-size:8px;color:#a78bfa;font-family:var(--mono)">Ontology×LLM</div>
+              <div class="ev-sub">规则链完整验证</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /chain -->
+  </div><!-- /col A -->
+
+
+  <!-- ═══ COL B: 纯 LLM ═══ -->
+  <div>
+    <div class="col-header" style="background:rgba(0,180,255,0.05);border:1px solid rgba(0,180,255,0.15)">
+      <span class="badge badge-llm">纯 LLM</span>
+      <span class="col-title" style="color:#00b4ff">仅语义推理，无结构化知识</span>
+    </div>
+
+    <div class="chain">
+
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-line">
+          <div class="dot" style="background:#2a3a60;color:#7a8ba8">1</div>
+          <div class="conn" style="background:#253050"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">
+            <span>[S1] 症状初步分析 <span class="prov llm">LLM</span></span>
+            <span class="elapsed">⏱ 1.1s</span>
+          </div>
+          <div class="step-body-text">
+            车辆上电失败，屏幕提示"钥匙未找到"，结合刹车已踩下，初步判断为钥匙相关问题。
+            <span style="color:#ff8c42;font-size:8px">※ 未引用具体信号值，无错误码分析</span>
+          </div>
+          <!-- No evidence panel -->
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-line">
+          <div class="dot" style="background:#2a3a60;color:#7a8ba8">2</div>
+          <div class="conn" style="background:#253050"></div>
+        </div>
+        <div class="step-body">
+          <div class="step-title">
+            <span>[S2] 可能原因推测 <span class="prov llm">LLM</span></span>
+            <span class="elapsed">⏱ 1.3s</span>
+          </div>
+          <div class="step-body-text">
+            可能原因：① 手机蓝牙未开启 ② 数字钥匙App未启动 ③ 蓝牙配对失效 ④ 钥匙电量不足。
+            <span style="color:#ff8c42;font-size:8px">※ 4个假设权重相近，未利用 AUTH_ERR(0x05) 错误码区分</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-line">
+          <div class="dot" style="background:#2a3a60;color:#7a8ba8">3</div>
+        </div>
+        <div class="step-body" style="border-color:rgba(0,180,255,0.2)">
+          <div class="step-title">
+            <span>[S3] 诊断结论 <span class="prov" style="background:rgba(0,180,255,0.1);border:1px solid #00b4ff;color:#00b4ff">Output</span></span>
+            <span class="elapsed">⏱ 0.9s</span>
+          </div>
+          <div class="step-body-text">
+            蓝牙钥匙连接异常，建议检查手机蓝牙设置和App权限。若问题持续，可尝试删除配对并重新绑定。
+            <span style="color:#ff8c42;font-size:8px">※ 根因不明确，建议操作泛化，无状态机依据</span>
+          </div>
+          <div class="evidence" style="grid-template-columns:1fr 1fr">
+            <div class="ev">
+              <div class="ev-lbl">最终置信度</div>
+              <div class="ev-bar"><div class="ev-bar-fill" style="width:62%;background:var(--yellow)"></div></div>
+              <div class="ev-val" style="color:var(--yellow)">🟡 62%</div>
+              <div class="ev-sub">中置信度</div>
+            </div>
+            <div class="ev">
+              <div class="ev-lbl">总耗时</div>
+              <div class="ev-val" style="color:#e8f0fa;font-size:13px">3.3s</div>
+              <div class="ev-sub">3步·0规则</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /chain -->
+  </div><!-- /col B -->
+
+</div><!-- /compare-grid -->
+
+
+<!-- ═══ DIFF TABLE ═══ -->
+<div class="diff-section">
+  <div class="diff-title">▎ 关键差异对比</div>
+
+  <div class="diff-row">
+    <div class="diff-cell better">
+      <div class="diff-label g">✅ Ontology+LLM — 错误码精准定位</div>
+      <code style="color:#ff4d6a;font-family:var(--mono);font-size:10px">AUTH_ERR(0x05)</code> → 规则 <code style="color:#a78bfa;font-family:var(--mono);font-size:10px">[T_1_3]</code> 明确标注为"硬件握手失败"，直接排除 App 层假设（0x01），将假设从 4 个收窄为 1 个。
+    </div>
+    <div class="diff-cell worse">
+      <div class="diff-label r">❌ 纯LLM — 错误码未利用</div>
+      BLE_ErrorCode=AUTH_ERR(0x05) 出现在信号中，但 LLM 未能将其与故障层级映射，4 个假设（蓝牙未开/App/配对/电量）权重相近，无法区分优先级。
+    </div>
+  </div>
+
+  <div class="diff-row">
+    <div class="diff-cell better">
+      <div class="diff-label g">✅ Ontology+LLM — 状态机链路追踪</div>
+      通过 <code style="color:#a78bfa;font-family:var(--mono);font-size:10px">T_1_3→T_2_1→T_4_2</code> 规则链，精确还原状态机阻断点：:Off→:LocalOn 转移因 :KeyValidSt=INVALID 中断。维修范围锁定到 BLE 认证模块，而非整个钥匙系统。
+    </div>
+    <div class="diff-cell worse">
+      <div class="diff-label r">❌ 纯LLM — 无状态机依据</div>
+      无法关联到 Off→LocalOn→Ready 的状态转移图，结论停留在"蓝牙钥匙连接异常"的表象描述，缺乏系统架构层面的根因定位。
+    </div>
+  </div>
+
+  <div class="diff-row">
+    <div class="diff-cell better">
+      <div class="diff-label g">✅ Ontology+LLM — 置信度 91%，含计算依据</div>
+      每步置信度有独立证据支撑（信号命中、规则覆盖率、错误码匹配度），置信度计算可回溯验证。
+    </div>
+    <div class="diff-cell worse">
+      <div class="diff-label r">❌ 纯LLM — 置信度 62%，黑盒数字</div>
+      置信度由模型内部估计，无量化拆解，无法判断是"症状模糊"还是"数据不足"导致低置信，也无法改进。
+    </div>
+  </div>
+
+  <div class="diff-row">
+    <div class="diff-cell better">
+      <div class="diff-label g">✅ Ontology+LLM — 维修建议精确分级</div>
+      ① 重启配对（软件层）→ ② 天线信号检测（硬件层）→ ③ TBOX固件版本（系统层），操作有优先级和技术规范参考号（FRS-BLE-4.2+）。
+    </div>
+    <div class="diff-cell worse">
+      <div class="diff-label r">❌ 纯LLM — 建议泛化</div>
+      "检查蓝牙设置""重新绑定"等建议适用于任何蓝牙钥匙问题，缺乏针对 AUTH_ERR(0x05) 的专项排查步骤，技术人员参考价值低。
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ VERDICT ═══ -->
+<div class="verdict">
+  <div class="verdict-card onto">
+    <div class="verdict-title" style="color:#a78bfa">Ontology + LLM</div>
+    <div class="verdict-item"><span class="icon">✅</span> 4步推理链，每步有信号证据 + 规则 ID + 置信度</div>
+    <div class="verdict-item"><span class="icon">✅</span> 错误码层级识别，假设从4个精确收窄到1个</div>
+    <div class="verdict-item"><span class="icon">✅</span> 状态机阻断点精确定位（:Off→:LocalOn）</div>
+    <div class="verdict-item"><span class="icon">✅</span> 置信度 91%，三级可追溯维修建议</div>
+    <div class="verdict-item"><span class="icon">✅</span> 可解释性强，适合向技术团队/管理层汇报</div>
+  </div>
+  <div class="verdict-card llm-only">
+    <div class="verdict-title" style="color:#00b4ff">纯 LLM</div>
+    <div class="verdict-item"><span class="icon">⚠️</span> 3步推理链，无信号值引用，无规则依据</div>
+    <div class="verdict-item"><span class="icon">❌</span> 未利用 AUTH_ERR(0x05)，4个假设无法排序</div>
+    <div class="verdict-item"><span class="icon">❌</span> 无状态机知识，根因停留在表象描述</div>
+    <div class="verdict-item"><span class="icon">⚠️</span> 置信度 62%，维修建议泛化无优先级</div>
+    <div class="verdict-item"><span class="icon">⚠️</span> 适合快速初筛，不适合作为最终诊断依据</div>
+  </div>
+</div>
+
+</body>
+</html>

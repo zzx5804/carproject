@@ -1,0 +1,87 @@
+<h2>三个优化方案</h2>
+<p class="subtitle">目标：同时实现 A节点激活 · B规则引用 · C对比模式 · D全链路透明，3-5天完成</p>
+
+<div class="section">
+  <div class="options">
+
+    <div class="option" data-choice="a" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>Ontology-as-Evidence 架构升级 ⭐ 推荐</h3>
+        <p><strong style="color:#00e68a">核心思路：</strong>让 Ontology 真正"参与"推理，而不是"配合展示"</p>
+        <div style="margin-top:8px;font-size:11px;line-height:1.8">
+          <div>① <strong>SPARQL 动态查询</strong>：OntologyFetcher 根据症状关键词实时从 TTL 查询相关类/规则/个体，替换硬编码 HTML</div>
+          <div>② <strong>结构化知识注入</strong>：LLM prompt 中注入带规则ID的结构化知识（如 R-BLE-001、T_1_2），引导 LLM 显式引用</div>
+          <div>③ <strong>激活状态追踪</strong>：后端记录哪些 Ontology 节点被查询，发送 <code>onto_activated</code> 事件到前端</div>
+          <div>④ <strong>对比模式开关</strong>：前端加 with/without Ontology 切换，同一症状跑两次对比</div>
+        </div>
+        <div style="margin-top:8px">
+          <div class="pros-cons" style="font-size:10px">
+            <div class="pros"><h4>优点</h4><ul><li>技术上真实可信</li><li>4个高光全覆盖</li><li>3-5天可完成</li><li>不破坏现有架构</li></ul></div>
+            <div class="cons"><h4>代价</h4><ul><li>需要改 OntologyFetcher</li><li>需要改 prompt builder</li><li>需要加前端激活面板</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="option" data-choice="b" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>Knowledge Graph Reasoning 深度接入</h3>
+        <p><strong style="color:#a78bfa">核心思路：</strong>引入 OWL-RL 推理器，让本体真正"思考"</p>
+        <div style="margin-top:8px;font-size:11px;line-height:1.8">
+          <div>① 启用 <code>owlrl</code> 推理器，从信号状态推断隐含事实（如 KeyValidSt=INVALID → 触发 BLE认证失败规则）</div>
+          <div>② SPARQL 在推理后的图上查询，得到语义层面的规则命中结果</div>
+          <div>③ 将推理链作为结构化 JSON 传给 LLM，LLM 输出引用具体 Triple</div>
+          <div>④ 前端展示 OWL 推理图（激活了哪些蕴含关系）</div>
+        </div>
+        <div style="margin-top:8px">
+          <div class="pros-cons" style="font-size:10px">
+            <div class="pros"><h4>优点</h4><ul><li>技术深度最强</li><li>真实 OWL 推理可演示</li></ul></div>
+            <div class="cons"><h4>代价</h4><ul><li>owlrl 推理较慢(1-3s)</li><li>需要改造 ontology 文件</li><li>5天可能偏紧</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="option" data-choice="c" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>透明度面板增强（前端主导）</h3>
+        <p><strong style="color:#ffc53d">核心思路：</strong>后端改动最小，靠前端把"已有信息"说清楚</p>
+        <div style="margin-top:8px;font-size:11px;line-height:1.8">
+          <div>① 新增"Ontology 调用记录"面板：展示实际执行的 SPARQL 查询语句</div>
+          <div>② 展示注入 LLM 的完整 ontology_context 字符串（可折叠）</div>
+          <div>③ 规则匹配面板标注来源（从 TTL 文件的哪一行）</div>
+          <div>④ A/B 对比用模拟数据（不跑两次真实请求）</div>
+        </div>
+        <div style="margin-top:8px">
+          <div class="pros-cons" style="font-size:10px">
+            <div class="pros"><h4>优点</h4><ul><li>1-2天完成</li><li>视觉效果显著</li></ul></div>
+            <div class="cons"><h4>代价</h4><ul><li>技术专家一眼看穿</li><li>对比是模拟的</li><li>不能回答"Ontology推理了什么"</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">我的推荐</div>
+  <div class="mockup">
+    <div class="mockup-header">方案 A 为主干 + 从方案 B 借鉴 OWL 推理层</div>
+    <div class="mockup-body">
+      <div style="font-size:11px;line-height:2;color:#c8d6e5">
+        <div style="color:#00e68a;margin-bottom:6px">为什么推荐 A？</div>
+        <div>面对技术专家老板，<strong>方案C会穿帮</strong>（模拟数据一追问就露馅）。</div>
+        <div>方案B的OWL推理是亮点，但全面重构时间风险高。</div>
+        <div style="margin-top:8px;color:#00b4ff">方案A + 局部引入OWL推理（针对最核心的 PowerMode 转换规则）= 技术深度真实 + 展示效果满分 + 时间可控。</div>
+        <div style="margin-top:8px;color:#7a8ba8;font-size:10px">
+          可以在演示时说："这里的规则命中是通过 SPARQL 查询本体实时得出的，LLM 的每一个推理步骤都有 Ontology 三元组作为依据。"<br>
+          ——这句话技术专家听了会点头。
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

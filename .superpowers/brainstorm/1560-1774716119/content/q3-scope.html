@@ -1,0 +1,52 @@
+<h2>问题 3 / 4 — 改动范围和时间</h2>
+<p class="subtitle">这决定我们能做多深的优化</p>
+
+<div class="section">
+  <div class="label">背景确认</div>
+  <div class="mockup">
+    <div class="mockup-header">已明确的汇报要求</div>
+    <div class="mockup-body">
+      <div style="font-size:11px;line-height:2;color:#c8d6e5">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px">
+          <span style="color:#00e68a">✓</span>
+          <span>展示目标 <strong style="color:#00b4ff">A</strong>：Ontology 如何约束/引导 LLM 推理（有因果链）</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px">
+          <span style="color:#00e68a">✓</span>
+          <span>展示目标 <strong style="color:#00b4ff">B</strong>：多 Agent 协作可视化（过程可见）</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="color:#00e68a">✓</span>
+          <span>受众：技术专家级老板，会追问架构深度 + "Ontology 到底起什么作用"</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">你有多少时间/精力来改？</div>
+  <div class="options">
+    <div class="option" data-choice="a" onclick="toggleSelect(this)">
+      <div class="letter">A</div>
+      <div class="content">
+        <h3>只有 1-2 天，要最小改动</h3>
+        <p>在现有 demo 基础上，加几个关键的"展示点"——让 Ontology 的贡献在 UI 上说得清楚，不重构后端逻辑</p>
+      </div>
+    </div>
+    <div class="option" data-choice="b" onclick="toggleSelect(this)">
+      <div class="letter">B</div>
+      <div class="content">
+        <h3>有 3-5 天，可以做中等改造</h3>
+        <p>可以真正接入 Ontology 推理（SPARQL 查询驱动 prompt 构建），让 LLM 接收到结构化知识而非字符串拼接</p>
+      </div>
+    </div>
+    <div class="option" data-choice="c" onclick="toggleSelect(this)">
+      <div class="letter">C</div>
+      <div class="content">
+        <h3>时间充裕，做深度重构</h3>
+        <p>引入真实 OWL 推理器（owlrl）、SHACL 约束校验、规则激活追踪——让每一步诊断都有 Ontology 背书</p>
+      </div>
+    </div>
+  </div>
+</div>
