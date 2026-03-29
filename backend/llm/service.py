@@ -844,7 +844,7 @@ class LLMTools:
                 "priority": "high" if primary_hyp.get("pct", 50) > 70 else "medium",
             }
 
-        # 验证并填充 confidence_factors
+        # 验证并填充 confidence_factors（仅当 LLM 未返回时生成默认值）
         if not data.get("confidence_factors"):
             logger.warning(
                 "LLM response missing confidence_factors, generating defaults"
@@ -858,9 +858,9 @@ class LLMTools:
                 },
                 {
                     "label": "规则可信度",
-                    "value": 0.90 if (activated_knowledge and activated_knowledge.activated_rules) else 0.85,
+                    "value": 0.85,
                     "weight": 0.35,
-                    "explanation": "来自本体知识库规则" if (activated_knowledge and activated_knowledge.activated_rules) else "来自知识库规则",
+                    "explanation": "来自知识库规则",
                 },
                 {
                     "label": "数据质量",
@@ -876,20 +876,29 @@ class LLMTools:
                 },
             ]
 
-        # 验证并填充 final_confidence
-        if not data.get("final_confidence"):
-            # 从 confidence_factors 计算
-            factors = data.get("confidence_factors", [])
-            if factors:
-                total_weight = sum(f.get("weight", 0) for f in factors)
-                weighted_sum = sum(
-                    f.get("value", 0) * f.get("weight", 0) for f in factors
-                )
-                data["final_confidence"] = (
-                    weighted_sum / total_weight if total_weight > 0 else 0.75
-                )
-            else:
-                data["final_confidence"] = 0.75
+        # 后处理：如果本体规则命中，提升"规则可信度"因子（不论 LLM 是否返回了 factors）
+        has_ontology = bool(activated_knowledge and activated_knowledge.activated_rules)
+        for factor in data.get("confidence_factors", []):
+            if isinstance(factor, dict) and factor.get("label") == "规则可信度":
+                if has_ontology:
+                    # 本体规则提供了额外证据支持，可信度上浮 0.05（上限 1.0）
+                    factor["value"] = min(round(factor.get("value", 0.85) + 0.05, 2), 1.0)
+                    factor["explanation"] = "来自本体知识库规则（本体激活加成）"
+                break
+
+        # 无条件从 confidence_factors 重算 final_confidence，不复用 LLM 的值
+        # 确保后处理对最终分数可见
+        factors = data.get("confidence_factors", [])
+        if factors:
+            total_weight = sum(f.get("weight", 0) for f in factors)
+            weighted_sum = sum(
+                f.get("value", 0) * f.get("weight", 0) for f in factors
+            )
+            data["final_confidence"] = round(
+                weighted_sum / total_weight if total_weight > 0 else 0.75, 2
+            )
+        else:
+            data["final_confidence"] = 0.75
 
         # 验证并填充 output_for_*
         role_str = (

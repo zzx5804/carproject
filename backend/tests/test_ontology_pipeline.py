@@ -101,6 +101,41 @@ class TestConfidenceFallback:
         )
         assert data["confidence_factors"][0]["value"] == 0.42
 
+    def test_ontology_boost_applied_even_when_llm_returns_factors(self):
+        """
+        When LLM returns confidence_factors that include '规则可信度',
+        the ontology boost (+0.05) must still be applied in post-processing.
+        This verifies the fix for the 91%-vs-91% bug.
+        """
+        import copy
+        tools = self._make_tools()
+        request = self._make_request()
+
+        class FakeKnowledge:
+            activated_rules = [object()]
+
+        base_factors = [
+            {"label": "规则可信度", "value": 0.86, "weight": 0.35, "explanation": "来自知识库规则"},
+            {"label": "症状匹配度", "value": 0.90, "weight": 0.30, "explanation": "基于场景匹配"},
+        ]
+        data_onto = tools._validate_and_fill_missing_fields(
+            {"confidence_factors": copy.deepcopy(base_factors)}, request,
+            activated_knowledge=FakeKnowledge()
+        )
+        data_llm = tools._validate_and_fill_missing_fields(
+            {"confidence_factors": copy.deepcopy(base_factors)}, request,
+            activated_knowledge=None
+        )
+
+        onto_rule = next(f["value"] for f in data_onto["confidence_factors"] if f["label"] == "规则可信度")
+        llm_rule = next(f["value"] for f in data_llm["confidence_factors"] if f["label"] == "规则可信度")
+        assert onto_rule > llm_rule, (
+            f"Post-processing must boost '规则可信度': onto={onto_rule}, llm={llm_rule}"
+        )
+        assert data_onto["final_confidence"] > data_llm["final_confidence"], (
+            "final_confidence must differ between modes after post-processing"
+        )
+
 
 class TestPromptTone:
     """Test that service.py prompt building uses reference tone, not mandatory instructions."""
