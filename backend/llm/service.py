@@ -653,7 +653,8 @@ class LLMTools:
                 chain += f"\n  置信度: {int(node.confidence * 100)}%"
                 chain += f"\n  来源: {node.source_triple}"
                 rule_lines.append(chain)
-            activated_block += "\n\n### 激活的 Ontology 规则\n"
+            activated_block += "\n\n### 激活的 Ontology 规则（供参考）\n"
+            activated_block += "以下规则来自本体知识库，可作为推理背景，无需强制引用：\n\n"
             activated_block += "\n\n".join(rule_lines)
 
         if activated_knowledge and activated_knowledge.signal_mappings:
@@ -669,15 +670,12 @@ class LLMTools:
         if activated_knowledge and activated_knowledge.activated_rules:
             reasoning_requirement = """
 
-## 推理要求（必须遵守）
+## 参考知识（可选引用）
 
-在 reasoning_steps 的每个 body 字段中：
-1. 引用具体规则 ID，格式：[T_x_x]（例如 [T_1_2]）
-2. 引用本体个体名，格式：:ClassName（例如 :ReadyEnableDisable）
-3. 每个推理步骤必须说明依据了哪条 Ontology 规则
-
-示例：
-"根据规则 [T_1_2]，当信号 :ReadyEnableDisable 时，状态转移到 :ReadyEnableEnable 失败，确认为上电链路异常。"
+上方已提供 Ontology 激活规则作为背景参考。在 reasoning_steps 中：
+- 若某个推理步骤与某条规则相关，可在 body 中提及规则 ID（格式：[T_x_x]）
+- 若规则前置条件与当前症状不符，说明原因即可
+- 不强制每个步骤都引用规则，以诊断准确性为优先
 """
 
         user_message = f"""## 诊断任务

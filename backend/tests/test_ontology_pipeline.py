@@ -100,3 +100,25 @@ class TestConfidenceFallback:
             {"confidence_factors": existing_factors}, request, activated_knowledge=None
         )
         assert data["confidence_factors"][0]["value"] == 0.42
+
+
+class TestPromptTone:
+    """Test that service.py prompt building uses reference tone, not mandatory instructions."""
+
+    def test_generate_diagnosis_prompt_no_mandatory_instruction(self):
+        """The reasoning_requirement built in generate_diagnosis must not contain '必须遵守'."""
+        import inspect
+        from llm.service import LLMTools
+        source = inspect.getsource(LLMTools.generate_diagnosis)
+        assert "必须遵守" not in source, (
+            "generate_diagnosis still contains '必须遵守' — change to optional reference tone"
+        )
+
+    def test_generate_diagnosis_prompt_has_reference_language(self):
+        """After fix, prompt should contain reference language."""
+        import inspect
+        from llm.service import LLMTools
+        source = inspect.getsource(LLMTools.generate_diagnosis)
+        assert "可选引用" in source or "供参考" in source, (
+            "generate_diagnosis should contain optional reference language"
+        )
