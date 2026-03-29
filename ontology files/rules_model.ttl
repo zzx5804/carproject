@@ -157,7 +157,10 @@
     :faultScenario "按启动按钮无法上电"@zh ;
     :faultScenario "踩刹车按启动键车辆不响应"@zh ;
     :faultScenario "车辆本地启动失败"@zh ;
-    :faultScenario "按启动键屏幕不亮"@zh .
+    :faultScenario "按启动键屏幕不亮"@zh ;
+    :faultScenario "强制下电后无法上电"@zh ;
+    :faultScenario "长按启动键后车辆无法恢复上电"@zh ;
+    :faultScenario "强制下电锁定无法重新启动"@zh .
 
 # T_1_2: Disable跳转至Enable (ReadyEnable state machine)
 :ruleT_1_2 rdf:type :TransitionRule ;
@@ -263,7 +266,9 @@
     :toState :OffMode ;
     :faultScenario "远程模式超时自动关闭"@zh ;
     :faultScenario "强制下电无法阻止"@zh ;
-    :faultScenario "远程上电超时断电"@zh .
+    :faultScenario "远程上电超时断电"@zh ;
+    :faultScenario "长按启动键强制下电"@zh ;
+    :faultScenario "车辆被强制下电后无法重启"@zh .
 
 # T_4_3: RemoteOn跳转至LocalOn
 :ruleT_4_3 rdf:type :TransitionRule ;
@@ -277,6 +282,20 @@
     :faultScenario "远程模式进入本地驾驶失败"@zh ;
     :faultScenario "远程上电后无法切换本地控制"@zh ;
     :faultScenario "远程转本地模式异常"@zh .
+
+# T_5_1: Off跳转至LocalOn（强制下电恢复）
+:ruleT_5_1 rdf:type :TransitionRule ;
+    rdfs:label "T_5_1: Off to LocalOn (Forced Off Recovery)"@en ;
+    rdfs:label "T_5_1: 强制下电后恢复上电"@zh ;
+    :ruleId "T_5_1" ;
+    rdfs:comment "Recovery from forced power-off back to Local On mode — triggered by long-press shutdown followed by failed restart"@en ;
+    rdfs:comment "长按启动键强制下电后，车辆无法恢复上电的故障场景"@zh ;
+    :fromState :OffMode ;
+    :toState :LocalOnMode ;
+    :faultScenario "长按启动键车辆强制下电"@zh ;
+    :faultScenario "强制下电后依旧无法上电"@zh ;
+    :faultScenario "长按启动键后松开无法再次上电"@zh ;
+    :faultScenario "强制下电进入锁定无法恢复"@zh .
 
 # =============================================================================
 # END OF RULES MODEL
