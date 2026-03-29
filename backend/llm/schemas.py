@@ -73,6 +73,28 @@ class ReasoningStep(BaseModel):
         le=1.0,
         description="Confidence in this step's conclusion"
     )
+    confidence_delta: Optional[float] = Field(
+        default=None,
+        ge=-1.0,
+        le=1.0,
+        description="Change in confidence vs previous step (can be negative)"
+    )
+    signals_referenced: Optional[List[Dict[str, str]]] = Field(
+        default=None,
+        description=(
+            "Signals referenced in this step. "
+            "Each item: {key, value, level} where level in error|warn|ok"
+        )
+    )
+    rules_matched: Optional[List[str]] = Field(
+        default=None,
+        description="Ontology rule IDs matched in this step, e.g. ['T_1_3', 'T_2_1']"
+    )
+    elapsed_ms: Optional[int] = Field(
+        default=None,
+        ge=0,
+        description="Time spent on this reasoning step in milliseconds (injected by backend)"
+    )
 
 
 class ConfidenceFactor(BaseModel):
