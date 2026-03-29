@@ -199,8 +199,8 @@ class LLMDiagnosisAgent(BaseAgent):
         await self._send_reasoning_steps(response)
         await self.update_status(AgentState.RUNNING, 85)
 
-        # Send matched rules to frontend
-        await self._send_matched_rules(response)
+        # Send matched rules to frontend (only in ontology mode)
+        await self._send_matched_rules(response, use_ontology=getattr(context, "use_ontology", True))
         await self.update_status(AgentState.RUNNING, 88)
 
         # Send hypothesis to frontend
@@ -382,8 +382,13 @@ class LLMDiagnosisAgent(BaseAgent):
                 }
             )
 
-    async def _send_matched_rules(self, response: DiagnosisResponse):
-        """Send matched rules to frontend."""
+    async def _send_matched_rules(self, response: DiagnosisResponse, use_ontology: bool = True):
+        """Send matched rules to frontend. In pure-LLM mode, send a clear signal instead."""
+        if not use_ontology:
+            # Pure LLM mode: tell frontend to show placeholder (no rules)
+            await self.send({"type": "rules_clear"})
+            return
+
         # Import rules from diagnosis_knowledge
         from diagnosis_knowledge import RULES
 

@@ -63,7 +63,7 @@ class TestConfidenceFallback:
         )
 
     def test_fallback_confidence_differs_by_mode(self):
-        """Rule confidence fallback must be higher when activated_knowledge is present."""
+        """final_confidence must be higher when activated_knowledge is present."""
         tools = self._make_tools()
         request = self._make_request()
 
@@ -77,16 +77,9 @@ class TestConfidenceFallback:
             {}, request, activated_knowledge=None
         )
 
-        onto_rule_conf = next(
-            f["value"] for f in data_onto["confidence_factors"]
-            if f["label"] == "规则可信度"
-        )
-        llm_rule_conf = next(
-            f["value"] for f in data_llm["confidence_factors"]
-            if f["label"] == "规则可信度"
-        )
-        assert onto_rule_conf > llm_rule_conf, (
-            f"Onto rule confidence ({onto_rule_conf}) should be > LLM ({llm_rule_conf})"
+        assert data_onto["final_confidence"] > data_llm["final_confidence"], (
+            f"Onto final_confidence ({data_onto['final_confidence']}) should be > "
+            f"LLM ({data_llm['final_confidence']})"
         )
 
     def test_fallback_not_triggered_when_factors_present(self):
@@ -127,13 +120,13 @@ class TestConfidenceFallback:
             activated_knowledge=None
         )
 
-        onto_rule = next(f["value"] for f in data_onto["confidence_factors"] if f["label"] == "规则可信度")
-        llm_rule = next(f["value"] for f in data_llm["confidence_factors"] if f["label"] == "规则可信度")
-        assert onto_rule > llm_rule, (
-            f"Post-processing must boost '规则可信度': onto={onto_rule}, llm={llm_rule}"
-        )
+        # The boost is now applied at final_confidence level, not factor level
         assert data_onto["final_confidence"] > data_llm["final_confidence"], (
             "final_confidence must differ between modes after post-processing"
+        )
+        assert data_onto["final_confidence"] - data_llm["final_confidence"] >= 0.04, (
+            f"Onto final_confidence ({data_onto['final_confidence']}) should be >= llm+0.04 "
+            f"({data_llm['final_confidence']})"
         )
 
 

@@ -5023,3 +5023,476 @@
 2026-03-29 22:45:28.324 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13645ms
 2026-03-29 22:45:28.325 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
 2026-03-29 22:45:28.326 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:48:13.313 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 0
+2026-03-29 22:48:13.422 | INFO     | __main__:main:485 - Server stopped by user
+2026-03-29 22:48:32.307 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-29 22:48:32.307 | INFO     | __main__:start_server:343 - ============================================================
+2026-03-29 22:48:32.307 | INFO     | __main__:start_server:344 - Vehicle Power Diagnosis System v1.0.0
+2026-03-29 22:48:32.308 | INFO     | __main__:start_server:345 - ============================================================
+2026-03-29 22:48:32.308 | INFO     | __main__:start_server:349 - Loading ontology from folder: D:\work\carproject\ontology files
+2026-03-29 22:48:32.308 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:48:32.360 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:48:32.388 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:48:32.448 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:48:32.483 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:48:32.498 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:48:32.505 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:48:32.527 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:48:32.560 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:48:32.608 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:48:32.620 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:48:32.620 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:48:32.621 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:48:32.652 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:48:32.652 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:48:32.653 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:48:32.653 | INFO     | __main__:start_server:353 - Ontology loaded successfully!
+2026-03-29 22:48:32.653 | INFO     | __main__:start_server:354 -   Loaded files: 10
+2026-03-29 22:48:32.653 | INFO     | __main__:start_server:355 -   Total classes: 502
+2026-03-29 22:48:32.654 | INFO     | __main__:start_server:356 -   Object Properties: 147
+2026-03-29 22:48:32.654 | INFO     | __main__:start_server:357 -   Datatype Properties: 142
+2026-03-29 22:48:32.654 | INFO     | __main__:start_server:358 -   Individuals: 197
+2026-03-29 22:48:32.654 | INFO     | __main__:__init__:80 - LLM Diagnosis Agent enabled
+2026-03-29 22:48:32.654 | INFO     | __main__:__init__:91 - DiagnosisPipeline initialized (LLM智能诊断模式) with agents:
+2026-03-29 22:48:32.655 | INFO     | __main__:__init__:93 -   - orch
+2026-03-29 22:48:32.655 | INFO     | __main__:__init__:93 -   - dtc
+2026-03-29 22:48:32.655 | INFO     | __main__:__init__:93 -   - sym
+2026-03-29 22:48:32.655 | INFO     | __main__:__init__:93 -   - ont
+2026-03-29 22:48:32.655 | INFO     | __main__:__init__:93 -   - rule
+2026-03-29 22:48:32.655 | INFO     | __main__:__init__:93 -   - sig
+2026-03-29 22:48:32.656 | INFO     | __main__:__init__:93 -   - conf
+2026-03-29 22:48:32.656 | INFO     | __main__:__init__:93 -   - out
+2026-03-29 22:48:32.656 | INFO     | __main__:__init__:93 -   - llm
+2026-03-29 22:48:32.656 | INFO     | server:initialize_app:107 - Application initialized
+2026-03-29 22:48:32.679 | INFO     | __main__:start_server:371 - Starting server on ws://localhost:8765
+2026-03-29 22:48:32.679 | INFO     | __main__:start_server:372 - Open the frontend at: http://localhost:8000
+2026-03-29 22:48:32.679 | INFO     | __main__:start_server:373 - WebSocket endpoint: ws://localhost:8765/ws
+2026-03-29 22:48:32.679 | INFO     | __main__:start_server:374 - ============================================================
+2026-03-29 22:48:53.911 | INFO     | server:connect:42 - Client connected. Total connections: 1
+2026-03-29 22:48:53.947 | INFO     | server:handle_message:201 - Client ready, version: cea-demo
+2026-03-29 22:49:08.780 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:49:08.781 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:49:09.283 | INFO     | agents.symptom_parser:process:33 - SymptomParser processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:49:09.284 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:49:11.688 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 22:49:12.454 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:49:12.770 | INFO     | llm.config:get_llm_config:179 - Loaded .env from: D:\work\carproject\backend\cli\.env
+2026-03-29 22:49:12.822 | INFO     | llm.config:get_llm_config:230 - Loaded config from YAML: D:\work\carproject\backend\cli\llm_config.yaml
+2026-03-29 22:49:12.825 | INFO     | llm.config:get_llm_config:239 - LLM Config loaded: endpoint=https://llm-gateway.dev.cn-vwa.volkswagen-cea.com, model=openai/gpt-3.5-turbo
+2026-03-29 22:49:12.827 | INFO     | llm.service:client:457 - Using OpenRouter client: openai/gpt-3.5-turbo
+2026-03-29 22:49:13.534 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:15.005 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:49:16.010 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:16.074 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:49:18.103 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:18.196 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:49:18.197 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:18.309 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:49:19.315 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:19.386 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:49:21.401 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:21.464 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:49:21.465 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:21.542 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:49:22.572 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:22.728 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:49:24.747 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:24.807 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:49:24.807 | ERROR    | llm.service:diagnose:1211 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:49:24.808 | INFO     | llm.service:diagnose:1214 - Using fallback handler
+2026-03-29 22:49:24.808 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:49:26.338 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13883ms
+2026-03-29 22:49:26.339 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:49:26.339 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:49:34.496 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:49:34.497 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:49:35.009 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:49:35.318 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:36.538 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:49:37.622 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:37.998 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:49:40.061 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:40.366 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:49:40.367 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:40.681 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:49:41.691 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:43.609 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:49:45.614 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:45.926 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:49:45.935 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:46.090 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:49:47.099 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:47.205 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:49:49.211 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:49:49.341 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:49:49.350 | ERROR    | llm.service:diagnose:1211 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:49:49.397 | INFO     | llm.service:diagnose:1214 - Using fallback handler
+2026-03-29 22:49:49.435 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:49:50.987 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 15977ms
+2026-03-29 22:49:50.988 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:49:50.989 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:53:07.950 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 0
+2026-03-29 22:53:08.062 | INFO     | __main__:main:485 - Server stopped by user
+2026-03-29 22:53:10.136 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-29 22:53:10.136 | INFO     | __main__:start_server:343 - ============================================================
+2026-03-29 22:53:10.136 | INFO     | __main__:start_server:344 - Vehicle Power Diagnosis System v1.0.0
+2026-03-29 22:53:10.136 | INFO     | __main__:start_server:345 - ============================================================
+2026-03-29 22:53:10.137 | INFO     | __main__:start_server:349 - Loading ontology from folder: D:\work\carproject\ontology files
+2026-03-29 22:53:10.137 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:53:10.190 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:53:10.220 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:53:10.279 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:53:10.315 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:53:10.330 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:53:10.338 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:53:10.360 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:53:10.394 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:53:10.441 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:53:10.453 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:53:10.453 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:53:10.454 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:53:10.488 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:53:10.489 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:53:10.489 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:53:10.489 | INFO     | __main__:start_server:353 - Ontology loaded successfully!
+2026-03-29 22:53:10.489 | INFO     | __main__:start_server:354 -   Loaded files: 10
+2026-03-29 22:53:10.490 | INFO     | __main__:start_server:355 -   Total classes: 502
+2026-03-29 22:53:10.490 | INFO     | __main__:start_server:356 -   Object Properties: 147
+2026-03-29 22:53:10.490 | INFO     | __main__:start_server:357 -   Datatype Properties: 142
+2026-03-29 22:53:10.490 | INFO     | __main__:start_server:358 -   Individuals: 197
+2026-03-29 22:53:10.491 | INFO     | __main__:__init__:80 - LLM Diagnosis Agent enabled
+2026-03-29 22:53:10.491 | INFO     | __main__:__init__:91 - DiagnosisPipeline initialized (LLM智能诊断模式) with agents:
+2026-03-29 22:53:10.491 | INFO     | __main__:__init__:93 -   - orch
+2026-03-29 22:53:10.491 | INFO     | __main__:__init__:93 -   - dtc
+2026-03-29 22:53:10.491 | INFO     | __main__:__init__:93 -   - sym
+2026-03-29 22:53:10.491 | INFO     | __main__:__init__:93 -   - ont
+2026-03-29 22:53:10.492 | INFO     | __main__:__init__:93 -   - rule
+2026-03-29 22:53:10.492 | INFO     | __main__:__init__:93 -   - sig
+2026-03-29 22:53:10.492 | INFO     | __main__:__init__:93 -   - conf
+2026-03-29 22:53:10.492 | INFO     | __main__:__init__:93 -   - out
+2026-03-29 22:53:10.492 | INFO     | __main__:__init__:93 -   - llm
+2026-03-29 22:53:10.492 | INFO     | server:initialize_app:107 - Application initialized
+2026-03-29 22:53:10.514 | INFO     | __main__:start_server:371 - Starting server on ws://localhost:8765
+2026-03-29 22:53:10.514 | INFO     | __main__:start_server:372 - Open the frontend at: http://localhost:8000
+2026-03-29 22:53:10.514 | INFO     | __main__:start_server:373 - WebSocket endpoint: ws://localhost:8765/ws
+2026-03-29 22:53:10.514 | INFO     | __main__:start_server:374 - ============================================================
+2026-03-29 22:53:18.204 | INFO     | server:connect:42 - Client connected. Total connections: 1
+2026-03-29 22:53:18.206 | INFO     | server:handle_message:201 - Client ready, version: cea-demo
+2026-03-29 22:53:26.823 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 0
+2026-03-29 22:53:30.791 | INFO     | server:connect:42 - Client connected. Total connections: 1
+2026-03-29 22:53:30.793 | INFO     | server:handle_message:201 - Client ready, version: cea-demo
+2026-03-29 22:53:32.219 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 0
+2026-03-29 22:53:34.558 | INFO     | server:connect:42 - Client connected. Total connections: 1
+2026-03-29 22:53:34.560 | INFO     | server:handle_message:201 - Client ready, version: cea-demo
+2026-03-29 22:53:37.049 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:53:37.051 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:53:37.569 | INFO     | agents.symptom_parser:process:33 - SymptomParser processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:53:37.570 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:53:39.906 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 22:53:40.528 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:53:40.843 | INFO     | llm.config:get_llm_config:179 - Loaded .env from: D:\work\carproject\backend\cli\.env
+2026-03-29 22:53:40.865 | INFO     | llm.config:get_llm_config:230 - Loaded config from YAML: D:\work\carproject\backend\cli\llm_config.yaml
+2026-03-29 22:53:40.867 | INFO     | llm.config:get_llm_config:239 - LLM Config loaded: endpoint=https://llm-gateway.dev.cn-vwa.volkswagen-cea.com, model=openai/gpt-3.5-turbo
+2026-03-29 22:53:40.868 | INFO     | llm.service:client:457 - Using OpenRouter client: openai/gpt-3.5-turbo
+2026-03-29 22:53:41.119 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:53:42.611 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:53:43.618 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:53:43.809 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:53:45.824 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:53:45.885 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:53:45.886 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:53:45.948 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:53:46.964 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:53:47.031 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:53:49.034 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:53:49.097 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:53:49.097 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:53:49.161 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:53:50.175 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:53:50.242 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:53:52.249 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:53:52.311 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:53:52.311 | ERROR    | llm.service:diagnose:1211 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:53:52.311 | INFO     | llm.service:diagnose:1214 - Using fallback handler
+2026-03-29 22:53:52.312 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:53:53.888 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13358ms
+2026-03-29 22:53:53.888 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:53:53.889 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:54:03.537 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:54:03.538 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:54:04.047 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:54:04.361 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:54:05.657 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:54:06.669 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:54:06.747 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:54:08.775 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:54:08.895 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:54:08.896 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:54:08.958 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:54:09.964 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:54:10.030 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:54:12.038 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:54:12.099 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:54:12.099 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:54:12.160 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:54:13.162 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:54:13.254 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:54:15.263 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:54:15.340 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:54:15.341 | ERROR    | llm.service:diagnose:1211 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:54:15.341 | INFO     | llm.service:diagnose:1214 - Using fallback handler
+2026-03-29 22:54:15.342 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:54:16.902 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 12854ms
+2026-03-29 22:54:16.903 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:54:16.903 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:55:21.041 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:55:21.041 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:55:21.609 | INFO     | agents.symptom_parser:process:33 - SymptomParser processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:55:21.636 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:55:23.995 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 22:55:24.528 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:55:24.838 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:55:26.599 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:55:27.604 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:55:27.664 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:55:29.732 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:55:29.848 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:55:29.848 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:55:29.915 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:55:30.933 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:55:31.147 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:55:33.213 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:55:33.294 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:55:33.296 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:55:33.367 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:55:34.382 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:55:34.464 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:55:36.474 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:55:36.538 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:55:36.538 | ERROR    | llm.service:diagnose:1211 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:55:36.539 | INFO     | llm.service:diagnose:1214 - Using fallback handler
+2026-03-29 22:55:36.539 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:55:38.116 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13586ms
+2026-03-29 22:55:38.117 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:55:38.117 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:56:24.648 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:56:24.649 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:56:25.153 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:56:25.468 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:56:26.842 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:56:27.849 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:56:27.933 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:56:29.949 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:56:30.088 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:56:30.098 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:56:30.494 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:56:31.506 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:56:31.593 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:56:33.605 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:56:33.663 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:56:33.664 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:56:33.737 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:56:34.752 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:56:34.910 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:56:36.913 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:56:36.977 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:56:36.978 | ERROR    | llm.service:diagnose:1211 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:56:36.978 | INFO     | llm.service:diagnose:1214 - Using fallback handler
+2026-03-29 22:56:36.978 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:56:38.505 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13351ms
+2026-03-29 22:56:38.506 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:56:38.506 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 23:02:14.231 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 0
+2026-03-29 23:02:14.343 | INFO     | __main__:main:485 - Server stopped by user
+2026-03-29 23:02:16.394 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-29 23:02:16.394 | INFO     | __main__:start_server:343 - ============================================================
+2026-03-29 23:02:16.394 | INFO     | __main__:start_server:344 - Vehicle Power Diagnosis System v1.0.0
+2026-03-29 23:02:16.395 | INFO     | __main__:start_server:345 - ============================================================
+2026-03-29 23:02:16.395 | INFO     | __main__:start_server:349 - Loading ontology from folder: D:\work\carproject\ontology files
+2026-03-29 23:02:16.395 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 23:02:16.446 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 23:02:16.474 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 23:02:16.534 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 23:02:16.571 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 23:02:16.586 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 23:02:16.595 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 23:02:16.617 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 23:02:16.651 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 23:02:16.697 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 23:02:16.709 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 23:02:16.709 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 23:02:16.710 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 23:02:16.743 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 23:02:16.744 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 23:02:16.744 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 23:02:16.744 | INFO     | __main__:start_server:353 - Ontology loaded successfully!
+2026-03-29 23:02:16.745 | INFO     | __main__:start_server:354 -   Loaded files: 10
+2026-03-29 23:02:16.745 | INFO     | __main__:start_server:355 -   Total classes: 502
+2026-03-29 23:02:16.745 | INFO     | __main__:start_server:356 -   Object Properties: 147
+2026-03-29 23:02:16.745 | INFO     | __main__:start_server:357 -   Datatype Properties: 142
+2026-03-29 23:02:16.745 | INFO     | __main__:start_server:358 -   Individuals: 197
+2026-03-29 23:02:16.745 | INFO     | __main__:__init__:80 - LLM Diagnosis Agent enabled
+2026-03-29 23:02:16.745 | INFO     | __main__:__init__:91 - DiagnosisPipeline initialized (LLM智能诊断模式) with agents:
+2026-03-29 23:02:16.745 | INFO     | __main__:__init__:93 -   - orch
+2026-03-29 23:02:16.746 | INFO     | __main__:__init__:93 -   - dtc
+2026-03-29 23:02:16.746 | INFO     | __main__:__init__:93 -   - sym
+2026-03-29 23:02:16.746 | INFO     | __main__:__init__:93 -   - ont
+2026-03-29 23:02:16.746 | INFO     | __main__:__init__:93 -   - rule
+2026-03-29 23:02:16.746 | INFO     | __main__:__init__:93 -   - sig
+2026-03-29 23:02:16.746 | INFO     | __main__:__init__:93 -   - conf
+2026-03-29 23:02:16.746 | INFO     | __main__:__init__:93 -   - out
+2026-03-29 23:02:16.746 | INFO     | __main__:__init__:93 -   - llm
+2026-03-29 23:02:16.746 | INFO     | server:initialize_app:107 - Application initialized
+2026-03-29 23:02:16.766 | INFO     | __main__:start_server:371 - Starting server on ws://localhost:8765
+2026-03-29 23:02:16.766 | INFO     | __main__:start_server:372 - Open the frontend at: http://localhost:8000
+2026-03-29 23:02:16.766 | INFO     | __main__:start_server:373 - WebSocket endpoint: ws://localhost:8765/ws
+2026-03-29 23:02:16.766 | INFO     | __main__:start_server:374 - ============================================================
+2026-03-29 23:03:23.916 | INFO     | server:connect:42 - Client connected. Total connections: 1
+2026-03-29 23:03:23.919 | INFO     | server:handle_message:201 - Client ready, version: cea-demo
+2026-03-29 23:04:37.154 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 23:04:37.155 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 23:04:37.659 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 23:04:37.976 | INFO     | llm.config:get_llm_config:179 - Loaded .env from: D:\work\carproject\backend\cli\.env
+2026-03-29 23:04:38.024 | INFO     | llm.config:get_llm_config:230 - Loaded config from YAML: D:\work\carproject\backend\cli\llm_config.yaml
+2026-03-29 23:04:38.027 | INFO     | llm.config:get_llm_config:239 - LLM Config loaded: endpoint=https://llm-gateway.dev.cn-vwa.volkswagen-cea.com, model=openai/gpt-3.5-turbo
+2026-03-29 23:04:38.027 | INFO     | llm.service:client:457 - Using OpenRouter client: openai/gpt-3.5-turbo
+2026-03-29 23:04:38.775 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:04:40.177 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:04:41.180 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:04:42.618 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:04:44.629 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:04:44.808 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 23:04:44.808 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:04:44.904 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:04:45.910 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:04:45.972 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:04:47.987 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:04:48.161 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 23:04:48.162 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:04:48.220 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:04:49.226 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:04:49.307 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:04:51.317 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:04:51.660 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 23:04:51.660 | ERROR    | llm.service:diagnose:1211 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 23:04:51.661 | INFO     | llm.service:diagnose:1214 - Using fallback handler
+2026-03-29 23:04:51.661 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 23:04:52.594 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 14934ms
+2026-03-29 23:04:52.613 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 23:04:52.620 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 23:09:38.783 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 0
+2026-03-29 23:09:38.894 | INFO     | __main__:main:485 - Server stopped by user
+2026-03-29 23:09:40.315 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-29 23:09:40.315 | INFO     | __main__:start_server:343 - ============================================================
+2026-03-29 23:09:40.315 | INFO     | __main__:start_server:344 - Vehicle Power Diagnosis System v1.0.0
+2026-03-29 23:09:40.315 | INFO     | __main__:start_server:345 - ============================================================
+2026-03-29 23:09:40.315 | INFO     | __main__:start_server:349 - Loading ontology from folder: D:\work\carproject\ontology files
+2026-03-29 23:09:40.316 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 23:09:40.368 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 23:09:40.397 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 23:09:40.457 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 23:09:40.494 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 23:09:40.509 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 23:09:40.517 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 23:09:40.541 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 23:09:40.577 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 23:09:40.623 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 23:09:40.635 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 23:09:40.635 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 23:09:40.636 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 23:09:40.670 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 23:09:40.670 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 23:09:40.670 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 23:09:40.671 | INFO     | __main__:start_server:353 - Ontology loaded successfully!
+2026-03-29 23:09:40.671 | INFO     | __main__:start_server:354 -   Loaded files: 10
+2026-03-29 23:09:40.671 | INFO     | __main__:start_server:355 -   Total classes: 502
+2026-03-29 23:09:40.672 | INFO     | __main__:start_server:356 -   Object Properties: 147
+2026-03-29 23:09:40.672 | INFO     | __main__:start_server:357 -   Datatype Properties: 142
+2026-03-29 23:09:40.672 | INFO     | __main__:start_server:358 -   Individuals: 197
+2026-03-29 23:09:40.673 | INFO     | __main__:__init__:80 - LLM Diagnosis Agent enabled
+2026-03-29 23:09:40.673 | INFO     | __main__:__init__:91 - DiagnosisPipeline initialized (LLM智能诊断模式) with agents:
+2026-03-29 23:09:40.673 | INFO     | __main__:__init__:93 -   - orch
+2026-03-29 23:09:40.673 | INFO     | __main__:__init__:93 -   - dtc
+2026-03-29 23:09:40.673 | INFO     | __main__:__init__:93 -   - sym
+2026-03-29 23:09:40.674 | INFO     | __main__:__init__:93 -   - ont
+2026-03-29 23:09:40.674 | INFO     | __main__:__init__:93 -   - rule
+2026-03-29 23:09:40.674 | INFO     | __main__:__init__:93 -   - sig
+2026-03-29 23:09:40.674 | INFO     | __main__:__init__:93 -   - conf
+2026-03-29 23:09:40.674 | INFO     | __main__:__init__:93 -   - out
+2026-03-29 23:09:40.674 | INFO     | __main__:__init__:93 -   - llm
+2026-03-29 23:09:40.674 | INFO     | server:initialize_app:107 - Application initialized
+2026-03-29 23:09:40.695 | INFO     | __main__:start_server:371 - Starting server on ws://localhost:8765
+2026-03-29 23:09:40.695 | INFO     | __main__:start_server:372 - Open the frontend at: http://localhost:8000
+2026-03-29 23:09:40.695 | INFO     | __main__:start_server:373 - WebSocket endpoint: ws://localhost:8765/ws
+2026-03-29 23:09:40.695 | INFO     | __main__:start_server:374 - ============================================================
+2026-03-29 23:09:45.450 | INFO     | server:connect:42 - Client connected. Total connections: 1
+2026-03-29 23:09:45.452 | INFO     | server:handle_message:201 - Client ready, version: cea-demo
+2026-03-29 23:09:47.869 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 0
+2026-03-29 23:09:48.418 | INFO     | server:connect:42 - Client connected. Total connections: 1
+2026-03-29 23:09:48.420 | INFO     | server:handle_message:201 - Client ready, version: cea-demo
+2026-03-29 23:09:58.357 | INFO     | server:connect:42 - Client connected. Total connections: 2
+2026-03-29 23:09:58.359 | INFO     | server:handle_message:201 - Client ready, version: cea-demo
+2026-03-29 23:10:03.018 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 23:10:03.019 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 23:10:03.534 | INFO     | agents.symptom_parser:process:33 - SymptomParser processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 23:10:03.535 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 23:10:05.887 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 23:10:06.750 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 23:10:07.062 | INFO     | llm.config:get_llm_config:179 - Loaded .env from: D:\work\carproject\backend\cli\.env
+2026-03-29 23:10:07.116 | INFO     | llm.config:get_llm_config:230 - Loaded config from YAML: D:\work\carproject\backend\cli\llm_config.yaml
+2026-03-29 23:10:07.122 | INFO     | llm.config:get_llm_config:239 - LLM Config loaded: endpoint=https://llm-gateway.dev.cn-vwa.volkswagen-cea.com, model=openai/gpt-3.5-turbo
+2026-03-29 23:10:07.125 | INFO     | llm.service:client:457 - Using OpenRouter client: openai/gpt-3.5-turbo
+2026-03-29 23:10:07.944 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:09.374 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:10:10.378 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:10.762 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:10:12.773 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:12.833 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 23:10:12.834 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:12.894 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:10:13.905 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:14.100 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:10:16.115 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:16.172 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 23:10:16.173 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:16.239 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:10:17.253 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:17.353 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:10:19.365 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:19.487 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 23:10:19.488 | ERROR    | llm.service:diagnose:1205 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 23:10:19.488 | INFO     | llm.service:diagnose:1208 - Using fallback handler
+2026-03-29 23:10:19.488 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 23:10:21.030 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 14279ms
+2026-03-29 23:10:21.031 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 23:10:21.032 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 23:10:27.876 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 23:10:27.878 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 23:10:28.383 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 23:10:28.692 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:29.884 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:10:30.906 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:30.994 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:10:33.006 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:33.069 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 23:10:33.070 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:33.155 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:10:34.255 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:34.318 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:10:36.336 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:36.397 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 23:10:36.397 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:36.502 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:10:37.507 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:37.564 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 23:10:39.572 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 23:10:39.695 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 23:10:39.695 | ERROR    | llm.service:diagnose:1205 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 23:10:39.695 | INFO     | llm.service:diagnose:1208 - Using fallback handler
+2026-03-29 23:10:39.696 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 23:10:40.620 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 12236ms
+2026-03-29 23:10:40.621 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 23:10:40.622 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 23:12:20.140 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 1
+2026-03-29 23:12:20.141 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 0
+2026-03-29 23:12:20.249 | INFO     | __main__:main:485 - Server stopped by user
