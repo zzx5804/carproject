@@ -345,10 +345,36 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
     </div>
   </div>
 </div>
+<!-- ═══ 全宽对比面板 ═══ -->
+<div id="comparePanel" style="margin-top:20px;padding:0 14px 30px">
+  <div class="panel">
+    <div class="panel-head">
+      <div class="ph-dot" style="background:var(--yellow);box-shadow:0 0 5px var(--yellow)"></div>
+      诊断对比
+      <span class="prov-tag" style="margin-left:6px;background:rgba(167,139,250,0.2);border:1px solid #a78bfa;color:#a78bfa">Ontology+LLM</span>
+      <span style="color:var(--tx3);font-size:10px;margin:0 6px">vs</span>
+      <span class="prov-tag llm">纯 LLM</span>
+      <span id="cmp-ts" style="margin-left:auto;font-size:9px;color:var(--tx3);font-family:var(--mono)"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:14px">
+      <div>
+        <div style="font-family:var(--mono);font-size:9px;color:#a78bfa;letter-spacing:1px;margin-bottom:10px">// ONTOLOGY + LLM</div>
+        <div id="cmp-onto"></div>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:1px;margin-bottom:10px">// 纯 LLM</div>
+        <div id="cmp-llm"></div>
+      </div>
+    </div>
+    <div id="cmp-diff" style="padding:0 14px 14px;display:none"></div>
+  </div>
+</div>
 </div>
 <script>
 let role='owner',running=false,scenarioKey='ble_auth',ws=null,stepIndex=0;
 let _useOntology = true;
+let _cachedSteps = [];
+let _lastFinalConf = 0;
 const DOT_COLORS = ['#00b4ff','#a78bfa','#ffc53d','#ff4d6a','#00e68a'];
 
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -518,7 +544,14 @@ function updateOutputMessage(msg){const ob=document.getElementById('outputBox');
 
 function updateOntologySummary(msg){if(msg.counts){animateNum('os-cls',0,msg.counts.classes||0,700);animateNum('os-prop',0,msg.counts.properties||0,900);animateNum('os-ind',0,msg.counts.rules||0,1100);document.getElementById('ontoBarFill').style.width='100%'}if(msg.summary){document.getElementById('ontoDetail').innerHTML=msg.summary;document.getElementById('ontoDetail').classList.add('vis')}}
 
-function handleBackendMessage(msg){switch(msg.type){case 'agent_status':setAgent(mapAgentId(msg.agent),msg.state||msg.status,msg.progress);break;case 'msg_bus':pushMsg(mapAgentId(msg.from),mapAgentId(msg.to),renderPairs(msg.pairs));break;case 'wire_animate':animateWire(mapAgentId(msg.from),mapAgentId(msg.to));break;case 'onto_activated':renderOntologyActivated(msg);break;case 'onto_summary':updateOntologySummary(msg);break;case 'reasoning_step':addChain(Object.assign({agent:'llm'},msg.step,{body:highlightRuleRefs(msg.step.body)}),stepIndex++);break;case 'rule_matched':appendRule(msg.rule);break;case 'hypothesis':appendHypothesis(msg.hypothesis||msg.hypo);break;case 'conf_factors':updateConfidenceFactors(msg.factors);break;case 'conf_final':updateFinalConfidence(msg.confidence,msg.level);break;case 'output':updateOutputMessage(msg);break;case 'pipeline_done':document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;setAgent('master','done',100);break;case 'error':document.getElementById('sysStatus').textContent='● ERROR';document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;break;case 'backend_status':document.getElementById('sysStatus').textContent='● '+String(msg.status||'READY').toUpperCase();updateOntologySummary({counts:msg.ontology_stats,summary:msg.ontology_loaded?'知识库已挂载':''});break;case 'llm_thinking':break;default:console.log('Unhandled backend message',msg)}}
+function handleBackendMessage(msg){switch(msg.type){case 'agent_status':setAgent(mapAgentId(msg.agent),msg.state||msg.status,msg.progress);break;case 'msg_bus':pushMsg(mapAgentId(msg.from),mapAgentId(msg.to),renderPairs(msg.pairs));break;case 'wire_animate':animateWire(mapAgentId(msg.from),mapAgentId(msg.to));break;case 'onto_activated':renderOntologyActivated(msg);break;case 'onto_summary':updateOntologySummary(msg);break;case 'reasoning_step':{const s=Object.assign({agent:'llm'},msg.step,{body:highlightRuleRefs(msg.step.body)});addChain(s,stepIndex++);_cachedSteps.push(s);break;}case 'rule_matched':appendRule(msg.rule);break;case 'hypothesis':appendHypothesis(msg.hypothesis||msg.hypo);break;case 'conf_factors':updateConfidenceFactors(msg.factors);break;case 'conf_final':updateFinalConfidence(msg.confidence,msg.level);_lastFinalConf=msg.confidence||0;break;case 'output':updateOutputMessage(msg);break;case 'pipeline_done':{document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;setAgent('master','done',100);
+  try{
+    const runData={steps:_cachedSteps.slice(),confidence:_lastFinalConf,ts:Date.now(),scenario:scenarioKey,mode:_useOntology?'onto':'llm'};
+    sessionStorage.setItem(_useOntology?'lastOntoRun':'lastLlmRun',JSON.stringify(runData));
+  }catch(e){console.warn('sessionStorage write failed',e);}
+  _cachedSteps=[];
+  renderComparePanel();
+  break;}case 'error':document.getElementById('sysStatus').textContent='● ERROR';document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;break;case 'backend_status':document.getElementById('sysStatus').textContent='● '+String(msg.status||'READY').toUpperCase();updateOntologySummary({counts:msg.ontology_stats,summary:msg.ontology_loaded?'知识库已挂载':''});break;case 'llm_thinking':break;default:console.log('Unhandled backend message',msg)}}
 
 function connectWebSocket(){if(ws&&[WebSocket.OPEN,WebSocket.CONNECTING].includes(ws.readyState))return;ws=new WebSocket('ws://localhost:8765/ws');ws.onopen=()=>{document.getElementById('sysStatus').textContent='● ONLINE';ws.send(JSON.stringify({type:'client_ready',client_version:'cea-demo'}))};ws.onmessage=(event)=>{handleBackendMessage(JSON.parse(event.data))};ws.onclose=()=>{document.getElementById('sysStatus').textContent='● OFFLINE';ws=null;running=false;const btn=document.getElementById('goBtn');btn.disabled=false;btn.innerHTML='⚡ 启动 Ontology-Driven 诊断';};ws.onerror=()=>{document.getElementById('sysStatus').textContent='● ERROR';running=false;if(ws)try{ws.close();}catch(e){}ws=null;const btn=document.getElementById('goBtn');btn.disabled=false;btn.innerHTML='⚡ 启动 Ontology-Driven 诊断';}}
 
@@ -654,7 +687,111 @@ function addChain(step,i){
   setTimeout(()=>{el.querySelector('.cs-dot').classList.remove('active');el.querySelector('.cs-dot').classList.add('done');el.querySelector('.cs-conn').classList.add('done');el.querySelector('.cs-title span').classList.add('done')},800);
 }
 
-function resetAll(){['master','symptom','ontology','llm','rule','output'].forEach(id=>{document.getElementById('ac-'+id).classList.remove('active','done');document.getElementById('st-'+id).className='ac-status s-idle';document.getElementById('st-'+id).innerHTML='⏸ idle';document.getElementById('pg-'+id).classList.remove('show')});document.getElementById('reasonChain').innerHTML='<div class="idle" id="chainIdle"><div class="idle-icon">🔗</div><div class="idle-txt">启动诊断查看推理链</div></div>';document.getElementById('ruleList').innerHTML='<div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待规则匹配</div>';document.getElementById('hypoList').innerHTML='<div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待假设生成</div>';document.getElementById('confNum').textContent='0%';document.getElementById('confLabel').textContent='等待计算';document.getElementById('confBarFill').style.width='0%';document.getElementById('confFactors').innerHTML='';document.getElementById('outputBox').innerHTML='<div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待诊断完成</div>';document.getElementById('outputBox').classList.remove('vis');document.getElementById('escalationHint').classList.remove('vis');document.getElementById('escalationHint').style.display='none';document.getElementById('ontoDetail').classList.remove('vis');document.getElementById('ontoDetail').innerHTML='';document.querySelectorAll('.wire-label').forEach(l=>{l.remove()});
+function renderCompareChain(container, runData, isOnto) {
+  let html = '';
+  runData.steps.forEach(function(step, i) {
+    const dotColor = isOnto ? DOT_COLORS[i % DOT_COLORS.length] : '#2a3a60';
+    const dotShadow = isOnto ? `0 0 8px ${dotColor}66` : 'none';
+    const nextColor = isOnto ? DOT_COLORS[(i+1) % DOT_COLORS.length] : '#253050';
+    const connStyle = isOnto
+        ? `background:linear-gradient(${dotColor},${nextColor})`
+        : 'background:#253050';
+    const effectiveAgent = (!isOnto && step.agent !== 'output') ? 'llm' : step.agent;
+    const tag = effectiveAgent==='llm'
+        ? '<span class="prov-tag llm">LLM</span>'
+        : effectiveAgent==='ont'
+            ? '<span class="prov-tag ont">Ontology</span>'
+            : '<span class="prov-tag rule">Output</span>';
+    const isLast = step.agent==='output' || (step.title && step.title.includes('根因'));
+    const cardBorder = isLast
+        ? (isOnto
+            ? 'border:1px solid var(--red);box-shadow:0 0 12px rgba(255,77,106,0.08)'
+            : 'border:1px solid rgba(0,180,255,0.3)')
+        : '';
+    const deficitHtml = step.deficit_note
+        ? `<div class="cs-deficit">※ ${esc(step.deficit_note)}</div>`
+        : '';
+    const connHtml = isLast ? '' : `<div class="cs-conn" style="${connStyle}"></div>`;
+    html += `<div class="chain-step vis">
+      <div class="cs-line">
+        <div class="cs-dot done" style="background:${dotColor};box-shadow:${dotShadow};color:${isOnto?'#000':'#7a8ba8'}">${i+1}</div>
+        ${connHtml}
+      </div>
+      <div class="cs-body" style="${cardBorder};border-radius:8px;padding:8px 10px">
+        <div class="cs-title" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">
+          <span class="done">[S${i+1}] ${esc(step.title||'')} ${tag}</span>
+        </div>
+        <div class="cs-content">${step.body||''}</div>
+        ${deficitHtml}
+      </div>
+    </div>`;
+  });
+  container.innerHTML = html || '<div style="font-size:10px;color:var(--tx3);font-family:var(--mono);padding:8px">// 暂无步骤数据</div>';
+}
+
+function renderComparePanel() {
+  const ontoEl = document.getElementById('cmp-onto');
+  const llmEl = document.getElementById('cmp-llm');
+  const diffEl = document.getElementById('cmp-diff');
+  const tsEl = document.getElementById('cmp-ts');
+  if (!ontoEl || !llmEl) return;
+
+  let ontoData = null, llmData = null;
+  try { ontoData = JSON.parse(sessionStorage.getItem('lastOntoRun') || 'null'); } catch(e) {}
+  try { llmData = JSON.parse(sessionStorage.getItem('lastLlmRun') || 'null'); } catch(e) {}
+
+  if (ontoData) {
+    renderCompareChain(ontoEl, ontoData, true);
+  } else {
+    ontoEl.innerHTML = '<div style="font-size:10px;color:var(--tx3);font-family:var(--mono);padding:16px 0">// 尚未运行 Ontology+LLM 模式</div>';
+  }
+
+  if (llmData) {
+    renderCompareChain(llmEl, llmData, false);
+  } else {
+    llmEl.innerHTML = '<div style="font-size:10px;color:var(--tx3);font-family:var(--mono);padding:16px 0">// 尚未运行纯 LLM 模式</div>';
+  }
+
+  const latest = [ontoData, llmData].filter(Boolean).sort((a,b) => b.ts - a.ts)[0];
+  if (latest && tsEl) {
+    tsEl.textContent = '最近更新 ' + new Date(latest.ts).toLocaleTimeString('zh-CN');
+  }
+
+  if (ontoData && llmData) {
+    const ontoRules = ontoData.steps.reduce((s,st) => s + (st.rules_matched ? st.rules_matched.length : 0), 0);
+    const llmRules  = llmData.steps.reduce((s,st)  => s + (st.rules_matched  ? st.rules_matched.length  : 0), 0);
+    const ontoSigs  = ontoData.steps.reduce((s,st) => s + (st.signals_referenced ? st.signals_referenced.length : 0), 0);
+    const llmSigs   = llmData.steps.reduce((s,st)  => s + (st.signals_referenced  ? st.signals_referenced.length  : 0), 0);
+    const ontoConf  = Math.round((ontoData.confidence || 0) * 100);
+    const llmConf   = Math.round((llmData.confidence || 0) * 100);
+
+    diffEl.innerHTML = `
+      <div style="font-family:var(--mono);font-size:9px;color:var(--yellow);letter-spacing:1px;margin-bottom:8px">▎ 关键差异摘要</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);margin-bottom:4px">最终置信度</div>
+          <div style="font-size:13px;font-weight:700"><span style="color:#a78bfa">${ontoConf}%</span> vs <span style="color:var(--accent)">${llmConf}%</span></div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);margin-bottom:4px">规则命中</div>
+          <div style="font-size:13px;font-weight:700"><span style="color:#a78bfa">${ontoRules}</span> vs <span style="color:var(--accent)">${llmRules}</span></div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);margin-bottom:4px">信号引用</div>
+          <div style="font-size:13px;font-weight:700"><span style="color:#a78bfa">${ontoSigs}</span> vs <span style="color:var(--accent)">${llmSigs}</span></div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--tx3);margin-bottom:4px">推理步骤数</div>
+          <div style="font-size:13px;font-weight:700"><span style="color:#a78bfa">${ontoData.steps.length}</span> vs <span style="color:var(--accent)">${llmData.steps.length}</span></div>
+        </div>
+      </div>`;
+    diffEl.style.display = 'block';
+  } else {
+    diffEl.style.display = 'none';
+  }
+}
+
+function resetAll(){_cachedSteps=[];['master','symptom','ontology','llm','rule','output'].forEach(id=>{document.getElementById('ac-'+id).classList.remove('active','done');document.getElementById('st-'+id).className='ac-status s-idle';document.getElementById('st-'+id).innerHTML='⏸ idle';document.getElementById('pg-'+id).classList.remove('show')});document.getElementById('reasonChain').innerHTML='<div class="idle" id="chainIdle"><div class="idle-icon">🔗</div><div class="idle-txt">启动诊断查看推理链</div></div>';document.getElementById('ruleList').innerHTML='<div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待规则匹配</div>';document.getElementById('hypoList').innerHTML='<div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待假设生成</div>';document.getElementById('confNum').textContent='0%';document.getElementById('confLabel').textContent='等待计算';document.getElementById('confBarFill').style.width='0%';document.getElementById('confFactors').innerHTML='';document.getElementById('outputBox').innerHTML='<div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待诊断完成</div>';document.getElementById('outputBox').classList.remove('vis');document.getElementById('escalationHint').classList.remove('vis');document.getElementById('escalationHint').style.display='none';document.getElementById('ontoDetail').classList.remove('vis');document.getElementById('ontoDetail').innerHTML='';document.querySelectorAll('.wire-label').forEach(l=>{l.remove()});
 // Reset onto-activated-panel based on current mode so stale data from a
 // previous Ontology run never bleeds into a new run of a different mode.
 const oap=document.getElementById('onto-activated-panel');
@@ -690,7 +827,7 @@ function highlightC(cats){
 
 async function startPipeline(){if(running)return;connectWebSocket();if(!ws)return;const btn=document.getElementById('goBtn');const defaultLabel='⚡ 启动 Ontology-Driven 诊断';btn.disabled=true;btn.innerHTML='<span class="tdots"><span></span><span></span><span></span></span> 诊断中...';const launch=()=>{running=true;stepIndex=0;resetAll();setAgent('master','running',10);let signalPayload=collectSignals();if(!Object.keys(signalPayload).length&&SCENARIOS[scenarioKey]){signalPayload=Object.fromEntries(Object.entries(SCENARIOS[scenarioKey].signals).map(([id,info])=>[id.replace('sv-',''),info.value]));}const payload={type:'start',symptom:document.getElementById('symptomInput').value,role:role,signals:signalPayload,use_ontology:_useOntology};ws.send(JSON.stringify(payload));};if(ws.readyState===WebSocket.OPEN){launch();return;}if(ws.readyState===WebSocket.CONNECTING){document.getElementById('sysStatus').textContent='● CONNECTING';const once=()=>{ws.removeEventListener('open',once);launch();};ws.addEventListener('open',once);return;}document.getElementById('sysStatus').textContent='● OFFLINE';btn.disabled=false;btn.innerHTML=defaultLabel;}
 
-window.addEventListener('load',()=>{loadScenario('ble_auth');connectWebSocket();setTimeout(drawWires,200);setTimeout(drawWires,500);document.fonts&&document.fonts.ready.then(()=>setTimeout(drawWires,200))});
+window.addEventListener('load',()=>{loadScenario('ble_auth');connectWebSocket();setTimeout(drawWires,200);setTimeout(drawWires,500);document.fonts&&document.fonts.ready.then(()=>setTimeout(drawWires,200));renderComparePanel();});
 window.addEventListener('resize',()=>setTimeout(drawWires,50));
 </script>
 </body>
