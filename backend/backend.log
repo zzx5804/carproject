@@ -3981,3 +3981,1045 @@
 2026-03-29 21:51:56.614 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 14547ms
 2026-03-29 21:51:56.614 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
 2026-03-29 21:51:56.615 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 21:53:18.734 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，提示“钥匙搜索超时”，车辆保持Off...
+2026-03-29 21:53:18.735 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 21:53:19.241 | INFO     | agents.symptom_parser:process:33 - SymptomParser processing: 踩刹车按启动按钮，提示“钥匙搜索超时”，车辆保持Off...
+2026-03-29 21:53:19.242 | DEBUG    | scenario_detector:detect:78 - Detected scenario: key_timeout (matched: 钥匙搜索.*超时)
+2026-03-29 21:53:21.170 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 21:53:21.717 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，提示“钥匙搜索超时”，车辆保持Off...
+2026-03-29 21:53:22.026 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:23.508 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:53:24.531 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:24.678 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:53:26.700 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:26.759 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 21:53:26.760 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:26.834 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:53:27.862 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:27.947 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:53:29.958 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:30.059 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 21:53:30.059 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:30.124 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:53:31.132 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:31.481 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:53:33.496 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:33.664 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 21:53:33.701 | ERROR    | llm.service:diagnose:1202 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 21:53:33.717 | INFO     | llm.service:diagnose:1205 - Using fallback handler
+2026-03-29 21:53:33.731 | DEBUG    | scenario_detector:detect:78 - Detected scenario: key_timeout (matched: 钥匙搜索.*超时)
+2026-03-29 21:53:35.286 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13568ms
+2026-03-29 21:53:35.287 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 21:53:35.287 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 21:53:45.194 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，提示“钥匙搜索超时”，车辆保持Off...
+2026-03-29 21:53:45.195 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 21:53:45.697 | INFO     | agents.symptom_parser:process:33 - SymptomParser processing: 踩刹车按启动按钮，提示“钥匙搜索超时”，车辆保持Off...
+2026-03-29 21:53:45.698 | DEBUG    | scenario_detector:detect:78 - Detected scenario: key_timeout (matched: 钥匙搜索.*超时)
+2026-03-29 21:53:47.631 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 21:53:48.142 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，提示“钥匙搜索超时”，车辆保持Off...
+2026-03-29 21:53:48.453 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:49.782 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:53:50.789 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:51.103 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:53:53.109 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:53.174 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 21:53:53.242 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:53.320 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:53:54.342 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:54.410 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:53:56.430 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:56.518 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 21:53:56.519 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:56.818 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:53:57.846 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:53:57.922 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:53:59.934 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:54:00.067 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 21:54:00.087 | ERROR    | llm.service:diagnose:1202 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 21:54:00.112 | INFO     | llm.service:diagnose:1205 - Using fallback handler
+2026-03-29 21:54:00.199 | DEBUG    | scenario_detector:detect:78 - Detected scenario: key_timeout (matched: 钥匙搜索.*超时)
+2026-03-29 21:54:01.770 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13625ms
+2026-03-29 21:54:01.771 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 21:54:01.771 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 21:58:31.059 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 远程启动失败，车辆无法进入远程开启模式，APP控制无响应...
+2026-03-29 21:58:31.061 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 21:58:31.576 | INFO     | agents.symptom_parser:process:33 - SymptomParser processing: 远程启动失败，车辆无法进入远程开启模式，APP控制无响应...
+2026-03-29 21:58:31.580 | WARNING  | scenario_detector:detect:85 - No scenario matched for: 远程启动失败，车辆无法进入远程开启模式，APP控制无响应..., defaulting to ble_auth
+2026-03-29 21:58:33.913 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 21:58:34.473 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 远程启动失败，车辆无法进入远程开启模式，APP控制无响应...
+2026-03-29 21:58:34.788 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:58:36.305 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:58:37.348 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:58:37.430 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:58:39.491 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:58:39.552 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 21:58:39.553 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:58:39.612 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:58:40.626 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:58:40.725 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:58:42.739 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:58:42.849 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 21:58:42.850 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:58:42.929 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:58:43.931 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:58:43.994 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:58:46.005 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:58:46.131 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 21:58:46.131 | ERROR    | llm.service:diagnose:1202 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 21:58:46.132 | INFO     | llm.service:diagnose:1205 - Using fallback handler
+2026-03-29 21:58:46.132 | WARNING  | scenario_detector:detect:85 - No scenario matched for: 远程启动失败，车辆无法进入远程开启模式，APP控制无响应..., defaulting to ble_auth
+2026-03-29 21:58:47.693 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13219ms
+2026-03-29 21:58:47.700 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 21:58:47.707 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 21:58:57.369 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 远程启动失败，车辆无法进入远程开启模式，APP控制无响应...
+2026-03-29 21:58:57.370 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 21:58:57.872 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 远程启动失败，车辆无法进入远程开启模式，APP控制无响应...
+2026-03-29 21:58:58.180 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:58:59.438 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:59:00.460 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:59:00.535 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:59:02.550 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:59:02.635 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 21:59:02.636 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:59:02.702 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:59:03.712 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:59:04.019 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:59:06.058 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:59:06.140 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 21:59:06.141 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:59:06.240 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:59:07.242 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:59:07.306 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 21:59:09.314 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 21:59:09.386 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 21:59:09.387 | ERROR    | llm.service:diagnose:1202 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 21:59:09.387 | INFO     | llm.service:diagnose:1205 - Using fallback handler
+2026-03-29 21:59:09.388 | WARNING  | scenario_detector:detect:85 - No scenario matched for: 远程启动失败，车辆无法进入远程开启模式，APP控制无响应..., defaulting to ble_auth
+2026-03-29 21:59:10.964 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13091ms
+2026-03-29 21:59:10.969 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 21:59:10.972 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:00:04.901 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 远程启动失败，车辆无法进入远程开启模式，APP控制无响应...
+2026-03-29 22:00:04.902 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:00:05.409 | INFO     | agents.symptom_parser:process:33 - SymptomParser processing: 远程启动失败，车辆无法进入远程开启模式，APP控制无响应...
+2026-03-29 22:00:05.410 | WARNING  | scenario_detector:detect:85 - No scenario matched for: 远程启动失败，车辆无法进入远程开启模式，APP控制无响应..., defaulting to ble_auth
+2026-03-29 22:00:07.811 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 22:00:08.342 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 远程启动失败，车辆无法进入远程开启模式，APP控制无响应...
+2026-03-29 22:00:08.651 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:00:10.099 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:00:11.116 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:00:11.185 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:00:13.188 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:00:13.268 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:00:13.269 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:00:13.354 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:00:14.362 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:00:14.431 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:00:16.437 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:00:16.558 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:00:16.560 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:00:16.655 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:00:17.681 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:00:17.753 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:00:19.767 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:00:19.832 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:00:19.833 | ERROR    | llm.service:diagnose:1202 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:00:19.834 | INFO     | llm.service:diagnose:1205 - Using fallback handler
+2026-03-29 22:00:19.835 | WARNING  | scenario_detector:detect:85 - No scenario matched for: 远程启动失败，车辆无法进入远程开启模式，APP控制无响应..., defaulting to ble_auth
+2026-03-29 22:00:21.390 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13047ms
+2026-03-29 22:00:21.400 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:00:21.408 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:10:43.287 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-29 22:10:43.289 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-29 22:10:43.349 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:10:43.401 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:10:43.433 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:10:43.495 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:10:43.533 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:10:43.547 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:10:43.555 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:10:43.578 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:10:43.613 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:10:43.666 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:10:43.677 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:10:43.678 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:10:43.678 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:10:43.712 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:43.712 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:10:43.712 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:10:43.861 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:10:43.907 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:10:43.938 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:10:43.998 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:10:44.034 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:10:44.049 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:10:44.057 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:10:44.083 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:10:44.118 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:10:44.171 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:10:44.181 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:10:44.181 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:10:44.181 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:10:44.216 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:44.217 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:10:44.217 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:10:44.241 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:10:44.291 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:10:44.330 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:10:44.408 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:10:44.449 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:10:44.465 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:10:44.474 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:10:44.498 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:10:44.534 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:10:44.590 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:10:44.601 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:10:44.601 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:10:44.602 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:10:44.640 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:44.640 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:10:44.640 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:10:44.667 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:10:44.717 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:10:44.749 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:10:44.825 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:10:44.967 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:10:44.981 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:10:44.989 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:10:45.013 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:10:45.048 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:10:45.099 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:10:45.109 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:10:45.109 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:10:45.110 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:10:45.143 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:45.143 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:10:45.144 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:10:45.145 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:10:45.192 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:10:45.221 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:10:45.281 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:10:45.316 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:10:45.330 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:10:45.339 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:10:45.362 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:10:45.395 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:10:45.448 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:10:45.457 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:10:45.457 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:10:45.458 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:10:45.491 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:45.491 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:10:45.491 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:10:45.510 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:10:45.557 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:10:45.587 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:10:45.648 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:10:45.685 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:10:45.699 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:10:45.707 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:10:45.730 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:10:45.764 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:10:45.814 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:10:45.824 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:10:45.824 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:10:45.825 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:10:45.939 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:45.939 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:10:45.939 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:10:45.941 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 22:10:46.420 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:10:46.462 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:10:46.493 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:10:46.556 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:10:46.592 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:10:46.606 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:10:46.614 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:10:46.640 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:10:46.673 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:10:46.724 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:10:46.734 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:10:46.734 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:10:46.735 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:10:46.768 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:46.768 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:10:46.768 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:10:46.770 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 22:10:47.263 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:10:47.310 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:10:47.340 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:10:47.402 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:10:47.441 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:10:47.455 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:10:47.463 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:10:47.486 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:10:47.522 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:10:47.575 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:10:47.585 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:10:47.585 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:10:47.586 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:10:47.623 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:47.624 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:10:47.624 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:10:47.670 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:10:47.718 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:10:47.747 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:10:47.923 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:10:47.959 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:10:47.975 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:10:47.983 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:10:48.005 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:10:48.037 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:10:48.091 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:10:48.100 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:10:48.100 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:10:48.101 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:10:48.134 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:48.135 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:10:48.135 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:10:48.183 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_load_single_file_backward0\test_onto.ttl
+2026-03-29 22:10:48.186 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_load_single_file_backward0\test_onto.ttl
+2026-03-29 22:10:48.186 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:10:48.186 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:48.186 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:10:48.200 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_load_folder_with_ttl_file0
+2026-03-29 22:10:48.202 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part1.ttl (3 triples)
+2026-03-29 22:10:48.204 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part2.ttl (3 triples)
+2026-03-29 22:10:48.205 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part3.ttl (3 triples)
+2026-03-29 22:10:48.205 | INFO     | ontology.parser:load:155 - Loaded 3 ontology files with 3 total triples
+2026-03-29 22:10:48.205 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:10:48.206 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:48.206 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:10:48.208 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_load_empty_folder0
+2026-03-29 22:10:48.208 | WARNING  | ontology.parser:load:138 - No TTL files found in folder: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_load_empty_folder0
+2026-03-29 22:10:48.209 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: /nonexistent/path/to/ontology.ttl
+2026-03-29 22:10:48.209 | ERROR    | ontology.parser:load:165 - Ontology source not found: /nonexistent/path/to/ontology.ttl
+2026-03-29 22:10:48.211 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_load_folder_logs_each_fil0
+2026-03-29 22:10:48.213 | INFO     | ontology.parser:load:151 - Loaded ontology file: module_a.ttl (3 triples)
+2026-03-29 22:10:48.215 | INFO     | ontology.parser:load:151 - Loaded ontology file: module_b.ttl (3 triples)
+2026-03-29 22:10:48.215 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 3 total triples
+2026-03-29 22:10:48.215 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:10:48.215 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:48.216 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:10:48.218 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_swrl_rules_from_multiple_0
+2026-03-29 22:10:48.220 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_part1.ttl (3 triples)
+2026-03-29 22:10:48.221 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_part2.ttl (3 triples)
+2026-03-29 22:10:48.221 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 6 total triples
+2026-03-29 22:10:48.221 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (2 classes)
+2026-03-29 22:10:48.222 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 2 SWRL rules from file comments
+2026-03-29 22:10:48.222 | INFO     | ontology.parser:load:179 - Parsed 2 classes, 0 object properties, 0 datatype properties, 0 individuals, 2 SWRL rules, 0 transition rules
+2026-03-29 22:10:48.224 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_loaded_files_is_list0\test.ttl
+2026-03-29 22:10:48.225 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_loaded_files_is_list0\test.ttl
+2026-03-29 22:10:48.225 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:10:48.226 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:48.226 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:10:48.228 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_loaded_files_contains_abs0\test.ttl
+2026-03-29 22:10:48.230 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_loaded_files_contains_abs0\test.ttl
+2026-03-29 22:10:48.230 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:10:48.230 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:48.230 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:10:48.233 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_load_folder_with_subfolde0
+2026-03-29 22:10:48.234 | INFO     | ontology.parser:load:151 - Loaded ontology file: root.ttl (3 triples)
+2026-03-29 22:10:48.235 | INFO     | ontology.parser:load:155 - Loaded 1 ontology files with 3 total triples
+2026-03-29 22:10:48.235 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:10:48.235 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:48.235 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:10:48.238 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_load_mixed_content_folder0
+2026-03-29 22:10:48.240 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology.ttl (3 triples)
+2026-03-29 22:10:48.240 | INFO     | ontology.parser:load:155 - Loaded 1 ontology files with 3 total triples
+2026-03-29 22:10:48.240 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:10:48.240 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:48.240 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:10:48.243 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_detect_namespace_from_cla0\action.ttl
+2026-03-29 22:10:48.245 | INFO     | ontology.parser:load:162 - Loaded ontology with 11 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_detect_namespace_from_cla0\action.ttl
+2026-03-29 22:10:48.245 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (3 classes)
+2026-03-29 22:10:48.245 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:48.245 | INFO     | ontology.parser:load:179 - Parsed 3 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:10:48.248 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_multi_file_namespace_dete0
+2026-03-29 22:10:48.250 | INFO     | ontology.parser:load:151 - Loaded ontology file: action.ttl (5 triples)
+2026-03-29 22:10:48.276 | INFO     | ontology.parser:load:151 - Loaded ontology file: context.ttl (5 triples)
+2026-03-29 22:10:48.276 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 10 total triples
+2026-03-29 22:10:48.276 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (4 classes)
+2026-03-29 22:10:48.276 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:48.276 | INFO     | ontology.parser:load:179 - Parsed 4 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:10:48.279 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_fallback_when_no_classes0\empty.ttl
+2026-03-29 22:10:48.280 | INFO     | ontology.parser:load:162 - Loaded ontology with 2 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-28\test_fallback_when_no_classes0\empty.ttl
+2026-03-29 22:10:48.281 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from owl:Ontology: http://example.org/test-ontology/core#
+2026-03-29 22:10:48.281 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:48.281 | INFO     | ontology.parser:load:179 - Parsed 0 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:10:48.284 | INFO     | llm.config:get_llm_config:179 - Loaded .env from: D:\work\carproject\backend\cli\.env
+2026-03-29 22:10:48.285 | INFO     | llm.config:get_llm_config:230 - Loaded config from YAML: D:\work\carproject\backend\cli\llm_config.yaml
+2026-03-29 22:10:48.286 | INFO     | llm.config:get_llm_config:239 - LLM Config loaded: endpoint=https://llm-gateway.dev.cn-vwa.volkswagen-cea.com, model=openai/gpt-3.5-turbo
+2026-03-29 22:10:48.286 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 踩刹车.*启动.*无法上电)
+2026-03-29 22:10:48.286 | WARNING  | llm.service:_validate_and_fill_missing_fields:799 - LLM response missing reasoning_steps, generating defaults
+2026-03-29 22:10:48.286 | WARNING  | llm.service:_validate_and_fill_missing_fields:823 - LLM response missing primary_hypothesis, generating defaults
+2026-03-29 22:10:48.286 | WARNING  | llm.service:_validate_and_fill_missing_fields:849 - LLM response missing confidence_factors, generating defaults
+2026-03-29 22:10:48.286 | WARNING  | llm.service:_validate_and_fill_missing_fields:901 - LLM response missing output for owner, generating defaults
+2026-03-29 22:10:48.286 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 踩刹车.*启动.*无法上电)
+2026-03-29 22:10:48.286 | WARNING  | llm.service:_validate_and_fill_missing_fields:799 - LLM response missing reasoning_steps, generating defaults
+2026-03-29 22:10:48.286 | WARNING  | llm.service:_validate_and_fill_missing_fields:823 - LLM response missing primary_hypothesis, generating defaults
+2026-03-29 22:10:48.286 | WARNING  | llm.service:_validate_and_fill_missing_fields:849 - LLM response missing confidence_factors, generating defaults
+2026-03-29 22:10:48.286 | WARNING  | llm.service:_validate_and_fill_missing_fields:901 - LLM response missing output for owner, generating defaults
+2026-03-29 22:10:48.287 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 踩刹车.*启动.*无法上电)
+2026-03-29 22:10:48.287 | WARNING  | llm.service:_validate_and_fill_missing_fields:799 - LLM response missing reasoning_steps, generating defaults
+2026-03-29 22:10:48.287 | WARNING  | llm.service:_validate_and_fill_missing_fields:823 - LLM response missing primary_hypothesis, generating defaults
+2026-03-29 22:10:48.288 | WARNING  | llm.service:_validate_and_fill_missing_fields:901 - LLM response missing output for owner, generating defaults
+2026-03-29 22:10:48.323 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:10:48.368 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:10:48.396 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:10:48.458 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:10:48.493 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:10:48.509 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:10:48.517 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:10:48.540 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:10:48.573 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:10:48.625 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:10:48.635 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:10:48.635 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:10:48.636 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:10:48.667 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:10:48.668 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:10:48.668 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:13:14.854 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 1
+2026-03-29 22:13:14.854 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 0
+2026-03-29 22:13:14.964 | INFO     | __main__:main:485 - Server stopped by user
+2026-03-29 22:13:16.756 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-29 22:13:16.756 | INFO     | __main__:start_server:343 - ============================================================
+2026-03-29 22:13:16.756 | INFO     | __main__:start_server:344 - Vehicle Power Diagnosis System v1.0.0
+2026-03-29 22:13:16.756 | INFO     | __main__:start_server:345 - ============================================================
+2026-03-29 22:13:16.757 | INFO     | __main__:start_server:349 - Loading ontology from folder: D:\work\carproject\ontology files
+2026-03-29 22:13:16.757 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:13:16.810 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:13:16.839 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:13:16.901 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:13:16.939 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:13:16.953 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:13:16.961 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:13:16.983 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:13:17.019 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:13:17.063 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:13:17.074 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:13:17.075 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:13:17.076 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:13:17.109 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:13:17.110 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:13:17.110 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:13:17.110 | INFO     | __main__:start_server:353 - Ontology loaded successfully!
+2026-03-29 22:13:17.110 | INFO     | __main__:start_server:354 -   Loaded files: 10
+2026-03-29 22:13:17.110 | INFO     | __main__:start_server:355 -   Total classes: 502
+2026-03-29 22:13:17.111 | INFO     | __main__:start_server:356 -   Object Properties: 147
+2026-03-29 22:13:17.111 | INFO     | __main__:start_server:357 -   Datatype Properties: 142
+2026-03-29 22:13:17.111 | INFO     | __main__:start_server:358 -   Individuals: 197
+2026-03-29 22:13:17.111 | INFO     | __main__:__init__:80 - LLM Diagnosis Agent enabled
+2026-03-29 22:13:17.111 | INFO     | __main__:__init__:91 - DiagnosisPipeline initialized (LLM智能诊断模式) with agents:
+2026-03-29 22:13:17.112 | INFO     | __main__:__init__:93 -   - orch
+2026-03-29 22:13:17.112 | INFO     | __main__:__init__:93 -   - dtc
+2026-03-29 22:13:17.112 | INFO     | __main__:__init__:93 -   - sym
+2026-03-29 22:13:17.112 | INFO     | __main__:__init__:93 -   - ont
+2026-03-29 22:13:17.112 | INFO     | __main__:__init__:93 -   - rule
+2026-03-29 22:13:17.112 | INFO     | __main__:__init__:93 -   - sig
+2026-03-29 22:13:17.112 | INFO     | __main__:__init__:93 -   - conf
+2026-03-29 22:13:17.112 | INFO     | __main__:__init__:93 -   - out
+2026-03-29 22:13:17.112 | INFO     | __main__:__init__:93 -   - llm
+2026-03-29 22:13:17.113 | INFO     | server:initialize_app:107 - Application initialized
+2026-03-29 22:13:17.135 | INFO     | __main__:start_server:371 - Starting server on ws://localhost:8765
+2026-03-29 22:13:17.136 | INFO     | __main__:start_server:372 - Open the frontend at: http://localhost:8000
+2026-03-29 22:13:17.136 | INFO     | __main__:start_server:373 - WebSocket endpoint: ws://localhost:8765/ws
+2026-03-29 22:13:17.136 | INFO     | __main__:start_server:374 - ============================================================
+2026-03-29 22:13:30.006 | INFO     | server:connect:42 - Client connected. Total connections: 1
+2026-03-29 22:13:30.029 | INFO     | server:handle_message:201 - Client ready, version: cea-demo
+2026-03-29 22:13:32.618 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:13:32.619 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:13:33.133 | INFO     | agents.symptom_parser:process:33 - SymptomParser processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:13:33.134 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:13:35.541 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 22:13:37.560 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:13:37.893 | INFO     | llm.config:get_llm_config:179 - Loaded .env from: D:\work\carproject\backend\cli\.env
+2026-03-29 22:13:38.031 | INFO     | llm.config:get_llm_config:230 - Loaded config from YAML: D:\work\carproject\backend\cli\llm_config.yaml
+2026-03-29 22:13:38.036 | INFO     | llm.config:get_llm_config:239 - LLM Config loaded: endpoint=https://llm-gateway.dev.cn-vwa.volkswagen-cea.com, model=openai/gpt-3.5-turbo
+2026-03-29 22:13:38.037 | INFO     | llm.service:client:457 - Using OpenRouter client: openai/gpt-3.5-turbo
+2026-03-29 22:13:38.806 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:13:40.279 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:13:41.283 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:13:41.356 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:13:43.363 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:13:43.472 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:13:43.472 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:13:43.534 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:13:44.546 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:13:44.611 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:13:46.628 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:13:46.702 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:13:46.703 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:13:46.765 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:13:47.770 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:13:47.836 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:13:49.845 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:13:50.084 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:13:50.085 | ERROR    | llm.service:diagnose:1202 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:13:50.085 | INFO     | llm.service:diagnose:1205 - Using fallback handler
+2026-03-29 22:13:50.085 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:13:51.621 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 14060ms
+2026-03-29 22:13:51.622 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:13:51.622 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:26:22.431 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 0
+2026-03-29 22:26:22.541 | INFO     | __main__:main:485 - Server stopped by user
+2026-03-29 22:26:26.133 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-29 22:26:26.133 | INFO     | __main__:start_server:343 - ============================================================
+2026-03-29 22:26:26.133 | INFO     | __main__:start_server:344 - Vehicle Power Diagnosis System v1.0.0
+2026-03-29 22:26:26.133 | INFO     | __main__:start_server:345 - ============================================================
+2026-03-29 22:26:26.133 | INFO     | __main__:start_server:349 - Loading ontology from folder: D:\work\carproject\ontology files
+2026-03-29 22:26:26.134 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:26:26.184 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:26:26.211 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:26:26.270 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:26:26.306 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:26:26.320 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:26:26.327 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:26:26.349 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:26:26.388 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:26:26.433 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:26:26.445 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:26:26.445 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:26:26.446 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:26:26.479 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:26:26.479 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:26:26.479 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:26:26.480 | INFO     | __main__:start_server:353 - Ontology loaded successfully!
+2026-03-29 22:26:26.480 | INFO     | __main__:start_server:354 -   Loaded files: 10
+2026-03-29 22:26:26.480 | INFO     | __main__:start_server:355 -   Total classes: 502
+2026-03-29 22:26:26.480 | INFO     | __main__:start_server:356 -   Object Properties: 147
+2026-03-29 22:26:26.480 | INFO     | __main__:start_server:357 -   Datatype Properties: 142
+2026-03-29 22:26:26.481 | INFO     | __main__:start_server:358 -   Individuals: 197
+2026-03-29 22:26:26.481 | INFO     | __main__:__init__:80 - LLM Diagnosis Agent enabled
+2026-03-29 22:26:26.481 | INFO     | __main__:__init__:91 - DiagnosisPipeline initialized (LLM智能诊断模式) with agents:
+2026-03-29 22:26:26.481 | INFO     | __main__:__init__:93 -   - orch
+2026-03-29 22:26:26.481 | INFO     | __main__:__init__:93 -   - dtc
+2026-03-29 22:26:26.481 | INFO     | __main__:__init__:93 -   - sym
+2026-03-29 22:26:26.481 | INFO     | __main__:__init__:93 -   - ont
+2026-03-29 22:26:26.481 | INFO     | __main__:__init__:93 -   - rule
+2026-03-29 22:26:26.481 | INFO     | __main__:__init__:93 -   - sig
+2026-03-29 22:26:26.482 | INFO     | __main__:__init__:93 -   - conf
+2026-03-29 22:26:26.482 | INFO     | __main__:__init__:93 -   - out
+2026-03-29 22:26:26.482 | INFO     | __main__:__init__:93 -   - llm
+2026-03-29 22:26:26.482 | INFO     | server:initialize_app:107 - Application initialized
+2026-03-29 22:26:26.602 | INFO     | __main__:start_server:371 - Starting server on ws://localhost:8765
+2026-03-29 22:26:26.602 | INFO     | __main__:start_server:372 - Open the frontend at: http://localhost:8000
+2026-03-29 22:26:26.603 | INFO     | __main__:start_server:373 - WebSocket endpoint: ws://localhost:8765/ws
+2026-03-29 22:26:26.603 | INFO     | __main__:start_server:374 - ============================================================
+2026-03-29 22:26:36.309 | INFO     | server:connect:42 - Client connected. Total connections: 1
+2026-03-29 22:26:36.312 | INFO     | server:handle_message:201 - Client ready, version: cea-demo
+2026-03-29 22:26:45.064 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:26:45.075 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:26:45.598 | INFO     | agents.symptom_parser:process:33 - SymptomParser processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:26:45.598 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:26:47.936 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 22:26:48.750 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:26:49.082 | INFO     | llm.config:get_llm_config:179 - Loaded .env from: D:\work\carproject\backend\cli\.env
+2026-03-29 22:26:49.202 | INFO     | llm.config:get_llm_config:230 - Loaded config from YAML: D:\work\carproject\backend\cli\llm_config.yaml
+2026-03-29 22:26:49.205 | INFO     | llm.config:get_llm_config:239 - LLM Config loaded: endpoint=https://llm-gateway.dev.cn-vwa.volkswagen-cea.com, model=openai/gpt-3.5-turbo
+2026-03-29 22:26:49.207 | INFO     | llm.service:client:457 - Using OpenRouter client: openai/gpt-3.5-turbo
+2026-03-29 22:26:49.979 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:26:51.778 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:26:52.781 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:26:53.030 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:26:55.038 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:26:55.118 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:26:55.119 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:26:55.320 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:26:56.322 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:26:56.413 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:26:58.416 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:26:58.567 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:26:58.568 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:26:58.663 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:26:59.668 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:26:59.738 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:27:01.747 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:27:01.891 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:27:01.892 | ERROR    | llm.service:diagnose:1202 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:27:01.892 | INFO     | llm.service:diagnose:1205 - Using fallback handler
+2026-03-29 22:27:01.893 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:27:03.498 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 14734ms
+2026-03-29 22:27:03.506 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:27:03.515 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:27:18.501 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:27:18.512 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:27:19.031 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:27:19.345 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:27:20.529 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:27:21.532 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:27:21.590 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:27:23.603 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:27:23.664 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:27:23.664 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:27:23.728 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:27:24.742 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:27:24.801 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:27:26.807 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:27:26.867 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:27:26.868 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:27:26.925 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:27:27.947 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:27:28.005 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:27:30.020 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:27:30.082 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:27:30.082 | ERROR    | llm.service:diagnose:1202 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:27:30.082 | INFO     | llm.service:diagnose:1205 - Using fallback handler
+2026-03-29 22:27:30.083 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:27:31.642 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 12610ms
+2026-03-29 22:27:31.643 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:27:31.643 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:36:10.997 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-29 22:36:11.000 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-29 22:36:11.060 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:36:11.112 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:36:11.145 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:36:11.209 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:36:11.250 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:36:11.265 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:36:11.273 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:36:11.297 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:36:11.333 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:36:11.385 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:36:11.397 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:36:11.397 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:36:11.398 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:36:11.431 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:11.431 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:36:11.431 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:36:11.573 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:36:11.620 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:36:11.653 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:36:11.715 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:36:11.751 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:36:11.766 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:36:11.774 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:36:11.800 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:36:11.835 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:36:11.891 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:36:11.902 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:36:11.903 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:36:11.903 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:36:11.938 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:11.939 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:36:11.939 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:36:11.964 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:36:12.015 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:36:12.048 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:36:12.113 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:36:12.153 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:36:12.169 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:36:12.177 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:36:12.201 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:36:12.237 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:36:12.291 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:36:12.301 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:36:12.302 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:36:12.302 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:36:12.339 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:12.339 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:36:12.339 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:36:12.364 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:36:12.413 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:36:12.446 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:36:12.512 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:36:12.663 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:36:12.679 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:36:12.687 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:36:12.712 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:36:12.747 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:36:12.809 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:36:12.819 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:36:12.819 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:36:12.819 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:36:12.854 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:12.855 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:36:12.855 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:36:12.856 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:36:12.908 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:36:12.939 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:36:13.004 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:36:13.048 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:36:13.062 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:36:13.073 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:36:13.096 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:36:13.130 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:36:13.184 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:36:13.194 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:36:13.194 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:36:13.195 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:36:13.228 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:13.228 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:36:13.229 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:36:13.247 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:36:13.296 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:36:13.325 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:36:13.387 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:36:13.424 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:36:13.438 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:36:13.446 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:36:13.469 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:36:13.504 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:36:13.555 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:36:13.563 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:36:13.563 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:36:13.564 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:36:13.691 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:13.692 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:36:13.692 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:36:13.718 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 22:36:14.221 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:36:14.277 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:36:14.310 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:36:14.373 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:36:14.410 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:36:14.424 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:36:14.432 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:36:14.457 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:36:14.492 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:36:14.544 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:36:14.553 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:36:14.554 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:36:14.554 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:36:14.587 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:14.587 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:36:14.587 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:36:14.589 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 22:36:15.074 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:36:15.121 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:36:15.151 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:36:15.213 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:36:15.250 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:36:15.265 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:36:15.273 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:36:15.296 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:36:15.332 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:36:15.384 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:36:15.394 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:36:15.394 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:36:15.395 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:36:15.430 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:15.431 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:36:15.431 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:36:15.477 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:36:15.526 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:36:15.555 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:36:15.736 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:36:15.772 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:36:15.789 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:36:15.796 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:36:15.820 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:36:15.856 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:36:15.910 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:36:15.920 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:36:15.920 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:36:15.921 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:36:15.955 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:15.955 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:36:15.955 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:36:16.004 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_load_single_file_backward0\test_onto.ttl
+2026-03-29 22:36:16.024 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_load_single_file_backward0\test_onto.ttl
+2026-03-29 22:36:16.024 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:36:16.025 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:16.025 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:36:16.028 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_load_folder_with_ttl_file0
+2026-03-29 22:36:16.030 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part1.ttl (3 triples)
+2026-03-29 22:36:16.032 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part2.ttl (3 triples)
+2026-03-29 22:36:16.034 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology_part3.ttl (3 triples)
+2026-03-29 22:36:16.034 | INFO     | ontology.parser:load:155 - Loaded 3 ontology files with 3 total triples
+2026-03-29 22:36:16.034 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:36:16.034 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:16.034 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:36:16.037 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_load_empty_folder0
+2026-03-29 22:36:16.037 | WARNING  | ontology.parser:load:138 - No TTL files found in folder: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_load_empty_folder0
+2026-03-29 22:36:16.038 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: /nonexistent/path/to/ontology.ttl
+2026-03-29 22:36:16.038 | ERROR    | ontology.parser:load:165 - Ontology source not found: /nonexistent/path/to/ontology.ttl
+2026-03-29 22:36:16.040 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_load_folder_logs_each_fil0
+2026-03-29 22:36:16.043 | INFO     | ontology.parser:load:151 - Loaded ontology file: module_a.ttl (3 triples)
+2026-03-29 22:36:16.045 | INFO     | ontology.parser:load:151 - Loaded ontology file: module_b.ttl (3 triples)
+2026-03-29 22:36:16.045 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 3 total triples
+2026-03-29 22:36:16.045 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:36:16.045 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:16.045 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:36:16.048 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_swrl_rules_from_multiple_0
+2026-03-29 22:36:16.066 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_part1.ttl (3 triples)
+2026-03-29 22:36:16.083 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_part2.ttl (3 triples)
+2026-03-29 22:36:16.084 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 6 total triples
+2026-03-29 22:36:16.084 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (2 classes)
+2026-03-29 22:36:16.084 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 2 SWRL rules from file comments
+2026-03-29 22:36:16.084 | INFO     | ontology.parser:load:179 - Parsed 2 classes, 0 object properties, 0 datatype properties, 0 individuals, 2 SWRL rules, 0 transition rules
+2026-03-29 22:36:16.087 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_loaded_files_is_list0\test.ttl
+2026-03-29 22:36:16.089 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_loaded_files_is_list0\test.ttl
+2026-03-29 22:36:16.089 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:36:16.090 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:16.090 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:36:16.092 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_loaded_files_contains_abs0\test.ttl
+2026-03-29 22:36:16.094 | INFO     | ontology.parser:load:162 - Loaded ontology with 3 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_loaded_files_contains_abs0\test.ttl
+2026-03-29 22:36:16.094 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:36:16.095 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:16.095 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:36:16.097 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_load_folder_with_subfolde0
+2026-03-29 22:36:16.100 | INFO     | ontology.parser:load:151 - Loaded ontology file: root.ttl (3 triples)
+2026-03-29 22:36:16.100 | INFO     | ontology.parser:load:155 - Loaded 1 ontology files with 3 total triples
+2026-03-29 22:36:16.100 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:36:16.100 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:16.100 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:36:16.103 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_load_mixed_content_folder0
+2026-03-29 22:36:16.106 | INFO     | ontology.parser:load:151 - Loaded ontology file: ontology.ttl (3 triples)
+2026-03-29 22:36:16.106 | INFO     | ontology.parser:load:155 - Loaded 1 ontology files with 3 total triples
+2026-03-29 22:36:16.106 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-mode# (1 classes)
+2026-03-29 22:36:16.106 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:16.106 | INFO     | ontology.parser:load:179 - Parsed 1 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:36:16.108 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_detect_namespace_from_cla0\action.ttl
+2026-03-29 22:36:16.127 | INFO     | ontology.parser:load:162 - Loaded ontology with 11 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_detect_namespace_from_cla0\action.ttl
+2026-03-29 22:36:16.127 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (3 classes)
+2026-03-29 22:36:16.128 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:16.128 | INFO     | ontology.parser:load:179 - Parsed 3 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:36:16.130 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_multi_file_namespace_dete0
+2026-03-29 22:36:16.148 | INFO     | ontology.parser:load:151 - Loaded ontology file: action.ttl (5 triples)
+2026-03-29 22:36:16.164 | INFO     | ontology.parser:load:151 - Loaded ontology file: context.ttl (5 triples)
+2026-03-29 22:36:16.165 | INFO     | ontology.parser:load:155 - Loaded 2 ontology files with 10 total triples
+2026-03-29 22:36:16.165 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (4 classes)
+2026-03-29 22:36:16.165 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:16.165 | INFO     | ontology.parser:load:179 - Parsed 4 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:36:16.168 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_fallback_when_no_classes0\empty.ttl
+2026-03-29 22:36:16.183 | INFO     | ontology.parser:load:162 - Loaded ontology with 2 triples from C:\Users\Toby\AppData\Local\Temp\pytest-of-Toby\pytest-29\test_fallback_when_no_classes0\empty.ttl
+2026-03-29 22:36:16.184 | INFO     | ontology.parser:_detect_namespace:237 - Auto-detected namespace from owl:Ontology: http://example.org/test-ontology/core#
+2026-03-29 22:36:16.184 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:16.184 | INFO     | ontology.parser:load:179 - Parsed 0 classes, 0 object properties, 0 datatype properties, 0 individuals, 0 SWRL rules, 0 transition rules
+2026-03-29 22:36:16.187 | INFO     | llm.config:get_llm_config:179 - Loaded .env from: D:\work\carproject\backend\cli\.env
+2026-03-29 22:36:16.188 | INFO     | llm.config:get_llm_config:230 - Loaded config from YAML: D:\work\carproject\backend\cli\llm_config.yaml
+2026-03-29 22:36:16.189 | INFO     | llm.config:get_llm_config:239 - LLM Config loaded: endpoint=https://llm-gateway.dev.cn-vwa.volkswagen-cea.com, model=openai/gpt-3.5-turbo
+2026-03-29 22:36:16.189 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 踩刹车.*启动.*无法上电)
+2026-03-29 22:36:16.189 | WARNING  | llm.service:_validate_and_fill_missing_fields:799 - LLM response missing reasoning_steps, generating defaults
+2026-03-29 22:36:16.189 | WARNING  | llm.service:_validate_and_fill_missing_fields:823 - LLM response missing primary_hypothesis, generating defaults
+2026-03-29 22:36:16.189 | WARNING  | llm.service:_validate_and_fill_missing_fields:849 - LLM response missing confidence_factors, generating defaults
+2026-03-29 22:36:16.189 | WARNING  | llm.service:_validate_and_fill_missing_fields:910 - LLM response missing output for owner, generating defaults
+2026-03-29 22:36:16.190 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 踩刹车.*启动.*无法上电)
+2026-03-29 22:36:16.190 | WARNING  | llm.service:_validate_and_fill_missing_fields:799 - LLM response missing reasoning_steps, generating defaults
+2026-03-29 22:36:16.190 | WARNING  | llm.service:_validate_and_fill_missing_fields:823 - LLM response missing primary_hypothesis, generating defaults
+2026-03-29 22:36:16.190 | WARNING  | llm.service:_validate_and_fill_missing_fields:849 - LLM response missing confidence_factors, generating defaults
+2026-03-29 22:36:16.190 | WARNING  | llm.service:_validate_and_fill_missing_fields:910 - LLM response missing output for owner, generating defaults
+2026-03-29 22:36:16.190 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 踩刹车.*启动.*无法上电)
+2026-03-29 22:36:16.190 | WARNING  | llm.service:_validate_and_fill_missing_fields:799 - LLM response missing reasoning_steps, generating defaults
+2026-03-29 22:36:16.191 | WARNING  | llm.service:_validate_and_fill_missing_fields:823 - LLM response missing primary_hypothesis, generating defaults
+2026-03-29 22:36:16.191 | WARNING  | llm.service:_validate_and_fill_missing_fields:910 - LLM response missing output for owner, generating defaults
+2026-03-29 22:36:16.191 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 踩刹车.*启动.*无法上电)
+2026-03-29 22:36:16.191 | WARNING  | llm.service:_validate_and_fill_missing_fields:799 - LLM response missing reasoning_steps, generating defaults
+2026-03-29 22:36:16.191 | WARNING  | llm.service:_validate_and_fill_missing_fields:823 - LLM response missing primary_hypothesis, generating defaults
+2026-03-29 22:36:16.191 | WARNING  | llm.service:_validate_and_fill_missing_fields:910 - LLM response missing output for owner, generating defaults
+2026-03-29 22:36:16.191 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 踩刹车.*启动.*无法上电)
+2026-03-29 22:36:16.192 | WARNING  | llm.service:_validate_and_fill_missing_fields:799 - LLM response missing reasoning_steps, generating defaults
+2026-03-29 22:36:16.192 | WARNING  | llm.service:_validate_and_fill_missing_fields:823 - LLM response missing primary_hypothesis, generating defaults
+2026-03-29 22:36:16.192 | WARNING  | llm.service:_validate_and_fill_missing_fields:910 - LLM response missing output for owner, generating defaults
+2026-03-29 22:36:16.231 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:36:16.277 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:36:16.305 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:36:16.367 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:36:16.403 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:36:16.419 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:36:16.427 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:36:16.450 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:36:16.484 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:36:16.538 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:36:16.548 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:36:16.548 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:36:16.549 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:36:16.582 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:36:16.583 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:36:16.583 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:37:01.140 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 0
+2026-03-29 22:37:01.253 | INFO     | __main__:main:485 - Server stopped by user
+2026-03-29 22:37:02.790 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-29 22:37:02.790 | INFO     | __main__:start_server:343 - ============================================================
+2026-03-29 22:37:02.790 | INFO     | __main__:start_server:344 - Vehicle Power Diagnosis System v1.0.0
+2026-03-29 22:37:02.790 | INFO     | __main__:start_server:345 - ============================================================
+2026-03-29 22:37:02.790 | INFO     | __main__:start_server:349 - Loading ontology from folder: D:\work\carproject\ontology files
+2026-03-29 22:37:02.791 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 22:37:02.844 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 22:37:02.874 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 22:37:02.937 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 22:37:02.985 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 22:37:02.999 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 22:37:03.007 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (213 triples)
+2026-03-29 22:37:03.030 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 22:37:03.070 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 22:37:03.116 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 22:37:03.128 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 22:37:03.128 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9531 total triples
+2026-03-29 22:37:03.129 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 22:37:03.162 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 22:37:03.162 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 22:37:03.163 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 142 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 22:37:03.163 | INFO     | __main__:start_server:353 - Ontology loaded successfully!
+2026-03-29 22:37:03.163 | INFO     | __main__:start_server:354 -   Loaded files: 10
+2026-03-29 22:37:03.163 | INFO     | __main__:start_server:355 -   Total classes: 502
+2026-03-29 22:37:03.163 | INFO     | __main__:start_server:356 -   Object Properties: 147
+2026-03-29 22:37:03.164 | INFO     | __main__:start_server:357 -   Datatype Properties: 142
+2026-03-29 22:37:03.164 | INFO     | __main__:start_server:358 -   Individuals: 197
+2026-03-29 22:37:03.164 | INFO     | __main__:__init__:80 - LLM Diagnosis Agent enabled
+2026-03-29 22:37:03.164 | INFO     | __main__:__init__:91 - DiagnosisPipeline initialized (LLM智能诊断模式) with agents:
+2026-03-29 22:37:03.164 | INFO     | __main__:__init__:93 -   - orch
+2026-03-29 22:37:03.164 | INFO     | __main__:__init__:93 -   - dtc
+2026-03-29 22:37:03.164 | INFO     | __main__:__init__:93 -   - sym
+2026-03-29 22:37:03.164 | INFO     | __main__:__init__:93 -   - ont
+2026-03-29 22:37:03.165 | INFO     | __main__:__init__:93 -   - rule
+2026-03-29 22:37:03.165 | INFO     | __main__:__init__:93 -   - sig
+2026-03-29 22:37:03.165 | INFO     | __main__:__init__:93 -   - conf
+2026-03-29 22:37:03.165 | INFO     | __main__:__init__:93 -   - out
+2026-03-29 22:37:03.165 | INFO     | __main__:__init__:93 -   - llm
+2026-03-29 22:37:03.166 | INFO     | server:initialize_app:107 - Application initialized
+2026-03-29 22:37:03.185 | INFO     | __main__:start_server:371 - Starting server on ws://localhost:8765
+2026-03-29 22:37:03.185 | INFO     | __main__:start_server:372 - Open the frontend at: http://localhost:8000
+2026-03-29 22:37:03.186 | INFO     | __main__:start_server:373 - WebSocket endpoint: ws://localhost:8765/ws
+2026-03-29 22:37:03.186 | INFO     | __main__:start_server:374 - ============================================================
+2026-03-29 22:37:11.682 | INFO     | server:connect:42 - Client connected. Total connections: 1
+2026-03-29 22:37:11.684 | INFO     | server:handle_message:201 - Client ready, version: cea-demo
+2026-03-29 22:37:13.377 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:37:13.378 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:37:13.881 | INFO     | agents.symptom_parser:process:33 - SymptomParser processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:37:13.882 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:37:16.238 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 22:37:17.193 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:37:17.507 | INFO     | llm.config:get_llm_config:179 - Loaded .env from: D:\work\carproject\backend\cli\.env
+2026-03-29 22:37:17.573 | INFO     | llm.config:get_llm_config:230 - Loaded config from YAML: D:\work\carproject\backend\cli\llm_config.yaml
+2026-03-29 22:37:17.580 | INFO     | llm.config:get_llm_config:239 - LLM Config loaded: endpoint=https://llm-gateway.dev.cn-vwa.volkswagen-cea.com, model=openai/gpt-3.5-turbo
+2026-03-29 22:37:17.587 | INFO     | llm.service:client:457 - Using OpenRouter client: openai/gpt-3.5-turbo
+2026-03-29 22:37:18.359 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:37:19.859 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:37:20.864 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:37:20.920 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:37:22.927 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:37:22.995 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:37:22.996 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:37:23.056 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:37:24.064 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:37:24.129 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:37:26.138 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:37:26.198 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:37:26.199 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:37:26.265 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:37:27.275 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:37:27.351 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:37:29.366 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:37:29.493 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:37:29.494 | ERROR    | llm.service:diagnose:1211 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:37:29.494 | INFO     | llm.service:diagnose:1214 - Using fallback handler
+2026-03-29 22:37:29.494 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:37:31.092 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13898ms
+2026-03-29 22:37:31.093 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:37:31.093 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:38:30.629 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:38:30.630 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:38:31.142 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 22:38:31.489 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:38:32.942 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:38:33.948 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:38:34.018 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:38:36.024 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:38:36.108 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:38:36.126 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:38:36.231 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:38:37.257 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:38:37.381 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:38:39.393 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:38:39.458 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:38:39.458 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:38:39.537 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:38:40.557 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:38:40.622 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:38:42.636 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:38:42.981 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:38:42.981 | ERROR    | llm.service:diagnose:1211 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:38:42.982 | INFO     | llm.service:diagnose:1214 - Using fallback handler
+2026-03-29 22:38:42.982 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 22:38:44.527 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13384ms
+2026-03-29 22:38:44.528 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:38:44.528 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:43:17.985 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 手机APP下发远程上电，车辆无响应，远程启动失败...
+2026-03-29 22:43:17.986 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:43:18.497 | INFO     | agents.symptom_parser:process:33 - SymptomParser processing: 手机APP下发远程上电，车辆无响应，远程启动失败...
+2026-03-29 22:43:18.499 | WARNING  | scenario_detector:detect:85 - No scenario matched for: 手机APP下发远程上电，车辆无响应，远程启动失败..., defaulting to ble_auth
+2026-03-29 22:43:20.836 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 22:43:21.384 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 手机APP下发远程上电，车辆无响应，远程启动失败...
+2026-03-29 22:43:21.780 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:43:23.184 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:43:24.198 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:43:24.255 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:43:26.270 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:43:26.334 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:43:26.334 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:43:26.393 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:43:27.398 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:43:27.483 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:43:29.524 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:43:29.590 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:43:29.590 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:43:29.654 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:43:30.666 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:43:30.771 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:43:32.776 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:43:32.834 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:43:32.835 | ERROR    | llm.service:diagnose:1211 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:43:32.835 | INFO     | llm.service:diagnose:1214 - Using fallback handler
+2026-03-29 22:43:32.836 | WARNING  | scenario_detector:detect:85 - No scenario matched for: 手机APP下发远程上电，车辆无响应，远程启动失败..., defaulting to ble_auth
+2026-03-29 22:43:34.370 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 12985ms
+2026-03-29 22:43:34.371 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:43:34.371 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:44:05.694 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom:  手机APP下发远程上电，车辆无响应，远程启动失败...
+2026-03-29 22:44:05.695 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:44:06.198 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing:  手机APP下发远程上电，车辆无响应，远程启动失败...
+2026-03-29 22:44:06.512 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:44:07.718 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:44:08.726 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:44:08.784 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:44:10.798 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:44:11.006 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:44:11.006 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:44:11.077 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:44:12.092 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:44:12.159 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:44:14.172 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:44:14.285 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:44:14.285 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:44:14.395 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:44:15.398 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:44:15.465 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:44:17.469 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:44:17.906 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:44:17.906 | ERROR    | llm.service:diagnose:1211 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:44:17.907 | INFO     | llm.service:diagnose:1214 - Using fallback handler
+2026-03-29 22:44:17.907 | WARNING  | scenario_detector:detect:85 - No scenario matched for:  手机APP下发远程上电，车辆无响应，远程启动失败..., defaulting to ble_auth
+2026-03-29 22:44:19.450 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13250ms
+2026-03-29 22:44:19.450 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:44:19.451 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
+2026-03-29 22:45:11.275 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 手机APP下发远程上电，车辆无响应，远程启动失败...
+2026-03-29 22:45:11.275 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 22:45:11.780 | INFO     | agents.symptom_parser:process:33 - SymptomParser processing: 手机APP下发远程上电，车辆无响应，远程启动失败...
+2026-03-29 22:45:11.781 | WARNING  | scenario_detector:detect:85 - No scenario matched for: 手机APP下发远程上电，车辆无响应，远程启动失败..., defaulting to ble_auth
+2026-03-29 22:45:14.129 | INFO     | agents.ontology_fetcher:process:42 - OntologyFetcher processing...
+2026-03-29 22:45:14.678 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 手机APP下发远程上电，车辆无响应，远程启动失败...
+2026-03-29 22:45:14.988 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:45:16.463 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:45:17.476 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:45:17.662 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:45:19.668 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:45:19.790 | WARNING  | llm.service:parse_symptom:524 - Symptom parsing failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:45:19.790 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:45:19.854 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:45:20.868 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:45:20.937 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:45:22.946 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:45:23.493 | WARNING  | llm.service:match_diagnostic_rules:597 - Rule matching failed (LLMConnectionError): OpenRouter authentication failed - check API key
+2026-03-29 22:45:23.494 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:45:23.555 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 1 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:45:24.557 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:45:24.698 | Level 30 | tenacity.before_sleep:log_it:64 - Retrying llm.service.OpenRouterClient.complete in 2 seconds as it raised LLMConnectionError: OpenRouter authentication failed - check API key.
+2026-03-29 22:45:26.712 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 22:45:26.785 | ERROR    | llm.service:generate_diagnosis:763 - LLM error during diagnosis generation: OpenRouter authentication failed - check API key
+2026-03-29 22:45:26.785 | ERROR    | llm.service:diagnose:1211 - LLM diagnosis failed: OpenRouter authentication failed - check API key
+2026-03-29 22:45:26.786 | INFO     | llm.service:diagnose:1214 - Using fallback handler
+2026-03-29 22:45:26.786 | WARNING  | scenario_detector:detect:85 - No scenario matched for: 手机APP下发远程上电，车辆无响应，远程启动失败..., defaulting to ble_auth
+2026-03-29 22:45:28.324 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 92%, Time: 13645ms
+2026-03-29 22:45:28.325 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 91%
+2026-03-29 22:45:28.326 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 91%
