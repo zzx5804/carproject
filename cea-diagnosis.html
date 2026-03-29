@@ -645,7 +645,7 @@ function addChain(step,i){
   }
   let sigCell='';
   if(step.signals_referenced&&step.signals_referenced.length>0){
-    const rows=step.signals_referenced.map(s=>`<div class="cs-sig-row ${s.level||''}">${s.key}: ${s.value}</div>`).join('');
+    const rows=step.signals_referenced.map(s=>`<div class="cs-sig-row ${s.level||''}">${esc(s.key)}: ${esc(s.value)}</div>`).join('');
     sigCell=`<div class="cs-ev-cell"><div class="cs-ev-label">引用信号</div>${rows}</div>`;
   }
   let rulesCell='';
@@ -837,8 +837,7 @@ function renderComparePanel() {
           <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:4px"><div style="height:100%;width:${llmConf}%;background:var(--accent);border-radius:2px"></div></div>
           <div style="font-size:9px;color:var(--tx3)">${confDiff > 0 ? `较本体模式低 ${confDiff}%，无规则约束` : '置信度与本体模式相近'}</div>
         </div>
-      </div>`;
-    diffEl.innerHTML += `
+      </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
         <div style="background:rgba(167,139,250,0.06);border:1px solid rgba(167,139,250,0.25);border-radius:8px;padding:10px 12px">
           <div style="font-size:12px;font-weight:600;color:#a78bfa;margin-bottom:8px">Ontology + LLM</div>
