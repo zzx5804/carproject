@@ -749,7 +749,7 @@ class LLMTools:
                 escalation_hint=data.get("escalation_hint"),
             )
             # Fill deficit notes for LLM-only runs
-            self._fill_deficit_notes(
+            response.reasoning_steps = self._fill_deficit_notes(
                 response.reasoning_steps,
                 activated_knowledge=activated_knowledge,
             )

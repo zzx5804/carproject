@@ -137,6 +137,10 @@ def test_fill_deficit_notes_no_ontology():
             step_number=3, title="结论", body="b",
             agent="output"
         ),  # output → None
+        ReasoningStep(
+            step_number=4, title="规则验证", body="b",
+            rules_matched=["T_1_3"]
+        ),  # 有规则（LLM 幻觉）
     ]
 
     result = tools._fill_deficit_notes(steps, activated_knowledge=None)
@@ -144,6 +148,7 @@ def test_fill_deficit_notes_no_ontology():
     assert result[0].deficit_note == "无信号引用与规则依据，推理基于语义理解"
     assert result[1].deficit_note == "识别到信号异常，但未通过本体规则链验证"
     assert result[2].deficit_note is None
+    assert result[3].deficit_note == "规则引用来自 LLM 推测，未经 SPARQL 验证"
 
 
 def test_fill_deficit_notes_with_ontology():
