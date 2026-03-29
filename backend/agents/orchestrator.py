@@ -137,7 +137,7 @@ class OrchestratorAgent(BaseAgent):
         
         # When use_ontology=True, run SymptomParser then OntologyFetcher first so that
         # context.activated_knowledge is populated before the LLM agent runs.
-        if getattr(context, "use_ontology", False):
+        if getattr(context, "use_ontology", True):
             await self._execute_phase("sym", context)
             await self._execute_phase("ont", context)
 
