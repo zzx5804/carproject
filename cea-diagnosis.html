@@ -350,6 +350,7 @@ let role='owner',running=false,scenarioKey='ble_auth',ws=null,stepIndex=0;
 let _useOntology = true;
 
 function setOntologyMode(enabled) {
+    if(running)return;
     _useOntology = enabled;
     document.getElementById("btn-with-onto").style.background =
         enabled ? "var(--accent)" : "var(--surface2)";
@@ -583,7 +584,8 @@ function addChain(step,i){
   let confCell='';
   if(step.confidence!=null){
     const pct=Math.round(step.confidence*100);
-    const color=pct>=85?'var(--green)':pct>=70?'var(--yellow)':'var(--orange)';
+    const threshold=_useOntology?85:70;
+    const color=pct>=threshold?'var(--green)':pct>=(threshold-15)?'var(--yellow)':'var(--orange)';
     const delta=step.confidence_delta!=null?step.confidence_delta:null;
     const arrow=delta==null?'':delta>0.001?'↑ ':delta<-0.001?'↓ ':'→ ';
     const deltaColor=delta==null?color:delta>0.001?'var(--green)':delta<-0.001?'var(--orange)':'var(--tx2)';
@@ -609,8 +611,8 @@ function addChain(step,i){
   const el=document.createElement('div');
   el.className='chain-step';
   el.innerHTML=`<div class="cs-line"><div class="cs-dot">${i+1}</div><div class="cs-conn"></div></div><div class="cs-body" style="${cardBorder};border-radius:8px;padding:8px 10px"><div class="cs-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px"><span>[S${i+1}] ${step.title} ${tag}</span>${elapsedBadge}</div><div class="cs-content">${step.body}</div>${evidenceHtml}</div>`;
-  if(!_useOntology&&i===0&&!document.getElementById('llm-only-banner')){const banner=document.createElement('div');banner.id='llm-only-banner';banner.style.cssText='background:rgba(0,180,255,0.06);border:1px solid rgba(0,180,255,0.2);border-radius:6px;padding:6px 10px;margin-bottom:8px;font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:1px;';banner.textContent='// 纯 LLM 模式 · 无本体规则约束 · 结论仅供参考';ch.insertBefore(banner,el);}
   ch.appendChild(el);
+  if(!_useOntology&&i===0&&!document.getElementById('llm-only-banner')){const banner=document.createElement('div');banner.id='llm-only-banner';banner.style.cssText='background:rgba(0,180,255,0.06);border:1px solid rgba(0,180,255,0.2);border-radius:6px;padding:6px 10px;margin-bottom:8px;font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:1px;';banner.textContent='// 纯 LLM 模式 · 无本体规则约束 · 结论仅供参考';ch.insertBefore(banner,ch.firstChild);}
   setTimeout(()=>{el.classList.add('vis');el.querySelector('.cs-dot').classList.add('active')},50);
   if(step.elapsed_ms!=null){setTimeout(()=>{const badge=document.getElementById(`cs-elapsed-${i}`);if(badge)badge.classList.add('vis')},250);}
   if(step.confidence!=null){
