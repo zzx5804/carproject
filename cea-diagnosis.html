@@ -330,7 +330,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
     </div>
     <!-- Reasoning + Results -->
     <div class="results-2col">
-      <div class="panel"><div class="panel-head"><div class="ph-dot" style="background:var(--green);box-shadow:0 0 5px var(--green)"></div>因果推理链 <span class="prov-tag llm" style="margin-left:auto">LLM+Ontology</span></div>
+      <div class="panel"><div class="panel-head"><div class="ph-dot" style="background:var(--green);box-shadow:0 0 5px var(--green)"></div>因果推理链 <span id="chain-mode-label" class="prov-tag llm" style="margin-left:auto">LLM+Ontology</span></div>
         <div style="padding:14px"><div id="onto-activated-panel" style="padding:8px 12px;min-height:40px;"></div><div class="chain" id="reasonChain"><div class="idle" id="chainIdle"><div class="idle-icon">🔗</div><div class="idle-txt">启动诊断查看推理链</div></div></div><div class="onto-detail" id="ontoDetail"></div></div>
       </div>
       <div class="panel"><div class="panel-head"><div class="ph-dot" style="background:var(--accent);box-shadow:0 0 5px var(--accent)"></div>诊断结果</div>
@@ -369,6 +369,12 @@ function setOntologyMode(enabled) {
                     // 纯 LLM 模式 — Ontology 未激活
                 </div>`;
         }
+    }
+    // Update chain panel header label
+    const lbl=document.getElementById('chain-mode-label');
+    if(lbl){
+        if(enabled){lbl.className='prov-tag llm';lbl.textContent='LLM+Ontology';}
+        else{lbl.className='prov-tag rule';lbl.textContent='纯 LLM';}
     }
     document.getElementById('reasonChain').innerHTML='<div class="idle" id="chainIdle"><div class="idle-icon">🔗</div><div class="idle-txt">切换模式后请重新运行诊断</div></div>';
     stepIndex=0;
