@@ -718,18 +718,51 @@ function renderCompareChain(container, runData, isOnto) {
     const deficitHtml = step.deficit_note
         ? `<div class="cs-deficit">※ ${esc(step.deficit_note)}</div>`
         : '';
-    const connHtml = isLast ? '' : `<div class="cs-conn" style="${connStyle}"></div>`;
+    const connHtml = isLast ? '' : `<div class="cs-conn done" style="${connStyle}"></div>`;
+
+    // Evidence cells
+    let confCell = '';
+    if (step.confidence != null) {
+      const pct = Math.round(step.confidence * 100);
+      const threshold = isOnto ? 85 : 70;
+      const color = pct >= threshold ? 'var(--green)' : pct >= (threshold - 15) ? 'var(--yellow)' : 'var(--orange)';
+      const delta = step.confidence_delta != null ? step.confidence_delta : null;
+      const arrow = delta == null ? '' : delta > 0.001 ? '↑ ' : delta < -0.001 ? '↓ ' : '→ ';
+      const deltaColor = delta == null ? color : delta > 0.001 ? 'var(--green)' : delta < -0.001 ? 'var(--orange)' : 'var(--tx2)';
+      const deltaSub = delta != null ? `<div class="cs-ev-sub">较上步 ${delta >= 0 ? '+' : ''}${Math.round(delta * 100)}%</div>` : '';
+      confCell = `<div class="cs-ev-cell"><div class="cs-ev-label">步骤置信度</div><div class="cs-ev-bar"><div class="cs-ev-bar-fill" style="width:${pct}%;background:${color}"></div></div><div class="cs-ev-value" style="color:${deltaColor}">${arrow}${pct}%</div>${deltaSub}</div>`;
+    }
+
+    let sigCell = '';
+    if (step.signals_referenced && step.signals_referenced.length > 0) {
+      const rows = step.signals_referenced.map(s => `<div class="cs-sig-row ${s.level||''}">${esc(s.key)}: ${esc(s.value)}</div>`).join('');
+      sigCell = `<div class="cs-ev-cell"><div class="cs-ev-label">引用信号</div>${rows}</div>`;
+    }
+
+    let rulesCell = '';
+    if (step.rules_matched && step.rules_matched.length > 0) {
+      const ruleSpans = step.rules_matched.map(r => `<span class="rule-tag cs-rule-tag">${esc(r)} ↗</span>`).join(' ');
+      rulesCell = `<div class="cs-ev-cell"><div class="cs-ev-label">命中规则</div>${ruleSpans}</div>`;
+    }
+    if (!isOnto && !rulesCell) {
+      rulesCell = `<div class="cs-ev-cell"><div class="cs-ev-label">命中规则</div><div style="font-size:8px;color:var(--tx3);font-family:var(--mono)">— 无本体规则</div></div>`;
+    }
+
+    const hasEvidence = confCell || sigCell || rulesCell;
+    const evidenceHtml = hasEvidence ? `<div class="cs-evidence">${confCell}${sigCell}${rulesCell}</div>` : '';
+
     html += `<div class="chain-step vis">
       <div class="cs-line">
         <div class="cs-dot done" style="background:${dotColor};box-shadow:${dotShadow};color:${isOnto?'#000':'#7a8ba8'}">${i+1}</div>
         ${connHtml}
       </div>
       <div class="cs-body" style="${cardBorder};border-radius:8px;padding:8px 10px">
-        <div class="cs-title" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">
-          <span class="done">[S${i+1}] ${esc(step.title||'')} ${tag}</span>
+        <div class="cs-title done" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">
+          <span>[S${i+1}] ${esc(step.title||'')} ${tag}</span>
         </div>
         <div class="cs-content">${step.body||''}</div>
         ${deficitHtml}
+        ${evidenceHtml}
       </div>
     </div>`;
   });
