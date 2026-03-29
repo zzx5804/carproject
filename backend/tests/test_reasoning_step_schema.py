@@ -97,3 +97,9 @@ def test_reasoning_step_agent_output():
     """agent field accepts 'output'."""
     step = ReasoningStep(step_number=1, title="t", body="b", agent="output")
     assert step.agent == "output"
+
+
+def test_reasoning_step_agent_invalid_value():
+    """Invalid agent value should raise ValidationError."""
+    with pytest.raises(ValidationError):
+        ReasoningStep(step_number=1, title="t", body="b", agent="unknown")

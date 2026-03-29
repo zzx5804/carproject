@@ -4,7 +4,7 @@ Pydantic schemas for LLM-based diagnosis.
 Defines request/response structures for LLM-powered diagnosis.
 """
 
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Literal
 from pydantic import BaseModel, Field, field_validator
 from enum import Enum
 import re
@@ -115,7 +115,7 @@ class ReasoningStep(BaseModel):
         ge=0,
         description="Time spent on this reasoning step in milliseconds (injected by backend)"
     )
-    agent: Optional[str] = Field(
+    agent: Literal["llm", "ont", "output"] = Field(
         default="llm",
         description="Step source agent: 'llm' | 'ont' | 'output'"
     )
