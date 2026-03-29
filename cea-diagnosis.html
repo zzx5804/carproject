@@ -838,6 +838,27 @@ function renderComparePanel() {
           <div style="font-size:9px;color:var(--tx3)">${confDiff > 0 ? `较本体模式低 ${confDiff}%，无规则约束` : '置信度与本体模式相近'}</div>
         </div>
       </div>`;
+    diffEl.innerHTML += `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+        <div style="background:rgba(167,139,250,0.06);border:1px solid rgba(167,139,250,0.25);border-radius:8px;padding:10px 12px">
+          <div style="font-size:12px;font-weight:600;color:#a78bfa;margin-bottom:8px">Ontology + LLM</div>
+          <div style="font-size:10px;color:var(--tx2);line-height:1.7">
+            <div>✅ ${ontoData.steps.length} 步推理链，含本体规则约束</div>
+            ${ontoRules > 0 ? `<div>✅ 命中 ${ontoRules} 条本体规则</div>` : '<div>⚠️ 本体规则未命中（关键词未匹配）</div>'}
+            ${ontoSigs > 0 ? `<div>✅ 引用 ${ontoSigs} 个信号值作为证据</div>` : '<div>⚠️ 无信号引用</div>'}
+            <div>✅ 最终置信度 <strong style="color:#a78bfa">${ontoConf}%</strong></div>
+          </div>
+        </div>
+        <div style="background:rgba(0,180,255,0.04);border:1px solid rgba(0,180,255,0.15);border-radius:8px;padding:10px 12px">
+          <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:8px">纯 LLM</div>
+          <div style="font-size:10px;color:var(--tx2);line-height:1.7">
+            <div>⚠️ ${llmData.steps.length} 步推理链，无结构化约束</div>
+            <div>❌ 无本体规则命中</div>
+            ${llmSigs > 0 ? `<div>⚠️ 引用 ${llmSigs} 个信号值</div>` : '<div>❌ 无信号引用</div>'}
+            <div>⚠️ 最终置信度 <strong style="color:var(--accent)">${llmConf}%</strong></div>
+          </div>
+        </div>
+      </div>`;
     diffEl.style.display = 'block';
   } else {
     diffEl.style.display = 'none';
