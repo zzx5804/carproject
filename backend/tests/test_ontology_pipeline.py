@@ -122,3 +122,116 @@ class TestPromptTone:
         assert "可选引用" in source or "供参考" in source, (
             "generate_diagnosis should contain optional reference language"
         )
+
+
+class TestOrchestratorPipeline:
+    """Test that orchestrator runs OntologyFetcher before LLMDiagnosisAgent when use_ontology=True."""
+
+    @pytest.mark.asyncio
+    async def test_ontology_fetcher_called_when_use_ontology_true(self):
+        """When use_ontology=True, OntologyFetcher must run before LLMDiagnosisAgent."""
+        from unittest.mock import AsyncMock, patch
+        from agents.orchestrator import OrchestratorAgent
+        from models import DiagnosisContext, Role, AgentID, ActivatedKnowledge
+
+        orchestrator = OrchestratorAgent(use_llm=True)
+
+        # Track call order
+        call_order = []
+
+        # Mock SymptomParser
+        mock_sym = AsyncMock()
+        mock_sym.agent_id = AgentID.SYM
+        async def sym_run(ctx):
+            call_order.append("sym")
+            return ctx
+        mock_sym.run = sym_run
+
+        # Mock OntologyFetcher — fills activated_knowledge
+        mock_ont = AsyncMock()
+        mock_ont.agent_id = AgentID.ONT
+        async def ont_run(ctx):
+            call_order.append("ont")
+            ctx.activated_knowledge = ActivatedKnowledge(
+                activated_rules=[], activated_classes=[],
+                signal_mappings={}, sparql_queries=[]
+            )
+            return ctx
+        mock_ont.run = ont_run
+
+        # Mock LLMDiagnosisAgent — checks activated_knowledge is already set
+        mock_llm = AsyncMock()
+        mock_llm.agent_id = AgentID.LLM
+        async def llm_run(ctx):
+            call_order.append("llm")
+            assert ctx.activated_knowledge is not None, (
+                "activated_knowledge must be set before LLM agent runs"
+            )
+            return ctx
+        mock_llm.run = llm_run
+
+        orchestrator.agents[AgentID.SYM] = mock_sym
+        orchestrator.agents[AgentID.ONT] = mock_ont
+        orchestrator.agents[AgentID.LLM] = mock_llm
+
+        context = DiagnosisContext(
+            symptom="踩刹车按启动按钮，车辆无法上电，屏幕弹出'钥匙未找到'",
+            role=Role.OWNER,
+            signals={"sv-kv": "INVALID"},
+            use_ontology=True,
+        )
+
+        with patch.object(orchestrator, 'send_msg_bus', new_callable=AsyncMock), \
+             patch.object(orchestrator, 'animate_wire', new_callable=AsyncMock), \
+             patch.object(orchestrator, 'send', new_callable=AsyncMock), \
+             patch.object(orchestrator, 'update_status', new_callable=AsyncMock):
+            await orchestrator._execute_llm_pipeline(context)
+
+        assert "sym" in call_order, "SymptomParser must be called"
+        assert "ont" in call_order, "OntologyFetcher must be called"
+        assert "llm" in call_order, "LLMDiagnosisAgent must be called"
+        assert call_order.index("sym") < call_order.index("llm"), "sym must run before llm"
+        assert call_order.index("ont") < call_order.index("llm"), "ont must run before llm"
+
+    @pytest.mark.asyncio
+    async def test_ontology_fetcher_not_called_when_use_ontology_false(self):
+        """When use_ontology=False, OntologyFetcher must NOT run."""
+        from unittest.mock import AsyncMock, patch
+        from agents.orchestrator import OrchestratorAgent
+        from models import DiagnosisContext, Role, AgentID
+
+        orchestrator = OrchestratorAgent(use_llm=True)
+        call_order = []
+
+        mock_ont = AsyncMock()
+        mock_ont.agent_id = AgentID.ONT
+        async def ont_run(ctx):
+            call_order.append("ont")
+            return ctx
+        mock_ont.run = ont_run
+
+        mock_llm = AsyncMock()
+        mock_llm.agent_id = AgentID.LLM
+        async def llm_run(ctx):
+            call_order.append("llm")
+            return ctx
+        mock_llm.run = llm_run
+
+        orchestrator.agents[AgentID.ONT] = mock_ont
+        orchestrator.agents[AgentID.LLM] = mock_llm
+
+        context = DiagnosisContext(
+            symptom="无法上电",
+            role=Role.OWNER,
+            signals={},
+            use_ontology=False,
+        )
+
+        with patch.object(orchestrator, 'send_msg_bus', new_callable=AsyncMock), \
+             patch.object(orchestrator, 'animate_wire', new_callable=AsyncMock), \
+             patch.object(orchestrator, 'send', new_callable=AsyncMock), \
+             patch.object(orchestrator, 'update_status', new_callable=AsyncMock):
+            await orchestrator._execute_llm_pipeline(context)
+
+        assert "ont" not in call_order, "OntologyFetcher must NOT be called in pure-LLM mode"
+        assert "llm" in call_order

@@ -135,8 +135,14 @@ class OrchestratorAgent(BaseAgent):
             logger.warning("LLM agent not registered, falling back to legacy pipeline")
             return await self._execute_legacy_pipeline(context)
         
+        # When use_ontology=True, run SymptomParser then OntologyFetcher first so that
+        # context.activated_knowledge is populated before the LLM agent runs.
+        if getattr(context, "use_ontology", False):
+            await self._execute_phase("sym", context)
+            await self._execute_phase("ont", context)
+
         llm_agent = self.agents[AgentID.LLM]
-        
+
         # Execute LLM agent (handles entire diagnosis)
         await self.send_msg_bus("llm", [
             {"k": "指令", "v": "LLM_DIAGNOSIS"},
