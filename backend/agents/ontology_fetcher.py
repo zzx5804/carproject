@@ -2,11 +2,12 @@
 OntologyFetcher Agent - Fetches relevant ontology information using SPARQL queries.
 """
 
+import re
 from typing import Dict, Any
 from loguru import logger
 
 from agents.base import BaseAgent
-from models import DiagnosisContext, AgentID, AgentState
+from models import DiagnosisContext, AgentID, AgentState, ActivatedKnowledge
 
 
 class OntologyFetcherAgent(BaseAgent):
@@ -53,9 +54,8 @@ class OntologyFetcherAgent(BaseAgent):
 
         # Extract keywords from parsed symptoms + raw symptom
         # Use regex to normalize Chinese punctuation before splitting
-        import re
         keywords = list(context.parsed_symptoms)
-        normalized = re.sub(r"[，。！？、：；''""（）【】《》\s]+", " ", context.symptom)
+        normalized = re.sub(r"[，。！？、：；\u2018\u2019\u201c\u201d'\"（）【】《》\s]+", " ", context.symptom)
         for word in normalized.split():
             if len(word) >= 2 and word not in keywords:
                 keywords.append(word)
@@ -80,7 +80,6 @@ class OntologyFetcherAgent(BaseAgent):
         await self.update_status(AgentState.RUNNING, 70)
 
         # ③ Assemble ActivatedKnowledge
-        from models import ActivatedKnowledge
         knowledge = ActivatedKnowledge(
             activated_rules=activated_rules,
             activated_classes=[],

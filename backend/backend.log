@@ -2493,3 +2493,105 @@
 2026-03-29 19:04:01.180 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 85%
 2026-03-29 19:05:35.363 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 0
 2026-03-29 19:05:35.474 | INFO     | __main__:main:485 - Server stopped by user
+2026-03-29 20:36:51.486 | DEBUG    | config:setup_logging:344 - Logging configured: level=INFO, file=backend.log
+2026-03-29 20:36:51.486 | INFO     | __main__:start_server:343 - ============================================================
+2026-03-29 20:36:51.486 | INFO     | __main__:start_server:344 - Vehicle Power Diagnosis System v1.0.0
+2026-03-29 20:36:51.486 | INFO     | __main__:start_server:345 - ============================================================
+2026-03-29 20:36:51.486 | INFO     | __main__:start_server:349 - Loading ontology from folder: D:\work\carproject\ontology files
+2026-03-29 20:36:51.487 | INFO     | ontology.parser:__init__:119 - OntologyParser initialized with source: D:\work\carproject\ontology files
+2026-03-29 20:36:51.540 | INFO     | ontology.parser:load:151 - Loaded ontology file: action_model.ttl (1411 triples)
+2026-03-29 20:36:51.570 | INFO     | ontology.parser:load:151 - Loaded ontology file: context_model.ttl (885 triples)
+2026-03-29 20:36:51.633 | INFO     | ontology.parser:load:151 - Loaded ontology file: core_model.ttl (1858 triples)
+2026-03-29 20:36:51.672 | INFO     | ontology.parser:load:151 - Loaded ontology file: event_model.ttl (1088 triples)
+2026-03-29 20:36:51.687 | INFO     | ontology.parser:load:151 - Loaded ontology file: provenance_model.ttl (422 triples)
+2026-03-29 20:36:51.694 | INFO     | ontology.parser:load:151 - Loaded ontology file: rules_model.ttl (173 triples)
+2026-03-29 20:36:51.716 | INFO     | ontology.parser:load:151 - Loaded ontology file: shacl_constraints.ttl (724 triples)
+2026-03-29 20:36:51.751 | INFO     | ontology.parser:load:151 - Loaded ontology file: subsystem_model.ttl (1016 triples)
+2026-03-29 20:36:51.797 | INFO     | ontology.parser:load:151 - Loaded ontology file: swrl_rules.ttl (1680 triples)
+2026-03-29 20:36:51.809 | INFO     | ontology.parser:load:151 - Loaded ontology file: version_model.ttl (268 triples)
+2026-03-29 20:36:51.809 | INFO     | ontology.parser:load:155 - Loaded 10 ontology files with 9491 total triples
+2026-03-29 20:36:51.810 | INFO     | ontology.parser:_detect_namespace:222 - Auto-detected namespace from classes: http://example.org/vehicle-power-management# (502 classes)
+2026-03-29 20:36:51.843 | DEBUG    | ontology.parser:_parse_swrl_rules:517 - Parsed 0 SWRL rules from file comments
+2026-03-29 20:36:51.843 | INFO     | ontology.parser:_parse_transition_rules:984 - Parsed 10 transition rules from ontology individuals
+2026-03-29 20:36:51.844 | INFO     | ontology.parser:load:179 - Parsed 502 classes, 147 object properties, 141 datatype properties, 197 individuals, 0 SWRL rules, 10 transition rules
+2026-03-29 20:36:51.844 | INFO     | __main__:start_server:353 - Ontology loaded successfully!
+2026-03-29 20:36:51.844 | INFO     | __main__:start_server:354 -   Loaded files: 10
+2026-03-29 20:36:51.845 | INFO     | __main__:start_server:355 -   Total classes: 502
+2026-03-29 20:36:51.845 | INFO     | __main__:start_server:356 -   Object Properties: 147
+2026-03-29 20:36:51.845 | INFO     | __main__:start_server:357 -   Datatype Properties: 141
+2026-03-29 20:36:51.845 | INFO     | __main__:start_server:358 -   Individuals: 197
+2026-03-29 20:36:51.845 | INFO     | __main__:__init__:80 - LLM Diagnosis Agent enabled
+2026-03-29 20:36:51.845 | INFO     | __main__:__init__:91 - DiagnosisPipeline initialized (LLM智能诊断模式) with agents:
+2026-03-29 20:36:51.845 | INFO     | __main__:__init__:93 -   - orch
+2026-03-29 20:36:51.846 | INFO     | __main__:__init__:93 -   - dtc
+2026-03-29 20:36:51.846 | INFO     | __main__:__init__:93 -   - sym
+2026-03-29 20:36:51.846 | INFO     | __main__:__init__:93 -   - ont
+2026-03-29 20:36:51.846 | INFO     | __main__:__init__:93 -   - rule
+2026-03-29 20:36:51.846 | INFO     | __main__:__init__:93 -   - sig
+2026-03-29 20:36:51.846 | INFO     | __main__:__init__:93 -   - conf
+2026-03-29 20:36:51.846 | INFO     | __main__:__init__:93 -   - out
+2026-03-29 20:36:51.847 | INFO     | __main__:__init__:93 -   - llm
+2026-03-29 20:36:51.847 | INFO     | server:initialize_app:107 - Application initialized
+2026-03-29 20:36:51.868 | INFO     | __main__:start_server:371 - Starting server on ws://localhost:8765
+2026-03-29 20:36:51.869 | INFO     | __main__:start_server:372 - Open the frontend at: http://localhost:8000
+2026-03-29 20:36:51.869 | INFO     | __main__:start_server:373 - WebSocket endpoint: ws://localhost:8765/ws
+2026-03-29 20:36:51.869 | INFO     | __main__:start_server:374 - ============================================================
+2026-03-29 20:36:57.796 | INFO     | server:connect:42 - Client connected. Total connections: 1
+2026-03-29 20:36:57.798 | INFO     | server:handle_message:201 - Client ready, version: cea-demo
+2026-03-29 20:37:01.589 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 20:37:01.590 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 20:37:02.105 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 20:37:02.420 | INFO     | llm.config:get_llm_config:179 - Loaded .env from: D:\work\carproject\backend\cli\.env
+2026-03-29 20:37:02.465 | INFO     | llm.config:get_llm_config:230 - Loaded config from YAML: D:\work\carproject\backend\cli\llm_config.yaml
+2026-03-29 20:37:02.467 | INFO     | llm.config:get_llm_config:239 - LLM Config loaded: endpoint=https://llm-gateway.dev.cn-vwa.volkswagen-cea.com, model=openai/gpt-3.5-turbo
+2026-03-29 20:37:02.468 | INFO     | llm.service:client:457 - Using OpenRouter client: openai/gpt-3.5-turbo
+2026-03-29 20:37:03.208 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 20:37:05.579 | DEBUG    | llm.service:complete:351 - OpenRouter response: 208 chars
+2026-03-29 20:37:05.580 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 20:37:07.025 | DEBUG    | llm.service:complete:351 - OpenRouter response: 219 chars
+2026-03-29 20:37:07.025 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 20:37:08.490 | DEBUG    | llm.service:complete:351 - OpenRouter response: 339 chars
+2026-03-29 20:37:08.490 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 20:37:08.490 | WARNING  | llm.service:_validate_and_fill_missing_fields:793 - LLM response missing reasoning_steps, generating defaults
+2026-03-29 20:37:08.491 | WARNING  | llm.service:_validate_and_fill_missing_fields:817 - LLM response missing primary_hypothesis, generating defaults
+2026-03-29 20:37:08.491 | WARNING  | llm.service:_validate_and_fill_missing_fields:843 - LLM response missing confidence_factors, generating defaults
+2026-03-29 20:37:08.491 | WARNING  | llm.service:_validate_and_fill_missing_fields:895 - LLM response missing output for technician, generating defaults
+2026-03-29 20:37:09.754 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 86%, Time: 7642ms
+2026-03-29 20:37:09.821 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 85%
+2026-03-29 20:37:09.844 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 85%
+2026-03-29 20:37:14.509 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 20:37:14.510 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 20:37:15.015 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 20:37:15.326 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 20:37:18.571 | DEBUG    | llm.service:complete:351 - OpenRouter response: 212 chars
+2026-03-29 20:37:18.571 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 20:37:19.962 | DEBUG    | llm.service:complete:351 - OpenRouter response: 179 chars
+2026-03-29 20:37:19.963 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 20:37:22.859 | DEBUG    | llm.service:complete:351 - OpenRouter response: 610 chars
+2026-03-29 20:37:22.860 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 20:37:22.860 | WARNING  | llm.service:_validate_and_fill_missing_fields:793 - LLM response missing reasoning_steps, generating defaults
+2026-03-29 20:37:22.860 | WARNING  | llm.service:_validate_and_fill_missing_fields:817 - LLM response missing primary_hypothesis, generating defaults
+2026-03-29 20:37:22.861 | WARNING  | llm.service:_validate_and_fill_missing_fields:843 - LLM response missing confidence_factors, generating defaults
+2026-03-29 20:37:22.861 | WARNING  | llm.service:_validate_and_fill_missing_fields:895 - LLM response missing output for technician, generating defaults
+2026-03-29 20:37:24.099 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 86%, Time: 9082ms
+2026-03-29 20:37:24.099 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 85%
+2026-03-29 20:37:24.100 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 85%
+2026-03-29 20:37:56.099 | INFO     | server:start_diagnosis:281 - Starting diagnosis for symptom: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 20:37:56.100 | INFO     | agents.orchestrator:process:54 - Orchestrator starting pipeline (LLM mode: True)...
+2026-03-29 20:37:56.613 | INFO     | agents.llm_diagnosis_agent:process:79 - LLMDiagnosisAgent processing: 踩刹车按启动按钮，车辆无法上电，屏幕弹出"钥匙未找到"...
+2026-03-29 20:37:56.929 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 20:37:59.655 | DEBUG    | llm.service:complete:351 - OpenRouter response: 203 chars
+2026-03-29 20:37:59.656 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 20:38:01.101 | DEBUG    | llm.service:complete:351 - OpenRouter response: 195 chars
+2026-03-29 20:38:01.101 | DEBUG    | llm.service:complete:337 - OpenRouter request: model=openai/gpt-3.5-turbo, messages=2
+2026-03-29 20:38:04.289 | DEBUG    | llm.service:complete:351 - OpenRouter response: 962 chars
+2026-03-29 20:38:04.290 | DEBUG    | scenario_detector:detect:78 - Detected scenario: ble_auth (matched: 钥匙未找到)
+2026-03-29 20:38:04.290 | WARNING  | llm.service:_validate_and_fill_missing_fields:793 - LLM response missing reasoning_steps, generating defaults
+2026-03-29 20:38:04.291 | WARNING  | llm.service:_validate_and_fill_missing_fields:817 - LLM response missing primary_hypothesis, generating defaults
+2026-03-29 20:38:04.291 | WARNING  | llm.service:_validate_and_fill_missing_fields:843 - LLM response missing confidence_factors, generating defaults
+2026-03-29 20:38:04.292 | WARNING  | llm.service:_validate_and_fill_missing_fields:895 - LLM response missing output for technician, generating defaults
+2026-03-29 20:38:05.536 | INFO     | agents.llm_diagnosis_agent:process:268 - LLM diagnosis complete. Confidence: 86%, Time: 8922ms
+2026-03-29 20:38:05.536 | INFO     | agents.orchestrator:process:104 - Pipeline complete. Final confidence: 85%
+2026-03-29 20:38:05.537 | INFO     | server:start_diagnosis:310 - Diagnosis complete. Confidence: 85%
+2026-03-29 20:38:16.714 | INFO     | server:disconnect:50 - Client disconnected. Total connections: 0
+2026-03-29 20:38:16.825 | INFO     | __main__:main:485 - Server stopped by user

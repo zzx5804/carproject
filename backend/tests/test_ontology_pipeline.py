@@ -11,7 +11,7 @@ class TestKeywordExtraction:
     def _extract_keywords(self, symptom: str, parsed_symptoms: list) -> list:
         """Mirrors the keyword extraction logic in OntologyFetcherAgent.process()."""
         keywords = list(parsed_symptoms)
-        normalized = re.sub(r"[，。！？、：；''""（）【】《》\s]+", " ", symptom)
+        normalized = re.sub(r"[，。！？、：；\u2018\u2019\u201c\u201d'\"（）【】《》\s]+", " ", symptom)
         for word in normalized.split():
             if len(word) >= 2 and word not in keywords:
                 keywords.append(word)
@@ -38,3 +38,9 @@ class TestKeywordExtraction:
         assert "钥匙" in keywords
         assert "启动" in keywords
         assert "无法上电" in keywords
+
+    def test_unicode_curly_quotes_normalized(self):
+        """Unicode curly quotes must also be stripped during normalization."""
+        symptom = "屏幕弹出\u2018钥匙未找到\u2019"  # Unicode left/right single quotes
+        keywords = self._extract_keywords(symptom, [])
+        assert "钥匙未找到" in keywords, f"'钥匙未找到' not found in {keywords}"
