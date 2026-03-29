@@ -123,6 +123,17 @@ header{display:flex;align-items:center;justify-content:space-between;padding-bot
 .chain{display:flex;flex-direction:column;gap:0}
 .chain-step{display:flex;gap:10px;opacity:0;transform:translateX(-6px);transition:all .4s}
 .chain-step.vis{opacity:1;transform:translateX(0)}
+.cs-evidence{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:5px;margin-top:7px}
+.cs-ev-cell{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:4px 6px}
+.cs-ev-label{font-family:var(--mono);font-size:7px;color:var(--tx3);letter-spacing:.5px;margin-bottom:3px}
+.cs-ev-bar{height:3px;background:var(--border);border-radius:2px;margin-bottom:2px;overflow:hidden}
+.cs-ev-bar-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.cs-ev-value{font-family:var(--mono);font-size:9px;font-weight:600}
+.cs-ev-sub{font-family:var(--mono);font-size:7px;color:var(--tx3);margin-top:1px}
+.cs-sig-row{font-family:var(--mono);font-size:8px;margin-bottom:1px}
+.cs-sig-row.err{color:var(--red)}.cs-sig-row.warn{color:var(--yellow)}.cs-sig-row.ok{color:var(--green)}
+.cs-elapsed{font-family:var(--mono);font-size:8px;color:var(--tx3);background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:1px 5px;opacity:0;transition:opacity .3s .2s}
+.cs-elapsed.vis{opacity:1}
 .cs-line{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0}
 .cs-dot{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;transition:all .3s;font-family:var(--mono);color:var(--tx3)}
 .cs-dot.active{border-color:var(--accent);color:var(--accent);box-shadow:0 0 8px rgba(0,180,255,0.25)}
@@ -470,7 +481,7 @@ const SCENARIOS = {
   }
 };
 
-function animateNum(id,s,e,d){const el=document.getElementById(id);if(!el)return;let t0=null;const step=ts=>{if(!t0)t0=ts;const p=Math.min((ts-t0)/d,1);el.textContent=Math.floor(p*(e-s)+s);if(p<1)requestAnimationFrame(step);else el.textContent=e};requestAnimationFrame(step)}
+function animateNum(id,s,e,d,fmt){const el=document.getElementById(id);if(!el)return;let t0=null;const step=ts=>{if(!t0)t0=ts;const p=Math.min((ts-t0)/d,1);const v=Math.floor(p*(e-s)+s);el.textContent=fmt?fmt.replace('{v}',v):v;if(p<1)requestAnimationFrame(step);else el.textContent=fmt?fmt.replace('{v}',e):e};requestAnimationFrame(step)}
 function loadScenario(key){const sc=SCENARIOS[key];if(!sc)return;scenarioKey=key;document.getElementById('symptomInput').value=sc.symptom;Object.entries(sc.signals).forEach(([id,info])=>{const el=document.getElementById(id);if(el){el.className='sig-val '+(info.cls||'ok');el.textContent=info.value||'';}});}
 
 function collectSignals(){const result={};document.querySelectorAll('[id^="sv-"]').forEach(el=>{const key=el.id.replace('sv-','');result[key]=el.textContent.trim();});return result;}
@@ -493,7 +504,7 @@ function updateOutputMessage(msg){const ob=document.getElementById('outputBox');
 
 function updateOntologySummary(msg){if(msg.counts){animateNum('os-cls',0,msg.counts.classes||0,700);animateNum('os-prop',0,msg.counts.properties||0,900);animateNum('os-ind',0,msg.counts.rules||0,1100);document.getElementById('ontoBarFill').style.width='100%'}if(msg.summary){document.getElementById('ontoDetail').innerHTML=msg.summary;document.getElementById('ontoDetail').classList.add('vis')}}
 
-function handleBackendMessage(msg){switch(msg.type){case 'agent_status':setAgent(mapAgentId(msg.agent),msg.state||msg.status,msg.progress);break;case 'msg_bus':pushMsg(mapAgentId(msg.from),mapAgentId(msg.to),renderPairs(msg.pairs));break;case 'wire_animate':animateWire(mapAgentId(msg.from),mapAgentId(msg.to));break;case 'onto_activated':renderOntologyActivated(msg);break;case 'onto_summary':updateOntologySummary(msg);break;case 'reasoning_step':addChain({title:msg.step.title,body:highlightRuleRefs(msg.step.body),agent:'llm',details:[]},stepIndex++);break;case 'rule_matched':appendRule(msg.rule);break;case 'hypothesis':appendHypothesis(msg.hypothesis||msg.hypo);break;case 'conf_factors':updateConfidenceFactors(msg.factors);break;case 'conf_final':updateFinalConfidence(msg.confidence,msg.level);break;case 'output':updateOutputMessage(msg);break;case 'pipeline_done':document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;setAgent('master','done',100);break;case 'error':document.getElementById('sysStatus').textContent='● ERROR';document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;break;case 'backend_status':document.getElementById('sysStatus').textContent='● '+String(msg.status||'READY').toUpperCase();updateOntologySummary({counts:msg.ontology_stats,summary:msg.ontology_loaded?'知识库已挂载':''});break;case 'llm_thinking':break;default:console.log('Unhandled backend message',msg)}}
+function handleBackendMessage(msg){switch(msg.type){case 'agent_status':setAgent(mapAgentId(msg.agent),msg.state||msg.status,msg.progress);break;case 'msg_bus':pushMsg(mapAgentId(msg.from),mapAgentId(msg.to),renderPairs(msg.pairs));break;case 'wire_animate':animateWire(mapAgentId(msg.from),mapAgentId(msg.to));break;case 'onto_activated':renderOntologyActivated(msg);break;case 'onto_summary':updateOntologySummary(msg);break;case 'reasoning_step':addChain(Object.assign({agent:'llm'},msg.step,{body:highlightRuleRefs(msg.step.body)}),stepIndex++);break;case 'rule_matched':appendRule(msg.rule);break;case 'hypothesis':appendHypothesis(msg.hypothesis||msg.hypo);break;case 'conf_factors':updateConfidenceFactors(msg.factors);break;case 'conf_final':updateFinalConfidence(msg.confidence,msg.level);break;case 'output':updateOutputMessage(msg);break;case 'pipeline_done':document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;setAgent('master','done',100);break;case 'error':document.getElementById('sysStatus').textContent='● ERROR';document.getElementById('goBtn').disabled=false;document.getElementById('goBtn').innerHTML='⚡ 重新运行诊断';running=false;break;case 'backend_status':document.getElementById('sysStatus').textContent='● '+String(msg.status||'READY').toUpperCase();updateOntologySummary({counts:msg.ontology_stats,summary:msg.ontology_loaded?'知识库已挂载':''});break;case 'llm_thinking':break;default:console.log('Unhandled backend message',msg)}}
 
 function connectWebSocket(){if(ws&&[WebSocket.OPEN,WebSocket.CONNECTING].includes(ws.readyState))return;ws=new WebSocket('ws://localhost:8765/ws');ws.onopen=()=>{document.getElementById('sysStatus').textContent='● ONLINE';ws.send(JSON.stringify({type:'client_ready',client_version:'cea-demo'}))};ws.onmessage=(event)=>{handleBackendMessage(JSON.parse(event.data))};ws.onclose=()=>{document.getElementById('sysStatus').textContent='● OFFLINE';ws=null;running=false;const btn=document.getElementById('goBtn');btn.disabled=false;btn.innerHTML='⚡ 启动 Ontology-Driven 诊断';};ws.onerror=()=>{document.getElementById('sysStatus').textContent='● ERROR';running=false;if(ws)try{ws.close();}catch(e){}ws=null;const btn=document.getElementById('goBtn');btn.disabled=false;btn.innerHTML='⚡ 启动 Ontology-Driven 诊断';}}
 
@@ -560,7 +571,54 @@ function setAgent(id,state,pg){const c=document.getElementById('ac-'+id);const s
 
 async function loadOntology(sc){const ls=['l1','l2','l3'];ls.forEach(l=>{document.getElementById('ol-'+l).classList.remove('loading','loaded');const s=document.getElementById('ols-'+l);s.className='ol-status idle';s.textContent='IDLE'});document.getElementById('ontoBarFill').style.width='0%';await delay(200);for(let i=0;i<3;i++){const l=ls[i],el=document.getElementById('ol-'+l),st=document.getElementById('ols-'+l);el.classList.add('loading');st.className='ol-status loading';st.textContent='LOADING...';document.getElementById('ontoBarFill').style.width=((i+.5)/3*100)+'%';await delay(400+Math.random()*200);el.classList.remove('loading');el.classList.add('loaded');st.className='ol-status loaded';st.textContent='✓ LOADED';document.getElementById('ontoBarFill').style.width=((i+1)/3*100)+'%'}animateNum('os-cls',0,sc.ontoCounts.cls,700);animateNum('os-prop',0,sc.ontoCounts.prop,900);animateNum('os-ind',0,sc.ontoCounts.ind,1100);await delay(300)}
 
-function addChain(step,i){const ch=document.getElementById('reasonChain');const idle=document.getElementById('chainIdle');if(idle)idle.style.display='none';const tag=step.agent==='llm'?'<span class="prov-tag llm">LLM</span>':step.agent==='ont'?'<span class="prov-tag ont">Ontology</span>':step.agent==='sym'?'<span class="prov-tag llm">NLU</span>':'<span class="prov-tag rule">Output</span>';let dh='';if(step.details&&step.details.length)dh='<div style="margin-top:3px">'+step.details.map(([k,v,c])=>`<div class="cs-kv"><span class="cs-k">${k}:</span><span class="cs-v ${c||''}">${v}</span></div>`).join('')+'</div>';const el=document.createElement('div');el.className='chain-step';el.innerHTML=`<div class="cs-line"><div class="cs-dot">${i+1}</div><div class="cs-conn"></div></div><div class="cs-body"><div class="cs-title">[S${i+1}] ${step.title} ${tag}</div><div class="cs-content">${step.body}${dh}</div></div>`;ch.appendChild(el);setTimeout(()=>{el.classList.add('vis');el.querySelector('.cs-dot').classList.add('active')},50);setTimeout(()=>{el.querySelector('.cs-dot').classList.remove('active');el.querySelector('.cs-dot').classList.add('done');el.querySelector('.cs-conn').classList.add('done');el.querySelector('.cs-title').classList.add('done')},800)}
+function addChain(step,i){
+  const ch=document.getElementById('reasonChain');
+  const idle=document.getElementById('chainIdle');
+  if(idle)idle.style.display='none';
+  const tag=step.agent==='llm'?'<span class="prov-tag llm">LLM</span>':step.agent==='ont'?'<span class="prov-tag ont">Ontology</span>':step.agent==='sym'?'<span class="prov-tag llm">NLU</span>':'<span class="prov-tag rule">Output</span>';
+  const elapsedBadge=(step.elapsed_ms!=null)?`<span class="cs-elapsed" id="cs-elapsed-${i}">⏱ ${(step.elapsed_ms/1000).toFixed(1)}s</span>`:'';
+  let confCell='';
+  if(step.confidence!=null){
+    const pct=Math.round(step.confidence*100);
+    const color=pct>=85?'var(--green)':pct>=70?'var(--yellow)':'var(--orange)';
+    const delta=step.confidence_delta!=null?step.confidence_delta:null;
+    const arrow=delta==null?'':delta>0.001?'↑ ':delta<-0.001?'↓ ':'→ ';
+    const deltaColor=delta==null?color:delta>0.001?'var(--green)':delta<-0.001?'var(--orange)':'var(--tx2)';
+    confCell=`<div class="cs-ev-cell"><div class="cs-ev-label">步骤置信度</div><div class="cs-ev-bar"><div class="cs-ev-bar-fill" style="width:0%;background:${color}" id="cs-conf-bar-${i}"></div></div><div class="cs-ev-value" style="color:${deltaColor}" id="cs-conf-num-${i}">${arrow}0%</div>${delta!=null?`<div class="cs-ev-sub">较上步 ${delta>=0?'+':''}${Math.round(delta*100)}%</div>`:''}</div>`;
+  }
+  let sigCell='';
+  if(step.signals_referenced&&step.signals_referenced.length>0){
+    const rows=step.signals_referenced.map(s=>`<div class="cs-sig-row ${s.level||''}">${s.key}: ${s.value}</div>`).join('');
+    sigCell=`<div class="cs-ev-cell"><div class="cs-ev-label">引用信号</div>${rows}</div>`;
+  }
+  let rulesCell='';
+  if(step.rules_matched&&step.rules_matched.length>0){
+    const ruleSpans=step.rules_matched.map(r=>`<span class="rule-tag" onclick="highlightOntologyNode('${r}')" style="background:rgba(167,139,250,0.2);border:1px solid #a78bfa;border-radius:3px;padding:1px 4px;color:#a78bfa;font-family:var(--mono);font-size:8px;cursor:pointer;display:inline-block;margin-bottom:2px">${r} ↗</span>`).join(' ');
+    rulesCell=`<div class="cs-ev-cell"><div class="cs-ev-label">命中规则</div>${ruleSpans}</div>`;
+  }
+  const hasEvidence=confCell||sigCell||rulesCell;
+  const evidenceHtml=hasEvidence?`<div class="cs-evidence">${confCell}${sigCell}${rulesCell}</div>`:'';
+  const isLast=step.agent==='output'||(step.title&&step.title.includes('根因'));
+  const cardBorder=isLast?'border:1px solid var(--red);box-shadow:0 0 12px rgba(255,77,106,0.08)':'';
+  const el=document.createElement('div');
+  el.className='chain-step';
+  el.innerHTML=`<div class="cs-line"><div class="cs-dot">${i+1}</div><div class="cs-conn"></div></div><div class="cs-body" style="${cardBorder};border-radius:8px;padding:8px 10px"><div class="cs-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px"><span>[S${i+1}] ${step.title} ${tag}</span>${elapsedBadge}</div><div class="cs-content">${step.body}</div>${evidenceHtml}</div>`;
+  ch.appendChild(el);
+  setTimeout(()=>{el.classList.add('vis');el.querySelector('.cs-dot').classList.add('active')},50);
+  if(step.elapsed_ms!=null){setTimeout(()=>{const badge=document.getElementById(`cs-elapsed-${i}`);if(badge)badge.classList.add('vis')},250);}
+  if(step.confidence!=null){
+    const pct=Math.round(step.confidence*100);
+    const delta=step.confidence_delta!=null?step.confidence_delta:null;
+    const arrow=delta==null?'':delta>0.001?'↑ ':delta<-0.001?'↓ ':'→ ';
+    setTimeout(()=>{
+      const bar=document.getElementById(`cs-conf-bar-${i}`);
+      const num=document.getElementById(`cs-conf-num-${i}`);
+      if(bar)bar.style.width=pct+'%';
+      if(num)animateNum(`cs-conf-num-${i}`,0,pct,600,arrow+'{v}%');
+    },150);
+  }
+  setTimeout(()=>{el.querySelector('.cs-dot').classList.remove('active');el.querySelector('.cs-dot').classList.add('done');el.querySelector('.cs-conn').classList.add('done');el.querySelector('.cs-title span').classList.add('done')},800);
+}
 
 function resetAll(){['master','symptom','ontology','llm','rule','output'].forEach(id=>{document.getElementById('ac-'+id).classList.remove('active','done');document.getElementById('st-'+id).className='ac-status s-idle';document.getElementById('st-'+id).innerHTML='⏸ idle';document.getElementById('pg-'+id).classList.remove('show')});document.getElementById('reasonChain').innerHTML='<div class="idle" id="chainIdle"><div class="idle-icon">🔗</div><div class="idle-txt">启动诊断查看推理链</div></div>';document.getElementById('ruleList').innerHTML='<div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待规则匹配</div>';document.getElementById('hypoList').innerHTML='<div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待假设生成</div>';document.getElementById('confNum').textContent='0%';document.getElementById('confLabel').textContent='等待计算';document.getElementById('confBarFill').style.width='0%';document.getElementById('confFactors').innerHTML='';document.getElementById('outputBox').innerHTML='<div style="font-size:10px;color:var(--tx3);text-align:center;padding:10px 0">等待诊断完成</div>';document.getElementById('outputBox').classList.remove('vis');document.getElementById('escalationHint').classList.remove('vis');document.getElementById('escalationHint').style.display='none';document.getElementById('ontoDetail').classList.remove('vis');document.getElementById('ontoDetail').innerHTML='';document.querySelectorAll('.wire-label').forEach(l=>{l.remove()});
 // Reset message bus
