@@ -783,6 +783,9 @@ class LLMTools:
         Args:
             data: LLM 返回的 JSON 数据
             request: 原始诊断请求
+            activated_knowledge: 可选的激活本体知识对象（包含 activated_rules 和 signal_mappings）。
+                                如果提供且包含非空规则列表，置信度兜底值会提升到 0.90；
+                                否则降至 0.85。
 
         Returns:
             填充后的数据字典
@@ -857,9 +860,9 @@ class LLMTools:
                 },
                 {
                     "label": "规则可信度",
-                    "value": 0.90 if activated_knowledge else 0.85,
+                    "value": 0.90 if (activated_knowledge and activated_knowledge.activated_rules) else 0.85,
                     "weight": 0.35,
-                    "explanation": "来自本体知识库规则" if activated_knowledge else "来自知识库规则",
+                    "explanation": "来自本体知识库规则" if (activated_knowledge and activated_knowledge.activated_rules) else "来自知识库规则",
                 },
                 {
                     "label": "数据质量",

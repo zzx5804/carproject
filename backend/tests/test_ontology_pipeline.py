@@ -68,7 +68,7 @@ class TestConfidenceFallback:
         request = self._make_request()
 
         class FakeKnowledge:
-            pass
+            activated_rules = [object()]  # non-empty so truthy check passes
 
         data_onto = tools._validate_and_fill_missing_fields(
             {}, request, activated_knowledge=FakeKnowledge()
