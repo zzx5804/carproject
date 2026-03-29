@@ -327,16 +327,19 @@ class LLMDiagnosisAgent(BaseAgent):
         return context
 
     async def _send_reasoning_steps(self, response: DiagnosisResponse):
-        """Send reasoning steps to frontend."""
+        """Send reasoning steps to frontend, injecting elapsed_ms from wall clock."""
         for step in response.reasoning_steps:
+            step_start = time.time()
             await self.delay(200)
+            elapsed_ms = int((time.time() - step_start) * 1000)
+
+            step_dict = step.model_dump()
+            step_dict["elapsed_ms"] = elapsed_ms  # backend overrides LLM value
+
             await self.send(
                 {
                     "type": "reasoning_step",
-                    "step": {
-                        "title": f"[{step.step_number}] {step.title}",
-                        "body": step.body,
-                    },
+                    "step": step_dict,
                 }
             )
 
