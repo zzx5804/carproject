@@ -723,7 +723,7 @@ class LLMTools:
             data = self._validate_and_fill_missing_fields(data, request)
 
             # Build DiagnosisResponse
-            return DiagnosisResponse(
+            response = DiagnosisResponse(
                 diagnosis_id=f"diag_{int(time.time() * 1000)}",
                 summary=data.get("summary", "诊断完成"),
                 reasoning_steps=[
@@ -748,6 +748,12 @@ class LLMTools:
                 model_used=self.config.model,
                 escalation_hint=data.get("escalation_hint"),
             )
+            # Fill deficit notes for LLM-only runs
+            self._fill_deficit_notes(
+                response.reasoning_steps,
+                activated_knowledge=activated_knowledge,
+            )
+            return response
 
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse diagnosis response JSON: {e}")
@@ -1018,6 +1024,41 @@ class LLMTools:
             model_used="fallback",
             escalation_hint=None,
         )
+
+    def _fill_deficit_notes(
+        self,
+        steps: List[ReasoningStep],
+        activated_knowledge: Optional[Any],
+    ) -> List[ReasoningStep]:
+        """
+        Fill deficit_note on each step for LLM-only runs.
+
+        Only called when activated_knowledge is None (pure LLM mode).
+        Returns the same list with deficit_note set in-place.
+        """
+        if activated_knowledge is not None:
+            return steps
+
+        for step in steps:
+            # Priority 1: output step — no note
+            if step.agent == "output":
+                step.deficit_note = None
+                continue
+
+            has_rules = bool(step.rules_matched)
+            has_signals = bool(step.signals_referenced)
+
+            # Priority 2: hallucinated rules
+            if has_rules:
+                step.deficit_note = "规则引用来自 LLM 推测，未经 SPARQL 验证"
+            # Priority 3: signals but no rules
+            elif has_signals:
+                step.deficit_note = "识别到信号异常，但未通过本体规则链验证"
+            # Priority 4: fallback
+            else:
+                step.deficit_note = "无信号引用与规则依据，推理基于语义理解"
+
+        return steps
 
     async def generate_output(
         self,

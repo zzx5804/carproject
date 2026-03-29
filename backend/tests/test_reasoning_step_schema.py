@@ -118,3 +118,47 @@ def test_reasoning_step_deficit_note_string():
         deficit_note="识别到信号异常，但未通过本体规则链验证"
     )
     assert step.deficit_note == "识别到信号异常，但未通过本体规则链验证"
+
+
+def test_fill_deficit_notes_no_ontology():
+    """_fill_deficit_notes sets notes when activated_knowledge is None."""
+    from llm.service import LLMTools
+    from llm.config import get_llm_config
+
+    tools = LLMTools(get_llm_config())
+
+    steps = [
+        ReasoningStep(step_number=1, title="分析", body="b"),  # 兜底
+        ReasoningStep(
+            step_number=2, title="验证", body="b",
+            signals_referenced=[{"key": "K", "value": "V", "level": "ok"}]
+        ),  # 有信号无规则
+        ReasoningStep(
+            step_number=3, title="结论", body="b",
+            agent="output"
+        ),  # output → None
+    ]
+
+    result = tools._fill_deficit_notes(steps, activated_knowledge=None)
+
+    assert result[0].deficit_note == "无信号引用与规则依据，推理基于语义理解"
+    assert result[1].deficit_note == "识别到信号异常，但未通过本体规则链验证"
+    assert result[2].deficit_note is None
+
+
+def test_fill_deficit_notes_with_ontology():
+    """_fill_deficit_notes does nothing when activated_knowledge is present."""
+    from llm.service import LLMTools
+    from llm.config import get_llm_config
+
+    tools = LLMTools(get_llm_config())
+
+    steps = [
+        ReasoningStep(step_number=1, title="t", body="b"),
+    ]
+
+    class FakeKnowledge:
+        pass
+
+    result = tools._fill_deficit_notes(steps, activated_knowledge=FakeKnowledge())
+    assert result[0].deficit_note is None
