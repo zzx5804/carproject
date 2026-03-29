@@ -136,9 +136,17 @@ class LLMDiagnosisAgent(BaseAgent):
             )
 
             # Try LLM diagnosis first
+            # Only pass ontology_parser when use_ontology=True; otherwise LLM
+            # prompt would still contain SWRL rules / ontology context, causing
+            # the LLM to label steps as agent:"ont" even in pure-LLM mode.
+            effective_parser = (
+                self._ontology_parser
+                if getattr(context, "use_ontology", True)
+                else None
+            )
             response = await self.llm_service.diagnose(
                 request,
-                ontology_parser=self._ontology_parser,
+                ontology_parser=effective_parser,
                 fallback_handler=self.fallback_handler.diagnose,
             )
 
